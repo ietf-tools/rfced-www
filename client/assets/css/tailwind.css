@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  --ietf-color: #000;
+  --ietf-link-color: #50b2df;
+  --ietf-bg: #fff;
+  --ietf-bg2: #002d3c;
+}
+
+html.dark-mode {
+  --ietf-color: #fff;
+  --ietf-link-color: #50b2df;
+  --ietf-bg: #000;
+
+  --ietf-bg2: #333;
+}
+
+a {
+  color: var(--ietf-link-color);
+}
+
+p {
+  line-height: 2;
+}
