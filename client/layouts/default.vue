@@ -1,11 +1,18 @@
 <template>
-  <div>
+  <div class="flex flex-col min-h-[100vh]">
     <Header>
-      <slot name="subheader"></slot>
+      <slot name="subheader">subheader</slot>
     </Header>
     <Main>
       <slot />
     </Main>
-    <Footer></Footer>
+    <Footer />
   </div>
 </template>
+
+<style>
+html {
+  /* https://fonts.nuxt.com/get-started/configuration */
+  font-family: 'Inter', sans-serif;
+}
+</style>

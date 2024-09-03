@@ -2,25 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body,
+  #__nuxt {
+    min-height: 100vh;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+
+    abbr {
+      text-decoration: underline;
+    }
+  }
+
+  p {
+    line-height: 2;
+  }
+}
+
 html {
-  --ietf-color: #000;
-  --ietf-link-color: #50b2df;
-  --ietf-bg: #fff;
-  --ietf-bg2: #002d3c;
+  background: theme('colors.gray.100');
+  color: theme('colors.black');
 }
 
-html.dark-mode {
-  --ietf-color: #fff;
-  --ietf-link-color: #50b2df;
-  --ietf-bg: #000;
-
-  --ietf-bg2: #333;
-}
-
-a {
-  color: var(--ietf-link-color);
-}
-
-p {
-  line-height: 2;
+html.dark {
+  background: theme('colors.black');
+  color: theme('colors.white');
 }

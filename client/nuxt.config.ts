@@ -9,8 +9,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     'nuxt-headlessui',
-    '@nuxt/icon'
+    '@nuxt/icon',
+    '@nuxt/fonts'
   ],
+  colorMode: {
+    classSuffix: ''
+  },
   eslint: {
     config: {
       stylistic: true

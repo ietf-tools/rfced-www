@@ -5,19 +5,26 @@
     as="div"
     class="relative inline-block"
   >
-    <HeadlessMenuButton class="rounded focus-visible:outline p-3">
+    <HeadlessMenuButton
+      v-slot="{ open }"
+      class="flex items-center gap-2 rounded hover:bg-gray-900 p-3"
+    >
       {{ menuItem.label }}
+      <ChevronGraphic :class="open && 'rotate-180'" />
     </HeadlessMenuButton>
     <HeadlessMenuItems
-      class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white dark:bg-neutral-800/90 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      class="absolute z-10 w-40 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red"
     >
       <HeadlessMenuItem
-        v-for="(child, childImdex) in menuItem.children"
-        :key="childImdex"
+        v-for="(child, childIndex) in menuItem.children"
+        :key="childIndex"
         v-slot="{ active }"
       >
         <a
-          :class="{ 'block bg-blue-500': active, 'block f': !active }"
+          :class="[
+            'block px-2 py-1 text-black dark:text-white',
+            { 'bg-blue-500': active }
+          ]"
           href="/"
         >
           {{ child.label }}
@@ -25,7 +32,10 @@
       </HeadlessMenuItem>
     </HeadlessMenuItems>
   </HeadlessMenu>
-  <button>?</button>
+  <a href="#search" type="button" class="flex items-center">
+    <Icon name="fluent:search-12-filled" />
+  </a>
+  <HeaderNavTheme />
 </template>
 
 <script setup lang="ts">

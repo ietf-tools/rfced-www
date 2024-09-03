@@ -7,22 +7,22 @@ export const menuData: MenuItem[] = [
   {
     label: 'Documents',
     children: [
-      { label: 'a', href: '/a' },
-      { label: 'b', href: '/b' }
+      { label: 'menu item a', href: '/a' },
+      { label: 'menu item b', href: '/b' }
     ]
   },
   {
     label: 'About RFCs',
     children: [
-      { label: 'a', href: '/a' },
-      { label: 'b', href: '/b' }
+      { label: 'menu item a', href: '/a' },
+      { label: 'menu item b', href: '/b' }
     ]
   },
   {
     label: 'Authoring',
     children: [
-      { label: 'a', href: '/a' },
-      { label: 'b', href: '/b' }
+      { label: 'menu item a', href: '/a' },
+      { label: 'menu item b', href: '/b' }
     ]
   },
   {
