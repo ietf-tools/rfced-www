@@ -21,4 +21,8 @@
 
 ## Getting Started
 
+### Client
+
+See `/client/` 
+
 *TODO*

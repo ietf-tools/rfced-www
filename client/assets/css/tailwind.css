@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body,
+  #__nuxt {
+    min-height: 100vh;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+
+    abbr {
+      text-decoration: underline;
+    }
+  }
+
+  p {
+    line-height: 2;
+  }
+}
+
+html {
+  background: theme('colors.gray.100');
+  color: theme('colors.black');
+}
+
+html.dark {
+  background: theme('colors.black');
+  color: theme('colors.white');
+}
