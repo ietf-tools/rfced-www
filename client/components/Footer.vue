@@ -20,10 +20,10 @@
         </p>
         <div class="flex gap-7 items-center mb-5">
           <a href="https://www.ietf.org/" target="_blank">
-            <IETFGraphic width="105" height="60" />
+            <GraphicsIETFLogo width="105" height="60" />
           </a>
           <a href="https://www.internetsociety.org/" target="_blank">
-            <InternetSocietyGraphic width="112" height="36" />
+            <GraphicsInternetSocietyLogo width="112" height="36" />
           </a>
         </div>
       </div>

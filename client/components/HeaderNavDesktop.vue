@@ -10,7 +10,7 @@
       class="flex items-center gap-2 rounded hover:bg-gray-900 p-3"
     >
       {{ menuItem.label }}
-      <ChevronGraphic :class="open && 'rotate-180'" />
+      <GraphicsChevron :class="open && 'rotate-180'" />
     </HeadlessMenuButton>
     <HeadlessMenuItems
       class="absolute z-10 w-40 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red"

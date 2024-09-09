@@ -11,7 +11,7 @@
               class="flex justify-between w-full py-5 pr-4 items-center"
               @click="isOpen = false"
             >
-              <HeaderLogoMobileMenuGraphic />
+              <GraphicsHeaderLogoMobileMenu />
               <svg
                 width="16"
                 height="16"
@@ -50,7 +50,7 @@
                 <Accordion.ItemIndicator
                   class="w-[16px] border-l border-gray-500 py-4 pl-6 pr-8 text-blue-100"
                 >
-                  <ChevronGraphic class="-rotate-90" data-chevron />
+                  <GraphicsChevron class="-rotate-90" data-chevron />
                 </Accordion.ItemIndicator>
               </Accordion.ItemTrigger>
               <Accordion.ItemContent>
@@ -73,12 +73,7 @@
       </HeadlessDialogPanel>
     </HeadlessDialog>
     <button type="button" class="text-white p-3" @click="isOpen = true">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" role="img">
-        <title>Open mobile menu</title>
-        <rect y="0.75" width="16" height="2" fill="currentColor" />
-        <rect y="7.25" width="16" height="2" fill="currentColor" />
-        <rect y="13.75" width="16" height="2" fill="currentColor" />
-      </svg>
+      <GraphicsHamburgerMenu />
     </button>
   </div>
 </template>
@@ -91,8 +86,11 @@ const isOpen = ref(false)
 </script>
 
 <style>
-/* Ark Accordion doesn't expose template vars, it just sets data-* attributes,
- so we use those to animate chevron rotation */
+/**
+   Ark Accordion doesn't expose template slots for open/closed state, it just
+   sets data-* attributes, so we use those to animate chevron rotation instead
+   of the conventional Vue approach
+**/
 [data-state='open'] [data-chevron] {
   transform: rotate(0deg);
 }

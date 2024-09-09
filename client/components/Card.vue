@@ -13,7 +13,7 @@
         ]"
       >
         <slot name="headingTitle">slot #headingTitle</slot>
-        <ChevronGraphic
+        <GraphicsChevron
           width="14"
           height="21"
           class="absolute right-4 bottom-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 transition-all group-hover:right-3 group-focus:right-3 -rotate-90"

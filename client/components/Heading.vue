@@ -3,7 +3,7 @@
     :is="`h${props.level}`"
     :class="[headingStyles[`h${props.level}`], 'text-grey-100', props.class]"
   >
-    <ThreeBarGraphic
+    <GraphicsIETFMotif
       v-if="hasIcon"
       class="absolute ml-[-1.3em] -mt-4"
       width="75"

@@ -1,12 +1,12 @@
 <template>
   <div class="container mx-auto">
-    <ThreeBarGraphic
+    <GraphicsIETFMotif
       width="500"
       height="400"
       class="absolute bottom-0 left-[150px]"
       :opacity="0.04"
     />
-    <ThreeBarGraphic
+    <GraphicsIETFMotif
       width="200"
       height="200"
       class="absolute bottom-0 left-[525px]"
@@ -22,7 +22,7 @@
           class="flex items-center gap-2 rounded p-2 font-bold text-nowrap hover:bg-black"
         >
           What is an RFC?
-          <ChevronGraphic class="-rotate-90" />
+          <GraphicsChevron class="-rotate-90" />
         </a>
       </div>
     </div>
