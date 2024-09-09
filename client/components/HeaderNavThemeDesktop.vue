@@ -2,7 +2,7 @@
   <HeadlessListbox
     v-model="$colorMode.preference"
     as="div"
-    class="relative flex items-center"
+    class="relative hidden lg:flex items-center"
   >
     <HeadlessListboxButton>
       <span

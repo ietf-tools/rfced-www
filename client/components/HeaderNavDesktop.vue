@@ -3,7 +3,7 @@
     v-for="(menuItem, index) in menuData"
     :key="index"
     as="div"
-    class="relative inline-block"
+    class="relative hidden lg:block"
   >
     <HeadlessMenuButton
       v-slot="{ open }"
@@ -32,10 +32,10 @@
       </HeadlessMenuItem>
     </HeadlessMenuItems>
   </HeadlessMenu>
-  <a href="#search" type="button" class="flex items-center">
+  <a href="#search" type="button" class="hidden lg:flex items-center">
     <Icon name="fluent:search-12-filled" />
   </a>
-  <HeaderNavTheme />
+  <HeaderNavThemeDesktop />
 </template>
 
 <script setup lang="ts">

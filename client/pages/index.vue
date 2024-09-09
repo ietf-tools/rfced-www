@@ -4,9 +4,21 @@
       <template #subheader>
         <IndexSubheader />
       </template>
-      <Heading level="2" has-icon>Latest RFCs</Heading>
 
-      <div class="grid grid-cols-3 gap-4">
+      <div
+        class="flex flex-col-reverse lg:flex-row lg:items-center justify-between"
+      >
+        <Heading level="2" has-icon class="lg:ml-4 text-left">
+          Latest RFCs
+        </Heading>
+        <p class="text-base text-grey-800 pt-3 lg:pt-0">
+          Looking for works in progress? Go to
+          <a href="https://datatracker.ietf.org/" class="text-blue-300"
+            >datatracker.ietf.org</a
+          >
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <RFCCard
           title="RFC9392"
           heading-level="3"
@@ -53,8 +65,7 @@
       </div>
 
       <Heading level="2" has-icon>Learn about RFCs</Heading>
-
-      <div class="flex gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card href="/sdf" heading-level="3" has-cover-link>
           <template #headingTitle>What is an RFC?</template>
           <p class="text-base mt-2 text-blue-900 dark:text-white">
@@ -63,21 +74,21 @@
         </Card>
 
         <Card href="/sdf" heading-level="3" has-cover-link>
-          <template #headingTitle>What is an RFC?</template>
+          <template #headingTitle>What are Errata?</template>
           <p class="text-base mt-2 text-blue-900 dark:text-white">
             Short description of the page here if it seems useful to show
           </p>
         </Card>
 
         <Card href="/sdf" heading-level="3" has-cover-link>
-          <template #headingTitle>What is an RFC?</template>
+          <template #headingTitle>FAQs</template>
           <p class="text-base mt-2 text-blue-900 dark:text-white">
             Short description of the page here if it seems useful to show
           </p>
         </Card>
 
         <Card href="/sdf" heading-level="3" has-cover-link>
-          <template #headingTitle>What is an RFC?</template>
+          <template #headingTitle>About the RFC Editor</template>
           <p class="text-base mt-2 text-blue-900 dark:text-white">
             Short description of the page here if it seems useful to show
           </p>
@@ -85,8 +96,66 @@
       </div>
 
       <Heading level="2" has-icon>Browse RFCs</Heading>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>By Stream</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>By Status</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>By Service</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>Download RFCs</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+      </div>
 
       <Heading level="2" has-icon>Start Participating</Heading>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>Internet Engineering Task Force</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>Internet Research Task Force</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>Internet Architecture Board</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+
+        <Card href="/sdf" heading-level="3" has-cover-link>
+          <template #headingTitle>Independent Stream</template>
+          <p class="text-base mt-2 text-blue-900 dark:text-white">
+            Short description of the page here if it seems useful to show
+          </p>
+        </Card>
+      </div>
     </NuxtLayout>
   </div>
 </template>

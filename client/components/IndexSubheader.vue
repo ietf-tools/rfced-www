@@ -12,7 +12,7 @@
       class="absolute bottom-0 left-[525px]"
       :opacity="0.04"
     />
-    <div class="flex w-full">
+    <div class="lg:flex w-full">
       <Heading level="1" class="w-full mt-5 mb-3">
         The official home of RFCs
       </Heading>
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="sm:w-2/3 md:w-1/2">
+    <div class="lg:w-1/2">
       <p>
         RFCs outline computer networking and Internet foundations, including
         <a href="/internet-standards">Internet Standards</a> and historical or
