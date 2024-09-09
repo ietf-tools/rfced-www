@@ -1,7 +1,14 @@
 type MenuItem = {
   label: string
-  children: { label: string; href: string }[]
+  children: { label: string; href: string; click?: () => void }[]
 }
+
+export const colorPreferences = [
+  { value: 'system', label: 'System default' },
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'sepia', label: 'Sepia' }
+]
 
 export const menuData: MenuItem[] = [
   {

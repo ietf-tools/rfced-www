@@ -12,63 +12,59 @@
               @click="isOpen = false"
             >
               <GraphicsHeaderLogoMobileMenu />
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                role="img"
-              >
-                <title>Close mobile menu</title>
-                <rect
-                  x="0.797363"
-                  y="14.2842"
-                  width="20"
-                  height="1.5"
-                  transform="rotate(-45 0.797363 14.2842)"
-                  fill="white"
-                />
-                <rect
-                  width="20"
-                  height="1.5"
-                  transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 15.6465 14.2842)"
-                  fill="white"
-                />
-              </svg>
+              <GraphicsClose />
             </button>
           </HeadlessDialogTitle>
-          <Accordion.Root>
-            <Accordion.Item
-              v-for="(item, index) in menuData"
-              :key="index"
-              :value="index.toString()"
-            >
-              <Accordion.ItemTrigger
-                class="flex flex-row w-full justify-between items-center py-1 border border-gray-500 hover:bg-white/10"
+          <div class="flex flex-col">
+            <Accordion.Root multiple collapsible>
+              <Accordion.Item
+                v-for="(item, index) in mobileMenuItem"
+                :key="index"
+                :value="index.toString()"
               >
-                <span class="p-4">{{ item.label }}</span>
-                <Accordion.ItemIndicator
-                  class="w-[16px] border-l border-gray-500 py-4 pl-6 pr-8 text-blue-100"
+                <Accordion.ItemTrigger
+                  class="flex flex-row w-full justify-between items-center py-1 border border-gray-500 hover:bg-white/10"
                 >
-                  <GraphicsChevron class="-rotate-90" data-chevron />
-                </Accordion.ItemIndicator>
-              </Accordion.ItemTrigger>
-              <Accordion.ItemContent>
-                <ul class="mx-4">
-                  <li
-                    v-for="(childItem, childIndex) in item.children"
-                    :key="childIndex"
+                  <span class="p-4">{{ item.label }}</span>
+                  <Accordion.ItemIndicator
+                    class="w-[16px] border-l border-gray-500 py-4 pl-6 pr-8 text-blue-100"
                   >
-                    <a
-                      :href="childItem.href"
-                      class="block border border-gray-500 px-6 py-3 hover:bg-white/10"
-                      >{{ childItem.label }}</a
+                    <GraphicsChevron class="-rotate-90" data-chevron />
+                  </Accordion.ItemIndicator>
+                </Accordion.ItemTrigger>
+                <Accordion.ItemContent>
+                  <ul class="mx-4">
+                    <li
+                      v-for="(childItem, childIndex) in item.children"
+                      :key="childIndex"
                     >
-                  </li>
-                </ul>
-              </Accordion.ItemContent>
-            </Accordion.Item>
-          </Accordion.Root>
+                      <a
+                        v-if="childItem.href"
+                        :href="childItem.href"
+                        class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                      >
+                        {{ childItem.label }}
+                      </a>
+                      <button
+                        v-else
+                        type="button"
+                        class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                        @click="childItem.click"
+                      >
+                        {{ childItem.label }}
+                      </button>
+                    </li>
+                  </ul>
+                </Accordion.ItemContent>
+              </Accordion.Item>
+              <Accordion.Item
+                v-for="(item, index) in menuData"
+                :key="index"
+                :value="index.toString()"
+              >
+              </Accordion.Item>
+            </Accordion.Root>
+          </div>
         </nav>
       </HeadlessDialogPanel>
     </HeadlessDialog>
@@ -80,7 +76,21 @@
 
 <script setup lang="ts">
 import { Accordion } from '@ark-ui/vue'
-import { menuData } from './HeaderNavData'
+import { menuData, colorPreferences } from './HeaderNavData'
+
+const colorMode = useColorMode()
+
+const mobileMenuItem = [
+  ...menuData,
+  {
+    label: 'Theme',
+    children: colorPreferences.map((colorPreference) => ({
+      label: colorPreference.label,
+      href: '',
+      click: () => (colorMode.preference = colorPreference.value)
+    }))
+  }
+]
 
 const isOpen = ref(false)
 </script>
