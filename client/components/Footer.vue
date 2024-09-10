@@ -1,7 +1,7 @@
 <template>
   <footer class="bg-blue-900 text-white dark:bg-blue-950 relative">
     <div class="container mx-auto flex flex-col md:flex-row py-4 lg:py-8 gap-4">
-      <div class="flex-1 flex flex-col gap-5 p-4">
+      <div class="flex-1 flex flex-col gap-5 pr-4">
         <p class="text-base">
           rfc-editor.org is maintained by the
           <a

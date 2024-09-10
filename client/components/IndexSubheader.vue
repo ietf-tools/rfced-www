@@ -45,17 +45,7 @@
         <a href="/ise"><abbr title="Independent Submission Editor">ISE</abbr></a
         >, which collectively form the authoritative source for RFCs
       </p>
-      <form method="get" action="/search" class="w-full flex pt-4 pb-6">
-        <input
-          type="text"
-          class="flex-1 bg-white text-black dark:bg-black dark:text-white"
-          placeholder="Find an RFC (e.g. ‘RFC 7120’)"
-          aria-label="Find an RFC (e.g. ‘RFC 7120’)"
-        />
-        <button type="submit" class="bg-blue-200 px-2 flex items-center">
-          <Icon name="fluent:search-12-filled" size="2em" />
-        </button>
-      </form>
+      <SearchBox />
     </div>
   </div>
 </template>

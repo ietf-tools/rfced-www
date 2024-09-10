@@ -3,7 +3,7 @@
     <HeaderSkipToContent />
     <nav class="container mx-auto flex justify-between py-4 px-0 w-full">
       <GraphicsHeaderLogos />
-      <div class="flex gap-2">
+      <div class="flex md:gap-8">
         <HeaderNavMobile />
         <HeaderNavDesktop />
       </div>
