@@ -2,7 +2,8 @@
   <div class="block lg:hidden">
     <HeadlessDialog as="div" :open="isOpen" @close="isOpen = false">
       <HeadlessDialogPanel
-        class="absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950"
+        :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
+        'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 overflow-y-scroll h-full'"
       >
         <nav class="container mx-auto flex flex-col">
           <HeadlessDialogTitle>
@@ -87,7 +88,10 @@ const mobileMenuItem = [
     children: colorPreferences.map((colorPreference) => ({
       label: colorPreference.label,
       href: '',
-      click: () => (colorMode.preference = colorPreference.value)
+      click: () => {
+        colorMode.preference = colorPreference.value
+        isOpen.value = false
+      }
     }))
   }
 ]

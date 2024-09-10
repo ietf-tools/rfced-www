@@ -19,10 +19,10 @@
       <div class="self-end">
         <a
           href="/what"
-          class="flex items-center gap-2 rounded p-2 font-bold text-nowrap hover:bg-black"
+          class="rounded p-2 font-bold text-nowrap hover:bg-black"
         >
           What is an RFC?
-          <GraphicsChevron class="-rotate-90" />
+          <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />
         </a>
       </div>
     </div>

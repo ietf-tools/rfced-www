@@ -33,7 +33,7 @@
         >
           <div
             :class="[
-              'flex items-center px-2',
+              'flex items-center px-2 cursor-pointer',
               {
                 'bg-blue-500 text-white': active
               }
