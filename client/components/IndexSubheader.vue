@@ -1,34 +1,36 @@
 <template>
   <div class="container mx-auto">
-    <ThreeBarGraphic
-      width="500"
-      height="400"
-      class="absolute bottom-0 left-[150px]"
-      :opacity="0.04"
-    />
-    <ThreeBarGraphic
-      width="200"
-      height="200"
-      class="absolute bottom-0 left-[525px]"
-      :opacity="0.04"
-    />
-    <div class="flex w-full">
-      <Heading level="1" class="w-full mt-5 mb-3">
+    <div class="absolute pointer-events-none inset-0 overflow-hidden">
+      <GraphicsIETFMotif
+        width="500"
+        height="400"
+        class="absolute bottom-0 left-[150px]"
+        :opacity="0.04"
+      />
+      <GraphicsIETFMotif
+        width="200"
+        height="200"
+        class="absolute bottom-0 left-[525px]"
+        :opacity="0.04"
+      />
+    </div>
+    <div class="lg:flex w-full">
+      <Heading level="1" class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance">
         The official home of RFCs
       </Heading>
-      <div class="self-end">
+      <div class="self-end sm:text-right">
         <a
           href="/what"
-          class="flex items-center gap-2 rounded p-2 font-bold text-nowrap hover:bg-black"
+          class="rounded inline-block px-5 py-3 font-bold text-nowrap hover:bg-black"
         >
           What is an RFC?
-          <ChevronGraphic class="-rotate-90" />
+          <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />
         </a>
       </div>
     </div>
 
-    <div class="sm:w-2/3 md:w-1/2">
-      <p>
+    <div class="lg:w-1/2">
+      <p class="pl-5 md:p-0">
         RFCs outline computer networking and Internet foundations, including
         <a href="/internet-standards">Internet Standards</a> and historical or
         informative content. They are published by the RFC Editor for the

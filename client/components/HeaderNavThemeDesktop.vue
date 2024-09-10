@@ -2,7 +2,7 @@
   <HeadlessListbox
     v-model="$colorMode.preference"
     as="div"
-    class="relative flex items-center"
+    class="relative hidden lg:flex items-center"
   >
     <HeadlessListboxButton>
       <span
@@ -33,7 +33,7 @@
         >
           <div
             :class="[
-              'flex items-center px-2',
+              'flex items-center px-2 cursor-pointer',
               {
                 'bg-blue-500 text-white': active
               }
@@ -51,12 +51,7 @@
 </template>
 
 <script setup type="ts">
-const colorMode = useColorMode()
+import { colorPreferences } from './HeaderNavData'
 
-const colorPreferences = [
-  { value: 'system', label: 'System default' },
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
-  { value: 'sepia', label: 'Sepia' },
-]
+const colorMode = useColorMode()
 </script>

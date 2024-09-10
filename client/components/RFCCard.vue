@@ -11,12 +11,12 @@
     </div>
     <ul v-if="props.body" class="text-sm text-blue-900 dark:text-white">
       <li v-for="(part, index) in props.body" :key="index" class="inline">
-        <DiamondGraphic v-if="index > 0" />{{ part }}
+        <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
     <ul v-if="props.footer" class="text-xs text-gray-800 mt-1 dark:text-white">
       <li v-for="(part, index) in props.footer" :key="index" class="inline">
-        <DiamondGraphic v-if="index > 0" />{{ part }}
+        <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
   </Card>
