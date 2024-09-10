@@ -1,7 +1,6 @@
 <template>
   <img
     :src="LogoMenuMobile"
-    class="lg:hidden"
     alt="RFC Editor - Official home of RFCs"
     width="131"
     height="24"

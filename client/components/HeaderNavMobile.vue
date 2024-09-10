@@ -9,7 +9,7 @@
           <HeadlessDialogTitle>
             <button
               type="button"
-              class="flex justify-between w-full py-5 pr-4 items-center"
+              class="flex justify-between w-full py-5 px-4 items-center"
               @click="isOpen = false"
             >
               <GraphicsHeaderLogoMobileMenu />
