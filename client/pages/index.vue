@@ -8,8 +8,10 @@
       <div
         class="flex flex-col-reverse lg:flex-row lg:items-center justify-between"
       >
-        <Heading level="2" has-icon class="text-left"> Latest RFCs </Heading>
-        <p class="text-base text-grey-800 pt-3 lg:pt-0">
+        <Heading level="2" has-icon class="text-left pl-5 md:pl-0">
+          Latest RFCs
+        </Heading>
+        <p class="text-base text-grey-800 pt-3 lg:pt-0 pl-5 md:pl-0">
           Looking for works in progress? Go to
           <a href="https://datatracker.ietf.org/" class="text-blue-300"
             >datatracker.ietf.org</a
@@ -62,7 +64,7 @@
         </RFCCard>
       </div>
 
-      <Heading level="2" has-icon>Learn about RFCs</Heading>
+      <Heading level="2" has-icon class="pl-5 md:p-0">Learn about RFCs</Heading>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card href="/sdf" heading-level="3" has-cover-link>
           <template #headingTitle>What is an RFC?</template>
@@ -93,7 +95,7 @@
         </Card>
       </div>
 
-      <Heading level="2" has-icon>Browse RFCs</Heading>
+      <Heading level="2" has-icon class="pl-5 md:p-0"> Browse RFCs </Heading>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card href="/sdf" heading-level="3" has-cover-link>
           <template #headingTitle>By Stream</template>
@@ -124,8 +126,10 @@
         </Card>
       </div>
 
-      <Heading level="2" has-icon>Start Participating</Heading>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <Heading level="2" has-icon class="pl-5 md:p-0">
+        Start Participating
+      </Heading>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card href="/sdf" heading-level="3" has-cover-link>
           <template #headingTitle>Internet Engineering Task Force</template>
           <p class="text-base mt-2 text-blue-900 dark:text-white">

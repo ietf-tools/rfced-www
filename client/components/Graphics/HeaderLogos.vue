@@ -1,5 +1,5 @@
 <template>
-  <a href="/">
+  <a href="/" class="pl-5 md:pl-0">
     <img
       :src="LogoMobile"
       class="lg:hidden"

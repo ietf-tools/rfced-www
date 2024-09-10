@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col min-h-[100vh]">
     <Header>
-      <slot name="subheader">subheader</slot>
+      <slot name="subheader"></slot>
     </Header>
     <Main>
       <slot />

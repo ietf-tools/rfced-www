@@ -1,15 +1,14 @@
 <template>
   <footer class="bg-blue-900 text-white dark:bg-blue-950 relative">
-    <div class="container mx-auto flex py-8">
-      <div class="flex-1 flex flex-col gap-5">
+    <div class="container mx-auto flex flex-col md:flex-row py-4 lg:py-8 gap-4">
+      <div class="flex-1 flex flex-col gap-5 p-4">
         <p class="text-base">
           rfc-editor.org is maintained by the
           <a
             href="https://www.ietf.org/"
             class="text-blue-100 font-semibold text-nowrap"
+            >Internet Engineering Task Force</a
           >
-            Internet Engineering Task Force
-          </a>
           and funded by the
           <a
             href="https://www.internetsociety.org/"
@@ -18,7 +17,7 @@
             Internet Society
           </a>
         </p>
-        <div class="flex gap-7 items-center mb-5">
+        <div class="flex gap-7 items-center mt-2 lg:mt-5">
           <a href="https://www.ietf.org/" target="_blank">
             <GraphicsIETFLogo width="105" height="60" />
           </a>
@@ -27,7 +26,7 @@
           </a>
         </div>
       </div>
-      <div class="flex-1 flex flex-row gap-10">
+      <div class="flex-1 flex flex-col lg:flex-row gap-10 p-3 lg:p-0">
         <div v-for="(menuItem, index) in menuData" :key="index">
           <Heading level="4" class="text-base text-white">
             {{ menuItem.label }}
