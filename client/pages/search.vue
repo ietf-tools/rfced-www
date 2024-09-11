@@ -10,27 +10,38 @@
         </div>
       </template>
 
-      <div
-        class="flex flex-col-reverse lg:flex-row lg:items-center justify-between"
-      >
+      <div class="flex flex-col lg:items-center justify-between">
         <Heading level="2" has-icon class="text-left pl-5 md:pl-0">
-          Showing <b>12 results</b> for "{{}}"
+          <span v-if="!searchStore.q"> ... </span>
+          <span v-else-if="!searchStore.searchResults"> Loading... </span>
+          <span v-else>
+            Showing <b>{{ searchStore.searchResults.length }} results</b> for
+            "{{ searchStore.q }}"
+            <span v-if="searchStore.hasFilters"> (with filters) </span>
+          </span>
         </Heading>
-        <form class="text-base text-grey-800 pt-3 lg:pt-0 pl-5 md:pl-0">
-          <label>
-            Sort by
-            <select>
-              <option>RFC no. (Lowest first)</option>
-              <option>RFC no. (Highest first)</option>
-            </select>
-          </label>
-        </form>
+
+        <ul v-if="searchStore.searchResults">
+          <li
+            v-for="(searchResult, searchIndex) in searchStore.searchResults"
+            :key="searchIndex"
+          >
+            {{ searchResult }}
+          </li>
+        </ul>
+
+        {{ searchStore.statuses }}
+        <SearchFilter />
       </div>
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useSearchStore } from '~/stores/search'
+
+const searchStore = useSearchStore()
+
 definePageMeta({
   layout: false
 })
