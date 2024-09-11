@@ -10,28 +10,54 @@
         </div>
       </template>
 
-      <div class="flex flex-col lg:items-center justify-between">
-        <Heading level="2" has-icon class="text-left pl-5 md:pl-0">
-          <span v-if="!searchStore.q"> ... </span>
-          <span v-else-if="!searchStore.searchResults"> Loading... </span>
-          <span v-else>
-            Showing <b>{{ searchStore.searchResults.length }} results</b> for
-            "{{ searchStore.q }}"
-            <span v-if="searchStore.hasFilters"> (with filters) </span>
-          </span>
-        </Heading>
-
-        <ul v-if="searchStore.searchResults">
-          <li
-            v-for="(searchResult, searchIndex) in searchStore.searchResults"
-            :key="searchIndex"
-          >
-            {{ searchResult }}
-          </li>
-        </ul>
-
-        {{ searchStore.statuses }}
-        <SearchFilter />
+      <div class="flex flex-row items-start gap-5">
+        <div class="lg:w-1/2">
+          <div class="flex flex-row justify-between">
+            <Heading
+              level="2"
+              class="text-lg text-left pl-5 md:pl-0"
+              aria-atomic="true"
+              aria-live="polite"
+            >
+              <template v-if="!searchStore.q"><!-- no search --></template>
+              <template
+                v-else-if="
+                  !searchStore.searchResults ||
+                  searchStore.searchResults.length === 0
+                "
+              >
+                Loading...
+              </template>
+              <template v-else>
+                Showing
+                <b>{{ searchStore.searchResults.length }} results</b> for "{{
+                  searchStore.q
+                }}"
+                <span v-if="searchStore.hasFilters"> (with filters) </span>
+              </template>
+            </Heading>
+            <div>
+              <label class="font-bold">
+                Sort by
+                <select v-model="searchStore.orderBy">
+                  <option value="lowest">RFC no. (Lowest first)</option>
+                  <option value="highest">RFC no. (Highest first)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <ul v-if="searchStore.searchResults">
+            <li
+              v-for="(searchResult, searchIndex) in searchStore.searchResults"
+              :key="searchIndex"
+            >
+              {{ searchResult }}
+            </li>
+          </ul>
+        </div>
+        <div class="hidden lg:w-1/2 lg:block">
+          <SearchFilter />
+        </div>
       </div>
     </NuxtLayout>
   </div>

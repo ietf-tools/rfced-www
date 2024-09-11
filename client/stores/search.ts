@@ -21,6 +21,12 @@ export const Areas = {
 } as const
 export type AreaValue = keyof typeof Areas
 
+export const OrderBy = {
+  lowest: 'RFC no. (Lowest first)',
+  highest: 'RFC no. (Highest first)'
+} as const
+export type OrderByValue = keyof typeof OrderBy
+
 type SearchParams = {
   q: string
   from: string
@@ -28,6 +34,7 @@ type SearchParams = {
   statuses: string
   streams: string
   areas: string
+  order: string
 }
 
 type SearchResult = {
@@ -42,7 +49,7 @@ export const useSearchStore = defineStore('search', () => {
 
   /**
    * Updates router query params with current search config
-   * and ensures empty values are removed from URL
+   * and ensures empty values (`''`) are removed from URL
    */
   function updateUrlParams(searchParams: Partial<SearchParams>) {
     const filterNull = <T extends Partial<SearchParams>>(obj: T): T =>
@@ -119,6 +126,13 @@ export const useSearchStore = defineStore('search', () => {
       .filter(Boolean) as StatusValue[]
   )
   const toggleStatus = (status: StatusValue) => {
+    /**
+     * Mutate the statuses array per Vue docs:
+     *
+     * "Vue is able to detect when a reactive array's mutation methods are called and trigger
+     *  necessary updates. These mutation methods are: push() pop() shift() unshift() splice()
+     *  sort() reverse()"
+     */
     if (statuses.value.includes(status)) {
       statuses.value.splice(statuses.value.indexOf(status), 1)
     } else {
@@ -138,6 +152,15 @@ export const useSearchStore = defineStore('search', () => {
     }
   )
 
+  // PARAM: order by
+  const orderBy = ref<OrderByValue>(
+    (route.query.order?.toString() ?? 'lowest') as OrderByValue
+  )
+  watch(orderBy, (newOrder) =>
+    updateUrlParams({ order: newOrder !== 'lowest' ? '' : newOrder })
+  )
+
+  // Search results
   const searchResults = ref<SearchResults>(null)
 
   const hasFilters = !!(
@@ -156,6 +179,7 @@ export const useSearchStore = defineStore('search', () => {
     publicationDateTo,
     stream,
     area,
+    orderBy,
     searchResults,
     hasFilters
   }

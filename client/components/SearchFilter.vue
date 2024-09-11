@@ -1,5 +1,7 @@
 <template>
   <form class="text-base text-grey-800 pt-3 lg:pt-0 pl-5 md:pl-0">
+    <Heading level="3" class="text-lg">Filter</Heading>
+
     <fieldset>
       <legend class="font-bold">Status</legend>
       <ul>
@@ -22,13 +24,13 @@
       </ul>
     </fieldset>
 
-    <label class="font-bold">
-      Sort by
-      <select>
-        <option>RFC no. (Lowest first)</option>
-        <option>RFC no. (Highest first)</option>
-      </select>
-    </label>
+    <fieldset>
+      <legend>Publication date</legend>
+      <div>
+        <DatePicker />
+        <DatePicker />
+      </div>
+    </fieldset>
   </form>
 </template>
 
