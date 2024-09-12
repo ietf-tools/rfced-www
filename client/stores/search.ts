@@ -75,12 +75,12 @@ export const useSearchStore = defineStore('search', () => {
     return date.toISOString().split('T')[0]
   }
 
-  // PARAM: Q
-  const q = ref<string>(route.query.q?.toString() ?? '')
-  let qTimer: ReturnType<typeof setTimeout> | undefined = undefined
-  watch(q, (newQ) => {
-    updateUrlParams({ q: newQ })
+  // Search results
+  const searchResults = ref<SearchResults>(null)
 
+  // A fake search stub
+  let qTimer: ReturnType<typeof setTimeout> | undefined = undefined
+  function doSearch() {
     searchResults.value = null
     if (qTimer) {
       clearTimeout(qTimer)
@@ -89,7 +89,18 @@ export const useSearchStore = defineStore('search', () => {
       // Fake search results
       searchResults.value = [{ type: 'sdfsdf' }, { type: 'sdfsdf' }]
     }, 2000)
+  }
+
+  // PARAM: Q (search terms string)
+  const q = ref<string>(route.query.q?.toString() ?? '')
+  watch(q, (newQ) => {
+    updateUrlParams({ q: newQ })
+    doSearch()
   })
+
+  if (q.value.length > 0) {
+    doSearch()
+  }
 
   // PARAM: publicationDateFrom
   const publicationDateFrom = ref<Date | null>(
@@ -159,9 +170,6 @@ export const useSearchStore = defineStore('search', () => {
   watch(orderBy, (newOrder) =>
     updateUrlParams({ order: newOrder !== 'lowest' ? '' : newOrder })
   )
-
-  // Search results
-  const searchResults = ref<SearchResults>(null)
 
   const hasFilters = !!(
     statuses.value.length > 0 ||

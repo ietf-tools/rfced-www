@@ -24,13 +24,13 @@
       </ul>
     </fieldset>
 
-    <fieldset>
-      <legend>Publication date</legend>
-      <div>
-        <DatePicker />
-        <DatePicker />
-      </div>
-    </fieldset>
+    <DateRange
+      label="Publication date (range)"
+      start-label="from"
+      end-label="to"
+      :start-model="searchStore.publicationDateFrom"
+      :end-model="searchStore.publicationDateTo"
+    />
   </form>
 </template>
 
