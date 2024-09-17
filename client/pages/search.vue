@@ -10,12 +10,13 @@
         </div>
       </template>
 
-      <div class="flex flex-row items-start gap-5">
-        <div class="lg:w-1/2">
-          <div class="flex flex-row justify-between">
+      <div class="flex flex-row items-start py-5">
+        <div class="w-full lg:w-1/2">
+          <div class="lg:flex flex-row justify-between">
             <Heading
               level="2"
-              class="text-lg text-left pl-5 md:pl-0"
+              style-level="4"
+              class="text-left pl-5 md:pl-0"
               aria-atomic="true"
               aria-live="polite"
             >
@@ -29,34 +30,47 @@
                 Loading...
               </template>
               <template v-else>
-                Showing
-                <b>{{ searchStore.searchResults.length }} results</b> for "{{
-                  searchStore.q
-                }}"
+                <span class="font-normal">Showing </span>
+                <b>{{ searchStore.searchResults.length }} results</b>
+                <span class="font-normal"> for "{{ searchStore.q }}" </span>
                 <span v-if="searchStore.hasFilters"> (with filters) </span>
               </template>
             </Heading>
-            <div>
-              <label class="font-bold">
-                Sort by
-                <select v-model="searchStore.orderBy">
+            <div class="hidden lg:block">
+              <label class="text-sm">
+                <span>Sort by</span>
+                <select v-model="searchStore.orderBy" class="text-sm ml-2">
                   <option value="lowest">RFC no. (Lowest first)</option>
                   <option value="highest">RFC no. (Highest first)</option>
                 </select>
               </label>
             </div>
           </div>
-          <ul v-if="searchStore.searchResults">
+          <ul
+            v-if="searchStore.searchResults"
+            class="mt-4 w-full flex flex-col gap-4"
+          >
             <li
               v-for="(searchResult, searchIndex) in searchStore.searchResults"
               :key="searchIndex"
             >
-              {{ searchResult }}
+              <RFCCard
+                heading-level="3"
+                title="RFC9392"
+                author="C. Perkins"
+                :tag="{
+                  type: 'Informational',
+                  date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
+                }"
+                intro="Message Header Field for Indicating Message Authentication Status"
+                :body="['C. Perkins', 'Date']"
+                :footer="['IETF Stream']"
+              />
             </li>
           </ul>
         </div>
-        <div class="hidden lg:w-1/2 lg:block">
-          <SearchFilter />
+        <div class="hidden lg:w-1/2 lg:block pl-10">
+          <SearchFilter class="border-l-2 pl-10" />
         </div>
       </div>
     </NuxtLayout>

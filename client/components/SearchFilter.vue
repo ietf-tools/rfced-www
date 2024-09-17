@@ -1,44 +1,79 @@
 <template>
-  <form class="text-base text-grey-800 pt-3 lg:pt-0 pl-5 md:pl-0">
-    <Heading level="3" class="text-lg">Filter</Heading>
+  <form
+    class="flex flex-col gap-5 text-base text-grey-800 pt-3 lg:pt-0 pl-5 md:pl-10"
+  >
+    <Heading level="2" style-level="4">Filter</Heading>
 
-    <fieldset>
-      <legend class="font-bold">Status</legend>
-      <ul>
-        <li
-          v-for="([statusValue, statusLabel], statusIndex) in Object.entries(
-            Statuses
-          )"
-          :key="statusIndex"
-        >
-          <label>
-            <input
-              type="checkbox"
-              :value="statusValue"
-              :checked="searchStore.statuses.includes(statusValue as StatusValue)"
-              @click="searchStore.toggleStatus(statusValue as StatusValue)"
-            />
-            {{ statusLabel }}
-          </label>
-        </li>
-      </ul>
-    </fieldset>
+    <SearchFilterStatuses />
 
-    <DateRange
-      label="Publication date (range)"
+    <DateYearMonthRange
+      v-model:start="startValue"
+      v-model:end="endValue"
+      :start-range-date="OLDEST_RFC"
+      :end-range-date="NEWEST_POTENTIAL_RFC"
+      label="Publication date"
       start-label="from"
+      start-placeholder="Date from"
       end-label="to"
-      :start-model="searchStore.publicationDateFrom"
-      :end-model="searchStore.publicationDateTo"
+      end-placeholder="Date to"
+    />
+
+    <SearchFilterSelect
+      v-model="searchStore.stream"
+      label="Stream"
+      :options="Object.entries(Streams)"
+    />
+
+    <SearchFilterSelect
+      v-model="searchStore.area"
+      label="Area"
+      :options="Object.entries(Areas)"
+    />
+
+    <SearchFilterSelect
+      v-model="searchStore.workingGroup"
+      label="Working group"
+      :options="Object.entries(WorkingGroups)"
     />
   </form>
 </template>
 
 <script setup lang="ts">
-// This template might be used several times in the DOM so ensure unique DOM ids
-// or don't use ids (eg <label> wrapping input, rather than for="id")
-import { useSearchStore, Statuses } from '~/stores/search'
-import type { StatusValue } from '~/stores/search'
+// This template and any descendant components within it might be used multiple times
+// in the DOM so please ensure unique DOM ids.
+import { useSearchStore, Streams, Areas, WorkingGroups } from '~/stores/search'
 
 const searchStore = useSearchStore()
+
+function parseDate(yearMonth: string): Date | undefined {
+  if (yearMonth === '') {
+    return undefined
+  }
+  const [year, month] = yearMonth.split('-')
+  return new Date(parseFloat(year), parseFloat(month) - 1)
+}
+
+/**
+ * The store uses `Date` objects whereas <DateYearMonthRange> expects
+ * strings of `YYYY-M` (eg `2024-3`) so we'll convert them here.
+ **/
+const startValue = computed({
+  get() {
+    return stringifyDate(searchStore.publicationDateFrom)
+  },
+  set(yearMonth: string) {
+    searchStore.publicationDateFrom = parseDate(yearMonth)
+  }
+})
+const endValue = computed({
+  get() {
+    return stringifyDate(searchStore.publicationDateTo)
+  },
+  set(yearMonth: string) {
+    searchStore.publicationDateTo = parseDate(yearMonth)
+  }
+})
+
+const OLDEST_RFC = new Date('1969-01-01')
+const NEWEST_POTENTIAL_RFC = new Date()
 </script>

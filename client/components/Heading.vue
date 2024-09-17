@@ -1,7 +1,11 @@
 <template>
   <component
     :is="`h${props.level}`"
-    :class="[headingStyles[`h${props.level}`], 'text-grey-100', props.class]"
+    :class="[
+      props.class,
+      headingStyles[`h${props.styleLevel || props.level}`],
+      'text-grey-100'
+    ]"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
@@ -16,10 +20,17 @@
 
 <script setup lang="ts">
 type Props = {
-  level: '1' | '2' | '3' | '4' | '5' | '6'
+  level: Level
+  /**
+   * By default the 'level' prop is also used for styling, but you can override this
+   * to have different styling to the actual HTML heading level.
+   */
+  styleLevel?: Level
   class?: string
   hasIcon?: boolean
 }
+
+type Level = '1' | '2' | '3' | '4' | '5' | '6'
 
 const props = defineProps<Props>()
 

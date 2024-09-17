@@ -1,25 +1,31 @@
 export const Statuses = {
-  any: 'Any',
-  standards: 'Standards tracks',
-  best: 'Best current practice',
-  informational: 'Informational',
+  '': 'Any',
   experimental: 'Experimental',
+  standards: 'Standards tracks',
   historic: 'Historic',
-  unknown: 'unknown'
+  best: 'Best current practice',
+  unknown: 'Unknown',
+  informational: 'Informational'
 } as const
 export type StatusValue = keyof typeof Statuses
 
 export const Streams = {
-  any: 'Any',
+  '': 'Any',
   todo: 'TODO'
 } as const
 export type StreamValue = keyof typeof Streams
 
 export const Areas = {
-  any: 'Any',
+  '': 'Any',
   todo: 'TODO'
 } as const
 export type AreaValue = keyof typeof Areas
+
+export const WorkingGroups = {
+  '': 'Any',
+  todo: 'TODO'
+} as const
+export type WorkingGroupValue = keyof typeof WorkingGroups
 
 export const OrderBy = {
   lowest: 'RFC no. (Lowest first)',
@@ -32,13 +38,14 @@ type SearchParams = {
   from: string
   to: string
   statuses: string
-  streams: string
-  areas: string
+  stream: string
+  area: string
+  workinggroup: string
   order: string
 }
 
 type SearchResult = {
-  type: 'sdfsdf'
+  type: 'sdfsdf' // FIXME
 }
 
 type SearchResults = null | SearchResult[]
@@ -66,13 +73,6 @@ export const useSearchStore = defineStore('search', () => {
     })
 
     router.push({ query })
-  }
-
-  function formatDate(date: Date | null): string {
-    if (!date) {
-      return ''
-    }
-    return date.toISOString().split('T')[0]
   }
 
   // Search results
@@ -103,32 +103,42 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   // PARAM: publicationDateFrom
-  const publicationDateFrom = ref<Date | null>(
-    route.query.from ? new Date(route.query.from.toString()) : null
+  const publicationDateFrom = ref<Date | undefined>(
+    route.query.from
+      ? new Date(parseDateString(route.query.from.toString()))
+      : undefined
   )
   watch(publicationDateFrom, (newFrom) =>
-    updateUrlParams({ from: formatDate(newFrom) })
+    updateUrlParams({ from: stringifyDate(newFrom) })
   )
 
   // PARAM: publicationDateTo
-  const publicationDateTo = ref<Date | null>(
-    route.query.to ? new Date(route.query.to.toString()) : null
+  const publicationDateTo = ref<Date | undefined>(
+    route.query.to
+      ? new Date(parseDateString(route.query.to.toString()))
+      : undefined
   )
   watch(publicationDateTo, (newTo) =>
-    updateUrlParams({ to: formatDate(newTo) })
+    updateUrlParams({ to: stringifyDate(newTo) })
   )
 
   // PARAM: stream
   const stream = ref<StreamValue>(
-    (route.query.area?.toString() ?? 'any') as StreamValue
+    (route.query.stream?.toString() ?? '') as StreamValue
   )
-  watch(stream, (newStream) => updateUrlParams({ streams: newStream }))
+  watch(stream, (newStream) => updateUrlParams({ stream: newStream }))
 
   // PARAM: area
-  const area = ref<AreaValue>(
-    (route.query.area?.toString() ?? 'any') as AreaValue
+  const area = ref<AreaValue>((route.query.area?.toString() ?? '') as AreaValue)
+  watch(area, (newArea) => updateUrlParams({ area: newArea }))
+
+  // PARAM: working group
+  const workingGroup = ref<WorkingGroupValue>(
+    (route.query.workinggroup?.toString() ?? '') as WorkingGroupValue
   )
-  watch(area, (newArea) => updateUrlParams({ areas: newArea }))
+  watch(workingGroup, (newWorkingGroup) =>
+    updateUrlParams({ workinggroup: newWorkingGroup })
+  )
 
   // PARAM: statuses
   const statuses = ref<StatusValue[]>(
@@ -153,7 +163,6 @@ export const useSearchStore = defineStore('search', () => {
   watch(
     statuses,
     (statuses) => {
-      console.log(statuses)
       updateUrlParams({
         statuses: statuses.length > 0 ? statuses.join(',') : ''
       })
@@ -175,8 +184,9 @@ export const useSearchStore = defineStore('search', () => {
     statuses.value.length > 0 ||
     publicationDateFrom.value ||
     publicationDateTo.value ||
-    stream.value !== 'any' ||
-    area.value !== 'any'
+    stream.value !== '' ||
+    area.value !== '' ||
+    workingGroup.value !== ''
   )
 
   return {
@@ -187,8 +197,31 @@ export const useSearchStore = defineStore('search', () => {
     publicationDateTo,
     stream,
     area,
+    workingGroup,
     orderBy,
     searchResults,
     hasFilters
   }
 })
+
+/**
+ * Stringifies dates to YYYY-M
+ * January = 1 (not 0)
+ */
+export function formatDateString(year: number, month: number): string {
+  return `${year}-${month}`
+}
+
+export function stringifyDate(date: Date | undefined): string {
+  if (!date) {
+    return ''
+  }
+
+  return formatDateString(date.getFullYear(), date.getMonth() + 1)
+}
+
+export function parseDateString(date: string): Date {
+  const [year, month] = date.split('-').map((val) => parseFloat(val))
+  const newDate = new Date(year, month - 1)
+  return newDate
+}
