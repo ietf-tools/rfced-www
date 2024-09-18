@@ -2,7 +2,7 @@
   <Card
     :href="props.href"
     heading-level="3"
-    :has-cover-link="responsiveModeStore.responsiveMode === 'Desktop'"
+    has-cover-link
     :chevron-position="
       props.abstract && responsiveModeStore.responsiveMode === 'Desktop'
         ? 'center'
@@ -41,7 +41,7 @@
           type="button"
           :aria-expanded="isMobileAbstractOpen"
           :aria-controls="abstractDomId"
-          class="text-blue-800 dark:text-blue-100 underline text-sm"
+          class="relative z-50 text-blue-800 dark:text-blue-100 underline text-sm p-3 -left-3 -top-3 -mb-3"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen"
         >
           <span v-if="isMobileAbstractOpen">Hide abstract</span>
@@ -49,7 +49,7 @@
         </button>
         <div
           :id="abstractDomId"
-          :class="[isMobileAbstractOpen ? 'block' : 'hidden', 'mt-5']"
+          :class="[isMobileAbstractOpen ? 'block' : 'hidden', 'mt-3']"
         >
           <Heading
             level="4"
@@ -72,12 +72,18 @@
         >
           Abstract
         </Heading>
-        <p class="leading-snug text-gray-800 dark:text-gray-300">
+        <p class="leading-snug text-gray-800 dark:text-gray-300 pb-2">
           {{ props.abstract }}
         </p>
       </div>
-      <div class="hidden lg:block"></div>
     </template>
+    <p
+      v-if="props.redNote"
+      key="redNote"
+      :class="['text-red-700 text-xs', isMobileAbstractOpen && 'mt-2']"
+    >
+      {{ props.redNote }}
+    </p>
   </Card>
 </template>
 
@@ -95,6 +101,7 @@ type Props = {
   body?: string[]
   footer?: string[]
   abstract?: string
+  redNote?: string
 }
 
 const props = defineProps<Props>()

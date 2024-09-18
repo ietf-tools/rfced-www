@@ -22,10 +22,21 @@
 type Props = {
   level: Level
   /**
-   * By default the 'level' prop is also used for styling, but you can override this
-   * to have different styling to the actual HTML heading level element. Eg choose
-   * <h1> but with h3's styling. Heading levels should be semantic per the page structure,
+   * By default the 'level' prop is also used for styling, but you can optionally override this
+   * to have different styling to the actual HTML heading element.
+   * Eg `<h1>` element but with h3's styling.
+   *
+   * For accessibility reasons heading levels should be semantic per the page structure / hierarchy,
    * not necessarily based on font size.
+   *
+   * W3C: WCAG, WAI say:
+   * > "Skipping heading ranks can be confusing and should be avoided where possible: Make sure
+   * > that a `<h2>` is not followed directly by an `<h4>`, for example."
+   *
+   * See also
+   * * https://www.w3.org/TR/2012/NOTE-WCAG20-TECHS-20120103/G141
+   * * https://dequeuniversity.com/rules/axe/3.4/heading-order
+   * * https://dequeuniversity.com/rules/axe/3.0/page-has-heading-one
    */
   styleLevel?: Level
   class?: string

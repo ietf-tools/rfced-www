@@ -57,16 +57,18 @@
                 heading-level="3"
                 title="RFC9392"
                 href="/"
-                author="C. Perkins"
                 :tag="{
                   type: 'Informational',
                   date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
                 }"
-                intro="Message Header Field for Indicating Message Authentication Status"
                 :body="['C. Perkins', 'Date']"
                 :footer="['IETF Stream']"
                 abstract="This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long. This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long."
-              />
+                red-note="sdfsdf"
+              >
+                Message Header Field for Indicating Message Authentication
+                Status
+              </RFCCard>
             </li>
           </ul>
         </div>

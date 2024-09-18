@@ -8,7 +8,9 @@
         :class="[
           'block text-[22px] font-bold text-blue-300 dark:text-blue-100 no-underline focus:underline hover:underline group',
           props.hasCoverLink &&
-            'before:absolute before:content-[\'\'] before:inset-0 before:z-50 before:transition-all hover:before:shadow-xl focus:before:shadow-xl'
+            `before:absolute before:content-[\'\'] before:inset-0 before:transition-all hover:before:shadow-xl focus:before:shadow-xl ${
+              /* must be able to have (eg) buttons over the coverLink, so coverlink is z-40 so buttons could be z-50 */ 'before:z-40'
+            }`
         ]"
       >
         <slot name="headingTitle">slot #headingTitle</slot>
@@ -16,7 +18,7 @@
           v-if="!props.hasCoverLink"
           class="block absolute right-0 w-10 h-full top-0"
         >
-          <!-- for a larger click area -->
+          <!-- for a larger click area along the right-hand side -->
         </span>
         <GraphicsChevron
           width="14"
