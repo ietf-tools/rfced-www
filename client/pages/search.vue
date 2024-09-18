@@ -65,6 +65,7 @@
                 intro="Message Header Field for Indicating Message Authentication Status"
                 :body="['C. Perkins', 'Date']"
                 :footer="['IETF Stream']"
+                abstract="This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long. This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long."
               />
             </li>
           </ul>

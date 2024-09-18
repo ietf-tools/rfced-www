@@ -16,6 +16,16 @@
 <script setup lang="ts">
 type Props = {
   label: string
+  /**
+   * An array of <option>'s of [value, label]. Eg.
+   * ```
+   * [
+   *   ['red', 'Red'],
+   *   ['green', 'Green'],
+   *   ['blue', 'Blue']
+   * ]
+   * ```
+   */
   options: [string, string][]
 }
 

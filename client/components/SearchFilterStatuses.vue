@@ -3,9 +3,7 @@
     <legend class="font-bold mb-2">Status</legend>
     <ul class="grid-cols-2 grid gap-1 lg:w-3/4">
       <li
-        v-for="([statusValue, statusLabel], statusIndex) in Object.entries(
-          Statuses
-        )"
+        v-for="(statusLabel, statusValue, statusIndex) in Statuses"
         :key="statusIndex"
       >
         <label class="text-sm cursor-pointer">

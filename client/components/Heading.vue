@@ -23,7 +23,9 @@ type Props = {
   level: Level
   /**
    * By default the 'level' prop is also used for styling, but you can override this
-   * to have different styling to the actual HTML heading level.
+   * to have different styling to the actual HTML heading level element. Eg choose
+   * <h1> but with h3's styling. Heading levels should be semantic per the page structure,
+   * not necessarily based on font size.
    */
   styleLevel?: Level
   class?: string

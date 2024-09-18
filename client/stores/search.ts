@@ -1,5 +1,5 @@
 export const Statuses = {
-  '': 'Any',
+  any: 'Any',
   experimental: 'Experimental',
   standards: 'Standards tracks',
   historic: 'Historic',

@@ -39,8 +39,9 @@
 </template>
 
 <script setup lang="ts">
-// This template and any descendant components within it might be used multiple times
-// in the DOM so please ensure unique DOM ids.
+// This template and any descendant components within it might be rendered multiple times
+// simultaneously in the DOM so please ensure unique DOM ids, or avoid them entirely (eg
+// <label> wrapping)
 import { useSearchStore, Streams, Areas, WorkingGroups } from '~/stores/search'
 
 const searchStore = useSearchStore()

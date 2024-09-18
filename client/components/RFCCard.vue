@@ -1,5 +1,10 @@
 <template>
-  <Card href="/sdf" heading-level="3" has-cover-link>
+  <Card
+    :href="props.href"
+    heading-level="3"
+    has-cover-link
+    :chevron-position="props.abstract ? 'center' : 'end'"
+  >
     <template #headingTitle>
       <component :is="formatTitle(props.title)" />
     </template>
@@ -19,6 +24,16 @@
         <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
+    <div v-if="props.abstract" class="mt-6">
+      <Heading
+        level="4"
+        style-level="5"
+        class="text-blue-900 pt-3 border-t inline-block"
+      >
+        Abstract
+      </Heading>
+      <p class="leading-snug text-gray-800">{{ props.abstract }}</p>
+    </div>
   </Card>
 </template>
 
@@ -33,6 +48,7 @@ type Props = {
   headingLevel: '1' | '2' | '3' | '4' | '5' | '6'
   body?: string[]
   footer?: string[]
+  abstract?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
