@@ -12,6 +12,12 @@
         ]"
       >
         <slot name="headingTitle">slot #headingTitle</slot>
+        <span
+          v-if="!props.hasCoverLink"
+          class="block absolute right-0 w-10 h-full top-0"
+        >
+          <!-- for a larger click area -->
+        </span>
         <GraphicsChevron
           width="14"
           height="21"

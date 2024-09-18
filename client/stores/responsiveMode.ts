@@ -1,7 +1,7 @@
 export type ResponsiveMode = 'Desktop' | 'Mobile'
 
 const getResponsiveMode = (): ResponsiveMode => {
-  // See https://tailwindcss.com/docs/responsive-design
+  // For 'lg' breakpoint see https://tailwindcss.com/docs/responsive-design
   const tailwindBreakpointLg = window.matchMedia('(min-width: 1024px)')
   return tailwindBreakpointLg.matches ? 'Desktop' : 'Mobile'
 }

@@ -3,7 +3,11 @@
     :href="props.href"
     heading-level="3"
     :has-cover-link="responsiveModeStore.responsiveMode === 'Desktop'"
-    :chevron-position="props.abstract ? 'center' : 'end'"
+    :chevron-position="
+      props.abstract && responsiveModeStore.responsiveMode === 'Desktop'
+        ? 'center'
+        : 'end'
+    "
   >
     <template #headingTitle>
       <component :is="formatTitle(props.title)" />
@@ -14,12 +18,18 @@
     <div class="my-4">
       <Tag :tag="props.tag" />
     </div>
-    <ul v-if="props.body" class="text-sm text-blue-900 dark:text-white">
+    <ul
+      v-if="props.body"
+      class="hidden lg:block text-sm text-blue-900 dark:text-white"
+    >
       <li v-for="(part, index) in props.body" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
-    <ul v-if="props.footer" class="text-xs text-gray-800 mt-1 dark:text-white">
+    <ul
+      v-if="props.footer"
+      class="hidden lg:block text-xs text-gray-800 mt-1 dark:text-white"
+    >
       <li v-for="(part, index) in props.footer" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
@@ -31,7 +41,7 @@
           type="button"
           :aria-expanded="isMobileAbstractOpen"
           :aria-controls="abstractDomId"
-          class="text-blue-800 underline text-sm"
+          class="text-blue-800 dark:text-blue-100 underline text-sm"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen"
         >
           <span v-if="isMobileAbstractOpen">Hide abstract</span>
@@ -44,11 +54,13 @@
           <Heading
             level="4"
             style-level="5"
-            class="text-blue-900 pt-3 border-t inline-block"
+            class="text-blue-900 dark:text-gray-300 pt-3 border-t inline-block"
           >
             Abstract
           </Heading>
-          <p class="leading-snug text-gray-800">{{ props.abstract }}</p>
+          <p class="leading-snug text-gray-800 dark:text-gray-300">
+            {{ props.abstract }}
+          </p>
         </div>
       </div>
       <div class="hidden lg:block mt-5">
@@ -56,11 +68,13 @@
         <Heading
           level="4"
           style-level="5"
-          class="text-blue-900 pt-3 border-t inline-block"
+          class="text-blue-900 dark:text-gray-300 pt-3 border-t inline-block"
         >
           Abstract
         </Heading>
-        <p class="leading-snug text-gray-800">{{ props.abstract }}</p>
+        <p class="leading-snug text-gray-800 dark:text-gray-300">
+          {{ props.abstract }}
+        </p>
       </div>
       <div class="hidden lg:block"></div>
     </template>
