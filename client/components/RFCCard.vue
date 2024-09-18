@@ -2,7 +2,7 @@
   <Card
     :href="props.href"
     heading-level="3"
-    has-cover-link
+    :has-cover-link="responsiveModeStore.responsiveMode === 'Desktop'"
     :chevron-position="props.abstract ? 'center' : 'end'"
   >
     <template #headingTitle>
@@ -24,23 +24,55 @@
         <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
-    <div v-if="props.abstract" class="mt-6">
-      <Heading
-        level="4"
-        style-level="5"
-        class="text-blue-900 pt-3 border-t inline-block"
-      >
-        Abstract
-      </Heading>
-      <p class="leading-snug text-gray-800">{{ props.abstract }}</p>
-    </div>
+    <template v-if="props.abstract">
+      <div class="block lg:hidden">
+        <!-- mobile abstract -->
+        <button
+          type="button"
+          :aria-expanded="isMobileAbstractOpen"
+          :aria-controls="abstractDomId"
+          class="text-blue-800 underline text-sm"
+          @click="isMobileAbstractOpen = !isMobileAbstractOpen"
+        >
+          <span v-if="isMobileAbstractOpen">Hide abstract</span>
+          <span v-else>Show abstract</span>
+        </button>
+        <div
+          :id="abstractDomId"
+          :class="[isMobileAbstractOpen ? 'block' : 'hidden', 'mt-5']"
+        >
+          <Heading
+            level="4"
+            style-level="5"
+            class="text-blue-900 pt-3 border-t inline-block"
+          >
+            Abstract
+          </Heading>
+          <p class="leading-snug text-gray-800">{{ props.abstract }}</p>
+        </div>
+      </div>
+      <div class="hidden lg:block mt-5">
+        <!-- desktop abstract -->
+        <Heading
+          level="4"
+          style-level="5"
+          class="text-blue-900 pt-3 border-t inline-block"
+        >
+          Abstract
+        </Heading>
+        <p class="leading-snug text-gray-800">{{ props.abstract }}</p>
+      </div>
+      <div class="hidden lg:block"></div>
+    </template>
   </Card>
 </template>
 
 <script setup lang="ts">
+import { useResponsiveModeStore } from '~/stores/responsiveMode'
+
 type Props = {
   title: string
-  href?: string
+  href: string
   tag: {
     type: string
     date: Date
@@ -51,9 +83,15 @@ type Props = {
   abstract?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  title: 'RFC0000'
-})
+const props = defineProps<Props>()
+
+const isMobileAbstractOpen = ref<boolean>(false)
+
+const responsiveModeStore = useResponsiveModeStore()
+
+const abstractDomId = computed(
+  () => `abstract-${(Math.random() * 999999).toString(36)}`
+)
 
 const formatTitle = (title: string) => {
   // split by groups of letters or numbers

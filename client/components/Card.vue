@@ -8,7 +8,7 @@
         :class="[
           'block text-[22px] font-bold text-blue-300 dark:text-blue-100 no-underline focus:underline hover:underline group',
           props.hasCoverLink &&
-            'before:absolute before:content-[\'\'] before:inset-0 before:z-100 before:transition-all hover:before:shadow-xl focus:before:shadow-xl'
+            'before:absolute before:content-[\'\'] before:inset-0 before:z-50 before:transition-all hover:before:shadow-xl focus:before:shadow-xl'
         ]"
       >
         <slot name="headingTitle">slot #headingTitle</slot>

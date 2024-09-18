@@ -37,7 +37,7 @@ type Level = '1' | '2' | '3' | '4' | '5' | '6'
 const props = defineProps<Props>()
 
 const headingStyles: Record<`h${Props['level']}`, string> = {
-  h1: 'text-5xl font-bold',
+  h1: 'text-3xl lg:text-5xl font-bold',
   h2: 'text-2xl mt-7 mb-5 font-bold',
   h3: 'text-xl font-bold',
   h4: 'text-lg font-bold',

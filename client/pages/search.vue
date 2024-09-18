@@ -33,7 +33,6 @@
                 <span class="font-normal">Showing </span>
                 <b>{{ searchStore.searchResults.length }} results</b>
                 <span class="font-normal"> for "{{ searchStore.q }}" </span>
-                <span v-if="searchStore.hasFilters"> (with filters) </span>
               </template>
             </Heading>
             <div class="hidden lg:block">
@@ -57,6 +56,7 @@
               <RFCCard
                 heading-level="3"
                 title="RFC9392"
+                href="/"
                 author="C. Perkins"
                 :tag="{
                   type: 'Informational',
