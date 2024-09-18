@@ -2,7 +2,7 @@
   <form
     class="flex flex-col gap-5 text-base text-grey-800 pt-3 lg:pt-0 pl-5 md:pl-10"
   >
-    <Heading level="2" style-level="4">Filter</Heading>
+    <Heading level="2" style-level="4" class="hidden lg:block">Filter</Heading>
 
     <SearchFilterStatuses />
 

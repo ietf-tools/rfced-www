@@ -1,6 +1,6 @@
 <template>
   <label>
-    <span class="font-bold block mb-1">{{ props.label }}</span>
+    <span class="text-sm font-bold block mb-1">{{ props.label }}</span>
     <select v-model="value" class="clear-both text-sm">
       <option
         v-for="([itemValue, itemLabel], itemIndex) in props.options"

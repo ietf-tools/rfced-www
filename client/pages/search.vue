@@ -12,11 +12,11 @@
 
       <div class="flex flex-row items-start py-5">
         <div class="w-full lg:w-1/2">
-          <div class="lg:flex flex-row justify-between">
+          <div class="flex flex-row justify-between items-center">
             <Heading
               level="2"
               style-level="4"
-              class="text-left pl-5 md:pl-0"
+              class="text-left lg:pl-5"
               aria-atomic="true"
               aria-live="polite"
             >
@@ -43,6 +43,9 @@
                   <option value="highest">RFC no. (Highest first)</option>
                 </select>
               </label>
+            </div>
+            <div class="lg:hidden">
+              <SearchMobileFilter />
             </div>
           </div>
           <ul

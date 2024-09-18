@@ -44,8 +44,8 @@
           class="relative z-50 text-blue-800 dark:text-blue-100 underline text-sm p-3 -left-3 -top-3 -mb-3"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen"
         >
-          <span v-if="isMobileAbstractOpen">Hide abstract</span>
-          <span v-else>Show abstract</span>
+          <template v-if="isMobileAbstractOpen">Hide abstract</template>
+          <template v-else>Show abstract</template>
         </button>
         <div
           :id="abstractDomId"
@@ -79,8 +79,10 @@
     </template>
     <p
       v-if="props.redNote"
-      key="redNote"
-      :class="['text-red-700 text-xs', isMobileAbstractOpen && 'mt-2']"
+      :class="[
+        'text-red-700 dark:text-red-300 text-xs',
+        isMobileAbstractOpen && 'mt-2'
+      ]"
     >
       {{ props.redNote }}
     </p>
