@@ -20,6 +20,7 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <RFCCard
+          href="/"
           title="RFC9392"
           heading-level="3"
           author="C. Perkins"
@@ -36,6 +37,7 @@
         </RFCCard>
 
         <RFCCard
+          href="/"
           title="RFC9230"
           heading-level="3"
           :tag="{
@@ -50,6 +52,7 @@
         </RFCCard>
 
         <RFCCard
+          href="/"
           title="RFC9392"
           heading-level="3"
           :tag="{

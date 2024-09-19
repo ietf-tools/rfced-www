@@ -10,7 +10,10 @@
       class="flex items-center gap-2 rounded hover:bg-gray-900 p-3"
     >
       {{ menuItem.label }}
-      <GraphicsChevron :class="open ? 'rotate-180' : undefined" />
+
+      <span class="text-blue-100">
+        <GraphicsChevron :class="open ? 'rotate-180' : undefined" />
+      </span>
     </HeadlessMenuButton>
     <HeadlessMenuItems
       class="absolute z-10 w-40 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red"
@@ -23,7 +26,7 @@
         <a
           :class="[
             'block px-2 py-1 text-black dark:text-white',
-            { 'bg-blue-500': active }
+            { 'bg-blue-500 text-white': active }
           ]"
           href="/"
         >
@@ -32,7 +35,11 @@
       </HeadlessMenuItem>
     </HeadlessMenuItems>
   </HeadlessMenu>
-  <a href="#search" type="button" class="hidden lg:flex items-center">
+  <a
+    href="#search"
+    type="button"
+    class="hidden lg:flex items-center hover:bg-gray-900 p-3"
+  >
     <Icon name="fluent:search-12-filled" />
   </a>
   <HeaderNavThemeDesktop />

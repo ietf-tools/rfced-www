@@ -14,7 +14,7 @@
     "types": "npx nuxi typecheck"
   },
   "dependencies": {
-    "@ark-ui/vue": "^3.11.0",
+    "@ark-ui/vue": "^3.13.0",
     "@nuxt/fonts": "^0.7.2",
     "@nuxt/icon": "^1.5.0",
     "@nuxtjs/color-mode": "^3.4.4",
@@ -22,10 +22,10 @@
     "@pinia/nuxt": "^0.5.4",
     "@tailwindcss/forms": "^0.5.8",
     "luxon": "^3.5.0",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.13.1",
     "nuxt-headlessui": "^1.2.0",
     "pinia": "^2.2.2",
-    "vue": "^3.4.38"
+    "vue": "^3.5.4"
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.5.3",
