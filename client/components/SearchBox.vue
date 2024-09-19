@@ -1,6 +1,7 @@
 <template>
-  <form method="get" action="/search" class="w-full flex pt-4 pb-6 lg:w-1/2">
+  <form method="get" action="/search" class="w-full flex pt-4 pb-6">
     <input
+      id="search"
       v-model="searchStore.q"
       type="search"
       name="q"

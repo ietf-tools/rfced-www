@@ -180,6 +180,20 @@ export const useSearchStore = defineStore('search', () => {
     updateUrlParams({ order: newOrder !== 'lowest' ? '' : newOrder })
   )
 
+  function clearFilters() {
+    q.value = ''
+    while (statuses.value.length) {
+      statuses.value.pop()
+    }
+    publicationDateFrom.value = undefined
+    publicationDateTo.value = undefined
+    stream.value = ''
+    area.value = ''
+    workingGroup.value = ''
+    orderBy.value = 'lowest'
+    searchResults.value = null
+  }
+
   const hasFilters = !!(
     statuses.value.length > 0 ||
     publicationDateFrom.value ||
@@ -200,7 +214,8 @@ export const useSearchStore = defineStore('search', () => {
     workingGroup,
     orderBy,
     searchResults,
-    hasFilters
+    hasFilters,
+    clearFilters
   }
 })
 

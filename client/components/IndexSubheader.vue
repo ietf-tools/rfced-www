@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div class="lg:w-1/2">
+    <div class="lg:w-2/3 xl:w-1/2">
       <p class="pl-5 md:p-0">
         RFCs outline computer networking and Internet foundations, including
         <a href="/internet-standards">Internet Standards</a> and historical or

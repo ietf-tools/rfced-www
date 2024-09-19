@@ -6,7 +6,9 @@
           <Heading level="1" class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance">
             Search RFCs
           </Heading>
-          <SearchBox />
+          <div class="lg:w-1/2">
+            <SearchBox />
+          </div>
         </div>
       </template>
 
@@ -16,7 +18,7 @@
             <Heading
               level="2"
               style-level="4"
-              class="text-left lg:pl-5"
+              class="text-left"
               aria-atomic="true"
               aria-live="polite"
             >
