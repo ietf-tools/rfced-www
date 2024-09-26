@@ -59,7 +59,7 @@ export const useSearchStore = defineStore('search', () => {
    * and ensures empty values (`''`) are removed from URL
    */
   function updateUrlParams(searchParams: Partial<SearchParams>) {
-    const filterNull = <T extends Partial<SearchParams>>(obj: T): T =>
+    const filterEmpty = <T extends Partial<SearchParams>>(obj: T): T =>
       Object.entries(obj).reduce((acc, [key, value]) => {
         if (value !== '') {
           acc[key as keyof SearchParams] = value
@@ -67,7 +67,7 @@ export const useSearchStore = defineStore('search', () => {
         return acc
       }, {} as T)
 
-    const query = filterNull({
+    const query = filterEmpty({
       ...route.query,
       ...searchParams
     })
@@ -231,7 +231,6 @@ export function stringifyDate(date: Date | undefined): string {
   if (!date) {
     return ''
   }
-
   return formatDateString(date.getFullYear(), date.getMonth() + 1)
 }
 

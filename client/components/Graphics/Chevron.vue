@@ -15,12 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-
 type Props = {
   width?: string
   height?: string
-  class?: HTMLAttributes['class']
+  class?: string | string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {

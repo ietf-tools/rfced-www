@@ -16,7 +16,7 @@
       <slot />
     </p>
     <div class="my-4">
-      <Tag :tag="props.tag" />
+      <Tag :text="[props.tag.type, formatDate(props.tag.date)]" />
     </div>
     <ul
       v-if="props.body"
@@ -90,6 +90,8 @@
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
+import { parseRFCId } from './rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 
 type Props = {
@@ -108,6 +110,11 @@ type Props = {
 
 const props = defineProps<Props>()
 
+function formatDate(date: Date) {
+  const luxonDate = DateTime.fromJSDate(date)
+  return luxonDate.toRelativeCalendar() ?? ''
+}
+
 const isMobileAbstractOpen = ref<boolean>(false)
 
 const responsiveModeStore = useResponsiveModeStore()
@@ -117,21 +124,11 @@ const abstractDomId = computed(
 )
 
 const formatTitle = (title: string) => {
-  // split by groups of letters or numbers
-  // ie "RFC0000" becomes ["RFC", "0000"]
-  const parts = title.match(/\d+|\D+/g)
-  if (parts === null) {
-    return title
-  }
+  const parts = parseRFCId(title)
 
-  return h(
-    'span',
-    parts.map((part) => {
-      if (part.match(/\d+/)) {
-        return h('span', part.toString())
-      }
-      return h('span', { class: 'font-normal' }, part.toString())
-    })
-  )
+  return h('span', [
+    h('span', { class: 'font-normal' }, parts.type),
+    h('span', parts.number)
+  ])
 }
 </script>
