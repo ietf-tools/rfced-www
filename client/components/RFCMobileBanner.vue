@@ -1,15 +1,15 @@
 <template>
   <div
     :class="[
-      props.isFixed && 'fixed bottom-0 left-0 right-0 lg:hidden',
-      'flex flex-row w-full justify-between items-center py-1 bg-[#002D3CE5] text-white dark:bg-black dark:border'
+      'flex flex-row w-full justify-between items-center py-1 bg-[#002D3CE5] text-white dark:bg-black dark:border',
+      props.isFixed && 'fixed bottom-0 left-0 right-0 lg:hidden'
     ]"
   >
     <div
       :class="[
-        props.isFixed && 'container mx-auto',
-        !props.isFixed && 'p-2',
-        'xs:leading-5 sm:leading-6'
+        'xs:leading-5 sm:leading-6',
+        props.isFixed && 'container mx-auto p-2',
+        !props.isFixed && 'p-2'
       ]"
     >
       <div class="font-bold">

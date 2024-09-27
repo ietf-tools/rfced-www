@@ -46,7 +46,11 @@
         </div>
       </div>
     </template>
+
+    <GraphicsIETFMotif class="absolute mt-8 w-[80vw] h-[80vh]" opacity="0.02" />
+
     <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
+
     <Heading level="1" class="mb-2">
       {{ rfcId.type }} {{ rfcId.number }}
     </Heading>
@@ -54,6 +58,7 @@
     <RFCMobileBanner :rfc-id="rfcId" :is-fixed="true" />
 
     <p v-if="props.intro">{{ props.intro }}</p>
+
     <div class="flex flex-row justify-between items-center flex-wrap">
       <div class="align-middle">
         <Tag
@@ -88,7 +93,7 @@
       <div v-if="props.errata">
         <button
           type="button"
-          class="text-sm underline text-blue-300"
+          class="text-sm underline text-blue-300 p-2"
           @click="gotoErrata"
         >
           {{ props.errata.length }}
@@ -98,6 +103,30 @@
         </button>
       </div>
     </div>
+
+    <Alert
+      v-if="props.obsoletedBy && obsoletedByRFCId"
+      variant="warning"
+      heading="This RFC is now obsolete"
+    >
+      <p class="text-sm">
+        For more information please refer to
+        <a :href="`/info/${props.obsoletedBy}`"
+          >{{ obsoletedByRFCId.type }} {{ obsoletedByRFCId.number }}
+          {{ obsoletedByRFCId.title }}
+        </a>
+      </p>
+    </Alert>
+
+    <Alert v-if="props.seeAlso" variant="info" heading="This RFC updates 1 RFC">
+      <p class="text-sm">
+        See also
+        <a href="/info/rfc9052"
+          >RFC 9052 CBOR Object Signing and Encryption (COSE): Structures and
+          Process</a
+        >
+      </p>
+    </Alert>
 
     <div
       v-for="(page, index) in props.pagesHtml"
@@ -117,11 +146,17 @@ type Props = {
   id: string
   meta?: ReturnType<typeof h>
   intro: string
+  obsoletedBy?: string
+  seeAlso?: string
   pagesHtml: string[]
   errata: string[]
 }
 
 const props = defineProps<Props>()
+
+const obsoletedByRFCId = computed(() =>
+  props.obsoletedBy ? parseRFCId(props.obsoletedBy) : undefined
+)
 
 const selectedTab = ref(0)
 

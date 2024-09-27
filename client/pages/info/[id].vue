@@ -9,6 +9,8 @@
         intro="CBOR Object Signing and Encryption (COSE): Countersignatures"
         :pages-html="pagesHtml"
         :errata="errata"
+        obsoleted-by="RFC9052CBOR"
+        see-also="RFC9052CBOR"
       />
     </NuxtLayout>
   </div>

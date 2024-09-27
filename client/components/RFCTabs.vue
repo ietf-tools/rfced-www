@@ -35,7 +35,9 @@
           ]"
           data-errata-tab
         >
-          Errata
+          <template v-if="props.errata.length === 1">Erratum</template>
+          <template v-else>Errata</template>
+
           <DiamondText
             class="lg:absolute ml-1"
             :text="props.errata.length.toString()"
@@ -69,7 +71,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const DEFAULT_CLASS = 'py-4'
+const DEFAULT_CLASS = 'py-4 whitespace-nowrap'
 const SELECTED_CLASS = 'border-b-2 border-b-blue-900 font-medium'
 const UNSELECTED_CLASS = 'text-gray-800'
 </script>

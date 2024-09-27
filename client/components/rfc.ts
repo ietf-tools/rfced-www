@@ -1,6 +1,7 @@
 type RFCId = {
   type: string | typeof RFC
   number: string
+  title?: string
 }
 
 export const RFC = 'RFC'
@@ -14,6 +15,14 @@ export const parseRFCId = (title: string): RFCId => {
     return {
       type: parts[0].toUpperCase(),
       number: parts[1]
+    }
+  }
+
+  if (parts?.length === 3) {
+    return {
+      type: parts[0].toUpperCase(),
+      number: parts[1],
+      title: parts[2]
     }
   }
 

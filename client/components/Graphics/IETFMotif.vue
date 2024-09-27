@@ -2,36 +2,21 @@
   <svg
     :width="props.width"
     :height="props.height"
-    viewBox="130 0 1190 1"
-    fill="none"
+    viewBox="0 0 475.29364 346.05695"
     xmlns="http://www.w3.org/2000/svg"
     :class="['pointer-events-none', props.class]"
+    fill="currentColor"
     aria-hidden="true"
   >
     <g :opacity="props.opacity">
-      <rect
-        x="528.128"
-        y="-313"
-        width="296.708"
-        height="746.886"
-        transform="rotate(45 528.128 -133)"
-        fill="currentColor"
+      <path
+        d="M 216.6199,2.4865995 5.794542,213.0781 89.851776,296.95018 300.68055,86.550968 Z"
       />
-      <rect
-        x="753.214"
-        y="-88"
-        width="296.708"
-        height="473.832"
-        transform="rotate(45 753.214 102.32)"
-        fill="currentColor"
+      <path
+        d="M 171.87956,229.45199 306.68695,95.278897 390.20493,179.88715 256.09455,313.8555 Z"
       />
-      <rect
-        x="979.621"
-        y="140"
-        width="296.708"
-        height="261.464"
-        transform="rotate(45 979.621 337.641)"
-        fill="currentColor"
+      <path
+        d="m 321.40782,263.69426 74.58039,-74.33433 83.68632,83.66101 -73.60691,74.10996 z"
       />
     </g>
   </svg>
