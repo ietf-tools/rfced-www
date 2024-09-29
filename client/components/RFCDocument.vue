@@ -3,6 +3,8 @@
     <template #sidebar>
       <RFCDocumentSidebar
         :id="props.id"
+        v-model:is-modal-open="isModalOpen"
+        v-model:selected-tab="selectedTab"
         :goto-errata="gotoErrata"
         :errata="props.errata"
         :change-tab="changeTab"
@@ -10,6 +12,7 @@
     </template>
     <RFCDocumentBody
       :id="props.id"
+      v-model:is-modal-open="isModalOpen"
       :intro="props.intro"
       :pages-html="props.pagesHtml"
       :breadcrumb-items="breadcrumbItems"
@@ -45,7 +48,7 @@ function gotoErrata() {
   const responsiveModeStore = useResponsiveModeStore()
 
   if (responsiveModeStore.responsiveMode === 'Mobile') {
-    isOpen.value = true
+    isModalOpen.value = true
   }
 
   selectedTab.value = 2
@@ -72,5 +75,5 @@ const breadcrumbItems: BreadcrumbItem[] = [
   { url: '/info', label: 'Documents' }
 ]
 
-const isOpen = ref(false)
+const isModalOpen = ref(false)
 </script>

@@ -1,8 +1,5 @@
 <template>
-  <HeadlessTabGroup
-    :selected-index="props.selectedTab"
-    @change="props.changeTab"
-  >
+  <HeadlessTabGroup :selected-index="selectedTab" @change="changeTab">
     <HeadlessTabList class="flex gap-7 border-b mr-6">
       <HeadlessTab v-slot="{ selected }" as="template">
         <button
@@ -65,11 +62,15 @@
 <script setup lang="ts">
 type Props = {
   errata?: string[]
-  selectedTab: number
-  changeTab: (index: number) => void
 }
 
 const props = defineProps<Props>()
+
+const selectedTab = defineModel<number>('selectedTab')
+
+function changeTab(index: number) {
+  selectedTab.value = index
+}
 
 const DEFAULT_CLASS = 'py-4 whitespace-nowrap'
 const SELECTED_CLASS = 'border-b-2 border-b-blue-900 font-medium'

@@ -1,10 +1,20 @@
 <template>
   <GraphicsIETFMotif
-    class="mt-8 -mb-[600px] left-0 w-[80vw] h-[80vh] max-h-[600px]"
+    class="absolute mt-8 -mb-[600px] left-0 w-[80vw] h-[80vh] max-h-[600px]"
     :opacity="0.02"
   />
 
   <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
+
+  <button
+    type="button"
+    class="fixed right-0 rounded-l bg-white dark:bg-black border border-gray-200 align-middle flex items-center p-1 pr-2 lg:hidden"
+    aria-label="Open details modal"
+    @click="isModalOpen = true"
+  >
+    <GraphicsExpandSidebar class="inline-block mr-1" />
+    Info
+  </button>
 
   <Heading level="1" class="mb-2">
     {{ rfcId.type }} {{ rfcId.number }}
@@ -109,6 +119,8 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+
+const isModalOpen = defineModel<boolean>('isModalOpen')
 
 const rfcId = computed(() => parseRFCId(props.id))
 
