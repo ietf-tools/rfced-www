@@ -1,5 +1,5 @@
 <template>
-  <ul class="block mt-1 -ml-2 mb-3">
+  <ul class="block mt-1 -ml-2 mb-3 px-1 xs:px-0">
     <li
       v-for="(path, index) in props.breadcrumbItems"
       :key="index"

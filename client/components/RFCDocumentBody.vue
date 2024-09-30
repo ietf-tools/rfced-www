@@ -16,13 +16,15 @@
     Info
   </button>
 
-  <Heading level="1" class="mb-2">
+  <Heading level="1" class="mb-2 px-1 xs:px-0">
     {{ rfcId.type }} {{ rfcId.number }}
   </Heading>
 
   <RFCMobileBanner :rfc-id="rfcId" :is-fixed="true" />
 
-  <p v-if="props.intro">{{ props.intro }}</p>
+  <p v-if="props.intro" class="px-1 xs:px-0 mb-2 text-base lg:text-xl">
+    {{ props.intro }}
+  </p>
 
   <div class="flex flex-row justify-between items-center flex-wrap">
     <div class="align-middle">
@@ -101,9 +103,9 @@
   <div
     v-for="(page, index) in props.pagesHtml"
     :key="index"
-    class="mt-10 text-xs md:text-xs lg:text-sm"
+    class="mt-10 text-[9px] sm:text-xs lg:text-sm"
   >
-    <div v-html="page" class="font-mono whitespace-pre-wrap" />
+    <div v-html="page" class="font-mono whitespace-pre-wrap px-3 xs:px-0" />
   </div>
 </template>
 
