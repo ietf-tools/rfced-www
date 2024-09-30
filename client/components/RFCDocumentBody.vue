@@ -36,7 +36,7 @@
       <HeadlessPopover class="inline align-middle">
         <HeadlessPopoverButton
           aria-label="Details of category"
-          class="inline-block text-blue-300 p-2 ml-1"
+          class="inline-block text-blue-300 dark:text-blue-100 p-2 ml-1"
         >
           <GraphicsQuestionMarkCircle />
         </HeadlessPopoverButton>
@@ -55,10 +55,11 @@
         </HeadlessPopoverPanel>
       </HeadlessPopover>
     </div>
+
     <div v-if="props.errata">
       <button
         type="button"
-        class="text-sm underline text-blue-300 p-2"
+        class="text-sm underline text-blue-300 dark:text-blue-100 p-2"
         @click="gotoErrata"
       >
         {{ props.errata.length }}
@@ -75,7 +76,7 @@
     heading="This RFC is now obsolete"
   >
     <p class="text-sm">
-      For more information please refer to
+      For more information, please refer to
       <a :href="`/info/${props.obsoletedBy}`"
         >{{ obsoletedByRFCId.type }} {{ obsoletedByRFCId.number }}
         {{ obsoletedByRFCId.title }}
@@ -83,7 +84,11 @@
     </p>
   </Alert>
 
-  <Alert v-if="props.seeAlso" variant="info" heading="This RFC updates 1 RFC">
+  <Alert
+    v-if="props.seeAlso"
+    variant="info"
+    heading="This RFC updates the following RFC:"
+  >
     <p class="text-sm">
       See also
       <a href="/info/rfc9052"
@@ -98,7 +103,7 @@
     :key="index"
     class="mt-10 text-xs md:text-xs lg:text-sm"
   >
-    <div v-html="page" class="whitespace-pre-wrap" />
+    <div v-html="page" class="font-mono whitespace-pre-wrap" />
   </div>
 </template>
 

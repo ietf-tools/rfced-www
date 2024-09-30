@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'inline-flex flex-col justify-center items-center bg-yellow-400 dark:bg-yellow-800 text-black text-xs uppercase font-semibold',
+      'inline-flex flex-col justify-center items-center bg-yellow-400 dark:bg-yellow-800 text-black dark:text-white text-xs uppercase font-semibold',
       {
         'w-[20px] h-[20px] [clip-path:polygon(0%_50%,_50%_0%,_50%_0%,100%_50%,50%_100%,50%_100%)]':
           props.text.length === 1,

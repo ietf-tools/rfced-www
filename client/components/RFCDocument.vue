@@ -18,6 +18,8 @@
       :breadcrumb-items="breadcrumbItems"
       :goto-errata="gotoErrata"
       :errata="props.errata"
+      :obsoleted-by="props.obsoletedBy"
+      :see-also="props.seeAlso"
       :change-tab="changeTab"
     />
   </BodyLayoutDocument>

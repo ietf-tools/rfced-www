@@ -6,13 +6,13 @@
           rfc-editor.org is maintained by the
           <a
             href="https://www.ietf.org/"
-            class="text-blue-100 font-semibold text-nowrap"
+            class="text-blue-100 font-semibold md:text-nowrap"
             >Internet Engineering Task Force</a
           >
           and funded by the
           <a
             href="https://www.internetsociety.org/"
-            class="text-blue-100 font-semibold text-nowrap"
+            class="text-blue-100 font-semibold md:text-nowrap"
           >
             Internet Society
           </a>
