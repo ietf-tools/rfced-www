@@ -2,15 +2,11 @@
   <div class="container mx-auto">
     <div class="absolute pointer-events-none inset-0 overflow-hidden">
       <GraphicsIETFMotif
-        width="500"
-        height="400"
-        class="absolute bottom-0 left-[150px]"
+        class="absolute left-[57vw] top-[25vh] w-[30vw] h-[30vh]"
         :opacity="0.04"
       />
       <GraphicsIETFMotif
-        width="200"
-        height="200"
-        class="absolute bottom-0 left-[525px]"
+        class="absolute w-[80vw] h-[80vh] bottom-0 left-[0px]"
         :opacity="0.04"
       />
     </div>

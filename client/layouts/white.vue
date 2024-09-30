@@ -3,20 +3,14 @@
     <Header>
       <slot name="subheader"></slot>
     </Header>
-    <Main :class="props.mainClass">
-      <slot />
-    </Main>
+    <div class="bg-white dark:bg-black flex-1">
+      <Main>
+        <slot />
+      </Main>
+    </div>
     <Footer />
   </div>
 </template>
-
-<script setup lang="ts">
-type Props = {
-  mainClass?: string
-}
-
-const props = defineProps<Props>()
-</script>
 
 <style>
 html {

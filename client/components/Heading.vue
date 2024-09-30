@@ -1,11 +1,7 @@
 <template>
   <component
     :is="`h${props.level}`"
-    :class="[
-      props.class,
-      headingStyles[`h${props.styleLevel || props.level}`],
-      'text-grey-100'
-    ]"
+    :class="[props.class, headingStyles[`h${props.styleLevel || props.level}`]]"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
@@ -19,6 +15,8 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from './VueUtils'
+
 type Props = {
   level: Level
   /**
@@ -39,7 +37,7 @@ type Props = {
    * * https://dequeuniversity.com/rules/axe/3.0/page-has-heading-one
    */
   styleLevel?: Level
-  class?: string
+  class?: VueStyleClass
   hasIcon?: boolean
 }
 
