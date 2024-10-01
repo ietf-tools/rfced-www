@@ -11,6 +11,11 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview --port 4567",
+    "story:test": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel",
+    "story:test:update": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel update",
     "types": "npx nuxi typecheck"
   },
   "dependencies": {
@@ -20,14 +25,19 @@
     "@nuxtjs/color-mode": "^3.4.4",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@pinia/nuxt": "^0.5.4",
+    "@playwright/test": "^1.40.0",
     "@tailwindcss/forms": "^0.5.8",
+    "lost-pixel": "^3.18.2",
     "luxon": "^3.5.0",
     "nuxt": "^3.13.1",
     "nuxt-headlessui": "^1.2.0",
     "pinia": "^2.2.2",
+    "playwright": "^1.47.1",
     "vue": "^3.5.4"
   },
   "devDependencies": {
+    "@histoire/plugin-nuxt": "^0.17.17",
+    "@histoire/plugin-vue": "^0.17.17",
     "@nuxt/eslint": "^0.5.3",
     "@types/luxon": "^3.4.2",
     "vue-tsc": "^2.0.29"
