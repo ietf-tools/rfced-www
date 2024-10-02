@@ -33,15 +33,13 @@ See `/client/`
 
 Visual regression testing compares screenshots of the app against approved 'baseline' screenshots.
 
-The screenshots are of isolated components or entire webpages, and these are specified in `*.story.vue` files using [Histoire.dev](https://histoire.dev/).
+The pages or components being screenshotted are specified in `*.story.vue` files using [Histoire.dev](https://histoire.dev/).
 
-These approved 'baseline' screenshots are found in `client/.lostpixel/baseline`.
-
-The screenshots are taken in a Docker, ensuring that there are no OS differences in rendering between CI and local tests.
+The screenshots are taken using [Lost Pixel OSS](https://www.lost-pixel.com/) in docker, ensuring that there are no OS differences in rendering between CI and local tests. These approved 'baseline' screenshots are found in `client/.lostpixel/baseline`.
 
 **how to test (after making your dev changes)**
 1. If necessary create or update a `*.story.vue` file with your components. Be sure to include every configuration of your component.
 2. `npm run story:build` ...builds the `*.story.vue` files.
 3. `npm run test:story` ...tests screenshots of the build (using [Lost Pixel OSS](https://www.lost-pixel.com/)) giving a pass or fail.
     a. If 'pass' then you're done, and you can push your changes.
-    b. If 'fail' open the directory `client/.lostpixel/difference` to see a visual diff of the screenshot changes. The filenames imply which `*.story.vue` files were affected. Decide whether to fix the bug or approve the changes. When ready to approve the changes run `npm run test:story:approve`, commit the updated 'baseline', and push the changes.
+    b. If 'fail' open the directory `client/.lostpixel/difference` to see a visual diff of the screenshot changes. The filenames imply which `*.story.vue` files were affected. Decide whether to fix the bug or approve the changes. When ready to approve the changes run `npm run test:story:approve`, commit the updated 'baseline' images in `client/.lostpixel/baseline`, and push the changes.
