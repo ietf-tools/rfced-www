@@ -22,12 +22,12 @@ jobs:
         run: npm ci
         working-directory: ./client
 
-      - name: Build Storybook
+      - name: Build Histoire (Pattern Library)
         run: npm run story:build
         working-directory: ./client
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.18.2
+        uses: lost-pixel/lost-pixel@v3.18.2 # remember to sync version with NPM package
         env:
           LOST_PIXEL_DISABLE_TELEMETRY: 1
 

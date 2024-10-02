@@ -14,10 +14,11 @@
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview --port 4567",
-    "story:test": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel docker",
-    "story:test:update": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel docker update",
+    "test:story": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker",
+    "test:story:approve": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker update",
     "types": "npx nuxi typecheck"
   },
+  "//": "If updating lost-pixel sync the version to the vis-reg-test.yml file",
   "dependencies": {
     "@ark-ui/vue": "^3.13.0",
     "@nuxt/fonts": "^0.7.2",
@@ -27,7 +28,7 @@
     "@pinia/nuxt": "^0.5.4",
     "@playwright/test": "^1.40.0",
     "@tailwindcss/forms": "^0.5.8",
-    "lost-pixel": "^3.18.2",
+    "lost-pixel": "3.18.2",
     "luxon": "^3.5.0",
     "nuxt": "^3.13.1",
     "nuxt-headlessui": "^1.2.0",
