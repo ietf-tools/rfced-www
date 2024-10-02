@@ -27,7 +27,7 @@ jobs:
         working-directory: ./client
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.0
+        uses: lost-pixel/lost-pixel@v3.18.2
         env:
           LOST_PIXEL_DISABLE_TELEMETRY: 1
 

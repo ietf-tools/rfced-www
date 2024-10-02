@@ -26,3 +26,9 @@
 See `/client/` 
 
 *TODO*
+
+## Testing
+
+### Visual regression testing
+
+To update baselines locally run `npm run story:test:update` to update, this will ensure that lost-pixel runs in docker and there are no OS differences in rendering between CI and local tests.
