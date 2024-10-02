@@ -1,3 +1,7 @@
+/**
+ * This is only used on CI
+ */
+
 export const config = {
   histoireShots: {
     histoireUrl: './client/.histoire/dist'
