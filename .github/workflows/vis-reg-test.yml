@@ -28,5 +28,4 @@ jobs:
 
       - name: Lost Pixel
         uses: lost-pixel/lost-pixel@v3.8.0
-        env:
-          LOST_PIXEL_CONFIG_DIR: ./client
+
