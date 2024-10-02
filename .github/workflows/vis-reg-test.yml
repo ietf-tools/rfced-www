@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './client' # Here the path to the folder where package-lock.json is located.
+        working-directory: './client'
 
     steps:
       - name: Checkout
@@ -28,4 +28,6 @@ jobs:
 
       - name: Lost Pixel
         uses: lost-pixel/lost-pixel@v3.8.0
+        env:
+          LOST_PIXEL_DISABLE_TELEMETRY: 1
 

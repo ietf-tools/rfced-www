@@ -14,7 +14,7 @@
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview --port 4567",
-    "story:test": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel docker ",
+    "story:test": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel docker",
     "story:test:update": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx lost-pixel docker update",
     "types": "npx nuxi typecheck"
   },
