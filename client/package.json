@@ -15,6 +15,7 @@
     "story:build": "histoire build",
     "story:preview": "histoire preview --port 4567",
     "test:story": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker",
+    "test:story:view": "npx --no -c 'vite dev ./visual-regression-viewer'",
     "test:story:approve": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker update",
     "types": "npx nuxi typecheck"
   },
