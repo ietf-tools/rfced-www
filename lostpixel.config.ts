@@ -4,7 +4,8 @@
 
 export const config = {
   histoireShots: {
-    histoireUrl: './client/.histoire/dist'
+    histoireUrl: './client/.histoire/dist',
+    breakpoints: [400, 1024]
   },
   imagePathBaseline: './client/.lostpixel/baseline/',
   imagePathCurrent: './client/.lostpixel/current/',

@@ -6,7 +6,7 @@
       type="search"
       name="q"
       class="flex-1 bg-white text-black dark:bg-black dark:text-white"
-      placeholder="Find an RFC (e.g. ‘RFC 7120’)"
+      :placeholder="responsiveModeStore.responsiveMode === 'Desktop' ? 'Find an RFC (e.g. ‘RFC 7120’)' : 'Find an RFC'"
       aria-label="Find an RFC (e.g. ‘RFC 7120’)"
     />
     <button type="submit" class="bg-blue-200 px-2 flex items-center">
@@ -19,4 +19,5 @@
 import { useSearchStore } from '~/stores/search'
 
 const searchStore = useSearchStore()
+const responsiveModeStore = useResponsiveModeStore()
 </script>
