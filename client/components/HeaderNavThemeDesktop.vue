@@ -1,6 +1,6 @@
 <template>
   <HeadlessListbox
-    v-model="$colorMode.preference"
+    v-model="colorMode.preference"
     as="div"
     class="relative hidden lg:flex items-center"
   >
