@@ -1,12 +1,12 @@
 <template>
   <Story
-    title="Footer"
+    title="Header"
     :layout="{
       type: 'single'
     }"
   >
-    <Variant title="Footer">
-      <Footer />
+    <Variant title="Header">
+      <Header />
     </Variant>
   </Story>
 </template>

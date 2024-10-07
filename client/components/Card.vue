@@ -8,8 +8,9 @@
         :class="[
           'block text-[22px] font-bold text-blue-300 dark:text-blue-100 no-underline focus:underline hover:underline group',
           props.hasCoverLink &&
-            `before:absolute before:content-[\'\'] before:inset-0 before:transition-all hover:before:shadow-xl focus:before:shadow-xl ${
-              /* must be able to have (eg) buttons over the coverLink, so coverlink is z-40 so buttons could be z-50 */ 'before:z-40'
+            `before:absolute before:content-[\'\'] before:inset-0 before:transition-all dark:before:shadow-slate-700 hover:before:shadow-xl focus:before:shadow-xl dark:hover:before:shadow-[0_0px_40px_20px_#00101c] ${
+              /* this is only a template string to allow inline doc:
+                 must be able to have <slot /> content above the coverLink, so coverlink is z-40 and slot content (eg buttons) could be z-50 */ 'before:z-40'
             }`
         ]"
       >
@@ -24,7 +25,7 @@
           width="14"
           height="21"
           :class="[
-            'absolute right-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 transition-all group-hover:right-3 group-focus:right-3 -rotate-90',
+            'absolute right-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 dark:group-hover:text-blue-100 dark:group-focus:text-blue-100 transition-all group-hover:right-3 group-focus:right-3 -rotate-90',
             props.chevronPosition === 'center' ? 'bottom-[50%]' : 'bottom-4'
           ]"
         />

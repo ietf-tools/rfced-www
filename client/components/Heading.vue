@@ -8,7 +8,7 @@
       class="absolute ml-[-1.3em] -mt-4"
       width="75"
       height="55"
-      :opacity="0.1"
+      :opacity="0.05"
     />
     <slot />
   </component>

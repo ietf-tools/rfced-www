@@ -42,4 +42,4 @@ The screenshots are taken using [Lost Pixel OSS](https://www.lost-pixel.com/) in
 2. `npm run story:build` ...builds the `*.story.vue` files.
 3. `npm run test:story` ...tests screenshots of the build (using [Lost Pixel OSS](https://www.lost-pixel.com/)) giving a pass or fail.
     a. If 'pass' then you're done, and you can push your changes.
-    b. If 'fail' open the directory `client/.lostpixel/difference` to see a visual diff of the screenshot changes. The filenames imply which `*.story.vue` files were affected. Decide whether to fix the bug or approve the changes. When ready to approve the changes run `npm run test:story:approve`, commit the updated 'baseline' images in `client/.lostpixel/baseline`, and push the changes.
+    b. If 'fail' then run `npm run test:story:view` to view the differences in a browser. Find the `*.story.vue` files that were affected and rerun `npm run story:build` and `npm run test:story` until you're happy with the changes. When ready to approve ALL the changes run `npm run test:story:approve`, commit the updated 'baseline' images in `client/.lostpixel/baseline`, and push the changes.
