@@ -7,16 +7,27 @@
   >
     <HeadlessMenuButton
       v-slot="{ open }"
+      as="template"
       class="flex items-center gap-2 rounded hover:bg-gray-900 p-3"
     >
-      {{ menuItem.label }}
+      <button
+        :class="[
+          {
+            'bg-blue-950 dark:bg-black border-2 border-yellow-700 dark:border-blue-900':
+              open,
+            'border-2 border-transparent': !open
+          }
+        ]"
+      >
+        {{ menuItem.label }}
 
-      <span class="text-blue-100">
-        <GraphicsChevron :class="open ? 'rotate-180' : undefined" />
-      </span>
+        <span class="text-blue-100">
+          <GraphicsChevron :class="open ? 'rotate-180' : undefined" />
+        </span>
+      </button>
     </HeadlessMenuButton>
     <HeadlessMenuItems
-      class="absolute z-10 w-40 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red"
+      class="absolute z-10 w-40 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-[0_0px_10px_10px_#00101c99] dark:shadow-[0_0px_10px_10px_#00101c99]"
     >
       <HeadlessMenuItem
         v-for="(child, childIndex) in menuItem.children"
@@ -26,7 +37,10 @@
         <a
           :class="[
             'block px-2 py-1 text-black dark:text-white',
-            { 'bg-blue-500 text-white': active }
+            {
+              'bg-blue-500 dark:bg-blue-600 text-white underline': active,
+              'no-underline': !active
+            }
           ]"
           href="/"
         >

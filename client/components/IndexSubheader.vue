@@ -6,8 +6,8 @@
         :opacity="0.04"
       />
       <GraphicsIETFMotif
-      class="absolute w-[40vw] h-[40vh] left-[37vw] top-[17vh]"
-      :opacity="0.04"
+        class="absolute w-[40vw] h-[40vh] left-[57vw] md:left-[47vw] xl:left-[37vw] top-[17vh]"
+        :opacity="0.04"
       />
     </div>
     <div class="lg:flex w-full">

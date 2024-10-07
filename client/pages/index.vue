@@ -13,7 +13,9 @@
           </Heading>
           <p class="hidden mt-8 lg:block text-sm text-grey-800 pl-5">
             Looking for works in progress? Go to
-            <a href="https://datatracker.ietf.org/" class="text-blue-300 dark:text-blue-100"
+            <a
+              href="https://datatracker.ietf.org/"
+              class="text-blue-300 dark:text-blue-100"
               >datatracker.ietf.org</a
             >
           </p>
@@ -67,7 +69,9 @@
           </RFCCard>
         </div>
 
-        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">Learn about RFCs</Heading>
+        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
+          Learn about RFCs
+        </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card href="/sdf" heading-level="3" has-cover-link>
             <template #headingTitle>What is an RFC?</template>
@@ -98,7 +102,9 @@
           </Card>
         </div>
 
-        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0"> Browse RFCs </Heading>
+        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
+          Browse RFCs
+        </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card href="/sdf" heading-level="3" has-cover-link>
             <template #headingTitle>By Stream</template>
