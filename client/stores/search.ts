@@ -45,7 +45,7 @@ type SearchParams = {
 }
 
 type SearchResult = {
-  type: 'sdfsdf' // FIXME
+  type: 'sdfsdf' // TODO
 }
 
 type SearchResults = null | SearchResult[]
@@ -59,6 +59,11 @@ export const useSearchStore = defineStore('search', () => {
    * and ensures empty values (`''`) are removed from URL
    */
   function updateUrlParams(searchParams: Partial<SearchParams>) {
+    if (route.path !== '/search') {
+      // Only sync url params on '/search' route
+      return
+    }
+
     const filterEmpty = <T extends Partial<SearchParams>>(obj: T): T =>
       Object.entries(obj).reduce((acc, [key, value]) => {
         if (value !== '') {
