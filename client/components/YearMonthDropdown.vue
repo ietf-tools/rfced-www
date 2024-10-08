@@ -1,7 +1,11 @@
 <template>
   <label>
     <span class="sr-only">{{ props.label }}</span>
-    <select v-model="value" class="text-sm" :title="props.label">
+    <select
+      v-model="value"
+      class="text-sm bg-white text-black dark:bg-black dark:text-white dark:border"
+      :title="props.label"
+    >
       <option value="" :disabled="isDisabled" class="text-gray-700">
         {{ props.placeholder }}
       </option>

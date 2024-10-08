@@ -50,8 +50,7 @@
     </HeadlessMenuItems>
   </HeadlessMenu>
   <a
-    href="#search"
-    type="button"
+    :href="searchHref"
     class="hidden lg:flex items-center hover:bg-gray-900 p-3"
   >
     <Icon name="fluent:search-12-filled" />
@@ -60,5 +59,17 @@
 </template>
 
 <script setup lang="ts">
+import { onUpdated } from 'vue'
 import { menuData } from './HeaderNavData'
+
+const searchHref = ref<string>('/search')
+
+onUpdated(() => {
+  // If there's a search box on the page just use it rather than linking to another page
+  const searchElement = document.getElementById('search')
+  const newSearchHref = searchElement ? '#search' : '/search'
+  if (newSearchHref !== searchHref.value) {
+    searchHref.value = newSearchHref
+  }
+})
 </script>

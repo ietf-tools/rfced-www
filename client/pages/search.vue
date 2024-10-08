@@ -12,7 +12,7 @@
         </div>
       </template>
 
-      <div class="flex flex-row items-start py-5">
+      <div class="container mx-auto flex flex-row items-start py-5">
         <div class="w-full lg:w-1/2">
           <div class="flex flex-row justify-between items-center">
             <Heading
@@ -40,7 +40,10 @@
             <div class="hidden lg:block">
               <label class="text-sm">
                 <span>Sort by</span>
-                <select v-model="searchStore.orderBy" class="text-sm ml-2">
+                <select
+                  v-model="searchStore.orderBy"
+                  class="text-sm ml-2 bg-white text-black dark:bg-black dark:text-white dark:border"
+                >
                   <option value="lowest">RFC no. (Lowest first)</option>
                   <option value="highest">RFC no. (Highest first)</option>
                 </select>
@@ -78,7 +81,7 @@
           </ul>
         </div>
         <div class="hidden lg:w-1/2 lg:block pl-10">
-          <SearchFilter class="border-l-2 pl-10" />
+          <SearchFilter class="border-l-2 dark:border-l-gray-500 pl-10" />
         </div>
       </div>
     </NuxtLayout>
