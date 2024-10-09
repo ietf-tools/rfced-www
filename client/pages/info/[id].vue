@@ -3,9 +3,7 @@
     <NuxtLayout name="white">
       <RFCDocument
         :id="route.params.id.toString()"
-        :meta="
-          h('span', ['part of ', h('a', { href: '/info/std96' }, ['STD 96'])])
-        "
+        :meta="meta"
         intro="CBOR Object Signing and Encryption (COSE): Countersignatures"
         :pages-html="pagesHtml"
         :errata="errata"
@@ -18,6 +16,11 @@
 
 <script setup lang="ts">
 const route = useRoute()
+
+const meta = h('span', [
+  'part of ',
+  h('a', { href: '/info/std96' }, ['STD 96'])
+])
 
 const pagesHtml = [
   `Network Working Group                                      J. Bouknight

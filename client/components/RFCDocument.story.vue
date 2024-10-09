@@ -2,9 +2,7 @@
   <Story title="RFC Document">
     <RFCDocument
       id="rfc1234"
-      :meta="
-        h('span', ['part of ', h('a', { href: '/info/std96' }, ['STD 96'])])
-      "
+      :meta="meta"
       intro="CBOR Object Signing and Encryption (COSE): Countersignatures"
       :pages-html="pagesHtml"
       :errata="errata"
@@ -15,6 +13,11 @@
 </template>
 
 <script setup lang="ts">
+const meta = h('span', [
+  'part of ',
+  h('a', { href: '/info/std96' }, ['STD 96'])
+])
+
 const pagesHtml = [
   `Network Working Group                                      J. Bouknight
 Request for Comments: 76                                      J. Madden

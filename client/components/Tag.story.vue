@@ -1,20 +1,16 @@
 <template>
   <Story title="Tag(s)">
-    <Tag
-      :text="[
-        'Some',
-        '1'
-        // short title
-      ]"
-    />
-    <Tag
-      :text="[
-        'Internet Standard',
-        '1234'
-        // normal title
-      ]"
-    />
-    <Tag :text="['Internet Standard', '12345']" />
-    <Tag :text="['Internet Standard', 'A Long Title']" />
+    <Variant title="Tag - short title">
+      <Tag :text="['Some', '1']" />
+    </Variant>
+    <Variant title="Tag - normal title">
+      <Tag :text="['Internet Standard', '1234']" />
+    </Variant>
+    <Variant title="Tag - longer title">
+      <Tag :text="['Internet Standard', '12345']" />
+    </Variant>
+    <Variant title="Tag - Longest title">
+      <Tag :text="['Internet Standard', 'A Long Title']" />
+    </Variant>
   </Story>
 </template>
