@@ -59,17 +59,22 @@
 </template>
 
 <script setup lang="ts">
-import { onUpdated } from 'vue'
+import { onMounted } from 'vue'
 import { menuData } from './HeaderNavData'
 
 const searchHref = ref<string>('/search')
 
-onUpdated(() => {
+const route = useRoute()
+
+function updateSearchLink() {
   // If there's a search box on the page just use it rather than linking to another page
   const searchElement = document.getElementById('search')
   const newSearchHref = searchElement ? '#search' : '/search'
   if (newSearchHref !== searchHref.value) {
     searchHref.value = newSearchHref
   }
-})
+}
+
+onMounted(updateSearchLink)
+watch(() => route.path, updateSearchLink)
 </script>

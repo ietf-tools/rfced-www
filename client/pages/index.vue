@@ -176,4 +176,8 @@
 definePageMeta({
   layout: false
 })
+
+useSeoMeta({
+  title: 'RFC Editor'
+})
 </script>
