@@ -17,15 +17,15 @@
 ## Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) *(Windows only)*
+- [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) _(Windows only)_
 
 ## Getting Started
 
 ### Client
 
-See `/client/` 
+See `/client/`
 
-*TODO*
+_TODO_
 
 ## Testing
 
@@ -37,9 +37,15 @@ The pages or components being screenshotted are specified in `*.story.vue` files
 
 The screenshots are taken using [Lost Pixel OSS](https://www.lost-pixel.com/) in docker, ensuring that there are no OS differences in rendering between CI and local tests. These approved 'baseline' screenshots are found in `client/.lostpixel/baseline`.
 
-**how to test (after making your dev changes)**
+#### How to test visual regressions
+
 1. If necessary create or update a `*.story.vue` file with your components. Be sure to include every configuration of your component.
-2. `npm run story:build` ...builds the `*.story.vue` files.
-3. `npm run test:story` ...tests screenshots of the build (using [Lost Pixel OSS](https://www.lost-pixel.com/)) giving a pass or fail.
-    a. If 'pass' then you're done, and you can push your changes.
-    b. If 'fail' then run `npm run test:story:view` to view the differences in a browser. Find the `*.story.vue` files that were affected and rerun `npm run story:build` and `npm run test:story` until you're happy with the changes. When ready to approve ALL the changes run `npm run test:story:approve`, commit the updated 'baseline' images in `client/.lostpixel/baseline`, and push the changes.
+2. Run `npm run story:dev` to see the component library and view your component and make sure it works.
+3. Run `npm run story:build` ...which builds the `*.story.vue` files.
+4. `npm run test:story` ...tests screenshots of the aforementioned build (using [Lost Pixel OSS](https://www.lost-pixel.com/)) giving either a pass (exiting cleanly) or fail (exiting with an exception).
+   a. If 'pass' then you're done, and you can push your changes.
+   b. If 'fail' then run `npm run test:story:view` to view the differences in a browser. Find the `*.story.vue` files that were affected and rerun `npm run story:build` and `npm run test:story` until you're happy with the changes. When ready to approve ALL the changes run `npm run test:story:approve`, commit the updated 'baseline' images in `client/.lostpixel/baseline`, and push the changes. If
+
+##### Troubleshooting `npm run test:story:approve`
+
+This command should always succeed. If it fails it usually means there's a JavaScript exception being thrown in the app. Read all the console output carefully, and try viewing your component with `npm run story:dev` to see if there's an exception being thrown.

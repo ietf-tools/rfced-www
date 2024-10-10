@@ -10,7 +10,7 @@
           colorPreferences.find(
             (colourPreference) =>
               colourPreference.value === colorMode.preference
-          ).label
+          )?.label ?? ''
         }`"
       >
         <Icon name="fluent:dark-theme-20-filled" />

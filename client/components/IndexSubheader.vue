@@ -17,7 +17,7 @@
       <div class="self-end lg:text-right">
         <a
           href="/what"
-          class="rounded text-blue-100 lg:text-white inline-block px-5 py-3 md:-mx-5 font-bold text-nowrap hover:bg-black"
+          class="rounded text-blue-100 lg:text-white inline-block px-5 py-3 font-bold text-nowrap hover:bg-black"
         >
           What is an RFC?
           <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />

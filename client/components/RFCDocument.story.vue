@@ -1,22 +1,18 @@
 <template>
-  <div class="min-h-[100vh]">
-    <NuxtLayout name="white">
-      <RFCDocument
-        :id="route.params.id.toString()"
-        :meta="meta"
-        intro="CBOR Object Signing and Encryption (COSE): Countersignatures"
-        :pages-html="pagesHtml"
-        :errata="errata"
-        obsoleted-by="RFC9052CBOR"
-        see-also="RFC9052CBOR"
-      />
-    </NuxtLayout>
-  </div>
+  <Story title="RFC Document">
+    <RFCDocument
+      id="rfc1234"
+      :meta="meta"
+      intro="CBOR Object Signing and Encryption (COSE): Countersignatures"
+      :pages-html="pagesHtml"
+      :errata="errata"
+      obsoleted-by="RFC9052CBOR"
+      see-also="RFC9052CBOR"
+    />
+  </Story>
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
-
 const meta = h('span', [
   'part of ',
   h('a', { href: '/info/std96' }, ['STD 96'])
@@ -78,8 +74,4 @@ NIC 5180                                                    G. Grossman
 ]
 
 const errata = ['something', 'something else', 'and something else']
-
-definePageMeta({
-  layout: false
-})
 </script>

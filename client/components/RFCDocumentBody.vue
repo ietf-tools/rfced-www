@@ -105,7 +105,7 @@
     :key="index"
     class="mt-10 text-[9px] sm:text-xs lg:text-sm"
   >
-    <div v-html="page" class="font-mono whitespace-pre-wrap px-3 xs:px-0" />
+    <div class="font-mono whitespace-pre-wrap px-3 xs:px-0" v-html="page" />
   </div>
 </template>
 
