@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.9.0",
+    "generators": {
+      "rfced-www": {
+        "generatorName": "typescript-fetch",
+        "inputSpec": "#{cwd}/rfced_www_api.yaml",
+        "output": "#{cwd}/generated/rfced_www_client",
+        "additionalProperties": {
+          "packageName": "rfced_www_client",
+          "disallowAdditionalPropertiesIfNotPresent": false
+        }
+      }
+    }
+  }
+}
