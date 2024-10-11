@@ -41,7 +41,7 @@ type SearchParams = {
   stream: string
   area: string
   workinggroup: string
-  order: string
+  sort: string
 }
 
 type SearchResult = {
@@ -179,10 +179,10 @@ export const useSearchStore = defineStore('search', () => {
 
   // PARAM: order by
   const orderBy = ref<OrderByValue>(
-    (route.query.order?.toString() ?? 'lowest') as OrderByValue
+    (route.query.sort?.toString() ?? 'lowest') as OrderByValue
   )
   watch(orderBy, (newOrder) =>
-    updateUrlParams({ order: newOrder !== 'lowest' ? '' : newOrder })
+    updateUrlParams({ sort: newOrder !== 'lowest' ? '' : newOrder })
   )
 
   function clearFilters() {

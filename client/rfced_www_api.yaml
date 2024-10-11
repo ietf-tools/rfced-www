@@ -15,6 +15,7 @@ paths:
       summary: Returns a list of homepage sections.
       responses:
         '200':
+          description: Returns a list of homepage sections.
           content:
             application/json:
               schema:
@@ -24,7 +25,7 @@ paths:
                   properties:
                     heading:
                       type: string
-                    f:
+                    children:
                       type: array
                       items:
                         oneOf:
@@ -32,7 +33,122 @@ paths:
                           - $ref: '#/components/schemas/Card'
                         discriminator:
                           propertyName: cardType
-
+  /search:
+    get:
+      summary: Return a list of search results.
+      parameters:
+        - in: query
+          name: q
+          description: Freetext search
+          schema:
+            type: string
+        - in: query
+          name: status
+          description: A comma separated list of statuses
+          schema:
+            type: string
+            enum:
+              [
+                'any',
+                'standards',
+                'best',
+                'informational',
+                'unknown',
+                'historic',
+                'experimental'
+              ]
+        - in: query
+          name: from
+          description: Publication dates from a date formatted as 'YYYY-MM'
+          schema:
+            type: string
+        - in: query
+          name: to
+          description: Publication dates to a date formatted as 'YYYY-MM'
+          schema:
+            type: string
+        - in: query
+          name: stream
+          description: Stream filter
+          schema:
+            type: string
+        - in: query
+          name: area
+          description: Area filter
+          schema:
+            type: string
+        - in: query
+          name: workinggroup
+          description: Working Group filter
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: Sort order of responses by RFC number
+          schema:
+            type: string
+            enum: ['lowest', 'highest']
+      responses:
+        '200':
+          description: Returns search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  children:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/RFCCard'
+                      discriminator:
+                        propertyName: cardType
+  /info/{id}:
+    get:
+      summary: Returns an RFC by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: RFC id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Info about a specific RFC
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  intro:
+                    type: string
+                  abstract:
+                    type: string
+                  about:
+                    type: string
+                  body:
+                    type: string
+                    description: The text of the RFC. Is this an array of strings? Is this HTML? What about headings?
+                  obsoletedBy:
+                    type: string # should this be an array?
+                    description: optional RFC Id of eg "RFC9063 CBOR" not sure how to represent CBOR
+                  errata:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                  updates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
 components:
   schemas:
     RFCCard:
