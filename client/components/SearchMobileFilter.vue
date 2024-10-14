@@ -49,7 +49,7 @@
   <div>
     <button
       type="button"
-      class="flex gap-1 bg-white text-black dark:bg-black dark:text-white text-xs p-3"
+      class="flex gap-1 bg-white text-black dark:bg-black dark:text-white text-base p-3"
       @click="isOpen = true"
     >
       <GraphicsFilter />

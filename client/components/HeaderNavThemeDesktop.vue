@@ -24,7 +24,7 @@
       <HeadlessListboxOptions
         class="absolute z-10 right-0 bg-white text-black dark:bg-black dark:text-white dark:border-2 mt-1 w-[10em] top-[40px] max-h-60 rounded-md py-1 shadow-lg"
       >
-        <div class="text-sm font-bold pl-4 pr-2 py-1">Select theme:</div>
+        <div class="text-base font-bold pl-4 pr-2 py-1">Select theme:</div>
         <HeadlessListboxOption
           v-for="colorPreference in colorPreferences"
           :key="colorPreference.value"

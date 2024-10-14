@@ -1,12 +1,12 @@
 <template>
   <fieldset>
-    <legend class="text-sm font-bold mb-2">Status</legend>
+    <legend class="text-base font-bold mb-2">Status</legend>
     <ul class="grid-cols-2 grid gap-1 lg:w-3/4">
       <li
         v-for="(statusLabel, statusValue, statusIndex) in Statuses"
         :key="statusIndex"
       >
-        <label class="text-sm cursor-pointer">
+        <label class="text-base cursor-pointer">
           <input
             class="mr-2"
             type="checkbox"

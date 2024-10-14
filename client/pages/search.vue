@@ -38,11 +38,11 @@
               </template>
             </Heading>
             <div class="hidden lg:block">
-              <label class="text-sm">
+              <label class="text-base">
                 <span>Sort by</span>
                 <select
                   v-model="searchStore.orderBy"
-                  class="text-sm ml-2 bg-white text-black dark:bg-black dark:text-white dark:border"
+                  class="text-base ml-2 bg-white text-black dark:bg-black dark:text-white dark:border"
                 >
                   <option value="lowest">RFC no. (Lowest first)</option>
                   <option value="highest">RFC no. (Highest first)</option>

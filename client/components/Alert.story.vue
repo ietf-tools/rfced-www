@@ -9,14 +9,14 @@
   >
     <Variant title="Warning Alert" theme="light">
       <Alert variant="warning" heading="This alert is a warning">
-        <p class="text-sm">
+        <p class="text-base">
           For more information, please refer to the documentation
         </p>
       </Alert>
     </Variant>
     <Variant title="Info Alert">
       <Alert variant="info" heading="This RFC is now obsolete">
-        <p class="text-sm">
+        <p class="text-base">
           For more information, please refer to the documentation
         </p>
       </Alert>

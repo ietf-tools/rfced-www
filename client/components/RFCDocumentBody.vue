@@ -61,7 +61,7 @@
     <div v-if="props.errata">
       <button
         type="button"
-        class="text-sm underline text-blue-300 dark:text-blue-100 p-2"
+        class="text-base underline text-blue-300 dark:text-blue-100 p-2"
         @click="gotoErrata"
       >
         {{ props.errata.length }}
@@ -77,7 +77,7 @@
     variant="warning"
     heading="This RFC is now obsolete"
   >
-    <p class="text-sm">
+    <p class="text-base">
       For more information, please refer to
       <a :href="`/info/${props.obsoletedBy}`"
         >{{ obsoletedByRFCId.type }} {{ obsoletedByRFCId.number }}
@@ -91,7 +91,7 @@
     variant="info"
     heading="This RFC updates the following RFC:"
   >
-    <p class="text-sm">
+    <p class="text-base">
       See also
       <a href="/info/rfc9052"
         >RFC 9052 CBOR Object Signing and Encryption (COSE): Structures and
@@ -103,7 +103,7 @@
   <div
     v-for="(page, index) in props.pagesHtml"
     :key="index"
-    class="mt-10 text-[9px] sm:text-xs lg:text-sm"
+    class="mt-10 text-[9px] sm:text-base lg:text-base"
   >
     <div class="font-mono whitespace-pre-wrap px-3 xs:px-0" v-html="page" />
   </div>

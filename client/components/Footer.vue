@@ -35,7 +35,7 @@
             <li
               v-for="(child, childIndex) in menuItem.children"
               :key="childIndex"
-              class="text-sm"
+              class="text-base"
             >
               <a
                 :href="child.href"
