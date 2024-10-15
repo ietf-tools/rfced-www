@@ -20,7 +20,7 @@
     </div>
     <ul
       v-if="props.body"
-      class="hidden lg:block text-sm text-blue-900 dark:text-white"
+      class="hidden lg:block text-base text-blue-900 dark:text-white"
     >
       <li v-for="(part, index) in props.body" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
@@ -28,7 +28,7 @@
     </ul>
     <ul
       v-if="props.footer"
-      class="hidden lg:block text-xs text-gray-800 mt-1 dark:text-white"
+      class="hidden lg:block text-base text-gray-800 mt-1 dark:text-white"
     >
       <li v-for="(part, index) in props.footer" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
@@ -41,7 +41,7 @@
           type="button"
           :aria-expanded="isMobileAbstractOpen"
           :aria-controls="abstractDomId"
-          class="relative z-50 text-blue-800 dark:text-blue-100 underline text-sm p-3 -left-3 -top-3 -mb-3"
+          class="relative z-50 text-blue-800 dark:text-blue-100 underline text-base p-3 -left-3 -top-3 -mb-3"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen"
         >
           <template v-if="isMobileAbstractOpen">Hide abstract</template>
@@ -80,7 +80,7 @@
     <p
       v-if="props.redNote"
       :class="[
-        'text-red-700 dark:text-red-300 text-xs',
+        'text-red-700 dark:text-red-300 text-base',
         isMobileAbstractOpen && 'mt-2'
       ]"
     >

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'pointer-events-none inline-flex items-center bg-blue-200 dark:bg-blue-800 text-white text-xs uppercase font-semibold',
+      'pointer-events-none inline-flex items-center bg-blue-400 dark:bg-blue-800 text-white text-base uppercase font-semibold',
       props.class,
       {
         '[clip-path:polygon(0%_50%,_6%_0%,_96%_0%,100%_50%,96%_100%,6%_100%)]':
@@ -35,7 +35,7 @@
         </template>
       </span>
       <span
-        class="bg-yellow-400 dark:bg-yellow-700 dark:text-white text-black pl-2 pr-5 py-2"
+        class="bg-yellow-200 dark:bg-yellow-700 dark:text-white text-black pl-2 pr-5 py-2"
       >
         <template v-if="typeof props.text[1] === 'string'">
           {{ props.text[1] }}

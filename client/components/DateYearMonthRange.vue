@@ -1,6 +1,6 @@
 <template>
   <fieldset>
-    <legend class="text-sm font-bold mb-1">{{ props.label }}</legend>
+    <legend class="text-base font-bold mb-1">{{ props.label }}</legend>
     <div class="flex gap-2">
       <YearMonthDropdown
         v-model="startValue"

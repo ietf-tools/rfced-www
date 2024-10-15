@@ -51,6 +51,6 @@ const headingStyles: Record<`h${Props['level']}`, string> = {
   h3: 'text-xl font-bold',
   h4: 'text-lg font-bold',
   h5: 'text-base font-bold',
-  h6: 'text-xs font-bold'
+  h6: 'text-base font-bold'
 }
 </script>

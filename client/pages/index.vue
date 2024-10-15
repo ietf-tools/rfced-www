@@ -11,7 +11,7 @@
           <Heading level="2" has-icon class="text-left mt-10 pl-5 md:pl-0">
             Latest RFCs
           </Heading>
-          <p class="hidden mt-8 lg:block text-sm text-grey-800 pl-5">
+          <p class="hidden mt-8 lg:block text-base text-grey-800 pl-5">
             Looking for works in progress? Go to
             <a
               href="https://datatracker.ietf.org/"
