@@ -1,6 +1,6 @@
 <template>
   <form
-    class="flex flex-col gap-5 text-base text-grey-800 pt-3 lg:pt-0 pl-5 lg:pl-10"
+    class="flex flex-col gap-5 text-base text-grey-800 pt-3 lg:pt-0 pl-5 lg:pl-0"
   >
     <Heading level="2" style-level="4" class="hidden lg:block">Filter</Heading>
 

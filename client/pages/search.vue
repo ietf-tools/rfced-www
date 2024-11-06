@@ -13,7 +13,10 @@
       </template>
 
       <div class="container mx-auto flex flex-row items-start py-5">
-        <div class="w-full lg:w-1/2">
+        <div class="hidden lg:w-1/3 lg:block">
+          <SearchFilter />
+        </div>
+        <div class="w-full lg:w-2/3">
           <div class="flex flex-row justify-between items-center">
             <Heading
               level="2"
@@ -79,9 +82,6 @@
               </RFCCard>
             </li>
           </ul>
-        </div>
-        <div class="hidden lg:w-1/2 lg:block pl-10">
-          <SearchFilter class="border-l-2 dark:border-l-gray-500 pl-10" />
         </div>
       </div>
     </NuxtLayout>
