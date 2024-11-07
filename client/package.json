@@ -22,6 +22,7 @@
   "//": "If updating lost-pixel sync the version to the vis-reg-test.yml file",
   "dependencies": {
     "@ark-ui/vue": "^3.13.0",
+    "@nuxt/content": "^2.13.4",
     "@nuxt/fonts": "^0.7.2",
     "@nuxt/icon": "^1.5.0",
     "@nuxtjs/color-mode": "^3.4.4",
@@ -29,6 +30,7 @@
     "@pinia/nuxt": "^0.5.4",
     "@playwright/test": "^1.40.0",
     "@tailwindcss/forms": "^0.5.8",
+    "lodash-es": "^4.17.21",
     "lost-pixel": "3.18.2",
     "luxon": "^3.5.0",
     "nuxt": "^3.13.1",
@@ -41,6 +43,7 @@
     "@histoire/plugin-nuxt": "^0.17.17",
     "@histoire/plugin-vue": "^0.17.17",
     "@nuxt/eslint": "^0.5.3",
+    "@types/lodash-es": "^4.17.12",
     "@types/luxon": "^3.4.2",
     "vue-tsc": "^2.0.29"
   },

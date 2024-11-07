@@ -12,7 +12,8 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'nuxt-headlessui',
     '@nuxt/icon',
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+    '@nuxt/content'
   ],
   colorMode: {
     classSuffix: ''
