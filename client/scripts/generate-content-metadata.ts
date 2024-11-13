@@ -52,6 +52,6 @@ const contentMetadataPath = path.join(clientPath, 'content-metadata.json')
 fs.writeFileSync(contentMetadataPath, JSON.stringify(contentMetadata, null, 2))
 
 console.log(
-  'Success: timestamps extract from git and written to',
+  'Success: metadata (timestamps) extracted from git and written to',
   contentMetadataPath
 )
