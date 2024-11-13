@@ -15,6 +15,7 @@
     "story:build": "histoire build",
     "story:preview": "histoire preview --port 4567",
     "generate:api": "npx --no @openapitools/openapi-generator-cli generate",
+    "generate:api:datatracker": "npx --no @openapitools/openapi-generator-cli generate --generator-key datatracker",
     "generate:api:help": "npx --no @openapitools/openapi-generator-cli help",
     "test:story": "LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker",
     "test:story:view": "npx --no -c 'vite dev ./visual-regression-viewer'",

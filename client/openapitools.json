@@ -12,6 +12,15 @@
           "packageName": "rfced_www_client",
           "disallowAdditionalPropertiesIfNotPresent": false
         }
+      },
+      "datatracker": {
+        "generatorName": "typescript-fetch",
+        "inputSpec": "http://localhost:8000/api/v3/schema/",
+        "output": "#{cwd}/generated/datatracker_client",
+        "additionalProperties": {
+          "packageName": "datatracker_client",
+          "disallowAdditionalPropertiesIfNotPresent": false
+        }
       }
     }
   }
