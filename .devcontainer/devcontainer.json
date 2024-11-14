@@ -21,7 +21,7 @@
     },
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "docker image pull lostpixel/lost-pixel:v3.18.2 && cd client && npm install"
+	"postCreateCommand": "./post-create.sh"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
