@@ -19,7 +19,7 @@
     "types": "npx nuxi typecheck",
     "generate-content-metadata": "node --experimental-strip-types ./scripts/generate-content-metadata.ts"
   },
-  "//": "If updating lost-pixel sync the version to the vis-reg-test.yml and devcontainer.json or rendering / filenames generated etc may be different",
+  "//": "If updating lost-pixel sync the version to the vis-reg-test.yml and post-create.sh or rendering / filenames generated etc may be different",
   "dependencies": {
     "@ark-ui/vue": "^3.13.0",
     "@nuxt/content": "^2.13.4",
