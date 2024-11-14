@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run generate-content-metadata nuxt build",
+    "build": "npm run generate-content-metadata && nuxt build",
     "dev": "npm run generate-content-metadata && nuxt dev",
     "cleanup": "nuxt cleanup",
     "preview": "npm run build && nuxt preview",
