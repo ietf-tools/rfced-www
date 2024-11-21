@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-blue-900 text-white dark:bg-blue-950 relative">
+  <header class="bg-blue-900 text-white dark:bg-blue-950 relative print:hidden">
     <HeaderSkipToContent />
     <nav class="container mx-auto flex justify-between py-4 px-0 w-full">
       <GraphicsHeaderLogos />

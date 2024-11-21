@@ -15,12 +15,12 @@
     <p class="text-base mt-2 text-blue-900 dark:text-white">
       <slot />
     </p>
-    <div class="my-4">
+    <div class="my-4 print:m-0">
       <Tag :text="[props.tag.type, formatDate(props.tag.date)]" />
     </div>
     <ul
       v-if="props.body"
-      class="hidden lg:block text-base text-blue-900 dark:text-white"
+      class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
     >
       <li v-for="(part, index) in props.body" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
@@ -28,7 +28,7 @@
     </ul>
     <ul
       v-if="props.footer"
-      class="hidden lg:block text-base text-gray-800 mt-1 dark:text-white"
+      class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
     >
       <li v-for="(part, index) in props.footer" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
