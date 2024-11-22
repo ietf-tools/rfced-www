@@ -1,6 +1,6 @@
 <template>
   <GraphicsIETFMotif
-    class="absolute mt-8 -mb-[600px] left-0 w-[80vw] h-[80vh] max-h-[600px]"
+    class="absolute mt-8 -mb-[600px] left-0 w-[80vw] h-[80vh] max-h-[600px] print:hidden"
     :opacity="0.02"
   />
 
@@ -8,7 +8,7 @@
 
   <button
     type="button"
-    class="fixed right-0 rounded-l bg-white dark:bg-black border border-gray-200 align-middle flex items-center p-1 pr-2 lg:hidden"
+    class="fixed right-0 rounded-l bg-white dark:bg-black border border-gray-200 align-middle flex items-center p-1 pr-2 lg:hidden print:hidden"
     aria-label="Open details modal"
     @click="isModalOpen = true"
   >
@@ -16,13 +16,16 @@
     Info
   </button>
 
-  <Heading level="1" class="mb-2 px-1 xs:px-0">
+  <Heading level="1" class="mb-2 px-1 xs:px-0 print:px-0">
     {{ rfcId.type }} {{ rfcId.number }}
   </Heading>
 
   <RFCMobileBanner :rfc-id="rfcId" :is-fixed="true" />
 
-  <p v-if="props.intro" class="px-1 xs:px-0 mb-2 text-base lg:text-xl">
+  <p
+    v-if="props.intro"
+    class="px-1 xs:px-0 mb-2 text-base lg:text-xl print:px-0"
+  >
     {{ props.intro }}
   </p>
 
@@ -38,7 +41,7 @@
       <HeadlessPopover class="inline align-middle">
         <HeadlessPopoverButton
           aria-label="Details of category"
-          class="inline-block text-blue-300 dark:text-blue-100 p-2 ml-1"
+          class="inline-block text-blue-300 dark:text-blue-100 p-2 ml-1 print:text-black"
         >
           <GraphicsQuestionMarkCircle />
         </HeadlessPopoverButton>

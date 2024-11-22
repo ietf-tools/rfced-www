@@ -7,16 +7,13 @@
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { isVNode } from 'vue'
+import type { VNode } from 'vue'
 
-defineProps({
-  /**
-   * Definitions of columns and their labels
-   **/
-  val: {
-    type: [String, Object],
-    required: true
-  }
-})
+type Props = {
+  val: string | VNode
+}
+
+defineProps<Props>()
 </script>

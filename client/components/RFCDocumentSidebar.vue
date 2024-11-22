@@ -24,7 +24,7 @@
         </div>
       </HeadlessDialogPanel>
     </HeadlessDialog>
-    <div class="hidden lg:block">
+    <div class="hidden lg:block print:block">
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab"
