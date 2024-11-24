@@ -15,7 +15,7 @@ const git = simpleGit()
 export type ContentMetadata = Record<
   string, // path within content directory
   {
-    timestamp: string // timestamp ISO 8601
+    mtime: string // timestamp ISO 8601
   }
 >
 
@@ -31,9 +31,11 @@ const markdownMetadataArray = await Promise.all(
           })
           .then((gitLog) => {
             if (gitLog.latest?.date) {
-              const relativePath = contentMarkdownPath.substring(contentPath.length).replace(/\.md$/, '')
+              const relativePath = contentMarkdownPath
+                .substring(contentPath.length)
+                .replace(/\.md$/, '')
               resolve({
-                [relativePath]: { timestamp: gitLog.latest?.date }
+                [relativePath]: { mtime: gitLog.latest?.date }
               })
             } else {
               reject(
@@ -45,7 +47,10 @@ const markdownMetadataArray = await Promise.all(
   )
 )
 
-const contentMetadata: ContentMetadata = Object.assign({}, ...markdownMetadataArray)
+const contentMetadata: ContentMetadata = Object.assign(
+  {},
+  ...markdownMetadataArray
+)
 
 const contentMetadataPath = path.join(clientPath, 'content-metadata.json')
 

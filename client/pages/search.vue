@@ -52,7 +52,7 @@
                 </select>
               </label>
             </div>
-            <div class="lg:hidden">
+            <div class="lg:hidden print:hidden">
               <SearchMobileFilter />
             </div>
           </div>
