@@ -1,12 +1,12 @@
 <template>
   <div
-    class="bg-white dark:bg-black relative dark:border-2 pl-5 pr-7 py-4 rounded"
+    class="bg-white dark:bg-black relative dark:border-2 pl-5 pr-7 py-4 rounded print:border-2 print:border-black"
   >
     <Heading :level="props.headingLevel">
       <a
         :href="props.href"
         :class="[
-          'block text-[22px] font-bold text-blue-300 dark:text-blue-100 no-underline focus:underline hover:underline group',
+          'block text-[22px] font-bold text-blue-300 dark:text-blue-100 print:text-black no-underline focus:underline hover:underline group',
           props.hasCoverLink &&
             `before:absolute before:content-[\'\'] before:inset-0 before:transition-all dark:before:shadow-slate-700 hover:before:shadow-xl focus:before:shadow-xl dark:hover:before:shadow-[0_0px_40px_20px_#00101c] ${
               /* this is only a template string to allow inline doc:
@@ -25,7 +25,7 @@
           width="14"
           height="21"
           :class="[
-            'absolute right-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 dark:group-hover:text-blue-100 dark:group-focus:text-blue-100 transition-all group-hover:right-3 group-focus:right-3 -rotate-90',
+            'absolute right-4 text-gray-200 group-hover:text-blue-400 group-focus:text-blue-400 dark:group-hover:text-blue-100 dark:group-focus:text-blue-100 transition-all group-hover:right-3 group-focus:right-3 -rotate-90 print:hidden',
             props.chevronPosition === 'center' ? 'bottom-[50%]' : 'bottom-4'
           ]"
         />

@@ -15,12 +15,12 @@
     <p class="text-base mt-2 text-blue-900 dark:text-white">
       <slot />
     </p>
-    <div class="my-4">
+    <div class="my-4 print:m-0">
       <Tag :text="[props.tag.type, formatDate(props.tag.date)]" />
     </div>
     <ul
       v-if="props.body"
-      class="hidden lg:block text-base text-blue-900 dark:text-white"
+      class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
     >
       <li v-for="(part, index) in props.body" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
@@ -28,7 +28,7 @@
     </ul>
     <ul
       v-if="props.footer"
-      class="hidden lg:block text-base text-gray-800 mt-1 dark:text-white"
+      class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
     >
       <li v-for="(part, index) in props.footer" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
@@ -41,7 +41,7 @@
           type="button"
           :aria-expanded="isMobileAbstractOpen"
           :aria-controls="abstractDomId"
-          class="relative z-50 text-blue-800 dark:text-blue-100 underline text-base p-3 -left-3 -top-3 -mb-3"
+          class="relative z-50 text-blue-800 dark:text-blue-100 underline text-base p-3 -left-3 -top-3 -mb-3 print:hidden"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen"
         >
           <template v-if="isMobileAbstractOpen">Hide abstract</template>
@@ -49,7 +49,13 @@
         </button>
         <div
           :id="abstractDomId"
-          :class="[isMobileAbstractOpen ? 'block' : 'hidden', 'mt-3']"
+          :class="[
+            'mt-3',
+            {
+              'block ': isMobileAbstractOpen,
+              'hidden print:block': !isMobileAbstractOpen
+            }
+          ]"
         >
           <Heading
             level="4"
@@ -80,8 +86,8 @@
     <p
       v-if="props.redNote"
       :class="[
-        'text-red-700 dark:text-red-300 text-base',
-        isMobileAbstractOpen && 'mt-2'
+        'text-red-700 dark:text-red-300 text-base print:text-black',
+        { 'mt-2': isMobileAbstractOpen }
       ]"
     >
       {{ props.redNote }}

@@ -4,6 +4,10 @@ export default {
   plugins: [require('@tailwindcss/forms')],
   theme: {
     extend: {
+      screens: {
+        print: { raw: 'print' },
+        screen: { raw: 'screen' }
+      },
       fontFamily: {
         sans: '"Inter", sans-serif'
       },

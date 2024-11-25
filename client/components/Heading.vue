@@ -5,7 +5,7 @@
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
-      class="absolute ml-[-1.3em] -mt-4"
+      class="absolute ml-[-1.3em] -mt-4 print:hidden"
       width="75"
       height="55"
       :opacity="0.05"
