@@ -1,4 +1,6 @@
-on: [push]
+name: Visual Regression Test
+
+on: [push, workflow_dispatch]
 
 jobs:
   build:
