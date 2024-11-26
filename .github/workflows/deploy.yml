@@ -40,6 +40,17 @@ jobs:
         fetch-depth: 1
         fetch-tags: false
 
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+
+    - name: NPM Install + Build Site
+      run: |
+        npm ci
+        npm run build
+      working-directory: ./client
+
     - name: Set Build Variables
       id: buildvars
       run: |
