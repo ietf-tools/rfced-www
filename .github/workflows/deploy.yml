@@ -77,8 +77,6 @@ jobs:
         push: true
         tags: |
           ghcr.io/ietf-tools/rfced-www:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
 
   # -----------------------------------------------------------------
   # STAGING
