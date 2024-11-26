@@ -1,10 +1,7 @@
 name: Build and Release
-run-name: ${{ github.ref_name == 'release' && '[Prod]' || '[Dev]' }} Build ${{ github.run_number }} of branch ${{ github.ref_name }} by @${{ github.actor }}
+run-name: Build ${{ github.run_number }} of branch ${{ github.ref_name }} by @${{ github.actor }}
 
-on:
-  # push:
-  #   branches: [main]
-    
+on:    
   workflow_dispatch:
     inputs:
       deploy:
@@ -83,7 +80,7 @@ jobs:
   # -----------------------------------------------------------------
   staging:
     name: Deploy to Staging
-    if: ${{ !failure() && !cancelled() && (inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Prod' || github.ref_name == 'main') }}
+    if: ${{ !failure() && !cancelled() && (inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Prod') }}
     needs: [build]
     runs-on: ubuntu-latest
     environment:
@@ -110,7 +107,7 @@ jobs:
   # -----------------------------------------------------------------
   prod:
     name: Deploy to Production
-    if: ${{ !failure() && !cancelled() && (inputs.deploy == 'Staging + Prod' || github.ref_name == 'main') }}
+    if: ${{ !failure() && !cancelled() && (inputs.deploy == 'Staging + Prod') }}
     needs: [build, staging]
     runs-on: ubuntu-latest
     environment:
