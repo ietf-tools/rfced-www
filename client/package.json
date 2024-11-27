@@ -36,6 +36,7 @@
     "luxon": "^3.5.0",
     "nuxt": "^3.13.1",
     "nuxt-headlessui": "^1.2.0",
+    "nuxt-module-feed": "^1.1.4",
     "pinia": "^2.2.2",
     "playwright": "^1.47.1",
     "simple-git": "^3.27.0",
