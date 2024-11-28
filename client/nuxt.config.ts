@@ -13,10 +13,21 @@ export default defineNuxtConfig({
     'nuxt-headlessui',
     '@nuxt/icon',
     '@nuxt/fonts',
-    '@nuxt/content'
+    '@nuxt/content',
+    'nuxt-module-feed'
   ],
   colorMode: {
     classSuffix: ''
+  },
+  feed: {
+    // https://nuxt.com/modules/module-feed
+    sources: [
+      {
+        path: '/rfcrss.xml', // The route to your feed.
+        type: 'rss2', // Can be: rss2, atom1, json1
+        cacheTime: 60 * 15 // How long should the feed be cached
+      }
+    ]
   },
   eslint: {
     config: {
