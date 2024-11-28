@@ -10,29 +10,6 @@ servers:
     description: Optional server description, e.g. Internal staging server for testing
 
 paths:
-  /home:
-    get:
-      summary: Returns a list of homepage sections.
-      responses:
-        '200':
-          description: Returns a list of homepage sections.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    heading:
-                      type: string
-                    children:
-                      type: array
-                      items:
-                        oneOf:
-                          - $ref: '#/components/schemas/RFCCard'
-                          - $ref: '#/components/schemas/Card'
-                        discriminator:
-                          propertyName: cardType
   /search:
     get:
       summary: Return a list of search results.
