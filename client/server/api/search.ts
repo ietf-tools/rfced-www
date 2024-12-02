@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { RedApi } from '../../generated/datatracker_client/index'
+import type { PaginatedRfcMetadataList } from '../../generated/datatracker_client/index'
 
 const SearchSchema = z.object({
   q: z.string().optional(),
@@ -12,7 +13,11 @@ const SearchSchema = z.object({
   order: z.string().optional()
 })
 
-export default defineEventHandler(async (event) => {
+export type SearchSchemaType = z.infer<typeof SearchSchema>
+
+export type ResponseType = PaginatedRfcMetadataList
+
+export default defineEventHandler(async (event): Promise<ResponseType> => {
   const query = await getValidatedQuery(event, (body) =>
     SearchSchema.safeParse(body)
   )
@@ -29,11 +34,11 @@ export default defineEventHandler(async (event) => {
 
   const api = new RedApi()
 
-  const results = api.redDocList({ publishedBefore, publishedAfter })
+  console.log({ publishedBefore, publishedAfter })
 
-  return {
-    list: results
-  }
+  const results = await api.redDocList({ publishedBefore, publishedAfter })
+
+  return results
 })
 
 function parseOptionalDate(optionalDate: string | undefined): Date | undefined {
