@@ -64,16 +64,18 @@
                 heading-level="3"
                 :title="searchResult.name"
                 href="/"
-                :tag="{
-                  type: 'Informational',
-                  date: new Date(searchResult.published)
-                }"
-                :body="[formatAuthors(searchResult.authors)]"
-                :footer="['IETF Stream']"
+                :tag="['Informational']"
+                :list1="[
+                  formatAuthors(searchResult.authors),
+                  formatDate(
+                    // typing is wrong. it's actually a string
+                    searchResult.published as unknown as string
+                  )
+                ]"
+                :list2="formatStreamAndArea(searchResult)"
                 abstract="This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long. This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long."
-                red-note="sdfsdf"
+                red-note=""
               >
-                {{ searchResult }}
                 {{ searchResult.title }}
               </RFCCard>
             </li>
@@ -85,6 +87,7 @@
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
 import { useSearchStore } from '~/stores/search'
 
 const searchStore = useSearchStore()
@@ -110,5 +113,16 @@ function formatAuthors(authors: Authors): string {
   return `${authors[0].name} and ${authors.length - 1} other${
     authors.length > 2 ? 's' : ''
   }`
+}
+
+function formatStreamAndArea(searchResult: SearchResult): string[] {
+  return [searchResult.stream?.name, searchResult.area?.name].filter(
+    Boolean
+  ) as string[]
+}
+
+function formatDate(isoDate: string): string {
+  const datetime = DateTime.fromISO(isoDate)
+  return datetime.toLocaleString({ month: 'long', year: 'numeric' })
 }
 </script>

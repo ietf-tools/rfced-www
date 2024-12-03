@@ -16,21 +16,21 @@
       <slot />
     </p>
     <div class="my-4 print:m-0">
-      <Tag :text="[props.tag.type, formatDate(props.tag.date)]" />
+      <Tag :text="props.tag" />
     </div>
     <ul
-      v-if="props.body"
+      v-if="props.list1"
       class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
     >
-      <li v-for="(part, index) in props.body" :key="index" class="inline">
+      <li v-for="(part, index) in props.list1" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
     <ul
-      v-if="props.footer"
+      v-if="props.list2"
       class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
     >
-      <li v-for="(part, index) in props.footer" :key="index" class="inline">
+      <li v-for="(part, index) in props.list2" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" />{{ part }}
       </li>
     </ul>
@@ -96,30 +96,26 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon'
 import { parseRFCId } from './rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 
 type Props = {
   title: string
   href: string
-  tag: {
-    type: string
-    date: Date
-  }
+  tag: string[]
   headingLevel: '1' | '2' | '3' | '4' | '5' | '6'
-  body?: string[]
-  footer?: string[]
+  list1?: string[]
+  list2?: string[]
   abstract?: string
   redNote?: string
 }
 
 const props = defineProps<Props>()
 
-function formatDate(date: Date) {
-  const luxonDate = DateTime.fromJSDate(date)
-  return luxonDate.toRelativeCalendar() ?? ''
-}
+// function formatDate(date: Date) {
+//   const luxonDate = DateTime.fromJSDate(date)
+//   return luxonDate.toRelativeCalendar() ?? ''
+// }
 
 const isMobileAbstractOpen = ref<boolean>(false)
 

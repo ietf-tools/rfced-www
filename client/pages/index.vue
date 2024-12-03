@@ -31,8 +31,8 @@
               date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
             }"
             intro="Message Header Field for Indicating Message Authentication Status"
-            :body="['C. Perkins', 'Date']"
-            :footer="['IETF Stream']"
+            :list1="['C. Perkins', 'Date']"
+            :list2="['IETF Stream']"
           >
             Sending RTP Control Protocol (RTPCP) Feedback for Congestion Control
             in Interactive Multimedia Conferences
@@ -47,8 +47,8 @@
               date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
             }"
             intro="Message Header Field for Indicating Message Authentication Status"
-            :body="['E. Kinnear and 3 others', 'June 2022']"
-            :footer="['Independent Stream', 'Area', 'Working group']"
+            :list1="['E. Kinnear and 3 others', 'June 2022']"
+            :list2="['Independent Stream', 'Area', 'Working group']"
           >
             Oblivious DNS over HTTPS
           </RFCCard>
@@ -62,8 +62,8 @@
               date: new Date()
             }"
             intro="Message Header Field for Indicating Message Authentication Status"
-            :body="['M. Kucherawy', 'May 2019']"
-            :footer="['IETF Stream', 'Reporting & Conformance Working Group']"
+            :list1="['M. Kucherawy', 'May 2019']"
+            :list2="['IETF Stream', 'Reporting & Conformance Working Group']"
           >
             Message Header Field for Indicating Message Authentication Status
           </RFCCard>
