@@ -26,17 +26,12 @@
               aria-live="polite"
             >
               <template v-if="!searchStore.q"><!-- no search --></template>
-              <template
-                v-else-if="
-                  !searchStore.searchResults ||
-                  searchStore.searchResults.length === 0
-                "
-              >
+              <template v-else-if="!searchStore.searchResults">
                 Loading...
               </template>
               <template v-else>
                 <span class="font-normal">Showing </span>
-                <b>{{ searchStore.searchResults.length }} results</b>
+                <b>{{ searchStore.searchResults.count }} results</b>
                 <span class="font-normal"> for "{{ searchStore.q }}" </span>
               </template>
             </Heading>
@@ -61,24 +56,25 @@
             class="mt-4 w-full flex flex-col gap-4"
           >
             <li
-              v-for="(searchResult, searchIndex) in searchStore.searchResults"
+              v-for="(searchResult, searchIndex) in searchStore.searchResults
+                .results"
               :key="searchIndex"
             >
               <RFCCard
                 heading-level="3"
-                title="RFC9392"
+                :title="searchResult.name"
                 href="/"
                 :tag="{
                   type: 'Informational',
-                  date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
+                  date: new Date(searchResult.published)
                 }"
-                :body="['C. Perkins', 'Date']"
+                :body="[formatAuthors(searchResult.authors)]"
                 :footer="['IETF Stream']"
                 abstract="This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long. This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long."
                 red-note="sdfsdf"
               >
-                Message Header Field for Indicating Message Authentication
-                Status
+                {{ searchResult }}
+                {{ searchResult.title }}
               </RFCCard>
             </li>
           </ul>
@@ -96,4 +92,23 @@ const searchStore = useSearchStore()
 definePageMeta({
   layout: false
 })
+
+type SearchResult = NonNullable<
+  typeof searchStore.searchResults
+>['results'][number]
+
+type Authors = SearchResult['authors']
+
+function formatAuthors(authors: Authors): string {
+  if (authors.length === 0) {
+    return ''
+  }
+  if (authors.length === 1) {
+    return `${authors[0].name}`
+  }
+
+  return `${authors[0].name} and ${authors.length - 1} other${
+    authors.length > 2 ? 's' : ''
+  }`
+}
 </script>
