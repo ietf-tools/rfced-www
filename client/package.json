@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run generate-content-metadata && nuxt build",
-    "dev": "npm run generate-content-metadata && nuxt dev",
+    "build": "npm run generate:content-metadata && npm run generate:api-red && nuxt build",
+    "dev": "npm run generate:content-metadata && npm run generate:api-red && nuxt dev",
     "cleanup": "nuxt cleanup",
     "preview": "npm run build && nuxt preview",
     "postinstall": "nuxt prepare",
@@ -17,10 +17,8 @@
     "test:story:view": "npx --no -c 'vite dev ./visual-regression-viewer'",
     "test:story:approve": "npm run story:build && LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker update",
     "types": "npx nuxi typecheck",
-    "generate-content-metadata": "node --experimental-strip-types ./scripts/generate-content-metadata.ts",
-    "generate:api": "npx --no @openapitools/openapi-generator-cli generate",
-    "generate:api:datatracker": "npx --no @openapitools/openapi-generator-cli generate --generator-key datatracker",
-    "generate:api:help": "npx --no @openapitools/openapi-generator-cli help"
+    "generate:content-metadata": "node --experimental-strip-types ./scripts/generate-content-metadata.ts",
+    "generate:api-red": "npx --no apigen-ts http://localhost:8000/api/schema/ --parse-dates ./generated/red-client.ts"
   },
   "//": "If updating lost-pixel sync the version to the vis-reg-test.yml and post-create.sh or rendering / filenames generated etc may be different",
   "dependencies": {
@@ -30,10 +28,10 @@
     "@nuxt/icon": "^1.5.0",
     "@nuxtjs/color-mode": "^3.4.4",
     "@nuxtjs/tailwindcss": "^6.12.1",
-    "@openapitools/openapi-generator-cli": "^2.15.3",
     "@pinia/nuxt": "^0.5.4",
     "@playwright/test": "^1.40.0",
     "@tailwindcss/forms": "^0.5.8",
+    "apigen-ts": "^1.0.1",
     "glob": "^11.0.0",
     "lodash-es": "^4.17.21",
     "lost-pixel": "3.18.2",

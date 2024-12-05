@@ -25,14 +25,18 @@
               aria-atomic="true"
               aria-live="polite"
             >
-              <template v-if="!searchStore.q"><!-- no search --></template>
-              <template v-else-if="!searchStore.searchResults">
+              <template v-if="!searchStore.searchResults">
                 Loading...
               </template>
               <template v-else>
                 <span class="font-normal">Showing </span>
-                <b>{{ searchStore.searchResults.count }} results</b>
-                <span class="font-normal"> for "{{ searchStore.q }}" </span>
+                <b>
+                  {{ searchStore.searchResults.count }}
+                  <span v-if="searchStore.searchResults.count === 1">
+                    result
+                  </span>
+                  <span v-else>results</span>
+                </b>
               </template>
             </Heading>
             <div class="hidden lg:block">
@@ -51,6 +55,7 @@
               <SearchMobileFilter />
             </div>
           </div>
+
           <ul
             v-if="searchStore.searchResults"
             class="mt-4 w-full flex flex-col gap-4"
@@ -62,24 +67,39 @@
             >
               <RFCCard
                 heading-level="3"
-                :title="searchResult.name"
-                href="/"
-                :tag="['Informational']"
+                :title="`RFC${searchResult.number}`"
+                :href="rfcUrlBuilder(searchResult.number)"
+                :tag="[searchResult.status.name]"
                 :list1="[
                   formatAuthors(searchResult.authors),
-                  formatDate(
-                    // typing is wrong. it's actually a string
-                    searchResult.published as unknown as string
-                  )
+                  formatDate(searchResult.published)
                 ]"
                 :list2="formatStreamAndArea(searchResult)"
-                abstract="This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long. This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long."
-                red-note=""
+                abstract=""
+                :red-note="formatObsoletedBy(searchResult.obsoleted_by)"
               >
                 {{ searchResult.title }}
               </RFCCard>
             </li>
           </ul>
+
+          <button
+            v-if="
+              searchStore.searchResults && searchStore.searchResults.previous
+            "
+            @click="searchStore.offset -= 10"
+            class="border-2 p-3"
+          >
+            Previous
+          </button>
+
+          <button
+            v-if="searchStore.searchResults && searchStore.searchResults.next"
+            @click="searchStore.offset += 10"
+            class="border-2 p-3"
+          >
+            Next
+          </button>
         </div>
       </div>
     </NuxtLayout>
@@ -89,6 +109,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import { useSearchStore } from '~/stores/search'
+import { rfcUrlBuilder } from '~/utilities/urlBuilder'
 
 const searchStore = useSearchStore()
 
@@ -124,5 +145,36 @@ function formatStreamAndArea(searchResult: SearchResult): string[] {
 function formatDate(isoDate: string): string {
   const datetime = DateTime.fromISO(isoDate)
   return datetime.toLocaleString({ month: 'long', year: 'numeric' })
+}
+
+function formatObsoletedBy(
+  obsoletedBy: SearchResult['obsoleted_by']
+): VNode | undefined {
+  if (!obsoletedBy || obsoletedBy.length === 0) return undefined
+
+  return h(
+    'span',
+    obsoletedBy.reduce(
+      (acc, obsoletedByItem, index) => {
+        if (index > 0) {
+          acc.push(', ')
+        }
+        acc.push(
+          h(
+            'a',
+            {
+              href: rfcUrlBuilder(obsoletedByItem.number),
+              title: `RFC${obsoletedByItem.number}: ${obsoletedByItem.title}`,
+              class: 'relative z-50 underline p-1 -m-1 hover:bg-gray-100'
+            },
+            ['RFC', h('b', obsoletedByItem.number)]
+          )
+        )
+
+        return acc
+      },
+      ['Obsoleted by '] as (string | VNode)[]
+    )
+  )
 }
 </script>

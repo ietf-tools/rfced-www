@@ -4,9 +4,9 @@
     heading-level="3"
     has-cover-link
     :chevron-position="
-      props.abstract && responsiveModeStore.responsiveMode === 'Desktop'
-        ? 'center'
-        : 'end'
+      props.abstract && responsiveModeStore.responsiveMode === 'Desktop' ?
+        'center'
+      : 'end'
     "
   >
     <template #headingTitle>
@@ -90,7 +90,7 @@
         { 'mt-2': isMobileAbstractOpen }
       ]"
     >
-      {{ props.redNote }}
+      <Renderable :val="props.redNote" />
     </p>
   </Card>
 </template>
@@ -107,15 +107,10 @@ type Props = {
   list1?: string[]
   list2?: string[]
   abstract?: string
-  redNote?: string
+  redNote?: string | VNode
 }
 
 const props = defineProps<Props>()
-
-// function formatDate(date: Date) {
-//   const luxonDate = DateTime.fromJSDate(date)
-//   return luxonDate.toRelativeCalendar() ?? ''
-// }
 
 const isMobileAbstractOpen = ref<boolean>(false)
 

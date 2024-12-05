@@ -26,10 +26,10 @@
             title="RFC9392"
             heading-level="3"
             author="C. Perkins"
-            :tag="{
-              type: 'Informational',
-              date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
-            }"
+            :tag="[
+              'Informational',
+              new Date(Date.now() - 3 * (24 * 60 * 60 * 1000)).toString()
+            ]"
             intro="Message Header Field for Indicating Message Authentication Status"
             :list1="['C. Perkins', 'Date']"
             :list2="['IETF Stream']"
@@ -42,10 +42,10 @@
             href="/"
             title="RFC9230"
             heading-level="3"
-            :tag="{
-              type: 'Experimental',
-              date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
-            }"
+            :tag="[
+              'Experimental',
+              new Date(Date.now() - 3 * (24 * 60 * 60 * 1000)).toString()
+            ]"
             intro="Message Header Field for Indicating Message Authentication Status"
             :list1="['E. Kinnear and 3 others', 'June 2022']"
             :list2="['Independent Stream', 'Area', 'Working group']"
@@ -57,10 +57,7 @@
             href="/"
             title="RFC9392"
             heading-level="3"
-            :tag="{
-              type: 'Proposed Standard',
-              date: new Date()
-            }"
+            :tag="['Proposed Standard', new Date().toString()]"
             intro="Message Header Field for Indicating Message Authentication Status"
             :list1="['M. Kucherawy', 'May 2019']"
             :list2="['IETF Stream', 'Reporting & Conformance Working Group']"

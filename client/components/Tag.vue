@@ -39,14 +39,14 @@
 
 <script setup lang="ts">
 type Props = {
-  text: (string | ReturnType<typeof h>)[]
+  text: (string | VNode)[]
   class?: string
 }
 
 const props = defineProps<Props>()
 
 // Is this safe? It seems to work
-function getText(obj: ReturnType<typeof h>): string {
+function getText(obj: VNode): string {
   if (typeof obj === 'string') {
     return obj
   } else if (typeof obj.children === 'string') {
@@ -59,9 +59,9 @@ function getText(obj: ReturnType<typeof h>): string {
   return ''
 }
 
-const totalTextLength = computed(() =>
-  props.text.reduce((acc, item): number => {
+const totalTextLength = computed(() => {
+  return props.text.reduce((acc, item): number => {
     return acc + (typeof item === 'string' ? item.length : getText(item).length)
   }, 0)
-)
+})
 </script>

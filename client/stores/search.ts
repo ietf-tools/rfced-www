@@ -45,6 +45,7 @@ type SearchParams = {
   area: string
   workinggroup: string
   order: string
+  offset: string
 }
 
 type SearchResults = null | ResponseType
@@ -94,6 +95,10 @@ export const useSearchStore = defineStore('search', () => {
       }
       previousAbortController = new AbortController()
 
+      // while fetching hide current results
+      searchResults.value = null
+      window.scrollTo(0, 0) // reset scroll to top of page
+
       const params = new URLSearchParams({
         q: q.value,
         from: stringifyDate(publicationDateFrom.value),
@@ -102,7 +107,8 @@ export const useSearchStore = defineStore('search', () => {
         stream: stream.value,
         area: area.value,
         workinggroup: workingGroup.value,
-        order: orderBy.value
+        order: orderBy.value,
+        offset: offset.value.toString()
       } satisfies SearchSchemaType)
 
       fetch(`/api/search?${params.toString()}`, {
@@ -118,32 +124,31 @@ export const useSearchStore = defineStore('search', () => {
   // PARAM: Q (search terms string)
   const q = ref<string>(route.query.q?.toString() ?? '')
   watch(q, (newQ) => {
+    offset.value = 0
     updateUrlParams({ q: newQ })
     doSearch()
   })
 
-  if (q.value.length > 0) {
-    doSearch()
-  }
-
   // PARAM: publicationDateFrom
   const publicationDateFrom = ref<Date | undefined>(
-    route.query.from
-      ? new Date(parseDateString(route.query.from.toString()))
-      : undefined
+    route.query.from ?
+      new Date(parseDateString(route.query.from.toString()))
+    : undefined
   )
   watch(publicationDateFrom, (newFrom) => {
+    offset.value = 0
     updateUrlParams({ from: stringifyDate(newFrom) })
     doSearch()
   })
 
   // PARAM: publicationDateTo
   const publicationDateTo = ref<Date | undefined>(
-    route.query.to
-      ? new Date(parseDateString(route.query.to.toString()))
-      : undefined
+    route.query.to ?
+      new Date(parseDateString(route.query.to.toString()))
+    : undefined
   )
   watch(publicationDateTo, (newTo) => {
+    offset.value = 0
     updateUrlParams({ to: stringifyDate(newTo) })
     doSearch()
   })
@@ -153,6 +158,7 @@ export const useSearchStore = defineStore('search', () => {
     (route.query.stream?.toString() ?? '') as StreamValue
   )
   watch(stream, (newStream) => {
+    offset.value = 0
     updateUrlParams({ stream: newStream })
     doSearch()
   })
@@ -160,6 +166,7 @@ export const useSearchStore = defineStore('search', () => {
   // PARAM: area
   const area = ref<AreaValue>((route.query.area?.toString() ?? '') as AreaValue)
   watch(area, (newArea) => {
+    offset.value = 0
     updateUrlParams({ area: newArea })
     doSearch()
   })
@@ -169,6 +176,7 @@ export const useSearchStore = defineStore('search', () => {
     (route.query.workinggroup?.toString() ?? '') as WorkingGroupValue
   )
   watch(workingGroup, (newWorkingGroup) => {
+    offset.value = 0
     updateUrlParams({ workinggroup: newWorkingGroup })
     doSearch()
   })
@@ -196,6 +204,7 @@ export const useSearchStore = defineStore('search', () => {
   watch(
     statuses,
     (statuses) => {
+      offset.value = 0
       updateUrlParams({
         statuses: statuses.length > 0 ? statuses.join(',') : ''
       })
@@ -211,7 +220,17 @@ export const useSearchStore = defineStore('search', () => {
     (route.query.order?.toString() ?? 'lowest') as OrderByValue
   )
   watch(orderBy, (newOrder) => {
+    offset.value = 0
     updateUrlParams({ order: newOrder !== 'lowest' ? '' : newOrder })
+    doSearch()
+  })
+
+  // PARAM: offset
+  const offset = ref<number>(
+    route.query.offset ? parseInt(route.query.offset.toString(), 10) : 0
+  )
+  watch(offset, (newOffset) => {
+    updateUrlParams({ offset: newOffset !== 0 ? newOffset.toString() : '' })
     doSearch()
   })
 
@@ -248,6 +267,7 @@ export const useSearchStore = defineStore('search', () => {
     area,
     workingGroup,
     orderBy,
+    offset,
     searchResults,
     hasFilters,
     clearFilters

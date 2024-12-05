@@ -4,12 +4,12 @@
   "generator-cli": {
     "version": "7.9.0",
     "generators": {
-      "datatracker": {
+      "red": {
         "generatorName": "typescript-fetch",
         "inputSpec": "http://localhost:8000/api/schema/",
-        "output": "#{cwd}/generated/datatracker_client",
+        "output": "#{cwd}/generated/red",
         "additionalProperties": {
-          "packageName": "datatracker_client",
+          "packageName": "red",
           "disallowAdditionalPropertiesIfNotPresent": false
         }
       }

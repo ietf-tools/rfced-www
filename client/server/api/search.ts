@@ -1,8 +1,10 @@
 import { z } from 'zod'
-import { RedApi } from '../../generated/datatracker_client/index'
-import type { PaginatedRfcMetadataList } from '../../generated/datatracker_client/index'
+// import { RedApi } from '../../generated/red/index'
+// import type { PaginatedRfcMetadataList } from '../../generated/red/index'
+import { ApiClient } from '../../generated/red-client'
+import type { PaginatedRfcMetadataList } from '../../generated/red-client'
 
-const SearchSchema = z.object({
+const SearchParamsSchema = z.object({
   q: z.string().optional(),
   from: z.string().optional(),
   to: z.string().optional(),
@@ -10,16 +12,17 @@ const SearchSchema = z.object({
   stream: z.string().optional(),
   area: z.string().optional(),
   workinggroup: z.string().optional(),
-  order: z.string().optional()
+  order: z.enum(['lowest', 'highest']).optional(),
+  offset: z.string().optional()
 })
 
-export type SearchSchemaType = z.infer<typeof SearchSchema>
+export type SearchSchemaType = z.infer<typeof SearchParamsSchema>
 
 export type ResponseType = PaginatedRfcMetadataList
 
 export default defineEventHandler(async (event): Promise<ResponseType> => {
   const query = await getValidatedQuery(event, (body) =>
-    SearchSchema.safeParse(body)
+    SearchParamsSchema.safeParse(body)
   )
 
   if (query.error) {
@@ -29,19 +32,75 @@ export default defineEventHandler(async (event): Promise<ResponseType> => {
     })
   }
 
-  const publishedBefore = parseOptionalDate(query.data.from)
-  const publishedAfter = parseOptionalDate(query.data.to)
+  const [published_after, published_before] = parseOptionalDateRange(
+    query.data.from,
+    query.data.to
+  )
 
-  const api = new RedApi()
+  const redApi = new ApiClient({ baseUrl: 'http://localhost:8000/' })
+  type DocListArg = Parameters<(typeof redApi)['red']['docList']>[0]
 
-  console.log({ publishedBefore, publishedAfter })
+  const docListArg: DocListArg = {}
 
-  const results = await api.redDocList({ publishedBefore, publishedAfter })
+  if (published_after) {
+    docListArg.published_after = published_after
+  }
+  if (published_before) {
+    docListArg.published_before = published_before
+  }
+  if (query.data.q) {
+    docListArg.search = query.data.q
+  }
+  if (query.data.order) {
+    docListArg.sort = [query.data.order === 'highest' ? '-number' : 'number']
+  }
+  if (query.data.offset) {
+    docListArg.offset = parseInt(query.data.offset, 10)
+  }
+
+  const results = await redApi.red.docList(docListArg)
 
   return results
 })
 
-function parseOptionalDate(optionalDate: string | undefined): Date | undefined {
-  if (!optionalDate) return
-  return new Date(optionalDate)
+function parseOptionalDateRange(
+  optionalDate1: string | undefined,
+  optionalDate2: string | undefined
+): [undefined, undefined] | [string, string] {
+  if (!optionalDate1 && !optionalDate2) return [undefined, undefined]
+
+  // then one or two dates are not undefined
+  let date1 = new Date()
+  let date2 = new Date()
+  try {
+    if (optionalDate1) {
+      date1 = new Date(optionalDate1)
+    }
+    if (optionalDate2) {
+      date2 = new Date(optionalDate2)
+    }
+  } catch (e: unknown) {
+    console.error(
+      'Ignoring date range as unable to parse date1 or date2',
+      { optionalDate1, optionalDate2 },
+      e
+    )
+    return [undefined, undefined]
+  }
+
+  const startDate = date1 < date2 ? date1 : date2
+  let endDate = date1 > date2 ? date2 : date1
+
+  // ensure endDate's day of the month is set to the last day of the month
+  // so that the YYYY-MM is inclusive of dates within the month
+  // https://stackoverflow.com/a/13773408
+  endDate = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0)
+
+  const lengthOfOpenAPIDate = 'YYYY-MM-DD'.length
+
+  return [
+    // truncate ISO date string to exclude time portion
+    startDate.toISOString().substring(0, lengthOfOpenAPIDate),
+    endDate.toISOString().substring(0, lengthOfOpenAPIDate)
+  ]
 }
