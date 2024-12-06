@@ -21,18 +21,18 @@
             <Heading
               level="2"
               style-level="4"
-              class="text-left"
+              class="text-left pl-4 md:pl-0"
               aria-atomic="true"
               aria-live="polite"
             >
-              <template v-if="!searchStore.searchResults">
+              <template v-if="!searchStore.searchResponse">
                 Loading...
               </template>
               <template v-else>
                 <span class="font-normal">Showing </span>
                 <b>
-                  {{ searchStore.searchResults.count }}
-                  <span v-if="searchStore.searchResults.count === 1">
+                  {{ searchStore.searchResponse.count }}
+                  <span v-if="searchStore.searchResponse.count === 1">
                     result
                   </span>
                   <span v-else>results</span>
@@ -56,50 +56,71 @@
             </div>
           </div>
 
+          <div v-if="searchStore.searchError">
+            <Alert
+              variant="warning"
+              heading="Unable to search RFCs. Please try again later."
+            >
+              {{ searchStore.searchError }}
+            </Alert>
+          </div>
+
           <ul
-            v-if="searchStore.searchResults"
+            v-if="searchStore.searchResponse"
             class="mt-4 w-full flex flex-col gap-4"
           >
             <li
-              v-for="(searchResult, searchIndex) in searchStore.searchResults
+              v-for="(searchResult, searchIndex) in searchStore.searchResponse
                 .results"
               :key="searchIndex"
             >
-              <RFCCard
-                heading-level="3"
-                :title="`RFC${searchResult.number}`"
-                :href="rfcUrlBuilder(searchResult.number)"
-                :tag="[searchResult.status.name]"
-                :list1="[
-                  formatAuthors(searchResult.authors),
-                  formatDate(searchResult.published)
-                ]"
-                :list2="formatStreamAndArea(searchResult)"
-                abstract=""
-                :red-note="formatObsoletedBy(searchResult.obsoleted_by)"
-              >
-                {{ searchResult.title }}
-              </RFCCard>
+              <RFCCardSearchItem
+                :key="searchResult.number"
+                :search-item="searchResult"
+              />
             </li>
           </ul>
 
-          <button
-            v-if="
-              searchStore.searchResults && searchStore.searchResults.previous
-            "
-            @click="searchStore.offset -= 10"
-            class="border-2 p-3"
+          <div
+            :class="[
+              'flex mt-4',
+              {
+                'justify-start':
+                  searchStore.searchResponse &&
+                  searchStore.searchResponse.previous &&
+                  !searchStore.searchResponse.next,
+                'justify-between':
+                  searchStore.searchResponse &&
+                  searchStore.searchResponse.previous &&
+                  searchStore.searchResponse.next,
+                'justify-end':
+                  searchStore.searchResponse &&
+                  !searchStore.searchResponse.previous &&
+                  searchStore.searchResponse.next
+              }
+            ]"
           >
-            Previous
-          </button>
+            <button
+              v-if="
+                searchStore.searchResponse &&
+                searchStore.searchResponse.previous
+              "
+              class="border font-bold px-4 py-3 mt-6 bg-blue-400 text-white hover:bg-blue-200 focus:bg-blue-200"
+              @click="searchStore.offset -= 10"
+            >
+              Previous
+            </button>
 
-          <button
-            v-if="searchStore.searchResults && searchStore.searchResults.next"
-            @click="searchStore.offset += 10"
-            class="border-2 p-3"
-          >
-            Next
-          </button>
+            <button
+              v-if="
+                searchStore.searchResponse && searchStore.searchResponse.next
+              "
+              class="border font-bold px-4 py-3 mt-6 bg-blue-400 text-white hover:bg-blue-200 focus:bg-blue-200"
+              @click="searchStore.offset += 10"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </NuxtLayout>
@@ -107,74 +128,11 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon'
 import { useSearchStore } from '~/stores/search'
-import { rfcUrlBuilder } from '~/utilities/urlBuilder'
 
 const searchStore = useSearchStore()
 
 definePageMeta({
   layout: false
 })
-
-type SearchResult = NonNullable<
-  typeof searchStore.searchResults
->['results'][number]
-
-type Authors = SearchResult['authors']
-
-function formatAuthors(authors: Authors): string {
-  if (authors.length === 0) {
-    return ''
-  }
-  if (authors.length === 1) {
-    return `${authors[0].name}`
-  }
-
-  return `${authors[0].name} and ${authors.length - 1} other${
-    authors.length > 2 ? 's' : ''
-  }`
-}
-
-function formatStreamAndArea(searchResult: SearchResult): string[] {
-  return [searchResult.stream?.name, searchResult.area?.name].filter(
-    Boolean
-  ) as string[]
-}
-
-function formatDate(isoDate: string): string {
-  const datetime = DateTime.fromISO(isoDate)
-  return datetime.toLocaleString({ month: 'long', year: 'numeric' })
-}
-
-function formatObsoletedBy(
-  obsoletedBy: SearchResult['obsoleted_by']
-): VNode | undefined {
-  if (!obsoletedBy || obsoletedBy.length === 0) return undefined
-
-  return h(
-    'span',
-    obsoletedBy.reduce(
-      (acc, obsoletedByItem, index) => {
-        if (index > 0) {
-          acc.push(', ')
-        }
-        acc.push(
-          h(
-            'a',
-            {
-              href: rfcUrlBuilder(obsoletedByItem.number),
-              title: `RFC${obsoletedByItem.number}: ${obsoletedByItem.title}`,
-              class: 'relative z-50 underline p-1 -m-1 hover:bg-gray-100'
-            },
-            ['RFC', h('b', obsoletedByItem.number)]
-          )
-        )
-
-        return acc
-      },
-      ['Obsoleted by '] as (string | VNode)[]
-    )
-  )
-}
 </script>

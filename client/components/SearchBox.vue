@@ -5,11 +5,11 @@
       v-model="searchStore.q"
       type="search"
       name="q"
-      class="flex-1 bg-white text-black dark:bg-black dark:text-white"
+      class="flex-1 bg-white text-black dark:bg-black dark:text-white pl-4 md:pl-4"
       :placeholder="
-        responsiveModeStore.responsiveMode === 'Desktop'
-          ? 'Find an RFC (e.g. ‘RFC 7120’)'
-          : 'Find an RFC'
+        responsiveModeStore.responsiveMode === 'Desktop' ?
+          'Find an RFC (e.g. ‘RFC 7120’)'
+        : 'Find an RFC'
       "
       aria-label="Find an RFC (e.g. ‘RFC 7120’)"
     />
