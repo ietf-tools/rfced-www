@@ -32,12 +32,12 @@
           class="border font-bold px-3 py-2 bg-blue-400 text-white"
           @click="isOpen = false"
         >
-          <template v-if="searchStore.searchResults === null">
+          <template v-if="searchStore.searchResponse === null">
             loading...
           </template>
           <template v-else>
-            Show {{ searchStore.searchResults.count }}
-            <template v-if="searchStore.searchResults.count === 1">
+            Show {{ searchStore.searchResponse.count }}
+            <template v-if="searchStore.searchResponse.count === 1">
               RFC
             </template>
             <template v-else> RFCs </template>
