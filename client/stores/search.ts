@@ -53,6 +53,7 @@ type SearchResponse = null | ResponseType
 
 const THROTTLE_FETCH_SIGNAL_CANCEL = 'THROTTLE_FETCH_SIGNAL_CANCEL'
 const THROTTLE_MS = 200
+export const DEFAULT_LIMIT = 10 // we don't allow the user to directly control the limit just the offset
 
 export const useSearchStore = defineStore('search', () => {
   const router = useRouter()

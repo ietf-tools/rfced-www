@@ -32,6 +32,14 @@
               </template>
               <template v-else-if="searchStore.searchResponse">
                 <span class="font-normal">Showing </span>
+                <span v-if="searchStore.offset > 0">
+                  <b>
+                    {{ searchStore.offset }}&ndash;{{
+                      searchStore.offset + DEFAULT_LIMIT
+                    }}
+                  </b>
+                  <span class="font-normal"> of </span>
+                </span>
                 <b>
                   {{ searchStore.searchResponse.count }}
                   <span v-if="searchStore.searchResponse.count === 1">
@@ -130,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSearchStore } from '~/stores/search'
+import { useSearchStore, DEFAULT_LIMIT } from '~/stores/search'
 
 const searchStore = useSearchStore()
 
