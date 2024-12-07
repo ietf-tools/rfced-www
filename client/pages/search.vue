@@ -25,10 +25,12 @@
               aria-atomic="true"
               aria-live="polite"
             >
-              <template v-if="!searchStore.searchResponse">
+              <template
+                v-if="!searchStore.searchResponse && !searchStore.searchError"
+              >
                 Loading...
               </template>
-              <template v-else>
+              <template v-else-if="searchStore.searchResponse">
                 <span class="font-normal">Showing </span>
                 <b>
                   {{ searchStore.searchResponse.count }}
