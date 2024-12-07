@@ -2,7 +2,7 @@
   <RFCCard
     heading-level="3"
     :title="`RFC${props.searchItem.number}`"
-    :href="rfcUrlBuilder(props.searchItem.number)"
+    :href="rfcPathBuilder(props.searchItem.number)"
     :tag="[props.searchItem.status.name]"
     :list1="[
       formatAuthors(props.searchItem.authors),
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import type { RfcMetadata } from '../generated/red-client'
-import { rfcUrlBuilder } from '~/utilities/urlBuilder'
+import { rfcPathBuilder } from '~/utilities/url'
 
 type Props = {
   searchItem: RfcMetadata
@@ -69,7 +69,7 @@ function formatObsoletedBy(
           h(
             'a',
             {
-              href: rfcUrlBuilder(obsoletedByItem.number),
+              href: rfcPathBuilder(obsoletedByItem.number),
               title: `RFC${obsoletedByItem.number}: ${obsoletedByItem.title}`,
               class: 'relative z-50 underline p-1 -m-1 hover:bg-gray-100'
             },

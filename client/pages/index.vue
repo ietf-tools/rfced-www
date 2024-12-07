@@ -139,6 +139,8 @@
 </template>
 
 <script setup lang="ts">
+import { SEARCH_API_PATH } from '~/utilities/url'
+
 definePageMeta({
   layout: false
 })
@@ -148,7 +150,7 @@ useSeoMeta({
 })
 
 const { data: searchResponse, error: searchError } =
-  await useFetch('/api/search')
+  await useFetch(SEARCH_API_PATH)
 
 const searchResults = searchResponse.value?.results.splice(0, 3)
 </script>

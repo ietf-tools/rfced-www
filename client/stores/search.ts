@@ -1,5 +1,6 @@
 import { debounce } from 'lodash-es'
 import type { SearchSchemaType, ResponseType } from '../server/api/search'
+import { SEARCH_PATH, SEARCH_API_PATH } from '~/utilities/url'
 
 export const Statuses = {
   any: 'Any',
@@ -50,17 +51,20 @@ type SearchParams = {
 
 type SearchResponse = null | ResponseType
 
+const THROTTLE_FETCH_SIGNAL_CANCEL = 'THROTTLE_FETCH_SIGNAL_CANCEL'
+const THROTTLE_MS = 200
+
 export const useSearchStore = defineStore('search', () => {
   const router = useRouter()
   const route = useRoute()
 
   /**
    * Updates router query params with current search config
-   * and ensures empty values (`''`) are removed from URL
+   * and ensures empty values ie '' have that param removed from URL
    */
   function updateUrlParams(searchParams: Partial<SearchParams>) {
-    if (route.path !== '/search') {
-      // Only sync url params on '/search' route, not on homepage
+    if (route.path !== SEARCH_PATH) {
+      // Only sync url params on '/search/' route, not on homepage
       return
     }
 
@@ -90,7 +94,7 @@ export const useSearchStore = defineStore('search', () => {
 
     return debounce(() => {
       if (previousAbortController) {
-        previousAbortController.abort()
+        previousAbortController.abort(THROTTLE_FETCH_SIGNAL_CANCEL)
       }
       previousAbortController = new AbortController()
 
@@ -115,17 +119,25 @@ export const useSearchStore = defineStore('search', () => {
       // delete any previous error as we're doing a new search
       searchError.value = ''
 
-      fetch(`/api/search${paramsString.length > 0 ? `?${paramsString}` : ''}`, {
-        signal: previousAbortController.signal
-      })
+      fetch(
+        `${SEARCH_API_PATH}${paramsString.length > 0 ? `?${paramsString}` : ''}`,
+        {
+          signal: previousAbortController.signal
+        }
+      )
         .then((resp) => resp.json())
         .then((results: ResponseType) => {
           searchResponse.value = results
         })
         .catch((reason) => {
+          if (reason === THROTTLE_FETCH_SIGNAL_CANCEL) {
+            // this is a normal occurence when aborting a fetch via previousAbortController.signal
+            // this is not an error so we ignore it
+            return
+          }
           searchError.value = reason.toString()
         })
-    }, 200)
+    }, THROTTLE_MS)
   })()
 
   const resetOffsetDueToSearchChange = () => {

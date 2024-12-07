@@ -1,5 +1,5 @@
 <template>
-  <form method="get" action="/search" class="w-full flex pt-4 pb-6">
+  <form method="get" :action="SEARCH_PATH" class="w-full flex pt-4 pb-6">
     <input
       id="search"
       v-model="searchStore.q"
@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import { useSearchStore } from '~/stores/search'
+import { SEARCH_PATH } from '~/utilities/url'
 
 const searchStore = useSearchStore()
 const responsiveModeStore = useResponsiveModeStore()
