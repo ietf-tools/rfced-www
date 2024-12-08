@@ -2,7 +2,10 @@ import { z } from 'zod'
 // import { RedApi } from '../../generated/red/index'
 // import type { PaginatedRfcMetadataList } from '../../generated/red/index'
 import { ApiClient } from '../../generated/red-client'
-import type { PaginatedRfcMetadataList } from '../../generated/red-client'
+import type {
+  PaginatedRfcMetadataList,
+  SlugEnum
+} from '../../generated/red-client'
 
 const SearchParamsSchema = z.object({
   q: z.string().optional(),
@@ -56,6 +59,18 @@ export default defineEventHandler(async (event): Promise<ResponseType> => {
   }
   if (query.data.offset) {
     docListArg.offset = parseInt(query.data.offset, 10)
+  }
+  if (query.data.stream) {
+    docListArg.stream = [query.data.stream]
+  }
+  if (query.data.area) {
+    docListArg.area = [query.data.area]
+  }
+  if (query.data.workinggroup) {
+    docListArg.group = [query.data.workinggroup]
+  }
+  if (query.data.statuses) {
+    docListArg.status = query.data.statuses.split(',') as SlugEnum[]
   }
 
   const results = await redApi.red.docList(docListArg)

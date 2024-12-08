@@ -4,30 +4,100 @@ import { SEARCH_PATH, SEARCH_API_PATH } from '~/utilities/url'
 
 export const Statuses = {
   any: 'Any',
+  informational: 'Informational',
+  standard: 'Standards Track',
   experimental: 'Experimental',
-  standards: 'Standards tracks',
-  historic: 'Historic',
-  best: 'Best current practice',
-  unknown: 'Unknown',
-  informational: 'Informational'
+  bcp: 'Best Current Practice',
+  historic: 'Historic'
 } as const
 export type StatusValue = keyof typeof Statuses
 
 export const Streams = {
   '': 'Any',
-  todo: 'TODO'
+  ietf: 'IETF (Internet Engineering Task Force',
+  ise: 'Independent Submission',
+  irtf: 'Internet Research Task Force',
+  iab: 'Internet Architecture Board'
 } as const
 export type StreamValue = keyof typeof Streams
 
 export const Areas = {
   '': 'Any',
-  todo: 'TODO'
+  int: 'Internet Area',
+  ops: 'Operations and Management Area',
+  rtg: 'Routing Area',
+  sec: 'Security Area',
+  wit: 'Web and Internet Transport',
+  art: 'Applications and Real-Time Area',
+  irtf: 'IRTF',
+  ietf: 'IETF'
 } as const
 export type AreaValue = keyof typeof Areas
 
 export const WorkingGroups = {
   '': 'Any',
-  todo: 'TODO'
+  '6man': 'IPv6 Maintenance',
+  ippm: 'IP Performance Measurement',
+  lsr: 'Link State Routing',
+  cose: 'CBOR Object Signing and Encryption',
+  none: 'Individual Submissions',
+  lamps: 'Limited Additional Mechanisms for PKIX and SMIME',
+  avtcore: 'Audio/Video Transport Core Maintenance',
+  sidrops: 'SIDR Operations',
+  cdni: 'Content Delivery Networks Interconnection',
+  extra: 'Email mailstore and eXtensions To Revise or Amend',
+  bpf: 'BPF/eBPF',
+  v6ops: 'IPv6 Operations',
+  uta: 'Using TLS in Applications',
+  jmap: 'JSON Mail Access Protocol',
+  dnsop: 'Domain Name System Operations',
+  httpbis: 'HTTP',
+  mpls: 'Multiprotocol Label Switching',
+  tvr: 'Time-Variant Routing',
+  ccamp: 'Common Control and Measurement Plane',
+  tsvwg: 'Transport and Services Working Group',
+  httpapi: 'Building Blocks for HTTP APIs',
+  tcpm: 'TCP Maintenance and Minor Extensions',
+  babel: 'Babel routing protocol',
+  netconf: 'Network Configuration',
+  nvo3: 'Network Virtualization Overlays',
+  gnap: 'Grant Negotiation and Authorization Protocol',
+  detnet: 'Deterministic Networking',
+  opsawg: 'Operations and Management Area Working Group',
+  mboned: 'MBONE Deployment',
+  bess: 'BGP Enabled ServiceS',
+  bier: 'Bit Indexed Explicit Replication',
+  hrpc: 'Human Rights Protocol Considerations',
+  iab: 'Internet Architecture Board',
+  ipsecme: 'IP Security Maintenance and Extensions',
+  add: 'Adaptive DNS Discovery',
+  sframe: 'Secure Media Frames',
+  pce: 'Path Computation Element',
+  trill: 'Transparent Interconnection of Lots of Links',
+  core: 'Constrained RESTful Environments',
+  ace: 'Authentication and Authorization for Constrained Environments',
+  cfrg: 'Crypto Forum',
+  kitten: 'Common Authentication Technology Next Generation',
+  qirg: 'Quantum Internet Research Group',
+  cbor: 'Concise Binary Object Representation Maintenance and Extensions',
+  openpgp: 'Open Specification for Pretty Good Privacy',
+  privacypass: 'Privacy Pass',
+  drip: 'Drone Remote ID Protocol',
+  alto: 'Application-Layer Traffic Optimization',
+  rtgwg: 'Routing Area Working Group',
+  uuidrev: 'Revise Universally Unique Identifier Definitions',
+  nfsv4: 'Network File System Version 4',
+  regext: 'Registration Protocols Extensions',
+  cellar: 'Codec Encoding for LossLess Archiving and Realtime transmission',
+  sedate: 'Serialising Extended Data About Times and Events',
+  t2trg: 'Thing-to-Thing',
+  calext: 'Calendaring Extensions',
+  idr: 'Inter-Domain Routing',
+  spring: 'Source Packet Routing in Networking',
+  teas: 'Traffic Engineering Architecture and Signaling',
+  intarea: 'Internet Area Working Group',
+  ohai: 'Oblivious HTTP Application Intermediation',
+  dprive: 'DNS PRIVate Exchange'
 } as const
 export type WorkingGroupValue = keyof typeof WorkingGroups
 
@@ -51,6 +121,14 @@ type SearchParams = {
 
 type SearchResponse = null | ResponseType
 
+type SearchNuxtError = {
+  statusCode: number
+  statusMessage: string
+  message: string
+  stack: string
+  url: string
+}
+
 const THROTTLE_FETCH_SIGNAL_CANCEL = 'THROTTLE_FETCH_SIGNAL_CANCEL'
 const THROTTLE_MS = 200
 export const DEFAULT_LIMIT = 10 // we don't allow the user to directly control the limit just the offset
@@ -65,6 +143,10 @@ export const useSearchStore = defineStore('search', () => {
    */
   function updateUrlParams(searchParams: Partial<SearchParams>) {
     if (route.path !== SEARCH_PATH) {
+      console.info('Not updating URL params on route ', {
+        routePath: route.path,
+        searchPAth: SEARCH_PATH
+      })
       // Only sync url params on '/search/' route, not on homepage
       return
     }
@@ -82,12 +164,17 @@ export const useSearchStore = defineStore('search', () => {
       ...searchParams
     })
 
-    router.push({ query })
+    router.push({
+      path: SEARCH_PATH, // necessary because otherwise the router will change the path to '/search' not '/search/'
+      query
+    })
   }
 
   // Search results
   const searchResponse = ref<SearchResponse>(null)
   const searchError = ref<string>()
+
+  const allStatus = ref<unknown[]>([])
 
   // Debounced search API
   const searchSoon = (() => {
@@ -127,8 +214,21 @@ export const useSearchStore = defineStore('search', () => {
         }
       )
         .then((resp) => resp.json())
-        .then((results: ResponseType) => {
-          searchResponse.value = results
+        .then((data: SearchResponse | SearchNuxtError) => {
+          if (isSearchResponse(data)) {
+            searchResponse.value = data
+            if (data?.results) {
+              data.results.forEach((result) => {
+                if (result.status) {
+                  allStatus.value.push(result.status)
+                }
+              })
+            }
+          } else if (isSearchNuxtError(data)) {
+            searchError.value = `"${data.statusCode} ${data.message}"`
+          } else {
+            searchError.value = `${JSON.stringify(data)}`
+          }
         })
         .catch((reason) => {
           if (reason === THROTTLE_FETCH_SIGNAL_CANCEL) {
@@ -160,6 +260,7 @@ export const useSearchStore = defineStore('search', () => {
     : undefined
   )
   watch(publicationDateFrom, (newFrom) => {
+    console.log({ newFrom })
     resetOffsetDueToSearchChange()
     updateUrlParams({ from: stringifyDate(newFrom) })
     searchSoon()
@@ -298,6 +399,8 @@ export const useSearchStore = defineStore('search', () => {
     offset,
     hasFilters,
     clearFilters,
+    allStatus,
+
     searchResponse,
     searchError
   }
@@ -322,4 +425,22 @@ export function parseDateString(date: string): Date {
   const [year, month] = date.split('-').map((val) => parseFloat(val))
   const newDate = new Date(year, month - 1)
   return newDate
+}
+
+function isSearchResponse(data: unknown): data is SearchResponse {
+  return (
+    typeof data === 'object' &&
+    Object.prototype.hasOwnProperty.call(data, 'count') &&
+    Object.prototype.hasOwnProperty.call(data, 'next') &&
+    Object.prototype.hasOwnProperty.call(data, 'previous') &&
+    Object.prototype.hasOwnProperty.call(data, 'results')
+  )
+}
+
+function isSearchNuxtError(data: unknown): data is SearchNuxtError {
+  return (
+    typeof data === 'object' &&
+    Object.prototype.hasOwnProperty.call(data, 'statusCode') &&
+    Object.prototype.hasOwnProperty.call(data, 'message')
+  )
 }
