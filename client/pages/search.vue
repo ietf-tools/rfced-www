@@ -138,7 +138,6 @@
 </template>
 
 <script setup lang="ts">
-import { uniqBy } from 'lodash-es'
 import { useSearchStore, DEFAULT_LIMIT } from '~/stores/search'
 
 const searchStore = useSearchStore()

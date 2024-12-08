@@ -1,6 +1,4 @@
 import { z } from 'zod'
-// import { RedApi } from '../../generated/red/index'
-// import type { PaginatedRfcMetadataList } from '../../generated/red/index'
 import { ApiClient } from '../../generated/red-client'
 import type {
   PaginatedRfcMetadataList,
@@ -51,6 +49,7 @@ export default defineEventHandler(async (event): Promise<ResponseType> => {
   if (published_before) {
     docListArg.published_before = published_before
   }
+
   if (query.data.q) {
     docListArg.search = query.data.q
   }
@@ -79,32 +78,34 @@ export default defineEventHandler(async (event): Promise<ResponseType> => {
 })
 
 function parseOptionalDateRange(
-  optionalDate1: string | undefined,
-  optionalDate2: string | undefined
+  fromDateParam: string | undefined,
+  toDateParam: string | undefined
 ): [undefined, undefined] | [string, string] {
-  if (!optionalDate1 && !optionalDate2) return [undefined, undefined]
+  if (!fromDateParam && !toDateParam) return [undefined, undefined]
 
   // then one or two dates are not undefined
-  let date1 = new Date()
-  let date2 = new Date()
+  let fromDate = new Date('1970-1-1') // default value before first RFC
+  let toDate = new Date() // default value Now
   try {
-    if (optionalDate1) {
-      date1 = new Date(optionalDate1)
+    if (fromDateParam) {
+      fromDate = new Date(fromDateParam)
     }
-    if (optionalDate2) {
-      date2 = new Date(optionalDate2)
+    if (toDateParam) {
+      toDate = new Date(toDateParam)
     }
   } catch (e: unknown) {
     console.error(
       'Ignoring date range as unable to parse date1 or date2',
-      { optionalDate1, optionalDate2 },
+      { optionalDate1: fromDateParam, optionalDate2: toDateParam },
       e
     )
     return [undefined, undefined]
   }
 
-  const startDate = date1 < date2 ? date1 : date2
-  let endDate = date1 > date2 ? date2 : date1
+  const isFromBeforeTo = fromDate.getTime() < toDate.getTime()
+
+  const startDate = isFromBeforeTo ? fromDate : toDate
+  let endDate = isFromBeforeTo ? toDate : fromDate
 
   // ensure endDate's day of the month is set to the last day of the month
   // so that the YYYY-MM is inclusive of dates within the month
