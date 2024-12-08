@@ -1,7 +1,7 @@
 <template>
   <component
     :is="`h${props.level}`"
-    :class="[props.class, headingStyles[`h${props.styleLevel || props.level}`]]"
+    :class="[headingStyles[`h${props.styleLevel || props.level}`], props.class]"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"

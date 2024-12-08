@@ -9,9 +9,9 @@
 </template>
 
 <script setup lang="ts">
-import _contentMetadata from '../content-metadata.json'
+// import _contentMetadata from '../content-metadata.json'
 
-const { data: page } = await useAsyncData('my-page', queryContent('/').findOne)
+// const { data: page } = await useAsyncData('my-page', queryContent('/').findOne)
 
-useContentHead(page)
+// useContentHead(page)
 </script>

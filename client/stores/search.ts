@@ -1,3 +1,7 @@
+import { debounce } from 'lodash-es'
+import type { SearchSchemaType, ResponseType } from '../server/api/search'
+import { SEARCH_PATH, SEARCH_API_PATH } from '~/utilities/url'
+
 export const Statuses = {
   any: 'Any',
   experimental: 'Experimental',
@@ -42,13 +46,14 @@ type SearchParams = {
   area: string
   workinggroup: string
   order: string
+  offset: string
 }
 
-type SearchResult = {
-  type: 'sdfsdf' // TODO
-}
+type SearchResponse = null | ResponseType
 
-type SearchResults = null | SearchResult[]
+const THROTTLE_FETCH_SIGNAL_CANCEL = 'THROTTLE_FETCH_SIGNAL_CANCEL'
+const THROTTLE_MS = 200
+export const DEFAULT_LIMIT = 10 // we don't allow the user to directly control the limit just the offset
 
 export const useSearchStore = defineStore('search', () => {
   const router = useRouter()
@@ -56,11 +61,11 @@ export const useSearchStore = defineStore('search', () => {
 
   /**
    * Updates router query params with current search config
-   * and ensures empty values (`''`) are removed from URL
+   * and ensures empty values ie '' have that param removed from URL
    */
   function updateUrlParams(searchParams: Partial<SearchParams>) {
-    if (route.path !== '/search') {
-      // Only sync url params on '/search' route
+    if (route.path !== SEARCH_PATH) {
+      // Only sync url params on '/search/' route, not on homepage
       return
     }
 
@@ -81,69 +86,124 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   // Search results
-  const searchResults = ref<SearchResults>(null)
+  const searchResponse = ref<SearchResponse>(null)
+  const searchError = ref<string>()
 
-  // A fake search stub
-  let qTimer: ReturnType<typeof setTimeout> | undefined = undefined
-  function doSearch() {
-    searchResults.value = null
-    if (qTimer) {
-      clearTimeout(qTimer)
-    }
-    qTimer = setTimeout(() => {
-      // Fake search results
-      searchResults.value = [{ type: 'sdfsdf' }, { type: 'sdfsdf' }]
-    }, 2000)
+  // Debounced search API
+  const searchSoon = (() => {
+    let previousAbortController: AbortController | null = null
+
+    return debounce(() => {
+      if (previousAbortController) {
+        previousAbortController.abort(THROTTLE_FETCH_SIGNAL_CANCEL)
+      }
+      previousAbortController = new AbortController()
+
+      // while fetching hide current results
+      searchResponse.value = null
+      window.scrollTo(0, 0) // reset scroll to top of page
+
+      const params = new URLSearchParams({
+        q: q.value,
+        from: stringifyDate(publicationDateFrom.value),
+        to: stringifyDate(publicationDateTo.value),
+        statuses: statuses.value.join(','),
+        stream: stream.value,
+        area: area.value,
+        workinggroup: workingGroup.value,
+        order: orderBy.value,
+        offset: offset.value.toString()
+      } satisfies SearchSchemaType)
+
+      const paramsString = params.toString()
+
+      // delete any previous error as we're doing a new search
+      searchError.value = ''
+
+      fetch(
+        `${SEARCH_API_PATH}${paramsString.length > 0 ? `?${paramsString}` : ''}`,
+        {
+          signal: previousAbortController.signal
+        }
+      )
+        .then((resp) => resp.json())
+        .then((results: ResponseType) => {
+          searchResponse.value = results
+        })
+        .catch((reason) => {
+          if (reason === THROTTLE_FETCH_SIGNAL_CANCEL) {
+            // this is a normal occurence when aborting a fetch via previousAbortController.signal
+            // this is not an error so we ignore it
+            return
+          }
+          searchError.value = reason.toString()
+        })
+    }, THROTTLE_MS)
+  })()
+
+  const resetOffsetDueToSearchChange = () => {
+    offset.value = 0
   }
 
   // PARAM: Q (search terms string)
   const q = ref<string>(route.query.q?.toString() ?? '')
   watch(q, (newQ) => {
+    resetOffsetDueToSearchChange()
     updateUrlParams({ q: newQ })
-    doSearch()
+    searchSoon()
   })
-
-  if (q.value.length > 0) {
-    doSearch()
-  }
 
   // PARAM: publicationDateFrom
   const publicationDateFrom = ref<Date | undefined>(
-    route.query.from
-      ? new Date(parseDateString(route.query.from.toString()))
-      : undefined
+    route.query.from ?
+      new Date(parseDateString(route.query.from.toString()))
+    : undefined
   )
-  watch(publicationDateFrom, (newFrom) =>
+  watch(publicationDateFrom, (newFrom) => {
+    resetOffsetDueToSearchChange()
     updateUrlParams({ from: stringifyDate(newFrom) })
-  )
+    searchSoon()
+  })
 
   // PARAM: publicationDateTo
   const publicationDateTo = ref<Date | undefined>(
-    route.query.to
-      ? new Date(parseDateString(route.query.to.toString()))
-      : undefined
+    route.query.to ?
+      new Date(parseDateString(route.query.to.toString()))
+    : undefined
   )
-  watch(publicationDateTo, (newTo) =>
+  watch(publicationDateTo, (newTo) => {
+    resetOffsetDueToSearchChange()
     updateUrlParams({ to: stringifyDate(newTo) })
-  )
+    searchSoon()
+  })
 
   // PARAM: stream
   const stream = ref<StreamValue>(
     (route.query.stream?.toString() ?? '') as StreamValue
   )
-  watch(stream, (newStream) => updateUrlParams({ stream: newStream }))
+  watch(stream, (newStream) => {
+    resetOffsetDueToSearchChange()
+    updateUrlParams({ stream: newStream })
+    searchSoon()
+  })
 
   // PARAM: area
   const area = ref<AreaValue>((route.query.area?.toString() ?? '') as AreaValue)
-  watch(area, (newArea) => updateUrlParams({ area: newArea }))
+  watch(area, (newArea) => {
+    resetOffsetDueToSearchChange()
+    updateUrlParams({ area: newArea })
+    searchSoon()
+  })
 
   // PARAM: working group
   const workingGroup = ref<WorkingGroupValue>(
     (route.query.workinggroup?.toString() ?? '') as WorkingGroupValue
   )
-  watch(workingGroup, (newWorkingGroup) =>
+  watch(workingGroup, (newWorkingGroup) => {
+    resetOffsetDueToSearchChange()
     updateUrlParams({ workinggroup: newWorkingGroup })
-  )
+    searchSoon()
+  })
 
   // PARAM: statuses
   const statuses = ref<StatusValue[]>(
@@ -168,9 +228,11 @@ export const useSearchStore = defineStore('search', () => {
   watch(
     statuses,
     (statuses) => {
+      resetOffsetDueToSearchChange()
       updateUrlParams({
         statuses: statuses.length > 0 ? statuses.join(',') : ''
       })
+      searchSoon()
     },
     {
       deep: true // because we're mutating array we need to 'deep'ly watch the array to see value changes
@@ -179,15 +241,27 @@ export const useSearchStore = defineStore('search', () => {
 
   // PARAM: order by
   const orderBy = ref<OrderByValue>(
-    (route.query.order?.toString() ?? 'lowest') as OrderByValue
+    (route.query.order?.toString() ?? 'highest') as OrderByValue
   )
-  watch(orderBy, (newOrder) =>
+  watch(orderBy, (newOrder) => {
+    resetOffsetDueToSearchChange()
     updateUrlParams({ order: newOrder !== 'lowest' ? '' : newOrder })
+    searchSoon()
+  })
+
+  // PARAM: offset
+  const offset = ref<number>(
+    route.query.offset ? parseInt(route.query.offset.toString(), 10) : 0
   )
+  watch(offset, (newOffset) => {
+    updateUrlParams({ offset: newOffset !== 0 ? newOffset.toString() : '' })
+    searchSoon()
+  })
 
   function clearFilters() {
     q.value = ''
     while (statuses.value.length) {
+      // mutating the array, see comment on toggleStatus()
       statuses.value.pop()
     }
     publicationDateFrom.value = undefined
@@ -195,8 +269,11 @@ export const useSearchStore = defineStore('search', () => {
     stream.value = ''
     area.value = ''
     workingGroup.value = ''
-    orderBy.value = 'lowest'
-    searchResults.value = null
+    orderBy.value = 'highest'
+    searchResponse.value = null
+    offset.value = 0
+    searchError.value = ''
+    searchSoon()
   }
 
   const hasFilters = !!(
@@ -218,9 +295,11 @@ export const useSearchStore = defineStore('search', () => {
     area,
     workingGroup,
     orderBy,
-    searchResults,
+    offset,
     hasFilters,
-    clearFilters
+    clearFilters,
+    searchResponse,
+    searchError
   }
 })
 

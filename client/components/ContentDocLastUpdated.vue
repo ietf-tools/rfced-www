@@ -1,5 +1,5 @@
 <template>
-  <Popover class="relative print:hidden">
+  <Popover v-if="thisContentMetadata" class="relative print:hidden">
     <PopoverButton
       class="focus:bg-gray-300 dark:focus:bg-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-md px-2 -ml-2"
     >
@@ -10,7 +10,7 @@
       <p class="font-mono">Last updated {{ localisedDate }}</p>
     </PopoverPanel>
   </Popover>
-  <p class="hidden print:block font-mono">
+  <p v-if="thisContentMetadata" class="hidden print:block font-mono">
     Last updated {{ relativeDate }}, {{ localisedDate }}
   </p>
 </template>
@@ -26,8 +26,12 @@ const contentMetadata: ContentMetadata = _contentMetadata
 const route = useRoute()
 const thisContentMetadata = contentMetadata[route.path]
 
-const datetime = DateTime.fromISO(thisContentMetadata.mtime)
+let localisedDate: string | null = null
+let relativeDate: string | null = null
 
-const relativeDate = datetime.toRelativeCalendar()
-const localisedDate = datetime.toLocaleString(DateTime.DATETIME_HUGE)
+if (thisContentMetadata) {
+  const datetime = DateTime.fromISO(thisContentMetadata.mtime)
+  relativeDate = datetime.toRelativeCalendar()
+  localisedDate = datetime.toLocaleString(DateTime.DATETIME_HUGE)
+}
 </script>
