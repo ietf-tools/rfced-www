@@ -4,19 +4,19 @@
       'pointer-events-none inline-flex items-center bg-blue-400 dark:bg-blue-800 print:bg-white text-white print:text-black text-base print:text-sm uppercase font-semibold',
       props.class,
       {
-        'screen:[clip-path:polygon(0%_50%,_6%_0%,_96%_0%,100%_50%,96%_100%,6%_100%)] px-1':
+        'screen:[clip-path:polygon(0%_50%,_6%_0%,_96%_0%,100%_50%,96%_100%,6%_100%)]':
           totalTextLength < 5,
-        'screen:[clip-path:polygon(0%_50%,_10%_0%,_90%_0%,100%_50%,90%_100%,10%_100%)] px-1':
+        'screen:[clip-path:polygon(0%_50%,_10%_0%,_90%_0%,100%_50%,90%_100%,10%_100%)]':
           totalTextLength >= 5 && totalTextLength <= 10,
-        'screen:[clip-path:polygon(0%_50%,_5%_0%,_95%_0%,100%_50%,95%_100%,5%_100%)] px-2':
+        'screen:[clip-path:polygon(0%_50%,_5%_0%,_95%_0%,100%_50%,95%_100%,5%_100%)]':
           totalTextLength > 10 && totalTextLength <= 15,
-        'screen:[clip-path:polygon(0%_50%,_4%_0%,_96%_0%,100%_50%,96%_100%,4%_100%)] px-3':
+        'screen:[clip-path:polygon(0%_50%,_4%_0%,_96%_0%,100%_50%,96%_100%,4%_100%)]':
           totalTextLength > 15
       }
     ]"
   >
     <template v-if="props.text.length === 1">
-      <span class="px-3 py-1 print:px-0 whitespace-nowrap">
+      <span class="px-3 py-1 print:px-0 whitespace-nowrap inline-block px-2">
         <Renderable :val="props.text[0]" />
       </span>
     </template>
