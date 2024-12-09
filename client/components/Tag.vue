@@ -8,15 +8,15 @@
           totalTextLength < 5,
         'screen:[clip-path:polygon(0%_50%,_10%_0%,_90%_0%,100%_50%,90%_100%,10%_100%)]':
           totalTextLength >= 5 && totalTextLength <= 10,
-        'screen:[clip-path:polygon(0%_50%,_7%_0%,_93%_0%,100%_50%,93%_100%,7%_100%)]':
-          totalTextLength > 10 && totalTextLength <= 15,
         'screen:[clip-path:polygon(0%_50%,_5%_0%,_95%_0%,100%_50%,95%_100%,5%_100%)]':
+          totalTextLength > 10 && totalTextLength <= 15,
+        'screen:[clip-path:polygon(0%_50%,_4%_0%,_96%_0%,100%_50%,96%_100%,4%_100%)]':
           totalTextLength > 15
       }
     ]"
   >
     <template v-if="props.text.length === 1">
-      <span class="px-3 py-1 print:px-0 whitespace-nowrap">
+      <span class="px-3 py-1 print:px-0 whitespace-nowrap inline-block px-2">
         <Renderable :val="props.text[0]" />
       </span>
     </template>
@@ -39,14 +39,14 @@
 
 <script setup lang="ts">
 type Props = {
-  text: (string | ReturnType<typeof h>)[]
+  text: (string | VNode)[]
   class?: string
 }
 
 const props = defineProps<Props>()
 
 // Is this safe? It seems to work
-function getText(obj: ReturnType<typeof h>): string {
+function getText(obj: VNode | string): string {
   if (typeof obj === 'string') {
     return obj
   } else if (typeof obj.children === 'string') {
@@ -59,9 +59,9 @@ function getText(obj: ReturnType<typeof h>): string {
   return ''
 }
 
-const totalTextLength = computed(() =>
-  props.text.reduce((acc, item): number => {
+const totalTextLength = computed(() => {
+  return props.text.reduce((acc, item): number => {
     return acc + (typeof item === 'string' ? item.length : getText(item).length)
   }, 0)
-)
+})
 </script>
