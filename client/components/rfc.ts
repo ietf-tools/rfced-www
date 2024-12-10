@@ -44,7 +44,7 @@ export const formatTitle = (rfcId: string) => {
   return h('span', [
     h('span', { class: 'font-normal' }, parts.type),
     NonBreakingSpace,
-    h('span', { class: 'bold' }, parts.number)
+    h('span', { class: 'font-bold' }, parts.number)
   ])
 }
 
