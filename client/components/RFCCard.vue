@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { parseRFCId } from './rfc'
+import { formatTitle } from './rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 
 type Props = {
@@ -119,13 +119,4 @@ const responsiveModeStore = useResponsiveModeStore()
 const abstractDomId = computed(
   () => `abstract-${(Math.random() * 999999).toString(36)}`
 )
-
-const formatTitle = (title: string) => {
-  const parts = parseRFCId(title)
-
-  return h('span', [
-    h('span', { class: 'font-normal' }, parts.type),
-    h('span', parts.number)
-  ])
-}
 </script>

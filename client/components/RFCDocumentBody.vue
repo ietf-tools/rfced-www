@@ -17,7 +17,7 @@
   </button>
 
   <Heading level="1" class="mb-2 px-1 xs:px-0 print:px-0">
-    {{ rfcId.type }} {{ rfcId.number }}
+    <component :is="formatTitle(`${rfcId.type}${rfcId.number}`)" />
   </Heading>
 
   <RFCMobileBanner :rfc-id="rfcId" :is-fixed="true" />
@@ -33,9 +33,9 @@
     <div class="align-middle">
       <Tag
         :text="
-          rfcId.type === RFC
-            ? ['Internet Standard', props.meta ?? rfcId.number]
-            : [rfcId.type, rfcId.number]
+          rfcId.type === RFC ?
+            ['Internet Standard', props.meta ?? rfcId.number]
+          : [rfcId.type, rfcId.number]
         "
       />
       <HeadlessPopover class="inline align-middle">
@@ -51,11 +51,15 @@
         >
           <p class="leading-6">
             For the definition of <b>Status</b>, see
-            <a href="/info/rfc2026">RFC 2026</a>.
+            <a :href="rfcPathBuilder('rfc2026')">
+              <component :is="formatTitle('RFC2026')" />
+            </a>
           </p>
           <p class="leading-6">
             For the definition of <b>Stream</b>, see
-            <a href="/info/rfc8729">RFC 8729</a>.
+            <a :href="rfcPathBuilder('rfc8729')">
+              <component :is="formatTitle('RFC2026')" /> </a
+            >.
           </p>
         </HeadlessPopoverPanel>
       </HeadlessPopover>
@@ -82,8 +86,12 @@
   >
     <p class="text-base">
       For more information, please refer to
-      <a :href="`/info/${props.obsoletedBy}`"
-        >{{ obsoletedByRFCId.type }} {{ obsoletedByRFCId.number }}
+      <a :href="rfcPathBuilder(props.obsoletedBy)">
+        <component
+          :is="
+            formatTitle(`${obsoletedByRFCId.type}${obsoletedByRFCId.number}`)
+          "
+        />
         {{ obsoletedByRFCId.title }}
       </a>
     </p>
@@ -96,10 +104,10 @@
   >
     <p class="text-base">
       See also
-      <a href="/info/rfc9052"
-        >RFC 9052 CBOR Object Signing and Encryption (COSE): Structures and
-        Process</a
-      >
+      <a :href="rfcPathBuilder('rfc9052')">
+        <component :is="formatTitle('rfc9052')" /> CBOR Object Signing and
+        Encryption (COSE): Structures and Process
+      </a>
     </p>
   </Alert>
 
@@ -113,7 +121,8 @@
 </template>
 
 <script setup lang="ts">
-import { parseRFCId, RFC } from './rfc'
+import { formatTitle, parseRFCId, RFC } from './rfc'
+import { rfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {

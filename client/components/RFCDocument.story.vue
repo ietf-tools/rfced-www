@@ -13,9 +13,12 @@
 </template>
 
 <script setup lang="ts">
+import { formatTitle } from './rfc'
+import { rfcPathBuilder } from '~/utilities/url'
+
 const meta = h('span', [
   'part of ',
-  h('a', { href: '/info/std96' }, ['STD 96'])
+  h('a', { href: rfcPathBuilder('std96') }, [formatTitle('STD96')])
 ])
 
 const pagesHtml = [
