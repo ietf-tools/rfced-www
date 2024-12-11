@@ -6,12 +6,19 @@ type RFCId = {
 
 export const RFC = 'RFC'
 
-const NonBreakingSpace = '\xa0'
+export const NonBreakingSpace = '\xa0'
 
 export const parseRFCId = (title: string): RFCId => {
   // split by groups of letters or numbers
   // ie "RFC0000" becomes ["RFC", "0000"]
-  const parts = title.match(/\d+|\D+/g)
+  // or "RFC0000BUB" becomes ["RFC", "0000", "BUB"]
+  const parts = title
+    .replace(
+      // remove whitespace including non-breaking-space
+      /\s/g,
+      ''
+    )
+    .match(/\d+|\D+/g)
 
   if (parts?.length === 2) {
     return {
