@@ -9,7 +9,7 @@
       formatDate(props.searchItem.published)
     ]"
     :list2="formatStreamAndArea(props.searchItem)"
-    abstract=""
+    :abstract="props.searchItem.abstract"
     :red-note="formatObsoletedBy(props.searchItem.obsoleted_by)"
   >
     {{ props.searchItem.title }}
@@ -19,8 +19,8 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import type { RfcMetadata } from '../generated/red-client'
-import { rfcPathBuilder } from '~/utilities/url'
 import { formatTitlePlaintext } from './rfc'
+import { rfcPathBuilder } from '~/utilities/url'
 
 type Props = {
   searchItem: RfcMetadata
