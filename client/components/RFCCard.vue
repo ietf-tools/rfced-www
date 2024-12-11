@@ -8,9 +8,9 @@
         'center'
       : 'end'
     "
-    class="lg:flex"
-    default-slot-class="md:w-1/2 xl:w-2/5 pr-4"
-    aside-slot-class="md:w-1/2 xl:w-3/5 border-l pl-12 pr-4"
+    :class="props.abstract ? 'lg:flex' : undefined"
+    :default-slot-class="props.abstract ? 'md:w-1/2 xl:w-2/5 pr-4' : undefined"
+    :aside-slot-class="props.abstract ? 'md:w-1/2 xl:w-3/5 border-l pl-12 pr-4' : undefined"
   >
     <template #headingTitle>
       <component :is="formatTitle(props.title)" />
@@ -84,7 +84,7 @@
         <Renderable :val="props.redNote" />
       </p>
     </template>
-    <template #aside>
+    <template v-if="!!props.abstract" #aside>
       <div class="hidden lg:block mt-5">
         <!-- desktop abstract -->
         <Heading

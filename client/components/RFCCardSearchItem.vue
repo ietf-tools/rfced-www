@@ -3,13 +3,13 @@
     heading-level="3"
     :title="`RFC${props.searchItem.number}`"
     :href="rfcPathBuilder(`rfc${props.searchItem.number}`)"
-    :tag="[props.searchItem.status.name]"
+    :tag="tag"
     :list1="[
       formatAuthors(props.searchItem.authors),
       formatDate(props.searchItem.published)
     ]"
     :list2="formatStreamAndArea(props.searchItem)"
-    :abstract="props.searchItem.abstract"
+    :abstract="props.showAbstract ? props.searchItem.abstract : undefined"
     :red-note="formatObsoletedBy(props.searchItem.obsoleted_by)"
   >
     {{ props.searchItem.title }}
@@ -24,6 +24,8 @@ import { rfcPathBuilder } from '~/utilities/url'
 
 type Props = {
   searchItem: RfcMetadata
+  showAbstract?: boolean
+  showTagDate?: boolean
 }
 
 const props = defineProps<Props>()
@@ -83,5 +85,15 @@ function formatObsoletedBy(
       ['Obsoleted by '] as (string | VNode)[]
     )
   )
+}
+
+const tag = [props.searchItem.status.name]
+
+if (props.showTagDate) {
+  const datetime = DateTime.fromISO(props.searchItem.published)
+  const relativeCalendar = datetime.toRelativeCalendar()
+  if (relativeCalendar) {
+    tag.push(relativeCalendar)
+  }
 }
 </script>

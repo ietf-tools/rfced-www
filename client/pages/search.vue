@@ -87,6 +87,8 @@
               <RFCCardSearchItem
                 :key="searchResult.number"
                 :search-item="searchResult"
+                :show-abstract="true"
+                :show-tag-date="false"
               />
             </li>
           </ul>
