@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
+    '@nuxt/test-utils/module',
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',

@@ -1,9 +1,9 @@
 <template>
-  <label>
+  <label class="w-full">
     <span class="sr-only">{{ props.label }}</span>
     <select
       v-model="value"
-      class="text-base bg-white text-black dark:bg-black dark:text-white dark:border"
+      class="w-full text-base bg-white text-black dark:bg-black dark:text-white dark:border"
       :title="props.label"
     >
       <option value="" :disabled="isDisabled" class="text-gray-700">

@@ -32,12 +32,12 @@
           class="border font-bold px-3 py-2 bg-blue-400 text-white"
           @click="isOpen = false"
         >
-          <template v-if="searchStore.searchResults === null">
+          <template v-if="searchStore.searchResponse === null">
             loading...
           </template>
           <template v-else>
-            Show {{ searchStore.searchResults.length }}
-            <template v-if="searchStore.searchResults.length === 1">
+            Show {{ searchStore.searchResponse.count }}
+            <template v-if="searchStore.searchResponse.count === 1">
               RFC
             </template>
             <template v-else> RFCs </template>
@@ -49,7 +49,7 @@
   <div>
     <button
       type="button"
-      class="flex gap-1 bg-white text-black dark:bg-black dark:text-white text-base p-3"
+      class="flex items-center gap-1 bg-white text-black dark:bg-black dark:text-white text-base p-3"
       @click="isOpen = true"
     >
       <GraphicsFilter />

@@ -21,23 +21,32 @@
             <Heading
               level="2"
               style-level="4"
-              class="text-left"
+              class="text-left pl-4 md:pl-0"
               aria-atomic="true"
               aria-live="polite"
             >
-              <template v-if="!searchStore.q"><!-- no search --></template>
               <template
-                v-else-if="
-                  !searchStore.searchResults ||
-                  searchStore.searchResults.length === 0
-                "
+                v-if="!searchStore.searchResponse && !searchStore.searchError"
               >
                 Loading...
               </template>
-              <template v-else>
+              <template v-else-if="searchStore.searchResponse">
                 <span class="font-normal">Showing </span>
-                <b>{{ searchStore.searchResults.length }} results</b>
-                <span class="font-normal"> for "{{ searchStore.q }}" </span>
+                <span v-if="searchStore.offset > 0">
+                  <b>
+                    {{ searchStore.offset }}&ndash;{{
+                      searchStore.offset + DEFAULT_LIMIT
+                    }}
+                  </b>
+                  <span class="font-normal"> of </span>
+                </span>
+                <b>
+                  {{ searchStore.searchResponse.count }}
+                  <span v-if="searchStore.searchResponse.count === 1">
+                    result
+                  </span>
+                  <span v-else>results</span>
+                </b>
               </template>
             </Heading>
             <div class="hidden lg:block">
@@ -56,32 +65,74 @@
               <SearchMobileFilter />
             </div>
           </div>
+
+          <div v-if="searchStore.searchError">
+            <Alert
+              variant="warning"
+              heading="Unable to search RFCs. Please try again later."
+            >
+              {{ searchStore.searchError }}
+            </Alert>
+          </div>
+
           <ul
-            v-if="searchStore.searchResults"
+            v-if="searchStore.searchResponse"
             class="mt-4 w-full flex flex-col gap-4"
           >
             <li
-              v-for="(searchResult, searchIndex) in searchStore.searchResults"
+              v-for="(searchResult, searchIndex) in searchStore.searchResponse
+                .results"
               :key="searchIndex"
             >
-              <RFCCard
-                heading-level="3"
-                title="RFC9392"
-                href="/"
-                :tag="{
-                  type: 'Informational',
-                  date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
-                }"
-                :body="['C. Perkins', 'Date']"
-                :footer="['IETF Stream']"
-                abstract="This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long. This paragraph represents this abstract for this particular RFC. It would likely only be one or two paragraphs long."
-                red-note="sdfsdf"
-              >
-                Message Header Field for Indicating Message Authentication
-                Status
-              </RFCCard>
+              <RFCCardSearchItem
+                :key="searchResult.number"
+                :search-item="searchResult"
+                :show-abstract="true"
+                :show-tag-date="false"
+              />
             </li>
           </ul>
+
+          <div
+            :class="[
+              'flex mt-4',
+              {
+                'justify-start':
+                  searchStore.searchResponse &&
+                  searchStore.searchResponse.previous &&
+                  !searchStore.searchResponse.next,
+                'justify-between':
+                  searchStore.searchResponse &&
+                  searchStore.searchResponse.previous &&
+                  searchStore.searchResponse.next,
+                'justify-end':
+                  searchStore.searchResponse &&
+                  !searchStore.searchResponse.previous &&
+                  searchStore.searchResponse.next
+              }
+            ]"
+          >
+            <button
+              v-if="
+                searchStore.searchResponse &&
+                searchStore.searchResponse.previous
+              "
+              class="border font-bold px-4 py-3 mt-6 bg-blue-400 text-white hover:bg-blue-200 focus:bg-blue-200"
+              @click="searchStore.offset -= 10"
+            >
+              Previous
+            </button>
+
+            <button
+              v-if="
+                searchStore.searchResponse && searchStore.searchResponse.next
+              "
+              class="border font-bold px-4 py-3 mt-6 bg-blue-400 text-white hover:bg-blue-200 focus:bg-blue-200"
+              @click="searchStore.offset += 10"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </NuxtLayout>
@@ -89,7 +140,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSearchStore } from '~/stores/search'
+import { useSearchStore, DEFAULT_LIMIT } from '~/stores/search'
 
 const searchStore = useSearchStore()
 

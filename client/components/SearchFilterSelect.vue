@@ -3,7 +3,7 @@
     <span class="text-base font-bold block mb-1">{{ props.label }}</span>
     <select
       v-model="value"
-      class="clear-both text-base bg-white text-black dark:bg-black dark:text-white dark:border"
+      class="clear-both w-full text-base bg-white text-black dark:bg-black dark:text-white dark:border"
     >
       <option
         v-for="([itemValue, itemLabel], itemIndex) in props.options"
@@ -30,6 +30,7 @@ type Props = {
    * ```
    */
   options: [string, string][]
+  class?: string
 }
 
 const props = defineProps<Props>()

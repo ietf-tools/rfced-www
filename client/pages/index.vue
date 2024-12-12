@@ -16,57 +16,25 @@
             <a
               href="https://datatracker.ietf.org/"
               class="text-blue-300 dark:text-blue-100"
-              >datatracker.ietf.org</a
             >
+              datatracker.ietf.org
+            </a>
           </p>
         </div>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <RFCCard
-            href="/"
-            title="RFC9392"
-            heading-level="3"
-            author="C. Perkins"
-            :tag="{
-              type: 'Informational',
-              date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
-            }"
-            intro="Message Header Field for Indicating Message Authentication Status"
-            :body="['C. Perkins', 'Date']"
-            :footer="['IETF Stream']"
-          >
-            Sending RTP Control Protocol (RTPCP) Feedback for Congestion Control
-            in Interactive Multimedia Conferences
-          </RFCCard>
+          <div v-if="searchError">
+            <Alert variant="warning" heading="Unable to load latest RFCs">
+              {{ searchError.statusMessage }}
+            </Alert>
+          </div>
 
-          <RFCCard
-            href="/"
-            title="RFC9230"
-            heading-level="3"
-            :tag="{
-              type: 'Experimental',
-              date: new Date(Date.now() - 3 * (24 * 60 * 60 * 1000))
-            }"
-            intro="Message Header Field for Indicating Message Authentication Status"
-            :body="['E. Kinnear and 3 others', 'June 2022']"
-            :footer="['Independent Stream', 'Area', 'Working group']"
-          >
-            Oblivious DNS over HTTPS
-          </RFCCard>
-
-          <RFCCard
-            href="/"
-            title="RFC9392"
-            heading-level="3"
-            :tag="{
-              type: 'Proposed Standard',
-              date: new Date()
-            }"
-            intro="Message Header Field for Indicating Message Authentication Status"
-            :body="['M. Kucherawy', 'May 2019']"
-            :footer="['IETF Stream', 'Reporting & Conformance Working Group']"
-          >
-            Message Header Field for Indicating Message Authentication Status
-          </RFCCard>
+          <RFCCardSearchItem
+            v-for="searchResult in searchResults"
+            :key="searchResult.number"
+            :search-item="searchResult"
+            :show-abstract="false"
+            :show-tag-date="true"
+          />
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
@@ -173,6 +141,8 @@
 </template>
 
 <script setup lang="ts">
+import { SEARCH_API_PATH } from '~/utilities/url'
+
 definePageMeta({
   layout: false
 })
@@ -180,4 +150,9 @@ definePageMeta({
 useSeoMeta({
   title: 'RFC Editor'
 })
+
+const { data: searchResponse, error: searchError } =
+  await useFetch(SEARCH_API_PATH)
+
+const searchResults = searchResponse.value?.results.splice(0, 3)
 </script>

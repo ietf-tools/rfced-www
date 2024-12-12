@@ -61,15 +61,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { menuData } from './HeaderNavData'
+import { SEARCH_PATH } from '~/utilities/url'
 
-const searchHref = ref<string>('/search')
+const searchHref = ref<string>(SEARCH_PATH)
 
 const route = useRoute()
 
 function updateSearchLink() {
   // If there's a search box on the page just use it rather than linking to another page
   const searchElement = document.getElementById('search')
-  const newSearchHref = searchElement ? '#search' : '/search'
+
+  const newSearchHref = searchElement ? '#search' : SEARCH_PATH
   if (newSearchHref !== searchHref.value) {
     searchHref.value = newSearchHref
   }
