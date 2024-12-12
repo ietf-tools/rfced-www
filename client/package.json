@@ -1,6 +1,7 @@
 {
   "name": "rfced-www",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "npm run generate:content-metadata && npm run generate:api-red && nuxt build",
     "dev": "npm run generate:content-metadata && npm run generate:api-red && nuxt dev",
