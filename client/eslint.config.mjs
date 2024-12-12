@@ -1,7 +1,9 @@
 // @ts-check
 import withNuxt from './.nuxt/eslint.config.mjs'
 
-export default withNuxt({
+export default withNuxt([
+  { ignores: ['**/generated/'] },
+  {
   rules: {
     'vue/comma-dangle': 'off',
     'vue/html-closing-bracket-newline': 'off',
@@ -33,4 +35,4 @@ export default withNuxt({
       }
     ]
   }
-})
+}])
