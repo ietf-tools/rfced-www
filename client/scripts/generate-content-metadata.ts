@@ -53,7 +53,7 @@ const contentMetadata: ContentMetadata = Object.assign(
   ...markdownMetadataArray
 )
 
-const contentMetadataPath = path.join(clientPath, 'content-metadata.json')
+const contentMetadataPath = path.join(clientPath, 'generated', 'content-metadata.json')
 
 fs.writeFileSync(contentMetadataPath, JSON.stringify(contentMetadata, null, 2))
 

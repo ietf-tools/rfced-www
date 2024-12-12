@@ -1,4 +1,4 @@
-name: Runs vitest, typescript check, lint
+name: Vitest, TypeScript check, ESLint
 
 on: [push, workflow_dispatch]
 
