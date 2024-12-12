@@ -9,8 +9,8 @@
       : 'end'
     "
     :class="props.abstract ? 'lg:flex' : undefined"
-    :default-slot-class="props.abstract ? 'md:w-1/2 xl:w-2/5 pr-4' : undefined"
-    :aside-slot-class="props.abstract ? 'md:w-1/2 xl:w-3/5 border-l pl-12 pr-4' : undefined"
+    :default-slot-class="props.abstract ? 'lg:w-1/2 xl:w-2/5 pr-4' : undefined"
+    :aside-slot-class="props.abstract ? 'lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4' : undefined"
   >
     <template #headingTitle>
       <component :is="formatTitle(props.title)" />
@@ -123,9 +123,5 @@ const isMobileAbstractOpen = ref<boolean>(false)
 
 const responsiveModeStore = useResponsiveModeStore()
 
-const abstractDomId = computed(
-  () => `abstract-${(Math.random() * 999999).toString(36)}`
-)
-
-// const asideClass = { "class": "basis-1/2" }
+const abstractDomId = useId()
 </script>
