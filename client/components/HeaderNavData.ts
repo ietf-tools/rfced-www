@@ -7,7 +7,6 @@ export const colorPreferences = [
   { value: 'system', label: 'System default' },
   { value: 'light', label: 'Light' },
   { value: 'dark', label: 'Dark' },
-  { value: 'sepia', label: 'Sepia' }
 ]
 
 export const menuData: MenuItem[] = [
