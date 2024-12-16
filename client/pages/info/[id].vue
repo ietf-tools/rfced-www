@@ -1,6 +1,12 @@
 <template>
   <div class="min-h-[100vh]">
     <NuxtLayout name="white">
+      <pre class="border-2 border-green-600">
+         {{ doc2 }}
+      </pre>
+      <pre class="border-2 border-red-600">
+     
+      </pre>
       <RFCDocument
         :id="route.params.id.toString()"
         :meta="meta"
@@ -15,10 +21,47 @@
 </template>
 
 <script setup lang="ts">
-import { formatTitle } from '~/components/rfc'
-import { rfcPathBuilder } from '~/utilities/url'
+import { ApiClient } from '../../generated/red-client'
+import type { RfcMetadata } from '../../generated/red-client'
+import { formatTitle, parseRFCId } from '~/components/rfc'
+import { API_RED_URL, rfcPathBuilder } from '~/utilities/url'
 
 const route = useRoute()
+// const idPath = route.params.id.toString()
+const redApi = new ApiClient({ baseUrl: API_RED_URL })
+
+let doc2
+try {
+ doc2 = await redApi.red.docRetrieve(8566)
+} catch(e) {
+console.log("doc2 error", e)
+}
+
+console.log({ doc2 })
+
+// const { data, error } = await useAsyncData(
+//   `doc:${idPath}`,
+//   async (): Promise<null | RfcMetadata> => {
+//     console.log({ idPath })
+//     const rfcId = parseRFCId(idPath)
+//     console.log({ rfcId })
+//     if (rfcId.type === 'unknown') {
+//       return null
+//     }
+//     const rfcNumber = parseInt(rfcId.number, 10)
+//     console.log({ rfcNumber })
+//     if (Number.isNaN(rfcNumber)) {
+//       console.log("exiting", rfcNumber)
+//       return null
+//     }
+//     console.log("apiclient")
+    
+//     console.log("docretrieve")
+//     const doc = await redApi.red.docRetrieve(rfcNumber)
+//     console.log({ doc })
+//     return doc
+//   }
+// )
 
 const meta = h('span', [
   'part of ',

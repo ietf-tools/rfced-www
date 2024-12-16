@@ -1,5 +1,5 @@
 type RFCId = {
-  type: string | typeof RFC
+  type: 'unknown' | 'RFC' | 'STD'
   number: string
   title?: string
 }
@@ -22,14 +22,14 @@ export const parseRFCId = (title: string): RFCId => {
 
   if (parts?.length === 2) {
     return {
-      type: parts[0].toUpperCase(),
+      type: parseRFCIdType(parts[0].toUpperCase()),
       number: parts[1]
     }
   }
 
   if (parts?.length === 3) {
     return {
-      type: parts[0].toUpperCase(),
+      type: parseRFCIdType(parts[0].toUpperCase()),
       number: parts[1],
       title: parts[2]
     }
@@ -39,6 +39,16 @@ export const parseRFCId = (title: string): RFCId => {
     type: 'unknown',
     number: title
   }
+}
+
+const parseRFCIdType = (rfcType: string): RFCId["type"] => {
+  switch (rfcType.toUpperCase()) {
+    case 'RFC':
+      return 'RFC'
+    case 'STD':
+      return 'STD'
+  }
+  return 'unknown'
 }
 
 /**
