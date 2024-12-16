@@ -19,7 +19,7 @@
 import { DateTime } from 'luxon'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 
-import _contentMetadata from '../content-metadata.json'
+import _contentMetadata from '../generated/content-metadata.json'
 import type { ContentMetadata } from '~/scripts/generate-content-metadata'
 
 const contentMetadata: ContentMetadata = _contentMetadata
