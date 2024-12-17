@@ -71,11 +71,11 @@ export const translateParamsObject = (
       searchParamsObj.to = `${legacySearchObj.to_year}-${monthNameToNumber(legacySearchObj.to_month, 1)}`
     }
   } else if (legacySearchObj.pub_date_type === 'this_month') {
-    const now = DateTime.utc()
+    const now = DateTime.now()
     searchParamsObj.from = now.minus({ month: 1 }).toFormat('yyyy-M')
     searchParamsObj.to = now.toFormat('yyyy-M')
   } else if (legacySearchObj.pub_date_type === 'this_year') {
-    const now = DateTime.utc()
+    const now = DateTime.now()
     searchParamsObj.from = `${now.year}-1`
     searchParamsObj.to = now.toFormat('yyyy-M')
   }
