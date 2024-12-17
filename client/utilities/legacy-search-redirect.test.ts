@@ -1,6 +1,6 @@
 // @vitest-environment nuxt
 import { test, expect, describe, beforeEach, afterEach, vi } from 'vitest'
-import { translateParamsString } from './rfc-search-utils'
+import { translateParamsString } from './legacy-search-redirect'
 
 test('translateParamsString: just a redirect', () => {
   expect(translateParamsString('?')).toEqual('')

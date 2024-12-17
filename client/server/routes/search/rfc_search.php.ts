@@ -1,4 +1,4 @@
-import { translateParamsString } from './rfc-search-utils'
+import { translateParamsString } from '~/utilities/legacy-search-redirect'
 import { SEARCH_PATH } from '~/utilities/url'
 
 const HTTP_301_PERMANENT_REDIRECT = 301
