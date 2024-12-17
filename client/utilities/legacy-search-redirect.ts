@@ -88,7 +88,9 @@ export const translateParamsObject = (
     searchParamsObj.statuses = pubstatus
       .map((pubstatus) => {
         for (const [key, value] of sortedStatusMappingFromLegacyToNew) {
-          if (pubstatus === value) {
+          if (typeof value === "string" && pubstatus === value) {
+            return key
+          } else if (Array.isArray(value) && value.includes(pubstatus)) {
             return key
           }
         }
@@ -146,18 +148,14 @@ const monthNameToNumber = (
   return index + 1 // index is zero based but we want +1 because Jan=1, Feb=2, etc
 }
 
-const statusMappingFromLegacyToNew: Record<keyof typeof Statuses, string> = {
+const statusMappingFromLegacyToNew: Record<keyof typeof Statuses, string | string[]> = {
   any: 'Any',
-  standard: 'Standards Track',
+  standard: ['Standards Track', 'Proposed Standard', 'Draft Standard', 'Internet Standard'],
   bcp: 'Best Current Practice',
   informational: 'Informational',
   experimental: 'Experimental',
   historic: 'Historic',
   unknown: 'Unknown'
-  // FIXME: not sure how to convert these.. the DataTracker API doesn't support statuses of these types:
-  // proposed: 'Proposed Standard',
-  // draft: 'Draft Standard',
-  // internet: 'Internet Standard',
 }
 
 const sortedStatusMappingFromLegacyToNew = Object.entries(
