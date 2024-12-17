@@ -42,19 +42,19 @@ describe('translateParamsString: dates', () => {
 
   test('this_month', () => {
     vi.setSystemTime(new Date(2020, 11, 1))
-    expect(translateParamsString('pub_date_type=this_month')).toEqual(
+    expect(translateParamsString('?pub_date_type=this_month')).toEqual(
       'from=2020-11&to=2020-12'
     )
 
     vi.setSystemTime(new Date(2021, 1, 1))
-    expect(translateParamsString('pub_date_type=this_month')).toEqual(
+    expect(translateParamsString('?pub_date_type=this_month')).toEqual(
       'from=2021-1&to=2021-2'
     )
   })
 
   test('this_year', () => {
     vi.setSystemTime(new Date(2020, 11, 1))
-    expect(translateParamsString('pub_date_type=this_year')).toEqual(
+    expect(translateParamsString('?pub_date_type=this_year')).toEqual(
       'from=2020-1&to=2020-12'
     )
   })
@@ -63,7 +63,7 @@ describe('translateParamsString: dates', () => {
     vi.setSystemTime(new Date(2020, 11, 1))
     expect(
       translateParamsString(
-        'pub_date_type=range&from_month=January&from_year=1970&to_month=May&to_year=1971'
+        '?pub_date_type=range&from_month=January&from_year=1970&to_month=May&to_year=1971'
       )
     ).toEqual('from=1970-1&to=1971-5')
   })

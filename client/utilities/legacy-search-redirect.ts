@@ -18,9 +18,7 @@ const LegacySearchParamsSchema = z.object({
 })
 
 export const translateParamsString = (url: string): string => {
-  const afterQuestionMark =
-    url.includes('?') ? url.substring(url.indexOf('?')) : url
-  const legacyURLParams = new URLSearchParams(afterQuestionMark)
+  const legacyURLParams = new URL(url, 'https://localhost/').searchParams
   const legacyObj: Record<string, string | string[]> = {}
 
   for (const [key, value] of legacyURLParams.entries()) {
