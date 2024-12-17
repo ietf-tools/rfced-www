@@ -23,5 +23,6 @@ export default defineNuxtConfig({
     config: {
       stylistic: true,
     },
-  }
+  },
+  routeRules: {}
 })

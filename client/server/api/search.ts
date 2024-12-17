@@ -5,7 +5,7 @@ import type {
   SlugEnum
 } from '../../generated/red-client'
 
-const SearchParamsSchema = z.object({
+export const SearchParamsSchema = z.object({
   q: z.string().optional(),
   from: z.string().optional(),
   to: z.string().optional(),
