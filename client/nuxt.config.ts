@@ -1,5 +1,9 @@
 /// <reference types="histoire" />
 
+import redirects from './redirects.json'
+
+type RouteRules = NonNullable<Parameters<typeof defineNuxtConfig>[0]["routeRules"]>
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -23,5 +27,12 @@ export default defineNuxtConfig({
     config: {
       stylistic: true
     }
+  },
+  routeRules: {
+    // https://nitro.build/config#routerules
+    ...redirects.redirects.reduce((acc, redirect) => {
+      acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
+      return acc
+    }, {} as RouteRules)
   }
 })
