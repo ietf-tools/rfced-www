@@ -8,8 +8,10 @@ export const Statuses = {
   standard: 'Standards Track',
   experimental: 'Experimental',
   bcp: 'Best Current Practice',
-  historic: 'Historic'
+  historic: 'Historic',
+  unknown: 'Unknown'
 } as const
+
 export type StatusValue = keyof typeof Statuses
 
 export const Streams = {
@@ -17,7 +19,9 @@ export const Streams = {
   ietf: 'IETF (Internet Engineering Task Force',
   ise: 'Independent Submission',
   irtf: 'Internet Research Task Force',
-  iab: 'Internet Architecture Board'
+  iab: 'Internet Architecture Board',
+  editorial: 'Editorial',
+  legacy: 'Legacy'
 } as const
 export type StreamValue = keyof typeof Streams
 
@@ -27,10 +31,14 @@ export const Areas = {
   ops: 'Operations and Management Area',
   rtg: 'Routing Area',
   sec: 'Security Area',
-  wit: 'Web and Internet Transport',
+  wit: 'Web and Internet Transport Area',
+  app: 'Applications Area',
+  gen: 'General Area',
   art: 'Applications and Real-Time Area',
-  irtf: 'IRTF',
-  ietf: 'IETF'
+  rai: 'Real-time Applications and Infrastructure Area',
+  irtf: 'IRTF Area',
+  ietf: 'IETF Area',
+  tsv: 'Transport Area'
 } as const
 export type AreaValue = keyof typeof Areas
 
