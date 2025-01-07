@@ -1,6 +1,6 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { rfcCitePathBuilder } from './url'
+import { rfcCitePathBuilder, rfcFormatPathBuilder } from './url'
 
 test('rfcCitePathBuilder: txt', () => {
   expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual(
@@ -26,5 +26,14 @@ test('rfcCitePathBuilder: bibTeX', () => {
   )
   expect(rfcCitePathBuilder('RFC9000', 'bibTeX')).toEqual(
     'https://datatracker.ietf.org/doc/rfc9000/bibtex/'
+  )
+})
+
+test('rfcFormatPathBuilder: html', () => {
+  expect(rfcFormatPathBuilder('rfc9000', 'html')).toEqual(
+    'https://www.rfc-editor.org/rfc/rfc9000.html'
+  )
+  expect(rfcFormatPathBuilder('RFC9000', 'html')).toEqual(
+    'https://www.rfc-editor.org/rfc/rfc9000.html'
   )
 })

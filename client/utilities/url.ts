@@ -14,10 +14,10 @@ export const rfcPathBuilder = (rfc: string) => {
 }
 
 export const rfcCitePathBuilder = (
-  rfc: string,
+  rfcId: string,
   format: 'txt' | 'bibTeX' | 'xml'
 ): string => {
-  const parsedRfcId = parseRFCId(rfc)
+  const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'txt':
@@ -26,6 +26,15 @@ export const rfcCitePathBuilder = (
       return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml`
     case 'bibTeX':
       return `https://datatracker.ietf.org/doc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/bibtex/`
+  }
+}
+
+export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
+  const parsedRfcId = parseRFCId(rfcId)
+
+  switch (format) {
+    case 'html':
+      return `https://www.rfc-editor.org/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
   }
 }
 
