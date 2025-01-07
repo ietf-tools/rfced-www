@@ -6,7 +6,7 @@
       @close="isModalOpen = false"
     >
       <HeadlessDialogPanel>
-        <RFCMobileBanner :rfc-id="rfcId" :is-fixed="false">
+        <RFCMobileBanner :rfc="props.rfc" :is-fixed="false">
           <button
             class="bg-white rounded-l text-black p-2 flex items-center"
             aria-label="Close"
@@ -19,7 +19,7 @@
           <RFCTabs
             ref="mobileRFCTabs"
             v-model:selected-tab="selectedTab"
-            :errata="props.errata"
+            :rfc="props.rfc"
           />
         </div>
       </HeadlessDialogPanel>
@@ -28,18 +28,17 @@
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab"
-        :errata="props.errata"
+        :rfc="props.rfc"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { parseRFCId } from './rfc'
+import type { Rfc } from '../generated/red-client'
 
 type Props = {
-  id: string
-  errata: string[]
+  rfc: Rfc
   gotoErrata: () => void
 }
 
@@ -48,5 +47,4 @@ const isModalOpen = defineModel<boolean>('isModalOpen')
 const selectedTab = defineModel<number>('selectedTab')
 
 const props = defineProps<Props>()
-const rfcId = computed(() => parseRFCId(props.id))
 </script>
