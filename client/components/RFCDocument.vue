@@ -21,18 +21,10 @@
 
 <script setup lang="ts">
 import type { Rfc } from '../generated/red-client'
-import { formatTitle, parseRFCId } from '~/components/rfc'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
   rfc: Rfc
-  // id: string
-  // meta?: ReturnType<typeof h>
-  // intro: string
-  // obsoletedBy?: string
-  // seeAlso?: string
-  // pagesHtml: string[]
-  // errata: string[]
 }
 
 const props = defineProps<Props>()

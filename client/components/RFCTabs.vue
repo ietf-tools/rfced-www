@@ -99,11 +99,31 @@
           <dt class="font-bold mt-2">Stream</dt>
           <dd>{{ props.rfc.stream.name }}</dd>
 
-          <template v-if="props.rfc.identifiers?.value">
-            <dt class="font-bold">
-              <abbr title="Digital Object IDentifier">DOI</abbr>
-            </dt>
-            <dd>{{ props.rfc.identifiers.value }}</dd>
+          <template v-if="props.rfc.identifiers">
+            <template v-for="identifier in props.rfc.identifiers">
+              <dt class="font-bold">
+                <template
+                  v-if="
+                    // @ts-expect-error
+                    identifier.type === 'doi'
+                  "
+                >
+                  <abbr title="doi">DOI</abbr>
+                </template>
+                <template v-else>
+                  {{
+                    // @ts-expect-error
+                    identifier.type
+                  }}
+                </template>
+              </dt>
+              <dd>
+                {{
+                  // @ts-expect-error
+                  identifier.value
+                }}
+              </dd>
+            </template>
           </template>
 
           <dt class="font-bold mt-2">
@@ -115,9 +135,9 @@
         <Heading level="3" class="mt-5 mb-2">Cite this RFC</Heading>
         <ul class="text-sm flex flex-col gap-2">
           <li v-for="citation in citations">
-            <a :href="citation.url" class="block px-2 -ml-2">{{
-              citation.title
-            }}</a>
+            <a :href="citation.url" class="block px-2 -ml-2">
+              {{ citation.title }}
+            </a>
           </li>
         </ul>
 
