@@ -33,7 +33,6 @@
             :key="searchResult.number"
             :search-item="searchResult"
             :show-abstract="false"
-            :show-tag-date="true"
           />
         </div>
 

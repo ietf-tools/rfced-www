@@ -101,14 +101,14 @@
 
           <template v-if="props.rfc.identifiers">
             <template v-for="identifier in props.rfc.identifiers">
-              <dt class="font-bold">
+              <dt class="font-bold mt-2">
                 <template
                   v-if="
                     // @ts-expect-error
                     identifier.type === 'doi'
                   "
                 >
-                  <abbr title="doi">DOI</abbr>
+                  <abbr title="Digital object identifier">DOI</abbr>
                 </template>
                 <template v-else>
                   {{
