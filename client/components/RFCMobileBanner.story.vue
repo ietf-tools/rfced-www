@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import { exampleRfc } from '~/utilities/rfc'
+import { exampleRfc } from '~/utilities/rfc.mocks'
 </script>

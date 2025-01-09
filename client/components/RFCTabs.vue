@@ -175,6 +175,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import type { Rfc } from '~/generated/red-client'
+import { COMMA, SPACE } from '~/utilities/strings'
 import {
   authorPathBuilder,
   rfcCitePathBuilder,
@@ -226,6 +227,4 @@ const DEFAULT_CLASS = 'py-4 whitespace-nowrap'
 const SELECTED_CLASS =
   'border-b-2 border-b-blue-900 dark:border-b-white font-medium'
 const UNSELECTED_CLASS = 'text-gray-800 dark:text-gray-300'
-const SPACE = ' '
-const COMMA = ','
 </script>

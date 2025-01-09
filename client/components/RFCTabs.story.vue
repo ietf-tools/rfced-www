@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { exampleRfc } from '~/utilities/rfc'
+import { exampleRfc } from '~/utilities/rfc.mocks'
 
 const selectedTab0 = ref(0)
 const selectedTab1 = ref(1)

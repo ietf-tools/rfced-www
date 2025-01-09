@@ -1,6 +1,7 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { parseRFCId, NonBreakingSpace } from './rfc'
+import { parseRFCId } from './rfc'
+import { NONBREAKING_SPACE } from './strings'
 
 test('parseRFCId', () => {
   expect(parseRFCId('rfc1234')).toEqual({
@@ -14,7 +15,7 @@ test('parseRFCId', () => {
     title: 'bub'
   })
 
-  expect(parseRFCId(`rfc${NonBreakingSpace}1234`)).toEqual({
+  expect(parseRFCId(`rfc${NONBREAKING_SPACE}1234`)).toEqual({
     type: 'RFC',
     number: '1234'
   })

@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ApiClient } from '../../generated/red-client'
-import { parseRFCId } from '~/components/rfc'
+import { parseRFCId } from '~/utilities/rfc'
 import { PRIVATE_API_URL } from '~/utilities/url'
 
 const route = useRoute()

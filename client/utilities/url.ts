@@ -1,5 +1,5 @@
-import { parseRFCId } from '~/components/rfc'
 import type { Rfc } from '~/generated/red-client'
+import { parseRFCId } from '~/utilities/rfc'
 
 export const PRIVATE_API_URL = 'http://localhost:8000/'
 

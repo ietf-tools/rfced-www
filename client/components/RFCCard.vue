@@ -114,7 +114,7 @@
 import { DateTime } from 'luxon'
 import type { Rfc, RfcMetadata } from '../generated/red-client'
 import { rfcPathBuilder } from '../utilities/url'
-import { formatTitle, formatTitlePlaintext } from './rfc'
+import { formatTitle, formatTitlePlaintext } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 
 type Props = {

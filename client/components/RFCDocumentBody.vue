@@ -33,7 +33,7 @@
     <div class="align-middle">
       <Tag
         :text="
-          rfcId.type === RFC ?
+          rfcId.type === RFC_TYPE_RFC ?
             ['Internet Standard', `${props.rfc.number}`]
           : [rfcId.type, rfcId.number]
         "
@@ -110,7 +110,7 @@
 
 <script setup lang="ts">
 import type { Rfc } from '../generated/red-client'
-import { formatTitle, parseRFCId, RFC } from './rfc'
+import { formatTitle, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
 import { rfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 

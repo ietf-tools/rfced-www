@@ -13,7 +13,7 @@
       ]"
     >
       <div class="font-bold">{{ idParts.type }} {{ idParts.number }}</div>
-      <div v-if="idParts.type === RFC">Internet Standard</div>
+      <div v-if="idParts.type === RFC_TYPE_RFC">Internet Standard</div>
       <div class="text-red-400">
         Obsoleted by
         <ul>
@@ -35,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatTitle, RFC, parseRFCId } from './rfc'
 import type { Rfc } from '~/generated/red-client'
+import { formatTitle, RFC_TYPE_RFC, parseRFCId } from '~/utilities/rfc'
 import { rfcPathBuilder } from '~/utilities/url'
 
 type Props = {

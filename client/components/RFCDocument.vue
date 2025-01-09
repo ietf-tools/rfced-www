@@ -2,16 +2,16 @@
   <BodyLayoutDocument>
     <template #sidebar>
       <RFCDocumentSidebar
-        :rfc="props.rfc"
-        v-model:is-modal-open="isModalOpen"
         v-model:selected-tab="selectedTab"
+        v-model:is-modal-open="isModalOpen"
+        :rfc="props.rfc"
         :goto-errata="gotoErrata"
         :change-tab="changeTab"
       />
     </template>
     <RFCDocumentBody
-      :rfc="props.rfc"
       v-model:is-modal-open="isModalOpen"
+      :rfc="props.rfc"
       :breadcrumb-items="breadcrumbItems"
       :goto-errata="gotoErrata"
       :change-tab="changeTab"
