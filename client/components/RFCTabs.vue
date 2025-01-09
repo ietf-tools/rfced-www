@@ -64,6 +64,7 @@
             <ul class="-mt-1">
               <li
                 v-for="(author, authorIndex) in props.rfc.authors"
+                :key="authorIndex"
                 class="inline"
               >
                 <a
