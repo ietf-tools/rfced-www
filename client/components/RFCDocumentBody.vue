@@ -87,7 +87,11 @@
     <div class="text-base">
       For more information, please refer to
       <ul>
-        <li v-for="obsoletedByItem in props.rfc.obsoleted_by">
+        <li
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc
+            .obsoleted_by"
+          :key="obsoletedByItemIndex"
+        >
           <a :href="rfcPathBuilder(`RFC${obsoletedByItem.id}`)">
             <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
             {{ obsoletedByItem.title }}

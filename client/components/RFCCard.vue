@@ -113,8 +113,8 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import type { Rfc, RfcMetadata } from '../generated/red-client'
-import { formatTitle, formatTitlePlaintext } from './rfc'
 import { rfcPathBuilder } from '../utilities/url'
+import { formatTitle, formatTitlePlaintext } from './rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 
 type Props = {

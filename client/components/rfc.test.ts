@@ -1,7 +1,6 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
 import { parseRFCId, NonBreakingSpace } from './rfc'
-import type { Rfc } from '../generated/red-client'
 
 test('parseRFCId', () => {
   expect(parseRFCId('rfc1234')).toEqual({

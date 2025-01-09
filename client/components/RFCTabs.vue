@@ -36,9 +36,9 @@
           ]"
           data-errata-tab
         >
-          <template v-if="props.rfc.obsoleted_by.length === 1"
-            >Erratum</template
-          >
+          <template v-if="props.rfc.obsoleted_by.length === 1">
+            Erratum
+          </template>
           <template v-else>Errata</template>
 
           <DiamondText
@@ -72,9 +72,10 @@
                 >
                   {{ author.name }}
                 </a>
-                <template v-if="authorIndex < props.rfc.authors.length - 1"
-                  >,{{ SPACE }}</template
-                >
+                <template v-if="authorIndex < props.rfc.authors.length - 1">
+                  {{ COMMA }}
+                  {{ SPACE }}
+                </template>
                 <template v-else>.</template>
               </li>
             </ul>
@@ -100,7 +101,10 @@
           <dd>{{ props.rfc.stream.name }}</dd>
 
           <template v-if="props.rfc.identifiers">
-            <template v-for="identifier in props.rfc.identifiers">
+            <template
+              v-for="(identifier, identifierIndex) in props.rfc.identifiers"
+              :key="identifierIndex"
+            >
               <dt class="font-bold mt-2">
                 <template
                   v-if="
@@ -134,7 +138,10 @@
 
         <Heading level="3" class="mt-5 mb-2">Cite this RFC</Heading>
         <ul class="text-sm flex flex-col gap-2">
-          <li v-for="citation in citations">
+          <li
+            v-for="(citation, citationIndex) in citations"
+            :key="citationIndex"
+          >
             <a :href="citation.url" class="block px-2 -ml-2">
               {{ citation.title }}
             </a>
@@ -143,7 +150,7 @@
 
         <Heading level="3" class="mt-5 mb-2">Formats</Heading>
         <ul class="text-sm flex flex-col gap-2">
-          <li v-for="format in formats">
+          <li v-for="(format, formatIndex) in formats" :key="formatIndex">
             <a :href="format.url" class="block px-2 -ml-2">{{
               format.title
             }}</a>
@@ -219,4 +226,5 @@ const SELECTED_CLASS =
   'border-b-2 border-b-blue-900 dark:border-b-white font-medium'
 const UNSELECTED_CLASS = 'text-gray-800 dark:text-gray-300'
 const SPACE = ' '
+const COMMA = ','
 </script>

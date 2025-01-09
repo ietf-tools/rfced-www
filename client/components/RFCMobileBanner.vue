@@ -17,7 +17,11 @@
       <div class="text-red-400">
         Obsoleted by
         <ul>
-          <li v-for="obsoletedByItem in props.rfc.obsoleted_by">
+          <li
+            v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc
+              .obsoleted_by"
+            :key="obsoletedByItemIndex"
+          >
             <a :href="rfcPathBuilder(`RFC${obsoletedByItem.id}`)">
               <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
               {{ obsoletedByItem.title }}
@@ -31,9 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatTitle, RFC, parseRFCId } from './rfc'
 import type { Rfc } from '~/generated/red-client'
-import { formatTitle, RFC } from './rfc'
-import { parseRFCId } from './rfc'
 import { rfcPathBuilder } from '~/utilities/url'
 
 type Props = {

@@ -1,5 +1,5 @@
-import { parseRFCId } from '~/components/rfc'
 import type { RfcMetadata, Rfc } from '../generated/red-client'
+import { parseRFCId } from '~/components/rfc'
 
 const cache: Record<string, Rfc> = {}
 
@@ -32,7 +32,7 @@ export const blankRfc: Rfc = {
   title: '',
   published: '1950-1-1',
   status: {
-    // @ts-expect-error
+    // @ts-expect-error waiting on fixes to Red via api client
     slug: 'standard',
     name: 'standards track'
   },
@@ -51,7 +51,7 @@ export const blankRfc: Rfc = {
     name: '',
     desc: ''
   },
-  // @ts-expect-error
+  // @ts-expect-error waiting on fixes to Red via api client
   identifiers: [],
   obsoleted_by: [],
   updated_by: [],
@@ -65,7 +65,7 @@ export const exampleRfc: Rfc = {
     'Label Switched Path (LSP) Ping/Traceroute for Segment Routing (SR) Egress Peer Engineering (EPE) Segment Identifiers (SIDs) with MPLS Data Plane',
   published: '2024-12-28',
   status: {
-    // @ts-expect-error
+    // @ts-expect-error waiting on fixes to Red via api client
     slug: 'standard',
     name: 'standards track'
   },
@@ -120,7 +120,7 @@ export const exampleRfc: Rfc = {
     name: 'IETF',
     desc: 'Internet Engineering Task Force (IETF)'
   },
-  // @ts-expect-error
+  // @ts-expect-error waiting on fixes to Red via api client
   identifiers: [
     {
       type: 'doi',
