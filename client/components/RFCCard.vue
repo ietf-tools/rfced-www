@@ -10,21 +10,25 @@
     "
     :class="props.showAbstract && props.rfc.abstract ? 'lg:flex' : undefined"
     :default-slot-class="
-      props.rfc.abstract ? 'lg:w-1/2 xl:w-2/5 pr-4' : undefined
+      props.showAbstract && props.rfc.abstract ?
+        'lg:w-1/2 xl:w-2/5 pr-4'
+      : undefined
     "
     :aside-slot-class="
-      props.rfc.abstract ? 'lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4' : undefined
+      props.showAbstract && props.rfc.abstract ?
+        'lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
+      : undefined
     "
   >
     <template #headingTitle>
-      <component :is="formatTitle(props.rfc.title)" />
+      <component :is="formatTitle(`rfc${props.rfc.number}`)" />
     </template>
     <template #default>
-      <!-- <p class="text-base mt-2 text-blue-900 dark:text-white">
-        {{ props.rfc.abstract }}
-      </p> -->
+      <p class="text-base mt-2 text-blue-900 dark:text-white">
+        {{ props.rfc.title }}
+      </p>
       <div class="my-4 print:m-0">
-        <Tag :text="[props.rfc.status.name]" />
+        <Tag :text="tagText" />
       </div>
       <ul
         v-if="list1"
@@ -116,6 +120,7 @@ import { useResponsiveModeStore } from '~/stores/responsiveMode'
 type Props = {
   rfc: Rfc
   showAbstract?: boolean
+  showTagDate?: boolean
   headingLevel?: '1' | '2' | '3' | '4' | '5' | '6'
 }
 
@@ -190,4 +195,14 @@ const list1 = computed(() => [
 ])
 
 const list2 = computed(() => formatStreamAndArea(props.rfc))
+
+const tagText = computed(() => {
+  const tagText = [props.rfc.status.name]
+  const datetime = DateTime.fromISO(props.rfc.published)
+  const relativeCalendar = datetime.toRelativeCalendar()
+  if (props.showTagDate && relativeCalendar) {
+    tagText.push(relativeCalendar)
+  }
+  return tagText
+})
 </script>
