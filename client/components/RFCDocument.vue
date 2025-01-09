@@ -2,40 +2,29 @@
   <BodyLayoutDocument>
     <template #sidebar>
       <RFCDocumentSidebar
-        :id="props.id"
-        v-model:is-modal-open="isModalOpen"
         v-model:selected-tab="selectedTab"
+        v-model:is-modal-open="isModalOpen"
+        :rfc="props.rfc"
         :goto-errata="gotoErrata"
-        :errata="props.errata"
         :change-tab="changeTab"
       />
     </template>
     <RFCDocumentBody
-      :id="props.id"
       v-model:is-modal-open="isModalOpen"
-      :intro="props.intro"
-      :pages-html="props.pagesHtml"
+      :rfc="props.rfc"
       :breadcrumb-items="breadcrumbItems"
       :goto-errata="gotoErrata"
-      :errata="props.errata"
-      :obsoleted-by="props.obsoletedBy"
-      :see-also="props.seeAlso"
       :change-tab="changeTab"
     />
   </BodyLayoutDocument>
 </template>
 
 <script setup lang="ts">
+import type { Rfc } from '../generated/red-client'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
-  id: string
-  meta?: ReturnType<typeof h>
-  intro: string
-  obsoletedBy?: string
-  seeAlso?: string
-  pagesHtml: string[]
-  errata: string[]
+  rfc: Rfc
 }
 
 const props = defineProps<Props>()

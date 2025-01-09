@@ -140,8 +140,8 @@ export class ApiClient {
       })
     },
 
-    docRetrieve: (id: number) => {
-      return this.Fetch<RfcMetadata>('get', `/api/red/doc/${id}/`, {})
+    docRetrieve: (rfc_number: number) => {
+      return this.Fetch<Rfc>('get', `/api/red/doc/${rfc_number}/`, {})
     }
   }
 
@@ -271,6 +271,23 @@ export type RelatedRfc = {
   title: string
 }
 
+export type Rfc = {
+  number: number
+  title: string
+  published: string
+  status: RfcStatus
+  pages?: number | null
+  authors: RfcAuthor[]
+  group: Group
+  area?: Group
+  stream: StreamName
+  identifiers?: DocIdentifier
+  obsoleted_by?: RelatedRfc[]
+  updated_by?: RelatedRfc[]
+  abstract?: string
+  text: string | null
+}
+
 export type RfcAuthor = {
   person: number
   name: string
@@ -280,7 +297,6 @@ export type RfcAuthor = {
 }
 
 export type RfcMetadata = {
-  id?: number
   number: number
   title: string
   published: string

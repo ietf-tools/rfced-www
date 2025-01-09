@@ -20,21 +20,21 @@
     <component :is="formatTitle(`${rfcId.type}${rfcId.number}`)" />
   </Heading>
 
-  <RFCMobileBanner :rfc-id="rfcId" :is-fixed="true" />
+  <RFCMobileBanner :rfc="rfc" :is-fixed="true" />
 
   <p
-    v-if="props.intro"
+    v-if="props.rfc.abstract"
     class="px-1 xs:px-0 mb-2 text-base lg:text-xl print:px-0"
   >
-    {{ props.intro }}
+    {{ props.rfc.abstract }}
   </p>
 
   <div class="flex flex-row justify-between items-center flex-wrap">
     <div class="align-middle">
       <Tag
         :text="
-          rfcId.type === RFC ?
-            ['Internet Standard', props.meta ?? rfcId.number]
+          rfcId.type === RFC_TYPE_RFC ?
+            ['Internet Standard', `${props.rfc.number}`]
           : [rfcId.type, rfcId.number]
         "
       />
@@ -52,88 +52,71 @@
           <p class="leading-6">
             For the definition of <b>Status</b>, see
             <a :href="rfcPathBuilder('rfc2026')">
-              <component :is="formatTitle('RFC2026')" />
+              <component :is="formatTitle('rfc2026')" />
             </a>
           </p>
           <p class="leading-6">
             For the definition of <b>Stream</b>, see
             <a :href="rfcPathBuilder('rfc8729')">
-              <component :is="formatTitle('RFC2026')" /> </a
+              <component :is="formatTitle('rfc8729')" /> </a
             >.
           </p>
         </HeadlessPopoverPanel>
       </HeadlessPopover>
     </div>
 
-    <div v-if="props.errata">
+    <!-- <div v-if="props.rfc">
       <button
         type="button"
         class="text-base underline text-blue-300 dark:text-blue-100 p-2"
         @click="gotoErrata"
       >
-        {{ props.errata.length }}
+        {{ props.rfc.errata }}
 
         <template v-if="props.errata.length === 1">erratum</template>
         <template v-else>errata</template>
       </button>
-    </div>
+    </div> -->
   </div>
 
   <Alert
-    v-if="props.obsoletedBy && obsoletedByRFCId"
+    v-if="props.rfc.obsoleted_by?.length"
     variant="warning"
     heading="This RFC is now obsolete"
   >
-    <p class="text-base">
+    <div class="text-base">
       For more information, please refer to
-      <a :href="rfcPathBuilder(props.obsoletedBy)">
-        <component
-          :is="
-            formatTitle(`${obsoletedByRFCId.type}${obsoletedByRFCId.number}`)
-          "
-        />
-        {{ obsoletedByRFCId.title }}
-      </a>
-    </p>
+      <ul>
+        <li
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc
+            .obsoleted_by"
+          :key="obsoletedByItemIndex"
+        >
+          <a :href="rfcPathBuilder(`RFC${obsoletedByItem.id}`)">
+            <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
+            {{ obsoletedByItem.title }}
+          </a>
+        </li>
+      </ul>
+    </div>
   </Alert>
 
-  <Alert
-    v-if="props.seeAlso"
-    variant="info"
-    heading="This RFC updates the following RFC:"
-  >
-    <p class="text-base">
-      See also
-      <a :href="rfcPathBuilder('rfc9052')">
-        <component :is="formatTitle('rfc9052')" /> CBOR Object Signing and
-        Encryption (COSE): Structures and Process
-      </a>
-    </p>
-  </Alert>
-
-  <div
-    v-for="(page, index) in props.pagesHtml"
-    :key="index"
-    class="mt-10 text-[9px] sm:text-base lg:text-base"
-  >
-    <div class="font-mono whitespace-pre-wrap px-3 xs:px-0" v-html="page" />
+  <div class="mt-10 text-[9px] sm:text-base lg:text-base">
+    <div class="font-mono whitespace-pre-wrap px-3 xs:px-0">
+      {{ props.rfc.text }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { formatTitle, parseRFCId, RFC } from './rfc'
+import type { Rfc } from '../generated/red-client'
+import { formatTitle, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
 import { rfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
-  id: string
-  intro: string
-  errata: string[]
+  rfc: Rfc
   gotoErrata: () => void
-  meta?: ReturnType<typeof h>
-  obsoletedBy?: string
-  seeAlso?: string
-  pagesHtml: string[]
   breadcrumbItems: BreadcrumbItem[]
 }
 
@@ -141,9 +124,5 @@ const props = defineProps<Props>()
 
 const isModalOpen = defineModel<boolean>('isModalOpen')
 
-const rfcId = computed(() => parseRFCId(props.id))
-
-const obsoletedByRFCId = computed(() =>
-  props.obsoletedBy ? parseRFCId(props.obsoletedBy) : undefined
-)
+const rfcId = computed(() => parseRFCId(`rfc${props.rfc.number}`))
 </script>

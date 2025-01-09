@@ -1,9 +1,6 @@
-import tailwindForms from '@tailwindcss/forms'
-
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  plugins: [tailwindForms],
   theme: {
     extend: {
       screens: {

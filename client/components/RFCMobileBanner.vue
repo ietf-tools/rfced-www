@@ -12,24 +12,39 @@
         !props.isFixed && 'p-2'
       ]"
     >
-      <div class="font-bold">
-        {{ props.rfcId.type }} {{ props.rfcId.number }}
+      <div class="font-bold">{{ idParts.type }} {{ idParts.number }}</div>
+      <div v-if="idParts.type === RFC_TYPE_RFC">Internet Standard</div>
+      <div class="text-red-400">
+        Obsoleted by
+        <ul>
+          <li
+            v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc
+              .obsoleted_by"
+            :key="obsoletedByItemIndex"
+          >
+            <a :href="rfcPathBuilder(`RFC${obsoletedByItem.id}`)">
+              <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
+              {{ obsoletedByItem.title }}
+            </a>
+          </li>
+        </ul>
       </div>
-      <div v-if="props.rfcId.type === RFC">Internet Standard</div>
-      <div class="text-red-400">Obsoleted by RFC 9052 CBOR</div>
     </div>
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import { RFC } from './rfc'
-import type { parseRFCId } from './rfc'
+import type { Rfc } from '~/generated/red-client'
+import { formatTitle, RFC_TYPE_RFC, parseRFCId } from '~/utilities/rfc'
+import { rfcPathBuilder } from '~/utilities/url'
 
 type Props = {
+  rfc: Rfc
   isFixed: boolean
-  rfcId: ReturnType<typeof parseRFCId>
 }
 
 const props = defineProps<Props>()
+
+const idParts = parseRFCId(`RFC${props.rfc.number}`)
 </script>

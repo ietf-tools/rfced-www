@@ -9,7 +9,7 @@
     ]"
   >
     <Heading
-      level="2"
+      :level="props.level"
       style-level="4"
       :class="[
         'print:border-black print:text-black',
@@ -25,9 +25,10 @@
 
 <script setup lang="ts">
 type Props = {
+  level?: '1' | '2' | '3' | '4' | '5' | '6'
   variant: 'warning' | 'info'
   heading: string
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { level: '2' })
 </script>

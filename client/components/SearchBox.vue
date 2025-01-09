@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatTitlePlaintext } from './rfc'
 import { useSearchStore } from '~/stores/search'
+import { formatTitlePlaintext } from '~/utilities/rfc'
 import { SEARCH_PATH } from '~/utilities/url'
 
 const searchStore = useSearchStore()
