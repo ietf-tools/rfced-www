@@ -2,8 +2,7 @@ import { DateTime } from 'luxon'
 import { ApiClient, RfcMetadata } from '~/generated/red-client'
 import { PRIVATE_API_URL } from '~/utilities/url'
 import { padStart } from 'lodash-es'
-import LineBreaker from '@foliojs-fork/linebreak'
-import { SPACE } from '~/utilities/strings'
+import { splitWordsAt } from '~/utilities/strings'
 
 /**
  * Redirect from the old URL of /search/rfc_search.php
@@ -16,6 +15,10 @@ export default defineEventHandler(async (event) => {
   const stream = new ReadableStream({
     start(controller) {
       const push = (data: string): void => {
+        if (abortController.signal.aborted) {
+          // ignore
+          return
+        }
         controller.enqueue(data)
       }
       const close = () => {
@@ -104,7 +107,6 @@ See the RFC Editor Web page http://www.rfc-editor.org
 
                                 RFC INDEX
                                 ---------
-
                                 
 `
 }
@@ -127,6 +129,7 @@ const appendResults = async (
   // ie 4 digit RFC requires 5 chars wide, whereas 5 digit RFC requires 6
   // chars. The 'longest RFC number length' will need to be calculated.
   docListArg.sort = ['-number'] // sort by largest RFC number
+  docListArg.limit = 250
   const response = await redApi.red.docList(docListArg)
   const biggestRfcNumber = response.results[0].number
   const longestRfcNumberLength = biggestRfcNumber.toString().length
@@ -143,6 +146,7 @@ const appendResults = async (
 
   for (let page = 0; page < biggestRfcNumber / resultsPerPage; page++) {
     docListArg.offset = page * resultsPerPage
+
     const response = await redApi.red.docList(docListArg)
 
     if (abortController.signal.aborted) {
@@ -192,15 +196,17 @@ const stringifyIdentifiers = (
       >)
     )
 
-  return identifiersArr
+  if (identifiersArr.length === 0) return ''
+
+  return ` ${identifiersArr
     .map(
       (identifier) => `(${identifier.type.toUpperCase()}: ${identifier.value})`
     )
-    .join(' ')
+    .join(' ')}`
 }
 
 const stringifyAuthor = (author: RfcMetadata['authors'][number]): string => {
-  return author.name
+  const name = author.name
     .split(/\s/g)
     .map((part, index, arr) =>
       index < arr.length - 1 ?
@@ -208,42 +214,34 @@ const stringifyAuthor = (author: RfcMetadata['authors'][number]): string => {
       : ` ${part}`
     )
     .join(' ')
+
+  return author.affiliation === 'Editor' ? `${name}, Ed.` : name
 }
 
-const stringifyRFC = (result: RfcMetadata): string => {
-  return [
-    `${result.title}. `,
-    result.authors.length > 0 ?
-      `${result.authors.map(stringifyAuthor).join(', ')}.[] `
-    : null,
-    `${result.published}. `,
-    stringifyIdentifiers(result.identifiers)
-  ]
-    .filter(Boolean)
-    .join('')
-}
+const stringifyRFC = (rfc: RfcMetadata): string => {
+  // Based on https://github.com/rfc-editor/rpcwebsite/blob/edf4896c1d97fdd79a78ee6145e3a0c5ffb11fb9/rfc-ed/bin/rfc2txt.py#L97
+  let obsups = ''
+  let rfcdate = ''
+  let rfcformat = ''
+  let also = ''
+  let doi = ''
+  if (rfc.title === 'Not Issued') {
+    return `${rfc.number} Not Issued.`
+  } else {
+    rfcdate = rfc.published
+    // rfcformat = rfc.format.join(', ');
 
-const splitWordsAt = (str: string, lineBreakAtChars: number): string[] => {
-  const lines: string[] = []
-
-  const breaker = new LineBreaker(str)
-  let last = 0
-  let bk
-  let line = ''
-
-  while ((bk = breaker.nextBreak())) {
-    // get the string between the last break and this one
-    var word = str.slice(last, bk.position)
-
-    if (line.length + word.length > lineBreakAtChars) {
-      lines.push(line.trimStart())
-      line = ''
+    // if ( rfc.obsoletes) obsups += ` (Obsoletes ${rfc.obsoletes.join(', ')})`;
+    if (rfc.obsoleted_by && rfc.obsoleted_by.length > 0) {
+      obsups += ` (Obsoleted by ${rfc.obsoleted_by.map((item) => `RFC${item.number}`).join(', ')})`
     }
-    line += word
-    last = bk.position
+    // if (rfc.updates) obsups += ` (Updates ${rfc.updates.join(', ')})`;
+    // if (rfc.updated_by) obsups += ` (Updated by ${rfc.updated_by.map(item => `RFC${item.number}`).join(', ')})`;
+
+    // const alsolist = [...(rfc.is_also || []), ...(rfc.see_also || [])];
+    // if (alsolist.length > 0) also = ` (Also ${alsolist.join(', ')})`;
+
+    doi = stringifyIdentifiers(rfc.identifiers)
+    return `${rfc.title}. ${rfc.authors.map(stringifyAuthor).join(', ')}, ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
   }
-
-  lines.push(line.trimStart())
-
-  return lines
 }

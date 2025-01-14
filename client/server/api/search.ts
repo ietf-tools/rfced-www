@@ -44,6 +44,8 @@ export default defineEventHandler(async (event): Promise<ResponseType> => {
 
   const docListArg: DocListArg = {}
 
+  docListArg.limit = 10 // stop users from requesting too much at a time
+
   if (published_after) {
     docListArg.published_after = published_after
   }
