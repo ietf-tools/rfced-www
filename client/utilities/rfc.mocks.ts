@@ -1,4 +1,4 @@
-import type { Rfc } from '../generated/red-client'
+import { SlugEnum, type Rfc } from '../generated/red-client'
 
 export const exampleRfc: Rfc = {
   number: 9703,
@@ -6,8 +6,7 @@ export const exampleRfc: Rfc = {
     'Label Switched Path (LSP) Ping/Traceroute for Segment Routing (SR) Egress Peer Engineering (EPE) Segment Identifiers (SIDs) with MPLS Data Plane',
   published: '2024-12-28',
   status: {
-    // @ts-expect-error waiting on fixes to Red via api client
-    slug: 'standard',
+    slug: SlugEnum.Standard,
     name: 'standards track'
   },
   pages: 15,

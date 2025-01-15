@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { DateTime } from 'luxon'
 import type { Statuses, Streams, Areas } from '../stores/search'
 import type { SearchParamsSchema } from '../server/api/search'
+import { monthNames } from '../utilities/strings'
 
 const LegacySearchParamsSchema = z.object({
   rfc: z.string().optional(),
@@ -86,7 +87,7 @@ export const translateParamsObject = (
     searchParamsObj.statuses = pubstatus
       .map((pubstatus) => {
         for (const [key, value] of sortedStatusMappingFromLegacyToNew) {
-          if (typeof value === "string" && pubstatus === value) {
+          if (typeof value === 'string' && pubstatus === value) {
             return key
           } else if (Array.isArray(value) && value.includes(pubstatus)) {
             return key
@@ -118,26 +119,15 @@ export const translateParamsObject = (
   return searchParamsObj
 }
 
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-].map((monthName) => monthName.toLowerCase())
+const lowercaseMonthNames = monthNames.map((monthName) =>
+  monthName.toLowerCase()
+)
 
 const monthNameToNumber = (
   monthName: string,
   defaultMonthNumber: number
 ): number => {
-  const index = monthNames.indexOf(monthName.toLowerCase())
+  const index = lowercaseMonthNames.indexOf(monthName.toLowerCase())
 
   if (index === -1) {
     return defaultMonthNumber
@@ -146,9 +136,17 @@ const monthNameToNumber = (
   return index + 1 // index is zero based but we want +1 because Jan=1, Feb=2, etc
 }
 
-const statusMappingFromLegacyToNew: Record<keyof typeof Statuses, string | string[]> = {
+const statusMappingFromLegacyToNew: Record<
+  keyof typeof Statuses,
+  string | string[]
+> = {
   any: 'Any',
-  standard: ['Standards Track', 'Proposed Standard', 'Draft Standard', 'Internet Standard'],
+  standard: [
+    'Standards Track',
+    'Proposed Standard',
+    'Draft Standard',
+    'Internet Standard'
+  ],
   bcp: 'Best Current Practice',
   informational: 'Informational',
   experimental: 'Experimental',
