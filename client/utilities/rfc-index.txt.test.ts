@@ -1,9 +1,9 @@
 // @vitest-environment nuxt
 import fs from 'node:fs'
 import path from 'node:path'
-import { test, expect } from 'vitest'
-import { ApiClient, SlugEnum } from '~/generated/red-client'
+import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { renderRfcIndexDotTxt } from './rfc-index'
+import { ApiClient, SlugEnum } from '~/generated/red-client'
 
 const expectedContent = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.txt'), 'utf-8')
@@ -263,34 +263,59 @@ const firstRfcs: DocListResponse = {
   ]
 }
 
-const streamWrapper = () =>
-  new Promise<string>(async (resolve) => {
-    const redApiMock = new ApiClient({ baseUrl: 'http://localhost/' })
-    type DocListArg = Parameters<(typeof redApiMock)['red']['docList']>[0]
-    redApiMock.red.docList = (search: DocListArg) =>
-      new Promise((resolve) => {
-        if (search.sort?.length === 1 && search.sort[0] === '-number') {
-          resolve(oldestRfc)
-        }
-        resolve(firstRfcs)
-      })
-
-    let responseTxt = ''
-    const push = (str: string) => {
-      responseTxt += str
-    }
-
-    const close = () => resolve(responseTxt)
-
-    const abortController = new AbortController()
-
-    await renderRfcIndexDotTxt(push, close, abortController, redApiMock)
-
-    resolve(responseTxt)
+describe('renderRfcIndexTxt', () => {
+  beforeEach(() => {
+    // tell vitest we use mocked time
+    vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
-test('renderRfcIndexTxt', async () => {
-  const str = await streamWrapper()
+  afterEach(() => {
+    // restoring date after each test run
+    vi.useRealTimers()
+  })
 
-  expect(str.substring(0, contentUntilRfc13.length)).toEqual(contentUntilRfc13)
+  test('renderRfcIndexTxt', async () => {
+    const date = new Date(2025, 0, 14)
+    vi.setSystemTime(date)
+
+    const streamWrapper = () =>
+      new Promise<string>((resolve) => {
+        const redApiMock = new ApiClient({ baseUrl: 'http://localhost/' })
+        type DocListArg = Parameters<ApiClient['red']['docList']>[0]
+
+        redApiMock.red.docList = (search: DocListArg) =>
+          new Promise((resolve) => {
+            if (search.sort?.length === 1 && search.sort[0] === '-number') {
+              resolve(oldestRfc)
+            }
+            resolve(firstRfcs)
+          })
+
+        let responseTxt = ''
+        const push = (str: string) => {
+          responseTxt += str
+        }
+
+        const close = () => resolve(responseTxt)
+
+        const abortController = new AbortController()
+
+        ;(async function () {
+          await renderRfcIndexDotTxt(
+            push,
+            close,
+            abortController,
+            redApiMock,
+            0
+          )
+          resolve(responseTxt)
+        })()
+      })
+
+    const str = await streamWrapper()
+
+    expect(str.substring(0, contentUntilRfc13.length)).toEqual(
+      contentUntilRfc13
+    )
+  })
 })

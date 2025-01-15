@@ -1,10 +1,13 @@
 import { DateTime } from 'luxon'
-import { ApiClient, type RfcMetadata } from '~/generated/red-client'
 import { padStart } from 'lodash-es'
 import { splitWordsAt } from './strings'
+import type { ApiClient, RfcMetadata } from '~/generated/red-client'
+
+/**
+ * Developer note: this file can't be named 'rfc-index.txt.ts' or else vitest can't import it
+ */
 
 const COLUMN_PADDING = 1
-const DELAY_BETWEEN_REQUESTS_MS = 50
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
@@ -13,7 +16,8 @@ export async function renderRfcIndexDotTxt(
   push: (data: string) => void,
   close: () => void,
   abortController: AbortController,
-  redApi: ApiClient
+  redApi: ApiClient,
+  delayBetweenRequestsMs: number
 ) {
   push(getHeader())
 
@@ -50,7 +54,9 @@ export async function renderRfcIndexDotTxt(
   docListArg.limit = 50 // load results in chunks of 50
   const resultsPerPage = docListArg.limit
 
-  for (let page = 0; page <= biggestRfcNumber / resultsPerPage; page++) {
+  const layout: Layout = { longestRfcNumberLength }
+
+  for (let page = 0; page < biggestRfcNumber / resultsPerPage; page++) {
     docListArg.offset = page * resultsPerPage
     const response = await redApi.red.docList(docListArg)
 
@@ -60,7 +66,7 @@ export async function renderRfcIndexDotTxt(
     }
 
     // wait between requests so as not to overwhelm the server
-    await setTimeoutPromise(DELAY_BETWEEN_REQUESTS_MS)
+    await setTimeoutPromise(delayBetweenRequestsMs)
 
     if (abortController.signal.aborted) {
       close()
@@ -71,13 +77,14 @@ export async function renderRfcIndexDotTxt(
     push(
       response.results
         .map((result) => {
+          const rfcText = stringifyRFC(result, layout)
+          const rfcLines = splitWordsAt(rfcText, column2width)
+
           return [
+            // No RFC prefix on these results
             padStart(result.number.toString(), longestRfcNumberLength, '0'),
             whitespace[column1Width - longestRfcNumberLength],
-            splitWordsAt(
-              stringifyRFC(result, { longestRfcNumberLength }),
-              column2width
-            ).join(`\n${whitespace[column1Width]}`)
+            rfcLines.join(`\n${whitespace[column1Width]}`)
           ].join('')
         })
         .join(' \n\n')
@@ -113,7 +120,7 @@ const stringifyIdentifiers = (
 
 const stringifyAuthor = (author: RfcMetadata['authors'][number]): string => {
   const name = author.name
-    .split(/[\s\.]/g)
+    .split(/[\s.]/g)
     .filter(Boolean)
     .reduce((acc, item, index, arr) => {
       return `${acc}${
@@ -254,10 +261,7 @@ const stringifyRFC = (
   const rfc: RfcMetadata & Partial<ExtraFieldsNeeded> = {
     ...missingRfc,
     ...rfcMetadata,
-    authors: [
-      ...(missingRfc?.authors ? missingRfc.authors : []),
-      ...rfcMetadata?.authors
-    ]
+    authors: [...toArray(missingRfc?.authors), ...toArray(rfcMetadata?.authors)]
   }
 
   if (rfc.title === 'Not Issued') {
@@ -309,10 +313,9 @@ const stringifyRFC = (
 }
 
 const getHeader = (): string => {
-  const date = DateTime.utc()
-  const createdOn = date.toFormat(
-    'MM/dd/yyyy' // note the backwards US month/day/year format
-  )
+  const date = new Date()
+  const createdOn = `${padStart((date.getMonth() + 1).toString(), 2, '0')}/${padStart(date.getDate().toString(), 2, '0')}/${date.getFullYear()}` // note the backwards US month/day/year format
+
   return `
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -320,7 +323,7 @@ const getHeader = (): string => {
                              RFC INDEX
                            -------------
 
-(CREATED ON: 01/14/2025.)
+(CREATED ON: ${createdOn}.)
 
 This file contains citations for all RFCs in numeric order.
 
@@ -378,4 +381,9 @@ See the RFC Editor Web page http://www.rfc-editor.org
                                 ---------
 
 `
+}
+
+const toArray = (obj: unknown) => {
+  if (!obj) return []
+  return Array.isArray(obj) ? obj : [obj]
 }
