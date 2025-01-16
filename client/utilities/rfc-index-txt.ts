@@ -1,11 +1,7 @@
 import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
-import { splitWordsAt } from './strings'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
-
-/**
- * Developer note: this file can't be named 'rfc-index.txt.ts' or else vitest can't import it
- */
+import { SPACE } from './strings'
 
 const COLUMN_PADDING = 1
 
@@ -78,7 +74,7 @@ export async function renderRfcIndexDotTxt(
       response.results
         .map((result) => {
           const rfcText = stringifyRFC(result, layout)
-          const rfcLines = splitWordsAt(rfcText, column2width)
+          const rfcLines = splitLinesAt(rfcText, column2width)
 
           return [
             // No RFC prefix on these results
@@ -386,4 +382,24 @@ See the RFC Editor Web page http://www.rfc-editor.org
 const toArray = (obj: unknown) => {
   if (!obj) return []
   return Array.isArray(obj) ? obj : [obj]
+}
+
+export const splitLinesAt = (str: string, lineLength: number): string[] => {
+  const lines: string[] = []
+  let remainingStr = str
+  let position = 0
+
+  while (remainingStr.length > lineLength) {
+    // get the string between the last break and this one
+    position = remainingStr.lastIndexOf(SPACE, lineLength)
+
+    if (position !== -1) {
+      lines.push(remainingStr.substring(0, position).trim())
+      remainingStr = remainingStr.substring(position + 1)
+    }
+  }
+
+  lines.push(remainingStr.trim())
+
+  return lines
 }

@@ -1,14 +1,9 @@
 import { ApiClient } from '~/generated/red-client'
 import { PRIVATE_API_URL } from '~/utilities/url'
-import { renderRfcIndexDotTxt } from '~/utilities/rfc-index'
+import { renderRfcIndexDotTxt } from '~/utilities/rfc-index-txt'
 
 const DELAY_BETWEEN_REQUESTS_MS = 50
 
-/**
- * Redirect from the old URL of /search/rfc_search.php
- * to the new path of /search/
- * while translating all the params (that's the hard bit..see adjacent tests)
- */
 export default defineEventHandler(async (event) => {
   setResponseHeaders(event, {
     'Content-Type': 'text/plain; charset=utf-8'
