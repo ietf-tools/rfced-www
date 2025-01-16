@@ -1,7 +1,10 @@
 import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
-import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 import { SPACE } from './strings'
+import type { ApiClient, RfcMetadata } from '~/generated/red-client'
+
+// Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
+// because vitest can't import that later filename
 
 const COLUMN_PADDING = 1
 

@@ -2,8 +2,32 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
-import { renderRfcIndexDotTxt } from './rfc-index-txt'
+import { splitLinesAt, renderRfcIndexDotTxt } from './rfc-index-txt'
 import { ApiClient, SlugEnum } from '~/generated/red-client'
+
+const paragraph =
+  'Obsoletes xxxx refers to other RFCs that this one replaces; Obsoleted by xxxx refers to RFCs that have replaced this one. Updates xxxx refers to other RFCs that this one merely updates (but does not replace);'
+
+test('splitWordsAt: 40', () => {
+  expect(splitLinesAt(paragraph, 40)).toEqual([
+    'Obsoletes xxxx refers to other RFCs that',
+    'this one replaces; Obsoleted by xxxx',
+    'refers to RFCs that have replaced this',
+    'one. Updates xxxx refers to other RFCs',
+    'that this one merely updates (but does',
+    'not replace);'
+  ])
+})
+
+test('splitWordsAt: 50', () => {
+  expect(splitLinesAt(paragraph, 50)).toEqual([
+    'Obsoletes xxxx refers to other RFCs that this one',
+    'replaces; Obsoleted by xxxx refers to RFCs that',
+    'have replaced this one. Updates xxxx refers to',
+    'other RFCs that this one merely updates (but does',
+    'not replace);'
+  ])
+})
 
 const originalFormatting = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.txt'), 'utf-8')
@@ -66,7 +90,7 @@ describe('renderRfcIndexDotTxt', () => {
 
     const str = await streamWrapper()
 
-    expect(str.length).toBeGreaterThan(originalFormattingUntilRfc13.length)
+    expect(originalFormattingUntilRfc13.length).toBe(str.length)
 
     // test rendering against a wget of the existing rfc-index.txt truncated to RFC0013
     expect(str.substring(0, originalFormattingUntilRfc13.length)).toEqual(
