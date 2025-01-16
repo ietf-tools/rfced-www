@@ -8,7 +8,7 @@ import { ApiClient, SlugEnum } from '~/generated/red-client'
 const paragraph =
   'Obsoletes xxxx refers to other RFCs that this one replaces; Obsoleted by xxxx refers to RFCs that have replaced this one. Updates xxxx refers to other RFCs that this one merely updates (but does not replace);'
 
-test('splitWordsAt: 40', () => {
+test('splitLinesAt: 40', () => {
   expect(splitLinesAt(paragraph, 40)).toEqual([
     'Obsoletes xxxx refers to other RFCs that',
     'this one replaces; Obsoleted by xxxx',
@@ -19,7 +19,7 @@ test('splitWordsAt: 40', () => {
   ])
 })
 
-test('splitWordsAt: 50', () => {
+test('splitLinesAt: 50', () => {
   expect(splitLinesAt(paragraph, 50)).toEqual([
     'Obsoletes xxxx refers to other RFCs that this one',
     'replaces; Obsoleted by xxxx refers to RFCs that',
