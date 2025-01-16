@@ -1,7 +1,10 @@
 import type { Rfc } from '~/generated/red-client'
 import { parseRFCId } from '~/utilities/rfc'
 
+// FIXME: get from an environment variable
 export const PRIVATE_API_URL = 'http://localhost:8000/'
+
+export const PUBLIC_SITE = 'https://www.rfc-editor.org/'
 
 export const SEARCH_PATH = '/search/' as const
 
