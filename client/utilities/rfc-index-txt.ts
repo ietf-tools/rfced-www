@@ -13,13 +13,11 @@ type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 // Incrementally pushes (streams) RFC results
 export async function renderRfcIndexDotTxt(
   push: (data: string) => void,
-  close: () => void,
+  close: () => Promise<void>,
   abortController: AbortController,
   redApi: ApiClient,
   delayBetweenRequestsMs: number
 ) {
-  push(getHeader())
-
   const docListArg: DocListArg = {}
 
   // extract latest RFC to find largest RFC number for layout reasons.
@@ -35,14 +33,19 @@ export async function renderRfcIndexDotTxt(
   if (response.results.length !== 1) {
     throw Error('Unable to retrieve single response of largest RFC number')
   }
-  const biggestRfcNumber = response.results[0].number
-  const longestRfcNumberLength = Math.max(
+  const largestRfcNumber = response.results[0].number
+  const longestRfcNumberStringLength = Math.max(
     4, // test suite may have a client that returns fewer, so we want 4 as the minimum
-    biggestRfcNumber.toString().length
+    largestRfcNumber.toString().length
   )
+  const layout: Layout = {
+    longestRfcNumberLength: longestRfcNumberStringLength
+  }
 
-  const column1Width = longestRfcNumberLength + COLUMN_PADDING
-  const column2width = 68
+  push(getHeader(layout))
+
+  const column1Width = longestRfcNumberStringLength + COLUMN_PADDING
+  const column2width = 72 - longestRfcNumberStringLength // yes this will cause reflow once RFC 10k, 100k, etc. occur
 
   // array of whitespace chars where the index = number of spaces
   const whitespace = new Array(column1Width + 1)
@@ -50,25 +53,18 @@ export async function renderRfcIndexDotTxt(
     .map((_, index) => ' '.repeat(index))
 
   docListArg.sort = ['number'] // sort by earliest RFC number
-  docListArg.limit = 50 // load results in chunks of 50
-  const resultsPerPage = docListArg.limit
+  docListArg.limit = 500 // load RFC in chunks
 
-  const layout: Layout = { longestRfcNumberLength }
+  let offset = 0
 
-  for (let page = 0; page < biggestRfcNumber / resultsPerPage; page++) {
-    docListArg.offset = page * resultsPerPage
+  while (!abortController.signal.aborted) {
+    docListArg.offset = offset
+
     const response = await redApi.red.docList(docListArg)
-
-    if (abortController.signal.aborted) {
-      close()
-      return
-    }
-
-    // wait between requests so as not to overwhelm the server
-    await setTimeoutPromise(delayBetweenRequestsMs)
-
-    if (abortController.signal.aborted) {
-      close()
+    if (
+      // checking again after the await
+      abortController.signal.aborted
+    ) {
       return
     }
 
@@ -81,16 +77,45 @@ export async function renderRfcIndexDotTxt(
 
           return [
             // No RFC prefix on these results
-            padStart(result.number.toString(), longestRfcNumberLength, '0'),
-            whitespace[column1Width - longestRfcNumberLength],
+            padStart(
+              result.number.toString(),
+              longestRfcNumberStringLength,
+              '0'
+            ),
+            whitespace[column1Width - longestRfcNumberStringLength],
             rfcLines.join(`\n${whitespace[column1Width]}`)
           ].join('')
         })
         .join(' \n\n')
     )
-  }
 
-  close()
+    // wait between requests so as not to overwhelm the server
+    await setTimeoutPromise(delayBetweenRequestsMs)
+    if (
+      // checking again after the await
+      abortController.signal.aborted
+    ) {
+      return
+    }
+
+    if (
+      // we've got to the end
+      response.results.some(
+        (rfcMetadata) => rfcMetadata.number === largestRfcNumber
+      )
+    ) {
+      close()
+      return
+    }
+
+    console.log(response.next)
+
+    // note that due to gaps in RFC number series and API filtering of RFCs there's
+    // not a 1:1 relationship in RFC numbers and pagination when sorting by RFC number.
+    // ie sort['number] and offset=100 doesn't mean the first result will be RFC0100.
+    // so we paginate by results.length
+    offset += response.results.length
+  }
 }
 
 const setTimeoutPromise = (timerMs: number) =>
@@ -311,9 +336,16 @@ const stringifyRFC = (
   }
 }
 
-const getHeader = (): string => {
+const getHeader = (layout: Layout): string => {
   const date = new Date()
   const createdOn = `${padStart((date.getMonth() + 1).toString(), 2, '0')}/${padStart(date.getDate().toString(), 2, '0')}/${date.getFullYear()}` // note the backwards US month/day/year format
+  const hashes = padStart('', layout.longestRfcNumberLength, '#')
+  const letterXs = padStart('', layout.longestRfcNumberLength, 'x')
+
+  const whitespace: Record<number, string> = {
+    8: padStart('', 8, ' '),
+    7: padStart('', 7, ' ')
+  }
 
   return `
 
@@ -328,23 +360,24 @@ This file contains citations for all RFCs in numeric order.
 
 RFC citations appear in this format:
 
-  ####  Title of RFC.  Author 1, Author 2, Author 3.  Issue date.
-        (Format: ASCII) (Obsoletes xxx) (Obsoleted by xxx) (Updates xxx)
-        (Updated by xxx) (Also FYI ####) (Status: ssssss) (DOI: ddd)
+  ${hashes}  ${splitLinesAt(`Title of RFC.  Author 1, Author 2, Author 3.  Issue date. (Format: ASCII) (Obsoletes xxx) (Obsoleted by xxx) (Updates xxx) (Updated by xxx) (Also FYI ${hashes}) (Status: ssssss) (DOI: ddd)`, 64).join(`\n${whitespace['8']}`)}
 
 or
 
-  ####  Not Issued.
+  ${hashes}  Not Issued.
 
 For example:
 
-  1129 Internet Time Synchronization: The Network Time Protocol. D.L.
-       Mills. October 1989. (Format: TXT, PS, PDF, HTML) (Also RFC1119) 
-       (Status: INFORMATIONAL) (DOI: 10.17487/RFC1129) 
+  1129 ${splitLinesAt(
+    'Internet Time Synchronization: The Network Time Protocol. D.L. Mills. October 1989. (Format: TXT, PS, PDF, HTML) (Also RFC1119) (Status: INFORMATIONAL) (DOI: 10.17487/RFC1129)',
+    64
+  ).reduce((acc, line, index) => {
+    return `${acc}${index > 0 ? `\n${whitespace['7']}` : ''}${line}${index > 0 ? ' ' : ''}`
+  }, '')}
 
 Key to citations:
 
-#### is the RFC number.
+${hashes} is the RFC number.
 
 Following the RFC number are the title, the author(s), and the
 publication date of the RFC.  Each of these is terminated by a period.
@@ -357,10 +390,10 @@ The format follows in parentheses. One or more of the following formats
 are listed:  text (TXT), PostScript (PS), Portable Document Format 
 (PDF), HTML, XML.
 
-Obsoletes xxxx refers to other RFCs that this one replaces;
-Obsoleted by xxxx refers to RFCs that have replaced this one.
-Updates xxxx refers to other RFCs that this one merely updates (but
-does not replace); Updated by xxxx refers to RFCs that have updated
+Obsoletes ${letterXs} refers to other RFCs that this one replaces;
+Obsoleted by ${letterXs} refers to RFCs that have replaced this one.
+Updates ${letterXs} refers to other RFCs that this one merely updates (but
+does not replace); Updated by ${letterXs} refers to RFCs that have updated
 (but not replaced) this one.  Generally, only immediately succeeding
 and/or preceding RFCs are indicated, not the entire history of each
 related earlier or later RFC in a related series.

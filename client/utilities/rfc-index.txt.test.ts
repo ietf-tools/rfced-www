@@ -72,7 +72,7 @@ describe('renderRfcIndexDotTxt', () => {
           responseTxt += str
         }
 
-        const close = () => resolve(responseTxt)
+        const close = async () => resolve(responseTxt)
 
         const abortController = new AbortController()
 
@@ -90,12 +90,12 @@ describe('renderRfcIndexDotTxt', () => {
 
     const str = await streamWrapper()
 
-    expect(originalFormattingUntilRfc13.length).toBe(str.length)
-
     // test rendering against a wget of the existing rfc-index.txt truncated to RFC0013
     expect(str.substring(0, originalFormattingUntilRfc13.length)).toEqual(
       originalFormattingUntilRfc13
     )
+
+    expect(originalFormattingUntilRfc13.length).toBe(str.length)
   })
 })
 
