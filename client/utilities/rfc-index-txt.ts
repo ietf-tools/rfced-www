@@ -86,7 +86,7 @@ export async function renderRfcIndexDotTxt({
     push(
       response.results
         .map((result) => {
-          const rfcText = stringifyRFC(result, layout)
+          const rfcText = stringifyRFC(result)
           const rfcLines = splitLinesAt(rfcText, column2width)
 
           return [
@@ -272,8 +272,7 @@ type Layout = {
 }
 
 const stringifyRFC = (
-  rfcMetadata: RfcMetadata & Partial<ExtraFieldsNeeded>,
-  layout: Layout
+  rfcMetadata: RfcMetadata & Partial<ExtraFieldsNeeded>
 ): string => {
   // Based on https://github.com/rfc-editor/rpcwebsite/blob/edf4896c1d97fdd79a78ee6145e3a0c5ffb11fb9/rfc-ed/bin/rfc2txt.py#L97
   let obsups = ''
