@@ -1,77 +1,13 @@
-import { z } from 'zod'
 import { ApiClient } from '~/generated/red-client'
 import { PRIVATE_API_URL } from '~/utilities/url'
 import { renderRfcIndexDotTxt } from '~/utilities/rfc-index-txt'
 
-type RFC_INDEX_DATA_STORAGE = string
-type RFC_INDEX_METADATA_STORAGE = { timestamp_ms: number }
-
-const CACHE_AGE_EXPIRY_MS = 24 * 60 * 60 * 1000
-const DELAY_BETWEEN_REQUESTS_MS = 50
-const STORAGE_GROUP = 'rfc-index'
-const STORAGE_TXT_KEY = 'txt'
-const STORAGE_METADATA_KEY = 'txt.json'
-const REBUILD_PARAM = 'rebuild'
-const REBUILD_ALLOWED = 'rebuild' // FIXME: limit cleaning by env var password?
-
-export const ParamsSchema = z.object({
-  [REBUILD_PARAM]: z.enum([REBUILD_ALLOWED]).optional()
-})
+const DELAY_BETWEEN_REQUESTS_MS = 0
 
 export default defineEventHandler(async (event) => {
-  const CACHE_AGE_EXPIRY_SECONDS = CACHE_AGE_EXPIRY_MS / 1000
   setResponseHeaders(event, {
-    'Content-Type': 'text/plain; charset=utf-8',
-    'Cache-Control': `max-age=${CACHE_AGE_EXPIRY_SECONDS} Public`
+    'Content-Type': 'text/plain; charset=utf-8'
   })
-
-  const query = await getValidatedQuery(event, (body) =>
-    ParamsSchema.safeParse(body)
-  )
-
-  if (query.error) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: JSON.stringify(query.error)
-    })
-  }
-
-  if (query.data[REBUILD_PARAM] === REBUILD_ALLOWED) {
-    console.log('Cleaning cache...')
-    await Promise.all([
-      useStorage<RFC_INDEX_METADATA_STORAGE>(STORAGE_GROUP).clear(
-        STORAGE_METADATA_KEY
-      ),
-      useStorage<RFC_INDEX_DATA_STORAGE>(STORAGE_GROUP).clear(STORAGE_TXT_KEY)
-    ])
-  }
-
-  const metadata =
-    await useStorage<RFC_INDEX_METADATA_STORAGE>(STORAGE_GROUP).getItem(
-      STORAGE_METADATA_KEY
-    )
-
-  const relativeCacheExpiry = Date.now() - CACHE_AGE_EXPIRY_MS
-
-  if (metadata && metadata.timestamp_ms > relativeCacheExpiry) {
-    console.log(
-      `Serving from cache (cache timestamp ${metadata.timestamp_ms}ms > expiry ${relativeCacheExpiry}ms)`
-    )
-    const txt =
-      await useStorage<RFC_INDEX_DATA_STORAGE>(STORAGE_GROUP).getItem(
-        STORAGE_TXT_KEY
-      )
-
-    if (txt) {
-      return txt
-    }
-
-    // this shouldn't occur because metadata and data should both be set, and it is recoverable
-    // because if there's no txt we can just generate it which is what the following code does.
-    // this is probably an unusual race condition if another thread clears the cache between the
-    // multiple awaits.
-    console.log('Unusual race condition in cache usage')
-  }
 
   const abortController = new AbortController()
 
@@ -89,18 +25,6 @@ export default defineEventHandler(async (event) => {
       }
       const close = async () => {
         abortController.abort()
-        await Promise.all([
-          useStorage<RFC_INDEX_METADATA_STORAGE>(STORAGE_GROUP).setItem(
-            STORAGE_METADATA_KEY,
-            {
-              timestamp_ms: Date.now()
-            }
-          ),
-          useStorage<RFC_INDEX_DATA_STORAGE>(STORAGE_GROUP).setItem(
-            STORAGE_TXT_KEY,
-            cacheValueArray.join('')
-          )
-        ])
         controller.close()
       }
 
