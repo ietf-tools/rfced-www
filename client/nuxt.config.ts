@@ -33,20 +33,6 @@ export default defineNuxtConfig({
       stylistic: true
     }
   },
-  nitro: {
-    storage: {
-      db: {
-        driver: 'fs',
-        base: './.data/db'
-      }
-    },
-    devStorage: {
-      db: {
-        driver: 'fs',
-        base: './.data/db'
-      }
-    }
-  },
   routeRules: {
     // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
     '/rfc-index.txt': {

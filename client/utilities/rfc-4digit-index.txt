@@ -64,65 +64,64 @@ See the RFC Editor Web page http://www.rfc-editor.org
 
 
 
-0001 Host Software. S. Crocker. April 1969. (Format: TXT, HTML) (Status:
+   1 Host Software. S. Crocker. April 1969. (Format: TXT, HTML) (Status:
      UNKNOWN) (DOI: 10.17487/RFC0001) 
 
-0002 Host software. B. Duvall. April 1969. (Format: TXT, PDF, HTML)
+   2 Host software. B. Duvall. April 1969. (Format: TXT, PDF, HTML)
      (Status: UNKNOWN) (DOI: 10.17487/RFC0002) 
 
-0003 Documentation conventions. S.D. Crocker. April 1969. (Format: TXT,
-     HTML) (Obsoleted by RFC0010) (Status: UNKNOWN) (DOI:
-     10.17487/RFC0003) 
+   3 Documentation conventions. S.D. Crocker. April 1969. (Format: TXT,
+     HTML) (Obsoleted by RFC10) (Status: UNKNOWN) (DOI: 10.17487/RFC0003) 
 
-0004 Network timetable. E.B. Shapiro. March 1969. (Format: TXT, HTML)
+   4 Network timetable. E.B. Shapiro. March 1969. (Format: TXT, HTML)
      (Status: UNKNOWN) (DOI: 10.17487/RFC0004) 
 
-0005 Decode Encode Language (DEL). J. Rulifson. June 1969. (Format: TXT,
+   5 Decode Encode Language (DEL). J. Rulifson. June 1969. (Format: TXT,
      HTML) (Status: UNKNOWN) (DOI: 10.17487/RFC0005) 
 
-0006 Conversation with Bob Kahn. S.D. Crocker. April 1969. (Format: TXT,
+   6 Conversation with Bob Kahn. S.D. Crocker. April 1969. (Format: TXT,
      HTML) (Status: UNKNOWN) (DOI: 10.17487/RFC0006) 
 
-0007 Host-IMP interface. G. Deloche. May 1969. (Format: TXT, HTML)
+   7 Host-IMP interface. G. Deloche. May 1969. (Format: TXT, HTML)
      (Status: UNKNOWN) (DOI: 10.17487/RFC0007) 
 
-0008 ARPA Network Functional Specifications. G. Deloche. May 1969.
+   8 ARPA Network Functional Specifications. G. Deloche. May 1969.
      (Format: PDF) (Status: UNKNOWN) (DOI: 10.17487/RFC0008) 
 
-0009 Host Software. G. Deloche. May 1969. (Format: PDF) (Status: UNKNOWN)
+   9 Host Software. G. Deloche. May 1969. (Format: PDF) (Status: UNKNOWN)
      (DOI: 10.17487/RFC0009) 
 
-0010 Documentation conventions. S.D. Crocker. July 1969. (Format: TXT,
-     HTML) (Obsoletes RFC0003) (Obsoleted by RFC0016) (Updated by
-     RFC0024, RFC0027, RFC0030) (Status: UNKNOWN) (DOI: 10.17487/RFC0010) 
+  10 Documentation conventions. S.D. Crocker. July 1969. (Format: TXT,
+     HTML) (Obsoletes RFC3) (Obsoleted by RFC16) (Updated by RFC24,
+     RFC27, RFC30) (Status: UNKNOWN) (DOI: 10.17487/RFC0010) 
 
-0011 Implementation of the Host - Host Software Procedures in GORDO. G.
-     Deloche. August 1969. (Format: TXT, PDF, HTML) (Obsoleted by
-     RFC0033) (Status: UNKNOWN) (DOI: 10.17487/RFC0011) 
+  11 Implementation of the Host - Host Software Procedures in GORDO. G.
+     Deloche. August 1969. (Format: TXT, PDF, HTML) (Obsoleted by RFC33)
+     (Status: UNKNOWN) (DOI: 10.17487/RFC0011) 
 
-0012 IMP-Host interface flow diagrams. M. Wingfield. August 1969.
+  12 IMP-Host interface flow diagrams. M. Wingfield. August 1969.
      (Format: TXT, PS, PDF, HTML) (Status: UNKNOWN) (DOI:
      10.17487/RFC0012) 
 
-0013 Zero Text Length EOF Message. V. Cerf. August 1969. (Format: TXT,
+  13 Zero Text Length EOF Message. V. Cerf. August 1969. (Format: TXT,
      HTML) (Status: UNKNOWN) (DOI: 10.17487/RFC0013) 
 
-0014 Not Issued. 
+  14 Not Issued. 
 
-0015 Network subsystem for time sharing hosts. C.S. Carr. September 1969.
+  15 Network subsystem for time sharing hosts. C.S. Carr. September 1969.
      (Format: TXT, HTML) (Status: UNKNOWN) (DOI: 10.17487/RFC0015) 
 
-0016 M.I.T. S. Crocker. August 1969. (Format: TXT, HTML) (Obsoletes
-     RFC0010) (Obsoleted by RFC0024) (Updated by RFC0024, RFC0027,
-     RFC0030) (Status: UNKNOWN) (DOI: 10.17487/RFC0016) 
+  16 M.I.T. S. Crocker. August 1969. (Format: TXT, HTML) (Obsoletes
+     RFC10) (Obsoleted by RFC24) (Updated by RFC24, RFC27,
+     RFC30) (Status: UNKNOWN) (DOI: 10.17487/RFC0016) 
 
-0017 Some questions re: Host-IMP Protocol. J.E. Kreznar. August 1969.
+  17 Some questions re: Host-IMP Protocol. J.E. Kreznar. August 1969.
      (Format: TXT, HTML) (Status: UNKNOWN) (DOI: 10.17487/RFC0017) 
 
-0018 IMP-IMP and HOST-HOST Control Links. V. Cerf. September 1969.
+  18 IMP-IMP and HOST-HOST Control Links. V. Cerf. September 1969.
      (Format: TXT, HTML) (Status: UNKNOWN) (DOI: 10.17487/RFC0018) 
 
-0019 Two protocol suggestions to reduce congestion at swap bound nodes.
+  19 Two protocol suggestions to reduce congestion at swap bound nodes.
      J.E. Kreznar. October 1969. (Format: TXT, HTML) (Status: UNKNOWN)
      (DOI: 10.17487/RFC0019) 
 

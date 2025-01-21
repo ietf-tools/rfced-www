@@ -94,7 +94,7 @@ export async function renderRfcIndexDotTxt({
             padStart(
               result.number.toString(),
               longestRfcNumberStringLength,
-              '0'
+              ' '
             ),
             whitespace[column1Width - longestRfcNumberStringLength],
             rfcLines.join(`\n${whitespace[column1Width]}`)
@@ -263,8 +263,8 @@ const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
   }
 }
 
-const formatRfcNumber = (number: number, layout: Layout): string => {
-  return `RFC${padStart(number.toString(), layout.longestRfcNumberLength, '0')}`
+const formatRfcNumber = (number: number): string => {
+  return `RFC${number.toString()}`
 }
 
 type Layout = {
@@ -301,32 +301,32 @@ const stringifyRFC = (
 
     if (rfc.obsoletes && rfc.obsoletes.length > 0) {
       obsups += ` (Obsoletes ${rfc.obsoletes
-        .map((item) => formatRfcNumber(item.number, layout))
+        .map((item) => formatRfcNumber(item.number))
         .join(', ')})`
     }
 
     if (rfc.obsoleted_by && rfc.obsoleted_by.length > 0) {
       obsups += ` (Obsoleted by ${rfc.obsoleted_by
-        .map((item) => formatRfcNumber(item.number, layout))
+        .map((item) => formatRfcNumber(item.number))
         .join(', ')})`
     }
     if (rfc.updates && rfc.updates.length > 0) {
       obsups += ` (Updates ${rfc.updates
-        .map((item) => formatRfcNumber(item.number, layout))
+        .map((item) => formatRfcNumber(item.number))
         .join(', ')})`
     }
     if (rfc.updated_by && rfc.updated_by.length > 0) {
       obsups += ` (Updated by ${rfc.updated_by
-        .map((item) => formatRfcNumber(item.number, layout))
+        .map((item) => formatRfcNumber(item.number))
         .join(', ')})`
     }
 
     const alsolist = [
       ...(rfc.is_also && rfc.is_also.length > 0 ?
-        rfc.is_also.map((item) => formatRfcNumber(item.number, layout))
+        rfc.is_also.map((item) => formatRfcNumber(item.number))
       : []),
       ...(rfc.see_also && rfc.see_also.length > 0 ?
-        rfc.see_also.map((item) => formatRfcNumber(item.number, layout))
+        rfc.see_also.map((item) => formatRfcNumber(item.number))
       : [])
     ]
     if (alsolist.length > 0) {
@@ -370,7 +370,7 @@ or
 
 For example:
 
-  ${padStart('1129', layout.longestRfcNumberLength, '0')} ${splitLinesAt(
+  ${padStart('1129', layout.longestRfcNumberLength, ' ')} ${splitLinesAt(
     'Internet Time Synchronization: The Network Time Protocol. D.L. Mills. October 1989. (Format: TXT, PS, PDF, HTML) (Also RFC1119) (Status: INFORMATIONAL) (DOI: 10.17487/RFC1129)',
     64
   ).reduce((acc, line, index) => {

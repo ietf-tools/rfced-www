@@ -37,7 +37,7 @@ const fourDigitIndexRendering = fs
   .toString()
 
 const fourDigitIndexRenderingUntilRfc13 = fourDigitIndexRendering
-  .substring(0, fourDigitIndexRendering.indexOf('0014'))
+  .substring(0, fourDigitIndexRendering.indexOf(' 14'))
   .trimEnd()
 
 const fiveDigitIndexRendering = fs
@@ -45,7 +45,7 @@ const fiveDigitIndexRendering = fs
   .toString()
 
 const fiveDigitIndexRenderingUntilRfc13 = fiveDigitIndexRendering
-  .substring(0, fourDigitIndexRendering.indexOf('0014'))
+  .substring(0, fourDigitIndexRendering.indexOf(' 14'))
   .trimEnd()
 
 type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
