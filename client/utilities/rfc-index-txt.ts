@@ -10,14 +10,22 @@ const COLUMN_PADDING = 1
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
-// Incrementally pushes (streams) RFC results
-export async function renderRfcIndexDotTxt(
-  push: (data: string) => void,
-  close: () => Promise<void>,
-  abortController: AbortController,
-  redApi: ApiClient,
+type Props = {
+  push: (data: string) => void
+  close: () => Promise<void>
+  abortController: AbortController
+  redApi: ApiClient
   delayBetweenRequestsMs: number
-) {
+}
+
+// Incrementally pushes (streams) RFC results
+export async function renderRfcIndexDotTxt({
+  push,
+  close,
+  abortController,
+  redApi,
+  delayBetweenRequestsMs
+}: Props) {
   const docListArg: DocListArg = {}
 
   // extract latest RFC to find largest RFC number for layout reasons.
@@ -113,8 +121,6 @@ export async function renderRfcIndexDotTxt(
       close()
       return
     }
-
-    console.log(response.next)
 
     // note that due to gaps in RFC number series and API filtering of RFCs there's
     // not a 1:1 relationship in RFC numbers and pagination when sorting by RFC number.
@@ -337,7 +343,7 @@ const getHeader = (layout: Layout): string => {
   const createdOn = `${padStart((date.getMonth() + 1).toString(), 2, '0')}/${padStart(date.getDate().toString(), 2, '0')}/${date.getFullYear()}` // note the backwards US month/day/year format
   const hashes = padStart('', layout.longestRfcNumberLength, '#')
   const letterXs = padStart('', layout.longestRfcNumberLength, 'x')
-
+  const exampleColumnSpacing = layout.longestRfcNumberLength === 4 ? '  ' : ' '
   const whitespace: Record<number, string> = {
     8: padStart('', 8, ' '),
     7: padStart('', 7, ' ')
@@ -356,19 +362,19 @@ This file contains citations for all RFCs in numeric order.
 
 RFC citations appear in this format:
 
-  ${hashes}  ${splitLinesAt(`Title of RFC.  Author 1, Author 2, Author 3.  Issue date. (Format: ASCII) (Obsoletes xxx) (Obsoleted by xxx) (Updates xxx) (Updated by xxx) (Also FYI ${hashes}) (Status: ssssss) (DOI: ddd)`, 64).join(`\n${whitespace['8']}`)}
+  ${hashes}${exampleColumnSpacing}${splitLinesAt(`Title of RFC.  Author 1, Author 2, Author 3.  Issue date. (Format: ASCII) (Obsoletes xxx) (Obsoleted by xxx) (Updates xxx) (Updated by xxx) (Also FYI ${hashes}) (Status: ssssss) (DOI: ddd)`, 64).join(`\n${whitespace['8']}`)}
 
 or
 
-  ${hashes}  Not Issued.
+  ${hashes}${exampleColumnSpacing}Not Issued.
 
 For example:
 
-  1129 ${splitLinesAt(
+  ${padStart('1129', layout.longestRfcNumberLength, '0')} ${splitLinesAt(
     'Internet Time Synchronization: The Network Time Protocol. D.L. Mills. October 1989. (Format: TXT, PS, PDF, HTML) (Also RFC1119) (Status: INFORMATIONAL) (DOI: 10.17487/RFC1129)',
     64
   ).reduce((acc, line, index) => {
-    return `${acc}${index > 0 ? `\n${whitespace['7']}` : ''}${line}${index > 0 ? ' ' : ''}`
+    return `${acc}${index > 0 ? `\n${layout.longestRfcNumberLength === 4 ? whitespace['7'] : whitespace['8']}` : ''}${line}${index > 0 ? ' ' : ''}`
   }, '')}
 
 Key to citations:

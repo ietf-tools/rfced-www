@@ -3,7 +3,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { splitLinesAt, renderRfcIndexDotTxt } from './rfc-index-txt'
-import { ApiClient } from '~/generated/red-client'
+import {
+  ApiClient,
+  type PaginatedRfcMetadataList
+} from '~/generated/red-client'
 
 const paragraph =
   'Obsoletes xxxx refers to other RFCs that this one replaces; Obsoleted by xxxx refers to RFCs that have replaced this one. Updates xxxx refers to other RFCs that this one merely updates (but does not replace);'
@@ -29,15 +32,71 @@ test('splitLinesAt: 50', () => {
   ])
 })
 
-const originalFormatting = fs
-  .readFileSync(path.join(import.meta.dirname, 'rfc-index.txt'), 'utf-8')
+const fourDigitIndexRendering = fs
+  .readFileSync(path.join(import.meta.dirname, 'rfc-4digit-index.txt'), 'utf-8')
   .toString()
 
-const originalFormattingUntilRfc13 = originalFormatting
-  .substring(0, originalFormatting.indexOf('0014'))
+const fourDigitIndexRenderingUntilRfc13 = fourDigitIndexRendering
+  .substring(0, fourDigitIndexRendering.indexOf('0014'))
+  .trimEnd()
+
+const fiveDigitIndexRendering = fs
+  .readFileSync(path.join(import.meta.dirname, 'rfc-5digit-index.txt'), 'utf-8')
+  .toString()
+
+const fiveDigitIndexRenderingUntilRfc13 = fiveDigitIndexRendering
+  .substring(0, fourDigitIndexRendering.indexOf('0014'))
   .trimEnd()
 
 type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
+
+type TestHelperResponses = {
+  oldestRfcResponse: DocListResponse
+  seekingResponses: PaginatedRfcMetadataList[]
+}
+
+const testHelper = (responses: TestHelperResponses) =>
+  new Promise<string>((resolve) => {
+    const redApiMock = new ApiClient({ baseUrl: 'http://localhost/' })
+    type DocListArg = Parameters<ApiClient['red']['docList']>[0]
+
+    // clone so that we don't mutate original array
+    const seekingResponses = [...responses.seekingResponses]
+
+    redApiMock.red.docList = (search: DocListArg) =>
+      new Promise((resolve) => {
+        if (search.sort?.length === 1 && search.sort[0] === '-number') {
+          resolve(responses.oldestRfcResponse)
+          return
+        }
+        const nextSeek = seekingResponses.pop()
+        if (!nextSeek) {
+          resolve(blankRfcResponse)
+          return
+        }
+        resolve(nextSeek)
+      })
+
+    let responseTxt = ''
+    const push = (str: string) => {
+      responseTxt += str
+    }
+
+    const close = async () => resolve(responseTxt)
+
+    const abortController = new AbortController()
+
+    ;(async function () {
+      await renderRfcIndexDotTxt({
+        push,
+        close,
+        abortController,
+        redApi: redApiMock,
+        delayBetweenRequestsMs: 0
+      })
+      resolve(responseTxt)
+    })()
+  })
 
 describe('renderRfcIndexDotTxt', () => {
   beforeEach(() => {
@@ -50,80 +109,64 @@ describe('renderRfcIndexDotTxt', () => {
     vi.useRealTimers()
   })
 
-  test('compare against original rendering', async () => {
+  test('compare against original 4 digit-wide rendering', async () => {
     const date = new Date(2025, 0, 14)
     vi.setSystemTime(date)
 
-    const streamWrapper = () =>
-      new Promise<string>((resolve) => {
-        const redApiMock = new ApiClient({ baseUrl: 'http://localhost/' })
-        type DocListArg = Parameters<ApiClient['red']['docList']>[0]
+    const str = await testHelper({
+      oldestRfcResponse: twoDigitOldestRfcResponse,
+      seekingResponses: [twoDigitRFCDocListResponse]
+    })
 
-        redApiMock.red.docList = (search: DocListArg) =>
-          new Promise((resolve) => {
-            if (search.sort?.length === 1 && search.sort[0] === '-number') {
-              resolve(oldestRfc)
-            }
-            resolve(firstRfcs)
-          })
-
-        let responseTxt = ''
-        const push = (str: string) => {
-          responseTxt += str
-        }
-
-        const close = async () => resolve(responseTxt)
-
-        const abortController = new AbortController()
-
-        ;(async function () {
-          await renderRfcIndexDotTxt(
-            push,
-            close,
-            abortController,
-            redApiMock,
-            0
-          )
-          resolve(responseTxt)
-        })()
-      })
-
-    const str = await streamWrapper()
+    // ensure that we read enough of a file
+    expect(fourDigitIndexRenderingUntilRfc13.length).toBeGreaterThan(1000)
 
     // test rendering against a wget of the existing rfc-index.txt truncated to RFC0013
-    expect(str.substring(0, originalFormattingUntilRfc13.length)).toEqual(
-      originalFormattingUntilRfc13
+    expect(str.substring(0, fourDigitIndexRenderingUntilRfc13.length)).toEqual(
+      fourDigitIndexRenderingUntilRfc13
     )
+  })
 
-    expect(originalFormattingUntilRfc13.length).toBe(str.length)
+  test('compare against 5 digit-wide rendering (RFC10k)', async () => {
+    const date = new Date(2025, 0, 14)
+    vi.setSystemTime(date)
+
+    const fiveDigitRfcNumber = 10000
+    const fiveDigitOldestRfcResponse: DocListResponse = {
+      ...twoDigitOldestRfcResponse,
+      count: fiveDigitRfcNumber,
+      results: [
+        {
+          ...twoDigitOldestRfcResponse.results[0],
+          number: fiveDigitRfcNumber
+        }
+      ]
+    }
+
+    const str = await testHelper({
+      oldestRfcResponse: fiveDigitOldestRfcResponse,
+      seekingResponses: [
+        {
+          ...twoDigitRFCDocListResponse,
+          results: [
+            ...twoDigitRFCDocListResponse.results,
+            { ...fiveDigitOldestRfcResponse.results[0] }
+          ]
+        }
+      ]
+    })
+
+    // ensure that we read enough of a file
+    expect(fiveDigitIndexRenderingUntilRfc13.length).toBeGreaterThan(100)
+
+    expect(str.substring(0, fiveDigitIndexRenderingUntilRfc13.length)).toEqual(
+      fiveDigitIndexRenderingUntilRfc13
+    )
   })
 })
 
-const oldestRfc: DocListResponse = {
+const twoDigitRFCDocListResponse: DocListResponse = {
   count: 13,
-  next: 'http://localhost:8000/api/red/doc/?limit=5&offset=5&sort=-number',
-  previous: null,
-  results: [
-    {
-      number: 13,
-      title: 'Zero Text Length EOF Message',
-      published: '1969-08-01',
-      status: { slug: 'unknown', name: 'unknown' },
-      pages: 1,
-      authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
-      area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0013' }],
-      obsoleted_by: [],
-      updated_by: [],
-      abstract: ''
-    }
-  ]
-}
-
-const firstRfcs: DocListResponse = {
-  count: 15,
   next: 'http://localhost:8000/api/red/doc/?limit=50&offset=50&sort=number',
   previous: null,
   results: [
@@ -331,4 +374,21 @@ const firstRfcs: DocListResponse = {
       abstract: ''
     }
   ]
+}
+
+const twoDigitOldestRfcResponse: DocListResponse = {
+  count: 13, //
+  next: 'http://localhost:8000/api/red/doc/?limit=5&offset=5&sort=-number',
+  previous: null,
+  results: [
+    [...twoDigitRFCDocListResponse.results].sort(
+      // sort by highest number
+      (a, b) => b.number - a.number
+    )[0] // first result
+  ]
+}
+
+const blankRfcResponse: DocListResponse = {
+  count: 0,
+  results: []
 }
