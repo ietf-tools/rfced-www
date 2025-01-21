@@ -11,11 +11,11 @@ const DELAY_BETWEEN_REQUESTS_MS = 50
 const STORAGE_GROUP = 'rfc-index'
 const STORAGE_TXT_KEY = 'txt'
 const STORAGE_METADATA_KEY = 'txt.json'
-const CLEAN_PARAM = 'clean'
-const CLEAN_ALLOWED = 'clean' // FIXME: limit cleaning by env var password?
+const REBUILD_PARAM = 'rebuild'
+const REBUILD_ALLOWED = 'rebuild' // FIXME: limit cleaning by env var password?
 
 export const ParamsSchema = z.object({
-  [CLEAN_PARAM]: z.enum([CLEAN_ALLOWED]).optional()
+  [REBUILD_PARAM]: z.enum([REBUILD_ALLOWED]).optional()
 })
 
 export default defineEventHandler(async (event) => {
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  if (query.data.clean === CLEAN_ALLOWED) {
+  if (query.data[REBUILD_PARAM] === REBUILD_ALLOWED) {
     console.log('Cleaning cache...')
     await Promise.all([
       useStorage<RFC_INDEX_METADATA_STORAGE>(STORAGE_GROUP).clear(

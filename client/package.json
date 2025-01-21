@@ -21,7 +21,7 @@
     "story:preview": "histoire preview --port 4567",
     "generate": "npm run generate:content-metadata && npm run generate:api-red",
     "generate:content-metadata": "node --experimental-strip-types ./scripts/generate-content-metadata.ts",
-    "generate:api-red": "npx --no apigen-ts http://localhost:8000/api/schema/ --parse-dates ./generated/red-client.ts"
+    "generate:api-red": "npx --no apigen-ts http://localhost:8000/api/schema/ --inline-enums --parse-dates ./generated/red-client.ts"
   },
   "//": "If updating lost-pixel sync the version to the vis-reg-test.yml and post-create.sh or rendering / filenames generated etc may be different",
   "dependencies": {
@@ -34,7 +34,7 @@
     "@pinia/nuxt": "^0.5.4",
     "@playwright/test": "^1.40.0",
     "@tailwindcss/forms": "^0.5.8",
-    "apigen-ts": "^1.0.1",
+    "apigen-ts": "^1.1.0",
     "glob": "^11.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.5.0",

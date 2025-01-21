@@ -42,6 +42,12 @@ export async function renderRfcIndexDotTxt(
     longestRfcNumberLength: longestRfcNumberStringLength
   }
 
+  if (
+    // checking again after the await
+    abortController.signal.aborted
+  ) {
+    return
+  }
   push(getHeader(layout))
 
   const column1Width = longestRfcNumberStringLength + COLUMN_PADDING
@@ -124,18 +130,8 @@ const setTimeoutPromise = (timerMs: number) =>
 const stringifyIdentifiers = (
   identifiers: RfcMetadata['identifiers']
 ): string => {
-  if (!identifiers) return ''
-  // FIXME: when TS is fixed we should be able to delete the following line
-  const identifiersArr =
-    Array.isArray(identifiers) ? identifiers : (
-      ([identifiers] as unknown as Array<
-        NonNullable<RfcMetadata['identifiers']>
-      >)
-    )
-
-  if (identifiersArr.length === 0) return ''
-
-  return ` ${identifiersArr
+  if (!identifiers || identifiers.length === 0) return ''
+  return ` ${identifiers
     .map(
       (identifier) => `(${identifier.type.toUpperCase()}: ${identifier.value})`
     )
