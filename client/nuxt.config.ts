@@ -2,7 +2,12 @@
 
 import redirects from './redirects.json'
 
-type RouteRules = NonNullable<Parameters<typeof defineNuxtConfig>[0]["routeRules"]>
+type RouteRules = NonNullable<
+  Parameters<typeof defineNuxtConfig>[0]['routeRules']
+>
+
+const oneHourInSeconds = 60 * 60
+const oneDayInSeconds = 24 * oneHourInSeconds
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -29,6 +34,19 @@ export default defineNuxtConfig({
     }
   },
   routeRules: {
+    // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
+    '/rfc-index.txt': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
+    '/rfcatom.xml': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
+    '/rfcrss.xml': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
     // https://nitro.build/config#routerules
     ...redirects.redirects.reduce((acc, redirect) => {
       acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }

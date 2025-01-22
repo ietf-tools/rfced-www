@@ -6,7 +6,6 @@ export const exampleRfc: Rfc = {
     'Label Switched Path (LSP) Ping/Traceroute for Segment Routing (SR) Egress Peer Engineering (EPE) Segment Identifiers (SIDs) with MPLS Data Plane',
   published: '2024-12-28',
   status: {
-    // @ts-expect-error waiting on fixes to Red via api client
     slug: 'standard',
     name: 'standards track'
   },
@@ -61,7 +60,6 @@ export const exampleRfc: Rfc = {
     name: 'IETF',
     desc: 'Internet Engineering Task Force (IETF)'
   },
-  // @ts-expect-error waiting on fixes to Red via api client
   identifiers: [
     {
       type: 'doi',
