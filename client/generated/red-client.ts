@@ -154,19 +154,14 @@ export class ApiClient {
   }
 }
 
-export enum ClientErrorEnum {
-  Client_error = 'client_error'
-}
+export type ClientErrorEnum = 'client_error'
 
 export type DocIdentifier = {
   type: DocIdentifierTypeEnum
   value: string
 }
 
-export enum DocIdentifierTypeEnum {
-  Doi = 'doi',
-  Issn = 'issn'
-}
+export type DocIdentifierTypeEnum = 'doi' | 'issn'
 
 export type Error404 = {
   code: ErrorCode404Enum
@@ -174,9 +169,7 @@ export type Error404 = {
   attr: string | null
 }
 
-export enum ErrorCode404Enum {
-  Not_found = 'not_found'
-}
+export type ErrorCode404Enum = 'not_found'
 
 export type ErrorResponse404 = {
   type: ClientErrorEnum
@@ -201,9 +194,7 @@ export type ParseError = {
   attr: string | null
 }
 
-export enum ParseErrorCodeEnum {
-  Parse_error = 'parse_error'
-}
+export type ParseErrorCodeEnum = 'parse_error'
 
 export type ParseErrorResponse = {
   type: ClientErrorEnum
@@ -281,7 +272,7 @@ export type Rfc = {
   group: Group
   area?: Group
   stream: StreamName
-  identifiers?: DocIdentifier
+  identifiers?: DocIdentifier[]
   obsoleted_by?: RelatedRfc[]
   updated_by?: RelatedRfc[]
   abstract?: string
@@ -306,7 +297,7 @@ export type RfcMetadata = {
   group: Group
   area?: Group
   stream: StreamName
-  identifiers?: DocIdentifier
+  identifiers?: DocIdentifier[]
   obsoleted_by?: RelatedRfc[]
   updated_by?: RelatedRfc[]
   abstract?: string
@@ -319,14 +310,13 @@ export type RfcStatus = {
 
 export type SchemaRetrieveErrorResponse400 = ParseErrorResponse
 
-export enum SlugEnum {
-  Bcp = 'bcp',
-  Experimental = 'experimental',
-  Historic = 'historic',
-  Informational = 'informational',
-  Standard = 'standard',
-  Unknown = 'unknown'
-}
+export type SlugEnum =
+  | 'bcp'
+  | 'experimental'
+  | 'historic'
+  | 'informational'
+  | 'standard'
+  | 'unknown'
 
 export type StreamName = {
   slug: string
@@ -334,6 +324,4 @@ export type StreamName = {
   desc?: string
 }
 
-export enum ValidationErrorEnum {
-  Validation_error = 'validation_error'
-}
+export type ValidationErrorEnum = 'validation_error'

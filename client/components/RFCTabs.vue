@@ -107,26 +107,15 @@
               :key="identifierIndex"
             >
               <dt class="font-bold mt-2">
-                <template
-                  v-if="
-                    // @ts-expect-error
-                    identifier.type === 'doi'
-                  "
-                >
+                <template v-if="identifier.type === 'doi'">
                   <abbr title="Digital object identifier">DOI</abbr>
                 </template>
                 <template v-else>
-                  {{
-                    // @ts-expect-error
-                    identifier.type
-                  }}
+                  {{ identifier.type }}
                 </template>
               </dt>
               <dd>
-                {{
-                  // @ts-expect-error
-                  identifier.value
-                }}
+                {{ identifier.value }}
               </dd>
             </template>
           </template>

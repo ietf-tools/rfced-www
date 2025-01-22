@@ -32,9 +32,8 @@ export const blankRfc: Rfc = {
   title: '',
   published: '1950-1-1',
   status: {
-    // @ts-expect-error waiting on fixes to Red via api client
-    slug: 'standard',
-    name: 'standards track'
+    slug: 'unknown',
+    name: 'Unknown'
   },
   pages: 0,
   authors: [],
@@ -51,7 +50,6 @@ export const blankRfc: Rfc = {
     name: '',
     desc: ''
   },
-  // @ts-expect-error waiting on fixes to Red via api client
   identifiers: [],
   obsoleted_by: [],
   updated_by: [],
