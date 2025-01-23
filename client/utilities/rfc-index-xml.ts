@@ -11,17 +11,36 @@ type Props = {
   delayBetweenRequestsMs: number
 }
 
-export async function renderRfcIndexDotXml({
-  push,
-  close,
-  abortController,
-  redApi,
-  delayBetweenRequestsMs
-}: Props) {
+export async function renderRfcIndexDotXml(props: Props) {
+  const { push } = props
   push('<?xml version="1.0" encoding="UTF-8"?>\n')
   push(
     '<rfc-index xmlns="https://www.rfc-editor.org/rfc-index" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.rfc-editor.org/rfc-index https://www.rfc-editor.org/rfc-index.xsd">\n'
   )
+  await renderBCPs(props)
+  await renderFYIs(props)
+  await renderRFCs(props)
+  await renderSTDs(props)
+  push('</rfc-index>')
+  close()
+}
+
+const renderBCPs = async (props: Props) => {
+  console.log(props.delayBetweenRequestsMs) // FIXME: remove this
+  // FIXME: render BCPs
+}
+
+const renderFYIs = async (props: Props) => {
+  console.log(props.delayBetweenRequestsMs) // FIXME: remove this
+  // FIXME: render FYIs
+}
+
+const renderRFCs = async ({
+  push,
+  abortController,
+  redApi,
+  delayBetweenRequestsMs
+}: Props) => {
   const docListArg: DocListArg = {}
   docListArg.sort = ['-number'] // sort by first RFC
   docListArg.limit = 1 // we only need one result
@@ -77,31 +96,18 @@ export async function renderRfcIndexDotXml({
       //   rfc.see_also.map((item) => formatRfcNumber(item.number, layout))
       // }
 
-      //   push(JSON.stringify(rfcMetadata))
+      // push(JSON.stringify(rfcMetadata))
 
       push('</rfc-entry>\n')
     })
 
     offset += response.results.length
 
-    console.log(
-      offset,
-      '>',
-      largestRfcNumber,
-      offset > largestRfcNumber,
-      ' | ',
-      response.results.length
-    )
-
     if (
       response.results.some(
         (rfcMetadata) => rfcMetadata.number === largestRfcNumber
       )
     ) {
-      if (!abortController.signal.aborted) {
-        push('</rfc-index>')
-      }
-      close()
       return
     }
 
@@ -109,6 +115,11 @@ export async function renderRfcIndexDotXml({
       await setTimeoutPromise(delayBetweenRequestsMs)
     }
   }
+}
+
+const renderSTDs = async (props: Props) => {
+  console.log(props.delayBetweenRequestsMs) // FIXME: remove this
+  // FIXME: render STDs
 }
 
 const padNumber = (number: number, longestRfcNumberLength: number): string =>
