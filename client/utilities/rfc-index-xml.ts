@@ -1,15 +1,23 @@
-import { delay, padStart } from 'lodash-es'
-import type { ApiClient, RfcMetadata } from '~/generated/red-client'
+import { padStart } from 'lodash-es'
+import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
-export async function renderRfcIndexDotXml(
-  push: (data: string) => void,
-  close: () => void,
-  abortController: AbortController,
-  redApi: ApiClient,
+type Props = {
+  push: (data: string) => void
+  close: () => void
+  abortController: AbortController
+  redApi: ApiClient
   delayBetweenRequestsMs: number
-) {
+}
+
+export async function renderRfcIndexDotXml({
+  push,
+  close,
+  abortController,
+  redApi,
+  delayBetweenRequestsMs
+}: Props) {
   push('<?xml version="1.0" encoding="UTF-8"?>\n')
   push(
     '<rfc-index xmlns="https://www.rfc-editor.org/rfc-index" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.rfc-editor.org/rfc-index https://www.rfc-editor.org/rfc-index.xsd">\n'
@@ -32,46 +40,46 @@ export async function renderRfcIndexDotXml(
 
     response.results.forEach((rfcMetadata) => {
       push(
-        `<bcp-entry><doc-id>BCP${padNumber(rfcMetadata.number, longestRfcNumberLength)}</doc-id>`
+        `<rfc-entry><doc-id>BCP${padNumber(rfcMetadata.number, longestRfcNumberLength)}</doc-id>`
       )
 
       // if (rfcMetadata.formats && rfc.formats.length > 0) {
       //   rfc.formats.map((format) => format.type).join(', ')}`
       // }
 
-      //if (rfcMetadata.obsoletes && rfcMetadata.obsoletes.length > 0) {
+      // if (rfcMetadata.obsoletes && rfcMetadata.obsoletes.length > 0) {
       // obsups += ` (Obsoletes ${rfcMetadata.obsoletes
       //   .map((item) => formatRfcNumber(item.number, layout))
       //   .join(', ')})`
-      //}
+      // }
 
-      //if (rfcMetadata.obsoleted_by && rfcMetadata.obsoleted_by.length > 0) {
+      // if (rfcMetadata.obsoleted_by && rfcMetadata.obsoleted_by.length > 0) {
       // obsups += ` (Obsoleted by ${rfc.obsoleted_by
       //   .map((item) => formatRfcNumber(item.number, layout))
       //   .join(', ')})`
       // }
-      //if (rfcMetadata.updates && rfcMetadata.updates.length > 0) {
+      // if (rfcMetadata.updates && rfcMetadata.updates.length > 0) {
       // obsups += ` (Updates ${rfc.updates
       //   .map((item) => formatRfcNumber(item.number, layout))
       //   .join(', ')})`
-      //}
-      //if (rfcMetadata.updated_by && rfcMetadata.updated_by.length > 0) {
+      // }
+      // if (rfcMetadata.updated_by && rfcMetadata.updated_by.length > 0) {
       // obsups += ` (Updated by ${rfc.updated_by
       //   .map((item) => formatRfcNumber(item.number, layout))
       //   .join(', ')})`
-      //}
+      // }
 
-      //if(rfcMetadata.is_also && rfcMetadata.is_also.length > 0) {
+      // if(rfcMetadata.is_also && rfcMetadata.is_also.length > 0) {
       //
       // }
 
       // if (rfcMetadata.see_also && rfcMetadata.see_also.length > 0) {
-      // rfc.see_also.map((item) => formatRfcNumber(item.number, layout))
+      //   rfc.see_also.map((item) => formatRfcNumber(item.number, layout))
       // }
 
       //   push(JSON.stringify(rfcMetadata))
 
-      push('</bcp-entry>\n')
+      push('</rfc-entry>\n')
     })
 
     offset += response.results.length
@@ -97,7 +105,9 @@ export async function renderRfcIndexDotXml(
       return
     }
 
-    await setTimeoutPromise(delayBetweenRequestsMs)
+    if (delayBetweenRequestsMs > 0) {
+      await setTimeoutPromise(delayBetweenRequestsMs)
+    }
   }
 }
 

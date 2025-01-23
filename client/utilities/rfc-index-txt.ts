@@ -103,8 +103,11 @@ export async function renderRfcIndexDotTxt({
         .join(' \n\n')
     )
 
-    // wait between requests so as not to overwhelm the server
-    await setTimeoutPromise(delayBetweenRequestsMs)
+    if (delayBetweenRequestsMs > 0) {
+      // wait between requests so as not to overwhelm the server
+      await setTimeoutPromise(delayBetweenRequestsMs)
+    }
+
     if (
       // checking again after the await
       abortController.signal.aborted
