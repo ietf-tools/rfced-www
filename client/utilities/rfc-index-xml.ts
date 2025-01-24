@@ -18,10 +18,11 @@ export async function renderRfcIndexDotXml(props: Props) {
   push(
     '<rfc-index xmlns="https://www.rfc-editor.org/rfc-index" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.rfc-editor.org/rfc-index https://www.rfc-editor.org/rfc-index.xsd">\n'
   )
-  await renderBCPs(props)
-  await renderFYIs(props)
+  // await renderBCPs(props)
+  // await renderFYIs(props)
   await renderRFCs(props)
-  await renderSTDs(props)
+  // await renderSTDs(props)
+
   push('</rfc-index>')
   close()
 }
@@ -39,22 +40,22 @@ const xmlBuilderOptions: XMLBuilderOptions = {
   textNodeName: '#text'
 }
 
-const renderBCPs = async (props: Props) => {
-  console.log(props.delayBetweenRequestsMs) // FIXME: remove this
-  // FIXME: render BCPs
-}
+// const renderBCPs = async (props: Props): Promise<void> => {
+//   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
+//   // FIXME: render BCPs
+// }
 
-const renderFYIs = async (props: Props) => {
-  console.log(props.delayBetweenRequestsMs) // FIXME: remove this
-  // FIXME: render FYIs
-}
+// const renderFYIs = async (props: Props): Promise<void> => {
+//   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
+//   // FIXME: render FYIs
+// }
 
 const renderRFCs = async ({
   push,
   abortController,
   redApi,
   delayBetweenRequestsMs
-}: Props) => {
+}: Props): Promise<void> => {
   const docListArg: DocListArg = {}
   docListArg.sort = ['-number'] // sort by oldest RFC to find the end
   docListArg.limit = 1 // we only need one result
@@ -149,10 +150,10 @@ const renderRFCs = async ({
   }
 }
 
-const renderSTDs = async (props: Props) => {
-  console.log(props.delayBetweenRequestsMs) // FIXME: remove this
-  // FIXME: render STDs
-}
+// const renderSTDs = async (props: Props): Promise<void> => {
+//   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
+//   // FIXME: render STDs
+// }
 
 const setTimeoutPromise = (timerMs: number) =>
   new Promise((resolve) => setTimeout(resolve, timerMs))

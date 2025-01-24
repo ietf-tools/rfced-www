@@ -22,6 +22,14 @@ const originalXML = parser.parse(originalXMLString)
 
 type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
 
+type RFCEntry = {
+  'rfc-entry': Record<
+    string,
+    any
+    // TODO: refine this type... ie using Zod to parse JS data structure into a type
+  >
+}
+
 type TestHelperResponses = {
   oldestRfcResponse: DocListResponse
   seekingResponses: PaginatedRfcMetadataList[]
@@ -70,6 +78,10 @@ const testHelper = (responses: TestHelperResponses) =>
     })()
   })
 
+const filterByTypeRFC = (entry: unknown) => {
+  return typeof entry === 'object' && entry && 'rfc-entry' in entry
+}
+
 describe('renderRfcIndexDotXml', () => {
   beforeEach(() => {
     // tell vitest we use mocked time
@@ -103,15 +115,22 @@ describe('renderRfcIndexDotXml', () => {
     expect(resultXML[1]).toHaveProperty('rfc-index')
     expect(resultXML[1]['rfc-index'].length).toBeGreaterThan(10)
 
-    for (let entryIndex = 0; entryIndex < 13; entryIndex++) {
-      const resultEntry = resultXML[1]['rfc-index'][entryIndex]
-      const originalEntry = originalXML[1]['rfc-index'][entryIndex]
-      const diffResult = diff(originalEntry, resultEntry)
+    // Test RFCs
+    const originalRFCs: RFCEntry[] =
+      originalXML[1]['rfc-index'].filter(filterByTypeRFC)
+    const resultRFCs: RFCEntry[] =
+      resultXML[1]['rfc-index'].filter(filterByTypeRFC)
 
-      if (diffResult) {
-        // expect(diffResult).toHaveLength(0) // FIXME: reenable
-      }
-    }
+    resultRFCs.forEach((resultRFC, i) => {
+      const originalRFC = originalRFCs[i]
+
+      expect(resultRFC).toBe(originalRFC)
+
+      //   const diffResult = diff(originalRFC, resultRFC)
+      //   if (diffResult) {
+      //     expect(diffResult.length). // FIXME: reenable
+      //   }
+    })
   })
 })
 
