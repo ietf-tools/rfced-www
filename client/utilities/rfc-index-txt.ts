@@ -85,14 +85,14 @@ export async function renderRfcIndexDotTxt({
     push('\n\n')
     push(
       response.results
-        .map((result) => {
-          const rfcText = stringifyRFC(result)
+        .map((rfcMetadata) => {
+          const rfcText = stringifyRFC(rfcMetadata)
           const rfcLines = splitLinesAt(rfcText, column2width)
 
           return [
             // No RFC prefix on these results
             padStart(
-              result.number.toString(),
+              rfcMetadata.number.toString(),
               longestRfcNumberStringLength,
               ' '
             ),

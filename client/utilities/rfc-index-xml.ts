@@ -1,4 +1,5 @@
-import { padStart } from 'lodash-es'
+import { DateTime } from 'luxon'
+import { XMLBuilder } from 'fast-xml-parser'
 import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
@@ -25,6 +26,19 @@ export async function renderRfcIndexDotXml(props: Props) {
   close()
 }
 
+type XMLBuilderOptions = NonNullable<
+  ConstructorParameters<typeof XMLBuilder>[0]
+>
+
+const xmlBuilderOptions: XMLBuilderOptions = {
+  ignoreAttributes: true,
+  attributeNamePrefix: '',
+  format: true,
+  suppressBooleanAttributes: true,
+  indentBy: '  ',
+  textNodeName: '#text'
+}
+
 const renderBCPs = async (props: Props) => {
   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
   // FIXME: render BCPs
@@ -42,11 +56,16 @@ const renderRFCs = async ({
   delayBetweenRequestsMs
 }: Props) => {
   const docListArg: DocListArg = {}
-  docListArg.sort = ['-number'] // sort by first RFC
+  docListArg.sort = ['-number'] // sort by oldest RFC to find the end
   docListArg.limit = 1 // we only need one result
   const response = await redApi.red.docList(docListArg)
   const largestRfcNumber = response.results[0].number
-  const longestRfcNumberLength = largestRfcNumber.toString().length
+  // const longestRfcNumberLength = largestRfcNumber.toString().length
+
+  const builder = new XMLBuilder({
+    ...xmlBuilderOptions,
+    arrayNodeName: 'rfc-entry'
+  })
 
   docListArg.sort = ['number'] // sort by first RFC
   let offset = 0
@@ -58,47 +77,60 @@ const renderRFCs = async ({
     const response = await redApi.red.docList(docListArg)
 
     response.results.forEach((rfcMetadata) => {
-      push(
-        `<rfc-entry><doc-id>BCP${padNumber(rfcMetadata.number, longestRfcNumberLength)}</doc-id>`
-      )
+      const [month, year] = DateTime.fromISO(rfcMetadata.published)
+        .toFormat('LLLL yyyy')
+        .split(' ')
 
-      // if (rfcMetadata.formats && rfc.formats.length > 0) {
-      //   rfc.formats.map((format) => format.type).join(', ')}`
-      // }
+      const abstractParagraphs = (rfcMetadata.abstract ?? '').split('\n')
 
-      // if (rfcMetadata.obsoletes && rfcMetadata.obsoletes.length > 0) {
-      // obsups += ` (Obsoletes ${rfcMetadata.obsoletes
-      //   .map((item) => formatRfcNumber(item.number, layout))
-      //   .join(', ')})`
-      // }
+      // FIXME: replace with RFC formats when the API has them
+      const formats = ['HTML', 'TEXT', 'PDF', 'XML']
 
-      // if (rfcMetadata.obsoleted_by && rfcMetadata.obsoleted_by.length > 0) {
-      // obsups += ` (Obsoleted by ${rfc.obsoleted_by
-      //   .map((item) => formatRfcNumber(item.number, layout))
-      //   .join(', ')})`
-      // }
-      // if (rfcMetadata.updates && rfcMetadata.updates.length > 0) {
-      // obsups += ` (Updates ${rfc.updates
-      //   .map((item) => formatRfcNumber(item.number, layout))
-      //   .join(', ')})`
-      // }
-      // if (rfcMetadata.updated_by && rfcMetadata.updated_by.length > 0) {
-      // obsups += ` (Updated by ${rfc.updated_by
-      //   .map((item) => formatRfcNumber(item.number, layout))
-      //   .join(', ')})`
-      // }
+      const rfc = {
+        'rfc-entry': {
+          'doc-id': `RFC${rfcMetadata.number}`,
+          title: rfcMetadata.title,
+          ...(rfcMetadata.authors.length > 0 ?
+            {
+              author: {
+                name: rfcMetadata.authors
+              }
+            }
+          : {}),
+          date: { month, year },
+          format: {
+            'file-format': formats
+          },
+          'page-count': rfcMetadata.pages,
+          keywords: {
+            // @ts-expect-error update when client provides that
+            kw: rfcMetadata.keywords
+          },
+          ...(abstractParagraphs.length > 0 ?
+            {
+              abstract:
+                // Certain RFCs have multiple paragraphs such as RFC1849, RFC2169, RFC2178, RFC2660, RFC3318, RFC3867, RFC3873, RFC3875, RFC3886, RFC3890, RFC3894, RFC3903, RFC3918, RFC3919, RFC3927, RFC3932, RFC3933, RFC3938, RFC3945, RFC3949, RFC3965, RFC3974, RFC3987, RFC3995, RFC4005, RFC4010, RFC4025, RFC4026, RFC4034, RFC4035, RFC4040, RFC4041, RFC4042, RFC4043, RFC4053, RFC4061, RFC4078, RFC4080, RFC4082, RFC4086, RFC4088, RFC4090 etc...
+                abstractParagraphs.map((abstractParagraph) => ({
+                  p: abstractParagraph
+                }))
+            }
+          : {}),
+          draft: 'draft-ietf-lamps-cms-cek-hkdf-sha256-05',
+          'current-status': rfcMetadata.status.slug,
+          'publication-status': rfcMetadata.status.slug,
+          stream: rfcMetadata.stream.name,
+          area: rfcMetadata.area,
+          wg_acronym: rfcMetadata.group.acronym,
+          doi:
+            rfcMetadata.identifiers?.find(
+              (identifier) => identifier.type === 'doi'
+            )?.value ?? undefined
+        }
+      }
 
-      // if(rfcMetadata.is_also && rfcMetadata.is_also.length > 0) {
-      //
-      // }
+      const xml = builder.build(rfc)
 
-      // if (rfcMetadata.see_also && rfcMetadata.see_also.length > 0) {
-      //   rfc.see_also.map((item) => formatRfcNumber(item.number, layout))
-      // }
-
-      // push(JSON.stringify(rfcMetadata))
-
-      push('</rfc-entry>\n')
+      push(xml)
     })
 
     offset += response.results.length
@@ -121,9 +153,6 @@ const renderSTDs = async (props: Props) => {
   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
   // FIXME: render STDs
 }
-
-const padNumber = (number: number, longestRfcNumberLength: number): string =>
-  padStart(number.toString(), longestRfcNumberLength, '0')
 
 const setTimeoutPromise = (timerMs: number) =>
   new Promise((resolve) => setTimeout(resolve, timerMs))
