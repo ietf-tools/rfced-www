@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { XMLBuilder } from 'fast-xml-parser'
 import type { ApiClient } from '~/generated/red-client'
+import { getRFCWithExtraFields } from './rfc.mocks'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
@@ -78,23 +79,25 @@ const renderRFCs = async ({
     const response = await redApi.red.docList(docListArg)
 
     response.results.forEach((rfcMetadata) => {
+      const rfc = getRFCWithExtraFields(rfcMetadata)
+
       const [month, year] = DateTime.fromISO(rfcMetadata.published)
         .toFormat('LLLL yyyy')
         .split(' ')
 
-      const abstractParagraphs = (rfcMetadata.abstract ?? '').split('\n')
+      const abstractParagraphs = (rfc.abstract ?? '').split('\n')
 
       // FIXME: replace with RFC formats when the API has them
       const formats = ['HTML', 'TEXT', 'PDF', 'XML']
 
-      const rfc = {
+      const rfcForXml = {
         'rfc-entry': {
-          'doc-id': `RFC${rfcMetadata.number}`,
-          title: rfcMetadata.title,
-          ...(rfcMetadata.authors.length > 0 ?
+          'doc-id': `rfc${rfc.number}`,
+          title: rfc.title,
+          ...(rfc.authors.length > 0 ?
             {
               author: {
-                name: rfcMetadata.authors
+                name: rfc.authors
               }
             }
           : {}),
@@ -102,10 +105,10 @@ const renderRFCs = async ({
           format: {
             'file-format': formats
           },
-          'page-count': rfcMetadata.pages,
+          'page-count': rfc.pages,
           keywords: {
             // @ts-expect-error update when client provides that
-            kw: rfcMetadata.keywords
+            kw: rfc.keywords
           },
           ...(abstractParagraphs.length > 0 ?
             {
@@ -117,19 +120,18 @@ const renderRFCs = async ({
             }
           : {}),
           draft: 'draft-ietf-lamps-cms-cek-hkdf-sha256-05',
-          'current-status': rfcMetadata.status.slug,
-          'publication-status': rfcMetadata.status.slug,
-          stream: rfcMetadata.stream.name,
-          area: rfcMetadata.area,
-          wg_acronym: rfcMetadata.group.acronym,
+          'current-status': rfc.status.slug,
+          'publication-status': rfc.status.slug,
+          stream: rfc.stream.name,
+          area: rfc.area,
+          wg_acronym: rfc.group.acronym,
           doi:
-            rfcMetadata.identifiers?.find(
-              (identifier) => identifier.type === 'doi'
-            )?.value ?? undefined
+            rfc.identifiers?.find((identifier) => identifier.type === 'doi')
+              ?.value ?? undefined
         }
       }
 
-      const xml = builder.build(rfc)
+      const xml = builder.build(rfcForXml)
 
       push(xml)
     })

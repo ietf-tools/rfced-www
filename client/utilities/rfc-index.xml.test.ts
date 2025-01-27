@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
+import { zip } from 'lodash'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLParser } from 'fast-xml-parser'
 
@@ -11,6 +12,7 @@ import {
   ApiClient,
   type PaginatedRfcMetadataList
 } from '~/generated/red-client'
+import { parseRFCId } from './rfc'
 
 const originalXMLString = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.xml'), 'utf-8')
@@ -28,11 +30,14 @@ type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
  * The following Zod schema is the minimal amount of structure needed to parse BCP/FYI/RFC/STD
  * entries with typing.
  *
- * Why not refine the z.any() type further? That's unnecessary because we have reference XML (originalXML)
+ * We don't need to refine the EntrySchema value further because we have reference XML (originalXML)
  * to parse too which means the XMLParser should produce the same data from the same XML so we can use
- * vitest to diff them. This also avoids any maintenance burden of keeping a Zod schema in sync with the
- * output of XMLBuilder.
+ * vitest to diff them rather than validating their exact types. This also avoids any maintenance burden
+ * of keeping a Zod schema in sync with the output of XMLBuilder.
  */
+const EntryValueSchema = z
+  .record(z.string(), z.record(z.string(), z.any()).array())
+  .array()
 const EntrySchema = z.record(
   z.enum([
     'bcp-entry',
@@ -41,9 +46,11 @@ const EntrySchema = z.record(
     'rfc-not-issued-entry',
     'std-entry'
   ]),
-  z.any()
+  EntryValueSchema
 )
 const EntriesSchema = EntrySchema.array()
+type Entry = z.infer<typeof EntrySchema>
+type RFCEntry = Required<Pick<Entry, 'rfc-entry'>>
 
 type TestHelperResponses = {
   oldestRfcResponse: DocListResponse
@@ -93,29 +100,38 @@ const testHelper = (responses: TestHelperResponses) =>
     })()
   })
 
-const filterByEntryTypeFactory =
-  (key: keyof z.infer<typeof EntrySchema>) =>
-  (entry: z.infer<typeof EntrySchema>) => {
-    return key in entry
+const filterByRFCEntry = (entry: Entry): entry is RFCEntry => {
+  return 'rfc-entry' in entry
+}
+
+// const summariseEntries = (entries: any[]) =>
+//   entries.reduce(
+//     (acc, entry) =>
+//       Object.keys(entry).reduce((acc, key, _index, arr) => {
+//         if (arr.length === 0) {
+//           throw Error(`Entry has no keys?`)
+//         }
+//         if (!acc[key]) {
+//           acc[key] = 0
+//         }
+//         acc[key]++
+//         return acc
+//       }, acc),
+//     {}
+//   )
+
+const getRFCNumber = (rfcEntry: RFCEntry): string => {
+  const docIdItem = rfcEntry['rfc-entry'].find((item) => {
+    return !!item['doc-id']
+  })
+  if (!docIdItem) throw Error(`Couldn't find doc-id in ${rfcEntry}`)
+  const rfcNumber = docIdItem['doc-id'][0]['#text']
+  const typeofRFCNumber = typeof rfcNumber !== 'string'
+  if (typeofRFCNumber) {
+    throw Error(`Expected RFCNumber to be a string but was ${typeofRFCNumber}`)
   }
-
-const filterByRFCEntry = filterByEntryTypeFactory('rfc-entry')
-
-const summariseEntries = (entries: any[]) =>
-  entries.reduce(
-    (acc, entry) =>
-      Object.keys(entry).reduce((acc, key, _index, arr) => {
-        if (arr.length === 0) {
-          throw Error(`Entry has no keys?`)
-        }
-        if (!acc[key]) {
-          acc[key] = 0
-        }
-        acc[key]++
-        return acc
-      }, acc),
-    {}
-  )
+  return parseRFCId(rfcNumber).number
+}
 
 describe('renderRfcIndexDotXml', () => {
   beforeEach(() => {
@@ -136,14 +152,15 @@ describe('renderRfcIndexDotXml', () => {
     expect(originalXML[1]).toHaveProperty('rfc-index')
     const originalXMLEntries = originalXML[1]['rfc-index']
     expect(originalXMLEntries.length).toBeGreaterThan(10)
-    const originalParseResult = EntriesSchema.safeParse(originalXMLEntries)
-    const originalParsedEntries = originalParseResult.data
+    const originalParsedXML = EntriesSchema.safeParse(originalXMLEntries)
+    const originalParsedEntries = originalParsedXML.data
     if (!originalParsedEntries) {
-      console.log(originalParseResult.error)
+      console.log(originalParsedXML.error)
       throw Error('Expected some results')
     }
-    expect(originalParseResult.success).toBeTruthy()
-    const originalRFCs = originalParsedEntries.filter(filterByRFCEntry)
+    expect(originalParsedXML.success).toBeTruthy()
+    const originalRFCs: RFCEntry[] =
+      originalParsedEntries.filter(filterByRFCEntry)
     expect(originalRFCs.length).toBeGreaterThan(10)
 
     const result = await testHelper({
@@ -159,21 +176,32 @@ describe('renderRfcIndexDotXml', () => {
     expect(resultXML[1]).toHaveProperty('rfc-index')
     const resultXMLEntries = resultXML[1]['rfc-index']
     expect(resultXMLEntries.length).toBeGreaterThan(10)
-    const resultEntries = EntriesSchema.parse(resultXMLEntries)
-    const resultRFCs = resultEntries.filter(filterByRFCEntry)
+    const resultParsedXML = EntriesSchema.safeParse(resultXMLEntries)
+    const resultParsedEntries = resultParsedXML.data
+    if (!resultParsedEntries) {
+      console.log(resultParsedXML.error)
+      throw Error('Expected some results')
+    }
+    expect(resultParsedXML.success).toBeTruthy()
+
+    const resultRFCs: RFCEntry[] = resultParsedEntries.filter(filterByRFCEntry)
     expect(resultRFCs.length).toBeGreaterThan(10)
 
     // Intentionally not using test.each() because that would continue running tests after one fails
     // whereas this will fail early and compete the tests much quicker
     resultRFCs.forEach((resultRFC, i) => {
       const originalRFC = originalRFCs[i]
+      const originalRFCNumber = getRFCNumber(originalRFC)
+      const resultRFCNumber = getRFCNumber(resultRFC)
+
+      expect(resultRFCNumber).toEqual(originalRFCNumber)
 
       if (
         // FIXME: enable checking more RFCs
         i < 14
       ) {
-        console.log(`Checking RFC${i + 1}`)
-        expect(resultRFC).toBe(originalRFC)
+        console.log(`Checking ${originalRFCNumber}`, resultRFC, originalRFC)
+        expect(resultRFC).toEqual(originalRFC)
       }
     })
   })
