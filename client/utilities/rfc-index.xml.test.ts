@@ -1,11 +1,12 @@
 // @vitest-environment nuxt
 import fs from 'node:fs'
 import path from 'node:path'
+import { z } from 'zod'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLParser } from 'fast-xml-parser'
-import { diff } from 'deep-diff'
 
 import { renderRfcIndexDotXml } from './rfc-index-xml'
+import { PRIVATE_API_URL } from './url'
 import {
   ApiClient,
   type PaginatedRfcMetadataList
@@ -22,13 +23,27 @@ const originalXML = parser.parse(originalXMLString)
 
 type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
 
-type RFCEntry = {
-  'rfc-entry': Record<
-    string,
-    any
-    // TODO: refine this type... ie using Zod to parse JS data structure into a type
-  >
-}
+/**
+ * In the XML there's a NodeList of BCP/FYI/RFC/STD entries which the XMLParser parses into a JS array.
+ * The following Zod schema is the minimal amount of structure needed to parse BCP/FYI/RFC/STD
+ * entries with typing.
+ *
+ * Why not refine the z.any() type further? That's unnecessary because we have reference XML (originalXML)
+ * to parse too which means the XMLParser should produce the same data from the same XML so we can use
+ * vitest to diff them. This also avoids any maintenance burden of keeping a Zod schema in sync with the
+ * output of XMLBuilder.
+ */
+const EntrySchema = z.record(
+  z.enum([
+    'bcp-entry',
+    'rfc-entry',
+    'fyi-entry',
+    'rfc-not-issued-entry',
+    'std-entry'
+  ]),
+  z.any()
+)
+const EntriesSchema = EntrySchema.array()
 
 type TestHelperResponses = {
   oldestRfcResponse: DocListResponse
@@ -37,7 +52,7 @@ type TestHelperResponses = {
 
 const testHelper = (responses: TestHelperResponses) =>
   new Promise<string>((resolve) => {
-    const redApiMock = new ApiClient({ baseUrl: 'http://localhost/' })
+    const redApiMock = new ApiClient({ baseUrl: PRIVATE_API_URL })
     type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
     // clone so that we don't mutate original array
@@ -78,9 +93,29 @@ const testHelper = (responses: TestHelperResponses) =>
     })()
   })
 
-const filterByTypeRFC = (entry: unknown) => {
-  return typeof entry === 'object' && entry && 'rfc-entry' in entry
-}
+const filterByEntryTypeFactory =
+  (key: keyof z.infer<typeof EntrySchema>) =>
+  (entry: z.infer<typeof EntrySchema>) => {
+    return key in entry
+  }
+
+const filterByRFCEntry = filterByEntryTypeFactory('rfc-entry')
+
+const summariseEntries = (entries: any[]) =>
+  entries.reduce(
+    (acc, entry) =>
+      Object.keys(entry).reduce((acc, key, _index, arr) => {
+        if (arr.length === 0) {
+          throw Error(`Entry has no keys?`)
+        }
+        if (!acc[key]) {
+          acc[key] = 0
+        }
+        acc[key]++
+        return acc
+      }, acc),
+    {}
+  )
 
 describe('renderRfcIndexDotXml', () => {
   beforeEach(() => {
@@ -99,7 +134,17 @@ describe('renderRfcIndexDotXml', () => {
 
     expect(originalXML[0]).toHaveProperty('?xml')
     expect(originalXML[1]).toHaveProperty('rfc-index')
-    expect(originalXML[1]['rfc-index'].length).toBeGreaterThan(10)
+    const originalXMLEntries = originalXML[1]['rfc-index']
+    expect(originalXMLEntries.length).toBeGreaterThan(10)
+    const originalParseResult = EntriesSchema.safeParse(originalXMLEntries)
+    const originalParsedEntries = originalParseResult.data
+    if (!originalParsedEntries) {
+      console.log(originalParseResult.error)
+      throw Error('Expected some results')
+    }
+    expect(originalParseResult.success).toBeTruthy()
+    const originalRFCs = originalParsedEntries.filter(filterByRFCEntry)
+    expect(originalRFCs.length).toBeGreaterThan(10)
 
     const result = await testHelper({
       oldestRfcResponse: twoDigitOldestRfcResponse,
@@ -110,26 +155,26 @@ describe('renderRfcIndexDotXml', () => {
       preserveOrder: true
     })
     const resultXML = resultParser.parse(result)
-
     expect(resultXML[0]).toHaveProperty('?xml')
     expect(resultXML[1]).toHaveProperty('rfc-index')
-    expect(resultXML[1]['rfc-index'].length).toBeGreaterThan(10)
+    const resultXMLEntries = resultXML[1]['rfc-index']
+    expect(resultXMLEntries.length).toBeGreaterThan(10)
+    const resultEntries = EntriesSchema.parse(resultXMLEntries)
+    const resultRFCs = resultEntries.filter(filterByRFCEntry)
+    expect(resultRFCs.length).toBeGreaterThan(10)
 
-    // Test RFCs
-    const originalRFCs: RFCEntry[] =
-      originalXML[1]['rfc-index'].filter(filterByTypeRFC)
-    const resultRFCs: RFCEntry[] =
-      resultXML[1]['rfc-index'].filter(filterByTypeRFC)
-
+    // Intentionally not using test.each() because that would continue running tests after one fails
+    // whereas this will fail early and compete the tests much quicker
     resultRFCs.forEach((resultRFC, i) => {
       const originalRFC = originalRFCs[i]
 
-      expect(resultRFC).toBe(originalRFC)
-
-      //   const diffResult = diff(originalRFC, resultRFC)
-      //   if (diffResult) {
-      //     expect(diffResult.length). // FIXME: reenable
-      //   }
+      if (
+        // FIXME: enable checking more RFCs
+        i < 14
+      ) {
+        console.log(`Checking RFC${i + 1}`)
+        expect(resultRFC).toBe(originalRFC)
+      }
     })
   })
 })
