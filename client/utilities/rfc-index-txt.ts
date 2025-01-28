@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
 import { SPACE } from './strings'
-import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 import type { ExtraFieldsNeeded } from './rfc.mocks'
 import { getRFCWithExtraFields } from './rfc.mocks'
+import { formatAuthor } from './rfc'
+import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
 // Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
 // because vitest can't import that later filename
@@ -149,21 +150,6 @@ const stringifyIdentifiers = (
     .join(' ')}`
 }
 
-const stringifyAuthor = (author: RfcMetadata['authors'][number]): string => {
-  const name = author.name
-    .split(/[\s.]/g)
-    .filter(Boolean)
-    .reduce((acc, item, index, arr) => {
-      return `${acc}${
-        index === arr.length - 1 ?
-          ` ${item}`
-        : `${item.substring(0, 1).toUpperCase()}.`
-      }`
-    }, '')
-
-  return author.affiliation === 'Editor' ? `${name}, Ed.` : name
-}
-
 const formatRfcNumber = (number: number): string => {
   return `RFC${number.toString()}`
 }
@@ -228,7 +214,7 @@ const stringifyRFC = (
     }
 
     doi = stringifyIdentifiers(rfc.identifiers)
-    return `${rfc.title}. ${rfc.authors.map(stringifyAuthor).join(', ')}. ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
+    return `${rfc.title}. ${rfc.authors.map(formatAuthor).join(', ')}. ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
   }
 }
 
@@ -309,11 +295,6 @@ See the RFC Editor Web page http://www.rfc-editor.org
                                 ---------
 
 `
-}
-
-const toArray = (obj: unknown) => {
-  if (!obj) return []
-  return Array.isArray(obj) ? obj : [obj]
 }
 
 export const splitLinesAt = (str: string, lineLength: number): string[] => {

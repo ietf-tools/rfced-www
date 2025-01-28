@@ -98,13 +98,22 @@ type ExtraFieldNeededSeeAlso = {
   number: number
 }
 
+type ExtraFieldNeededKeyword = string
+
+type ExtraFieldNeededDraft = string
+
+type ExtraFieldNeededErrata = string
+
 /** New fields needed in the RfcMetadata response */
 export type ExtraFieldsNeeded = {
+  draft: ExtraFieldNeededDraft
   formats: ExtraFieldNeededFormat[]
   obsoletes: ExtraFieldNeededObsolete[]
   updates: ExtraFieldNeededUpdate[]
   is_also: ExtraFieldNeededIsAlso[]
   see_also: ExtraFieldNeededSeeAlso[]
+  keywords: ExtraFieldNeededKeyword[]
+  errata: ExtraFieldNeededErrata[]
 }
 
 const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
@@ -119,11 +128,19 @@ const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
   },
   2: {
     authors: [{ name: 'Bill Duvall', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'PDF' }, { type: 'HTML' }]
+    formats: [{ type: 'TXT' }, { type: 'PDF' }, { type: 'HTML' }],
+    errata: ['yes']
   },
   3: {
     authors: [{ name: 'Steve D. Crocker', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
+    formats: [{ type: 'TXT' }, { type: 'HTML' }],
+    obsoleted_by: [
+      {
+        id: 10,
+        number: 10,
+        title: 'Documentation conventions'
+      }
+    ]
   },
   4: {
     authors: [{ name: 'E. B. Shapiro', person: 0 }],
@@ -131,7 +148,8 @@ const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
   },
   5: {
     authors: [{ name: 'J. Rulifson', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
+    formats: [{ type: 'TXT' }, { type: 'HTML' }],
+    errata: ['yes']
   },
   6: {
     authors: [{ name: 'S.D. Crocker.', person: 0 }],

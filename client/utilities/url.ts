@@ -24,7 +24,7 @@ export const rfcCitePathBuilder = (
 
   switch (format) {
     case 'txt':
-      return `https://www.rfc-editor.org/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt`
+      return `${PUBLIC_SITE}refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt`
     case 'xml':
       return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml`
     case 'bibTeX':
@@ -37,8 +37,14 @@ export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
 
   switch (format) {
     case 'html':
-      return `https://www.rfc-editor.org/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
+      return `${PUBLIC_SITE}rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
   }
+}
+
+export const rfcErrataPathBuilder = (rfcId: string): string => {
+  const parsedRfcId = parseRFCId(rfcId)
+
+  return `${PUBLIC_SITE}errata/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/`
 }
 
 export const authorPathBuilder = (author: Rfc['authors'][number]): string => {

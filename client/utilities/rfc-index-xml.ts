@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
 import { XMLBuilder } from 'fast-xml-parser'
-import type { ApiClient } from '~/generated/red-client'
 import { getRFCWithExtraFields } from './rfc.mocks'
+import { formatAuthor } from './rfc'
+import { rfcErrataPathBuilder } from './url'
+import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
@@ -85,46 +87,96 @@ const renderRFCs = async ({
         .toFormat('LLLL yyyy')
         .split(' ')
 
-      const abstractParagraphs = (rfc.abstract ?? '').split('\n')
-
-      // FIXME: replace with RFC formats when the API has them
-      const formats = ['HTML', 'TEXT', 'PDF', 'XML']
-
+      // Based on https://github.com/rfc-editor/rpcwebsite/blob/edf4896c1d97fdd79a78ee6145e3a0c5ffb11fb9/rfc-ed/bin/xmlIndex.pl
       const rfcForXml = {
         'rfc-entry': {
-          'doc-id': `rfc${rfc.number}`,
+          'doc-id': `RFC${rfc.number}`,
           title: rfc.title,
           ...(rfc.authors.length > 0 ?
             {
               author: {
-                name: rfc.authors
+                name: rfc.authors.map(formatAuthor)
               }
             }
           : {}),
           date: { month, year },
-          format: {
-            'file-format': formats
-          },
+          ...(rfc.formats ?
+            {
+              format: {
+                'file-format': rfc.formats.map((format) => {
+                  if (format.type === 'TXT') {
+                    return 'ASCII'
+                  }
+                  return format.type
+                })
+              }
+            }
+          : {}),
           'page-count': rfc.pages,
-          keywords: {
-            // @ts-expect-error update when client provides that
-            kw: rfc.keywords
-          },
-          ...(abstractParagraphs.length > 0 ?
+          ...(rfc.keywords ?
+            {
+              keywords: {
+                kw: rfc.keywords
+              }
+            }
+          : {}),
+          ...(rfc.obsoletes && rfc.obsoletes.length > 0 ?
+            {
+              obsoletes: {
+                'doc-id': rfc.obsoletes.map(
+                  (obsoletesItem) => `RFC${obsoletesItem.number}`
+                )
+              }
+            }
+          : {}),
+          ...(rfc.obsoleted_by && rfc.obsoleted_by.length > 0 ?
+            {
+              'obsoleted-by': {
+                'doc-id': rfc.obsoleted_by.map(
+                  (obsoletedByItem) => `RFC${obsoletedByItem.number}`
+                )
+              }
+            }
+          : {}),
+          ...(rfc.updated_by && rfc.updated_by.length > 0 ?
+            {
+              'updated-by': {
+                'doc-id': rfc.updated_by.map(
+                  (updatedByItem) => `RFC${updatedByItem.number}`
+                )
+              }
+            }
+          : {}),
+          ...(rfc.abstract ?
             {
               abstract:
                 // Certain RFCs have multiple paragraphs such as RFC1849, RFC2169, RFC2178, RFC2660, RFC3318, RFC3867, RFC3873, RFC3875, RFC3886, RFC3890, RFC3894, RFC3903, RFC3918, RFC3919, RFC3927, RFC3932, RFC3933, RFC3938, RFC3945, RFC3949, RFC3965, RFC3974, RFC3987, RFC3995, RFC4005, RFC4010, RFC4025, RFC4026, RFC4034, RFC4035, RFC4040, RFC4041, RFC4042, RFC4043, RFC4053, RFC4061, RFC4078, RFC4080, RFC4082, RFC4086, RFC4088, RFC4090 etc...
-                abstractParagraphs.map((abstractParagraph) => ({
+                rfc.abstract.split('\n').map((abstractParagraph) => ({
                   p: abstractParagraph
                 }))
             }
           : {}),
-          draft: 'draft-ietf-lamps-cms-cek-hkdf-sha256-05',
-          'current-status': rfc.status.slug,
-          'publication-status': rfc.status.slug,
-          stream: rfc.stream.name,
-          area: rfc.area,
-          wg_acronym: rfc.group.acronym,
+          ...(rfc.draft ? { draft: rfc.draft } : {}),
+          'current-status': rfc.status.slug.toUpperCase(),
+          'publication-status': rfc.status.slug.toUpperCase(),
+          ...(rfc.stream.slug === 'LEGACY' ?
+            { stream: 'Legacy' }
+          : {
+              stream: rfc.stream.name,
+              ...(rfc.area?.acronym ? { area: rfc.area?.acronym } : {}),
+              ...(rfc.group.acronym ?
+                // wg_acronym:
+                //   rfc.group.acronym === 'IETF-NWG' ?
+                //     'NON WORKING GROUP'
+                //   : rfc.group.acronym
+                {}
+              : {})
+            }),
+          ...(rfc.errata && rfc.errata.length > 0 ?
+            {
+              'errata-url': rfcErrataPathBuilder(`rfc${rfc.number}`)
+            }
+          : {}),
           doi:
             rfc.identifiers?.find((identifier) => identifier.type === 'doi')
               ?.value ?? undefined

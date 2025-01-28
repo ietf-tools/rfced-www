@@ -120,3 +120,27 @@ export const formatTitlePlaintext = (title: string) => {
 
   return `${parts.type}${NONBREAKING_SPACE}${parts.number}`
 }
+
+type Author = RfcMetadata['authors'][number]
+
+/**
+ * Formats author names into an initialised format, eg.
+ * author.name:
+ * * "First Name" becomes "F. Name"
+ * * "First Second Name" becomes "F.S. Name"
+ * ...and if they're an editor they get an "Ed." suffix
+ */
+export const formatAuthor = (author: Author): string => {
+  const name = author.name
+    .split(/[\s.]/g)
+    .filter(Boolean)
+    .reduce((acc, item, index, arr) => {
+      return `${acc}${
+        index === arr.length - 1 ?
+          ` ${item}`
+        : `${item.substring(0, 1).toUpperCase()}.`
+      }`
+    }, '')
+
+  return author.affiliation === 'Editor' ? `${name}, Ed.` : name
+}

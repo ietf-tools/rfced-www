@@ -2,17 +2,15 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
-import { zip } from 'lodash'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLParser } from 'fast-xml-parser'
-
 import { renderRfcIndexDotXml } from './rfc-index-xml'
 import { PRIVATE_API_URL } from './url'
+import { parseRFCId } from './rfc'
 import {
   ApiClient,
   type PaginatedRfcMetadataList
 } from '~/generated/red-client'
-import { parseRFCId } from './rfc'
 
 const originalXMLString = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.xml'), 'utf-8')
@@ -120,11 +118,19 @@ const filterByRFCEntry = (entry: Entry): entry is RFCEntry => {
 //     {}
 //   )
 
-const getRFCNumber = (rfcEntry: RFCEntry): string => {
-  const docIdItem = rfcEntry['rfc-entry'].find((item) => {
-    return !!item['doc-id']
+const getRFCItemByName = (rfcEntry: RFCEntry, key: string) => {
+  const item = rfcEntry['rfc-entry'].find((item) => {
+    return !!item[key]
   })
-  if (!docIdItem) throw Error(`Couldn't find doc-id in ${rfcEntry}`)
+  if (!item)
+    throw Error(
+      `Couldn't find "${key}" in ${JSON.stringify(rfcEntry, null, 2)}`
+    )
+  return item
+}
+
+const getRFCNumber = (rfcEntry: RFCEntry): string => {
+  const docIdItem = getRFCItemByName(rfcEntry, 'doc-id')
   const rfcNumber = docIdItem['doc-id'][0]['#text']
   const typeofRFCNumber = typeof rfcNumber !== 'string'
   if (typeofRFCNumber) {
@@ -194,14 +200,21 @@ describe('renderRfcIndexDotXml', () => {
       const originalRFCNumber = getRFCNumber(originalRFC)
       const resultRFCNumber = getRFCNumber(resultRFC)
 
-      expect(resultRFCNumber).toEqual(originalRFCNumber)
+      expect(originalRFCNumber).toEqual(resultRFCNumber)
 
       if (
         // FIXME: enable checking more RFCs
         i < 14
       ) {
-        console.log(`Checking ${originalRFCNumber}`, resultRFC, originalRFC)
-        expect(resultRFC).toEqual(originalRFC)
+        // const keyToCheck = 'keywords'
+        // const originalItem = getRFCItemByName(originalRFC, keyToCheck)
+        // const resultItem = getRFCItemByName(resultRFC, keyToCheck)
+        // console.log(
+        //   JSON.stringify(originalItem, null, 2),
+        //   ' vs ',
+        //   JSON.stringify(resultItem, null, 2)
+        // )
+        expect(resultRFC, `RFC${originalRFCNumber}`).toEqual(originalRFC)
       }
     })
   })
