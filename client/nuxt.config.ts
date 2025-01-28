@@ -35,6 +35,10 @@ export default defineNuxtConfig({
   },
   routeRules: {
     // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
+    '/': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
     '/rfc-index.txt': {
       swr: oneDayInSeconds,
       prerender: true

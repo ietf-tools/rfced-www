@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
 import { SPACE } from './strings'
+import type { ExtraFieldsNeeded } from './rfc.mocks'
+import { getRFCWithExtraFields } from './rfc.mocks'
+import { formatAuthor } from './rfc'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
 // Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
@@ -85,14 +88,14 @@ export async function renderRfcIndexDotTxt({
     push('\n\n')
     push(
       response.results
-        .map((result) => {
-          const rfcText = stringifyRFC(result)
+        .map((rfcMetadata) => {
+          const rfcText = stringifyRFC(rfcMetadata)
           const rfcLines = splitLinesAt(rfcText, column2width)
 
           return [
             // No RFC prefix on these results
             padStart(
-              result.number.toString(),
+              rfcMetadata.number.toString(),
               longestRfcNumberStringLength,
               ' '
             ),
@@ -103,8 +106,11 @@ export async function renderRfcIndexDotTxt({
         .join(' \n\n')
     )
 
-    // wait between requests so as not to overwhelm the server
-    await setTimeoutPromise(delayBetweenRequestsMs)
+    if (delayBetweenRequestsMs > 0) {
+      // wait between requests so as not to overwhelm the server
+      await setTimeoutPromise(delayBetweenRequestsMs)
+    }
+
     if (
       // checking again after the await
       abortController.signal.aborted
@@ -144,125 +150,6 @@ const stringifyIdentifiers = (
     .join(' ')}`
 }
 
-const stringifyAuthor = (author: RfcMetadata['authors'][number]): string => {
-  const name = author.name
-    .split(/[\s.]/g)
-    .filter(Boolean)
-    .reduce((acc, item, index, arr) => {
-      return `${acc}${
-        index === arr.length - 1 ?
-          ` ${item}`
-        : `${item.substring(0, 1).toUpperCase()}.`
-      }`
-    }, '')
-
-  return author.affiliation === 'Editor' ? `${name}, Ed.` : name
-}
-
-type ExtraFieldNeededFormat =
-  | {
-      type: 'TXT'
-    }
-  | { type: 'HTML' }
-  | { type: 'HTMLized' }
-  | { type: 'PDF' }
-  | { type: 'PS' }
-
-type ExtraFieldNeededObsolete = {
-  number: number
-}
-
-type ExtraFieldNeededUpdate = {
-  number: number
-}
-
-type ExtraFieldNeededIsAlso = {
-  number: number
-}
-
-type ExtraFieldNeededSeeAlso = {
-  number: number
-}
-
-type ExtraFieldsNeeded = {
-  formats: ExtraFieldNeededFormat[]
-  obsoletes: ExtraFieldNeededObsolete[]
-  updates: ExtraFieldNeededUpdate[]
-  is_also: ExtraFieldNeededIsAlso[]
-  see_also: ExtraFieldNeededSeeAlso[]
-}
-
-const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
-  1: {
-    authors: [
-      {
-        name: 'Steve Crocker',
-        person: 0
-      }
-    ],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  },
-  2: {
-    authors: [{ name: 'Bill Duvall', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'PDF' }, { type: 'HTML' }]
-  },
-  3: {
-    authors: [{ name: 'Steve D. Crocker', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  },
-  4: {
-    authors: [{ name: 'E. B. Shapiro', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  },
-  5: {
-    authors: [{ name: 'J. Rulifson', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  },
-  6: {
-    authors: [{ name: 'S.D. Crocker.', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  },
-  7: {
-    authors: [{ name: 'G. Deloche', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  },
-  8: {
-    authors: [{ name: 'G. Deloche', person: 0 }],
-    formats: [{ type: 'PDF' }]
-  },
-  9: {
-    authors: [{ name: 'G. Deloche', person: 0 }],
-    formats: [{ type: 'PDF' }]
-  },
-  10: {
-    authors: [{ name: 'S.D. Crocker.', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }],
-    obsoletes: [{ number: 3 }],
-    updated_by: [
-      { id: 24, number: 24, title: '?' },
-      { id: 27, number: 27, title: '?' },
-      { id: 30, number: 30, title: '?' }
-    ]
-  },
-  11: {
-    authors: [{ name: 'G. Deloche', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'PDF' }, { type: 'HTML' }]
-  },
-  12: {
-    authors: [{ name: 'M. Wingfield', person: 0 }],
-    formats: [
-      { type: 'TXT' },
-      { type: 'PS' },
-      { type: 'PDF' },
-      { type: 'HTML' }
-    ]
-  },
-  13: {
-    authors: [{ name: 'Vincent Cerf', person: 0 }],
-    formats: [{ type: 'TXT' }, { type: 'HTML' }]
-  }
-}
-
 const formatRfcNumber = (number: number): string => {
   return `RFC${number.toString()}`
 }
@@ -281,13 +168,7 @@ const stringifyRFC = (
   let also = ''
   let doi = ''
 
-  const missingRfc = missingData[rfcMetadata.number]
-
-  const rfc: RfcMetadata & Partial<ExtraFieldsNeeded> = {
-    ...missingRfc,
-    ...rfcMetadata,
-    authors: [...toArray(missingRfc?.authors), ...toArray(rfcMetadata?.authors)]
-  }
+  const rfc = getRFCWithExtraFields(rfcMetadata)
 
   if (rfc.title === 'Not Issued') {
     return 'Not Issued.'
@@ -333,7 +214,7 @@ const stringifyRFC = (
     }
 
     doi = stringifyIdentifiers(rfc.identifiers)
-    return `${rfc.title}. ${rfc.authors.map(stringifyAuthor).join(', ')}. ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
+    return `${rfc.title}. ${rfc.authors.map(formatAuthor).join(', ')}. ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
   }
 }
 
@@ -414,11 +295,6 @@ See the RFC Editor Web page http://www.rfc-editor.org
                                 ---------
 
 `
-}
-
-const toArray = (obj: unknown) => {
-  if (!obj) return []
-  return Array.isArray(obj) ? obj : [obj]
 }
 
 export const splitLinesAt = (str: string, lineLength: number): string[] => {
