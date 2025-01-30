@@ -5,6 +5,7 @@ import type { ExtraFieldsNeeded } from './rfc.mocks'
 import { getRFCWithExtraFields } from './rfc.mocks'
 import { formatAuthor } from './rfc'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
+import { setTimeoutPromise } from './promises'
 
 // Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
 // because vitest can't import that later filename
@@ -135,9 +136,6 @@ export async function renderRfcIndexDotTxt({
     offset += response.results.length
   }
 }
-
-const setTimeoutPromise = (timerMs: number) =>
-  new Promise((resolve) => setTimeout(resolve, timerMs))
 
 const stringifyIdentifiers = (
   identifiers: RfcMetadata['identifiers']

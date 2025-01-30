@@ -33,6 +33,22 @@ export default defineNuxtConfig({
       stylistic: true
     }
   },
+  nitro: {
+    // Production
+    storage: {
+      db: {
+        driver: 'fs',
+        base: './data/db'
+      }
+    },
+    // Development
+    devStorage: {
+      db: {
+        driver: 'fs',
+        base: './data/db'
+      }
+    }
+  },
   routeRules: {
     // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
     '/': {
@@ -40,6 +56,10 @@ export default defineNuxtConfig({
       prerender: true
     },
     '/rfc-index.txt': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
+    '/rfc-index/': {
       swr: oneDayInSeconds,
       prerender: true
     },
