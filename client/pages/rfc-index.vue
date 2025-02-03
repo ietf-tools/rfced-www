@@ -5,7 +5,7 @@
         RFC Index
       </Heading>
       <p class="leading-6 mb-2 pl-5 md:p-0 md:w-1/2">
-        CREATED ON: Jan - 28 - 2025
+        CREATED ON: {{ createdOn }}
       </p>
     </SectionHeader>
     <div class="container mx-auto mt-10">
@@ -13,13 +13,13 @@
         This file contains citations for all RFCs in numeric order. RFC
         citations appear in this format:
       </p>
-
       <RFCIndexTable
-        :rfcSummaries="exampleRfcSummaries"
-        isExample
+        :rfc-summaries="exampleRfcSummaries"
+        is-example
       ></RFCIndexTable>
+
       <p>For example:</p>
-      <RFCIndexTable :rfcSummaries="exampleRfcSummaries"></RFCIndexTable>
+      <RFCIndexTable :rfc-summaries="exampleRfcSummaries"></RFCIndexTable>
 
       <h2>Key to Citations</h2>
       <ul>
@@ -67,15 +67,15 @@
       </p>
 
       <Alert
+        v-if="error"
         variant="warning"
         level="1"
-        v-if="error"
         heading="Error loading RFCs"
       >
         {{ error }}
       </Alert>
 
-      <RFCIndexTable v-if="rfcs" :rfcSummaries="rfcSummaries"></RFCIndexTable>
+      <RFCIndexTable v-if="rfcs" :rfc-summaries="rfcSummaries"></RFCIndexTable>
     </div>
   </div>
 </template>
@@ -83,82 +83,20 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import { ApiClient } from '~/generated/red-client'
-import { setTimeoutPromise } from '~/utilities/promises'
-import { formatAuthor } from '~/utilities/rfc'
-import { getRFCWithExtraFields } from '~/utilities/rfc.mocks'
+import { getAllRFCs } from '~/utilities/redClientWrappers'
+import { rfcToRfcSummary } from '~/utilities/rfc-index-html'
 import { PRIVATE_API_URL, PUBLIC_SITE, rfcPathBuilder } from '~/utilities/url'
-const CACHE_KEY = 'rfc-index.html'
 
-type DocListArg = Parameters<ApiClient['red']['docList']>[0]
-
-type DocListRfc = ReturnType<typeof getRFCWithExtraFields>
-
-const { data: rfcs, error } = await useAsyncData(CACHE_KEY, async () => {
-  const abortController = new AbortController()
-  const delayBetweenRequestsMs = 50
-  const rfcs: ReturnType<typeof getRFCWithExtraFields>[] = []
-
-  const redApi = new ApiClient({ baseUrl: PRIVATE_API_URL })
-
-  const docListArg: DocListArg = {}
-  docListArg.sort = ['-number'] // sort by oldest RFC to find the end
-  docListArg.limit = 1 // we only need one result
-  const response = await redApi.red.docList(docListArg)
-  const largestRfcNumber = response.results[0].number
-
-  docListArg.sort = ['number'] // sort by first RFC
-  let offset = 0
-
-  while (!abortController.signal.aborted) {
-    docListArg.offset = offset
-    docListArg.limit = 1000
-
-    const response = await redApi.red.docList(docListArg)
-    offset += response.results.length
-
-    rfcs.push(
-      ...response.results.map((rfcMetadata) =>
-        getRFCWithExtraFields(rfcMetadata)
-      )
-    )
-
-    if (
-      response.results.some(
-        (rfcMetadata) => rfcMetadata.number === largestRfcNumber
-      )
-    ) {
-      break
-    }
-
-    if (delayBetweenRequestsMs > 0) {
-      await setTimeoutPromise(delayBetweenRequestsMs)
-    }
-  }
-
-  return rfcs
-})
-
+const DE_DUP_KEY = 'rfc-index.html'
+const createdOn = DateTime.now().toFormat('d LLLL yyyy')
+const apiClient = new ApiClient({ baseUrl: PRIVATE_API_URL })
+const { data: rfcs, error } = await useAsyncData(DE_DUP_KEY, () =>
+  getAllRFCs(apiClient)
+)
 const rfcSummaries = computed(() => {
   if (!rfcs.value) return []
-
-  return rfcs.value.map((rfc) => {
-    const [month, year] = DateTime.fromISO(rfc.published)
-      .toFormat('LLLL yyyy')
-      .split(' ')
-
-    const body = h(
-      'span',
-      `${rfc.authors.map(formatAuthor)} [ ${month} ${year} ] ${rfc.formats ? `(${rfc.formats.map((format) => format.type).join(', ')})` : ''} (Status: ${rfc.status.name}) (Stream: ${rfc.stream.name}) ${rfc.identifiers ? `(${rfc.identifiers.map((identifier) => `${identifier.type}: ${identifier.value}`)})` : ''}`
-    )
-
-    return {
-      number: rfc.number,
-      heading: rfc.title,
-      body
-    }
-  })
+  return rfcs.value.map(rfcToRfcSummary)
 })
-
 const rfcSummary5234 = rfcSummaries.value?.find((rfc) => rfc.number === 5234)
 const exampleRfcSummaries = rfcSummary5234 ? [rfcSummary5234] : []
 </script>

@@ -3,8 +3,8 @@ import { XMLBuilder } from 'fast-xml-parser'
 import { getRFCWithExtraFields } from './rfc.mocks'
 import { formatAuthor } from './rfc'
 import { rfcErrataPathBuilder } from './url'
-import type { ApiClient } from '~/generated/red-client'
 import { setTimeoutPromise } from './promises'
+import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 

@@ -21,8 +21,8 @@
         </td>
       </TableRow>
       <TableRow
-        v-else
         v-for="rfcSummary in rfcSummaries"
+        v-else
         :key="rfcSummary.number.toString()"
       >
         <td>

@@ -4,8 +4,8 @@ import { SPACE } from './strings'
 import type { ExtraFieldsNeeded } from './rfc.mocks'
 import { getRFCWithExtraFields } from './rfc.mocks'
 import { formatAuthor } from './rfc'
-import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 import { setTimeoutPromise } from './promises'
+import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
 // Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
 // because vitest can't import that later filename
