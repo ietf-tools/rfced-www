@@ -4,6 +4,7 @@ import { SPACE } from './strings'
 import type { ExtraFieldsNeeded } from './rfc.mocks'
 import { getRFCWithExtraFields } from './rfc.mocks'
 import { formatAuthor } from './rfc'
+import { setTimeoutPromise } from './promises'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
 // Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
@@ -135,9 +136,6 @@ export async function renderRfcIndexDotTxt({
     offset += response.results.length
   }
 }
-
-const setTimeoutPromise = (timerMs: number) =>
-  new Promise((resolve) => setTimeout(resolve, timerMs))
 
 const stringifyIdentifiers = (
   identifiers: RfcMetadata['identifiers']

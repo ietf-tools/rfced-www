@@ -3,6 +3,7 @@ import { XMLBuilder } from 'fast-xml-parser'
 import { getRFCWithExtraFields } from './rfc.mocks'
 import { formatAuthor } from './rfc'
 import { rfcErrataPathBuilder } from './url'
+import { setTimeoutPromise } from './promises'
 import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
@@ -39,8 +40,7 @@ const xmlBuilderOptions: XMLBuilderOptions = {
   attributeNamePrefix: '',
   format: true,
   suppressBooleanAttributes: true,
-  indentBy: '  ',
-  textNodeName: '#text'
+  indentBy: '  '
 }
 
 // const renderBCPs = async (props: Props): Promise<void> => {
@@ -64,12 +64,8 @@ const renderRFCs = async ({
   docListArg.limit = 1 // we only need one result
   const response = await redApi.red.docList(docListArg)
   const largestRfcNumber = response.results[0].number
-  // const longestRfcNumberLength = largestRfcNumber.toString().length
 
-  const builder = new XMLBuilder({
-    ...xmlBuilderOptions,
-    arrayNodeName: 'rfc-entry'
-  })
+  const builder = new XMLBuilder(xmlBuilderOptions)
 
   docListArg.sort = ['number'] // sort by first RFC
   let offset = 0
@@ -208,6 +204,3 @@ const renderRFCs = async ({
 //   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
 //   // FIXME: render STDs
 // }
-
-const setTimeoutPromise = (timerMs: number) =>
-  new Promise((resolve) => setTimeout(resolve, timerMs))

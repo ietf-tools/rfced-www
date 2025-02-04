@@ -80,14 +80,14 @@ export const parseRFCId = (title: string): RFCId => {
   if (parts?.length === 2) {
     return {
       type: parts[0].toUpperCase(),
-      number: parts[1]
+      number: parseInt(parts[1], 10).toString()
     }
   }
 
   if (parts?.length === 3) {
     return {
       type: parts[0].toUpperCase(),
-      number: parts[1],
+      number: parseInt(parts[1], 10).toString(),
       title: parts[2]
     }
   }
