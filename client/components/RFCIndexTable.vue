@@ -2,15 +2,16 @@
   <Table>
     <thead>
       <tr>
-        <th><abbr title="Number">Num</abbr></th>
-        <th>Information</th>
+        <th class="text-left p-1">
+          <abbr title="Number" class="underline-none">Num</abbr>
+        </th>
+        <th class="text-left p-1">Information</th>
       </tr>
     </thead>
     <tbody>
       <TableRow v-if="props.isExample" key="example">
         <td>#####</td>
         <td>
-          <h2 class="inline font-inherit">title</h2>
           <p>
             Title of RFC Author list [ Month Year ] (Format) (Obsoletes xxxx)
             (Obsoleted-By xxxx) (Updates xxxx) (Updated-By xxxx) (Also zzz##)
@@ -21,21 +22,18 @@
         </td>
       </TableRow>
       <TableRow
-        v-for="rfcSummary in rfcSummaries"
+        v-for="rfcRow in rfcRows"
         v-else
-        :key="rfcSummary.number.toString()"
+        :key="rfcRow.number.toString()"
       >
-        <td>
-          <a :href="rfcPathBuilder(`rfc${rfcSummary.number}`)">
-            {{ rfcSummary.number }}
+        <td class="text-right align-top p-1">
+          <a :href="rfcPathBuilder(`rfc${rfcRow.number}`)" class="font-mono">
+            {{ rfcRow.number }}
           </a>
         </td>
-        <td>
-          <h2 class="inline font-inherit">
-            {{ rfcSummary.heading }}
-          </h2>
+        <td p-1>
           <p>
-            <Renderable :val="rfcSummary.body" />
+            <Renderable :val="rfcRow.information" />
           </p>
         </td>
       </TableRow>
@@ -46,10 +44,10 @@
 <script setup lang="ts">
 import { rfcPathBuilder } from '~/utilities/url'
 
-type RfcSummary = { number: number; heading: string; body: VNode }
+type RfcRow = { number: number; information: VNode }
 
 type Props = {
-  rfcSummaries: RfcSummary[]
+  rfcRows: RfcRow[]
   isExample?: boolean
 }
 

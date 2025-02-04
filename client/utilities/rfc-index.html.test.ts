@@ -4,7 +4,7 @@ import { renderToString } from 'vue/server-renderer'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { isVNode } from 'vue'
-import { rfcToRfcSummary, rfcCommaList } from './rfc-index-html'
+import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
 import { getAllRFCs } from './redClientWrappers'
 import { PRIVATE_API_URL, rfcPathBuilder } from './url'
 import {
@@ -27,7 +27,7 @@ test('rfcCommaList', () => {
   expect(isVNode(result[2])).toBeTruthy()
 })
 
-describe('rfcToRfcSummary for /rfc-index/', () => {
+describe('rfcToRfcIndexRow for /rfc-index/', () => {
   beforeEach(() => {
     // tell vitest we use mocked time
     vi.useFakeTimers({ shouldAdvanceTime: true })
@@ -38,7 +38,7 @@ describe('rfcToRfcSummary for /rfc-index/', () => {
     vi.useRealTimers()
   })
 
-  test('rfcToRfcSummary', async () => {
+  test('rfcToRfcIndexRow', async () => {
     const apiClient = getTestApiClient({
       oldestRfcResponse: twoDigitOldestRfcResponse,
       seekingResponses: [twoDigitRFCDocListResponse]
@@ -46,13 +46,13 @@ describe('rfcToRfcSummary for /rfc-index/', () => {
     const rfcs = await getAllRFCs(apiClient)
     const rfcSummariesAsVNodes = rfcs.map(
       // This is the thing we're testing
-      rfcToRfcSummary
+      rfcToRfcIndexRow
     )
     const rfcSummariesWithExtraHTML = await Promise.all(
       rfcSummariesAsVNodes.map((rfcSummaryAsVNode) =>
         // Returns HTML that looks like
         //   <span><!--[-->S. Crocker<!--]--> [ April 1969 ] (TXT, HTML)<!--[--><!--]--> (Status: unknown) (Stream: Legacy)(doi: 10.17487/RFC0001)</span>"
-        renderToString(rfcSummaryAsVNode.body, {})
+        renderToString(rfcSummaryAsVNode.information, {})
       )
     )
     const rfcSummaries = rfcSummariesWithExtraHTML.map(

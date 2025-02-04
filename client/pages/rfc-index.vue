@@ -9,20 +9,17 @@
       </p>
     </SectionHeader>
     <div class="container mx-auto mt-10">
-      <p class="leading-6 mb-10 pl-5 md:p-0 md:w-1/2">
+      <p class="leading-6 mb-2 pl-5 md:p-0 md:w-1/2">
         This file contains citations for all RFCs in numeric order. RFC
         citations appear in this format:
       </p>
-      <RFCIndexTable
-        :rfc-summaries="exampleRfcSummaries"
-        is-example
-      ></RFCIndexTable>
+      <RFCIndexTable :rfc-rows="exampleRfcSummaries" is-example></RFCIndexTable>
 
       <p>For example:</p>
-      <RFCIndexTable :rfc-summaries="exampleRfcSummaries"></RFCIndexTable>
+      <RFCIndexTable :rfc-rows="exampleRfcSummaries"></RFCIndexTable>
 
-      <h2>Key to Citations</h2>
-      <ul>
+      <Heading level="2" class="mt-4 mb-2">Key to Citations</Heading>
+      <ul class="list-disc ml-6">
         <li>#### is the RFC number.</li>
         <li>
           Following the number are the title, the author list, and the
@@ -62,8 +59,8 @@
         <li>The DOI field gives the Digital Object Identifier.</li>
       </ul>
       <p>
-        See the
-        <a :href="PUBLIC_SITE">RFC Editor Web page</a> for more information.
+        See the <a :href="PUBLIC_SITE">RFC Editor Web page</a> for more
+        information.
       </p>
 
       <Alert
@@ -75,7 +72,8 @@
         {{ error }}
       </Alert>
 
-      <RFCIndexTable v-if="rfcs" :rfc-summaries="rfcSummaries"></RFCIndexTable>
+      <Heading v-if="rfcs" level="1" class="mt-6 mb-3">RFC Index</Heading>
+      <RFCIndexTable v-if="rfcs" :rfc-rows="rfcRows"></RFCIndexTable>
     </div>
   </div>
 </template>
@@ -84,7 +82,7 @@
 import { DateTime } from 'luxon'
 import { ApiClient } from '~/generated/red-client'
 import { getAllRFCs } from '~/utilities/redClientWrappers'
-import { rfcToRfcSummary } from '~/utilities/rfc-index-html'
+import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
 import { PRIVATE_API_URL, PUBLIC_SITE, rfcPathBuilder } from '~/utilities/url'
 
 const DE_DUP_KEY = 'rfc-index.html'
@@ -93,10 +91,10 @@ const apiClient = new ApiClient({ baseUrl: PRIVATE_API_URL })
 const { data: rfcs, error } = await useAsyncData(DE_DUP_KEY, () =>
   getAllRFCs(apiClient)
 )
-const rfcSummaries = computed(() => {
+const rfcRows = computed(() => {
   if (!rfcs.value) return []
-  return rfcs.value.map(rfcToRfcSummary)
+  return rfcs.value.map(rfcToRfcIndexRow)
 })
-const rfcSummary5234 = rfcSummaries.value?.find((rfc) => rfc.number === 5234)
+const rfcSummary5234 = rfcRows.value?.find((rfc) => rfc.number === 5234)
 const exampleRfcSummaries = rfcSummary5234 ? [rfcSummary5234] : []
 </script>

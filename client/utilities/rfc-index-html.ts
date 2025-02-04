@@ -6,12 +6,12 @@ import { COMMA } from './strings'
 
 type Rfc = Awaited<ReturnType<typeof getAllRFCs>>[number]
 
-export const rfcToRfcSummary = (rfc: Rfc) => {
+export const rfcToRfcIndexRow = (rfc: Rfc) => {
   const [month, year] = DateTime.fromISO(rfc.published)
     .toFormat('LLLL yyyy')
     .split(' ')
 
-  const body = h('span', [
+  const information = h('span', [
     h('b', rfc.title),
     ' ',
     ...rfc.authors.map(formatAuthor),
@@ -38,8 +38,7 @@ export const rfcToRfcSummary = (rfc: Rfc) => {
 
   return {
     number: rfc.number,
-    heading: rfc.title,
-    body
+    information
   }
 }
 
