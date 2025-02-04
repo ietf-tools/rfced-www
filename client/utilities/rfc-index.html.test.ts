@@ -137,7 +137,7 @@ const extractRfcSummaries = (document: unknown) => {
         /**
            The HTML looks like this:
 
-             <script> doStandardDocLink(&apos;RFC9280&apos;); </script>
+             <script type="text/javascript"> doStandardDocLink(&apos;RFC9280&apos;); </script>
              <noscript>9280</noscript>
 
            which is converted to:
@@ -161,7 +161,7 @@ const extractRfcSummaries = (document: unknown) => {
         /**
            The HTML looks like this:
 
-             <script> doStandardDocLink(&apos;RFC9280&apos;); </script>
+             <script type="text/javascript"> doStandardDocLink(&apos;RFC9280&apos;); </script>
              <noscript>RFC9280</noscript>
 
            which is converted to:

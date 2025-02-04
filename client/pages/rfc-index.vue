@@ -62,7 +62,6 @@
         See the <a :href="PUBLIC_SITE">RFC Editor Web page</a> for more
         information.
       </p>
-
       <Alert
         v-if="error"
         variant="warning"
@@ -71,10 +70,9 @@
       >
         {{ error }}
       </Alert>
-
-      <Heading v-if="rfcs" level="2" styleLevel="1" class="mt-6 mb-3"
-        >RFC Index</Heading
-      >
+      <Heading v-if="rfcs" level="2" style-level="1" class="mt-6 mb-3">
+        RFC Index
+      </Heading>
       <RFCIndexTable v-if="rfcs" :rfc-rows="rfcRows"></RFCIndexTable>
     </div>
   </div>
