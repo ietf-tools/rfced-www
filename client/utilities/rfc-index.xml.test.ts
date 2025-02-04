@@ -8,14 +8,14 @@ import { renderRfcIndexDotXml } from './rfc-index-xml'
 import { PRIVATE_API_URL } from './url'
 import { parseRFCId } from './rfc'
 import {
-  ApiClient,
-  type PaginatedRfcMetadataList
-} from '~/generated/red-client'
-import {
   blankRfcResponse,
   twoDigitOldestRfcResponse,
   twoDigitRFCDocListResponse
 } from './rfc.test'
+import {
+  ApiClient,
+  type PaginatedRfcMetadataList
+} from '~/generated/red-client'
 
 const originalXMLString = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.xml'), 'utf-8')

@@ -1,7 +1,10 @@
-import { vi, describe, beforeEach, afterEach, it, expect } from 'vitest'
+import path from 'node:path'
 import fs from 'node:fs'
+import { renderToString } from 'vue/server-renderer'
+import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
-import { rfcToRfcSummary } from './rfc-index-html'
+import { isVNode } from 'vue'
+import { rfcToRfcSummary, rfcCommaList } from './rfc-index-html'
 import { getAllRFCs } from './redClientWrappers'
 import { PRIVATE_API_URL, rfcPathBuilder } from './url'
 import {
@@ -10,14 +13,62 @@ import {
   twoDigitRFCDocListResponse,
   type DocListResponse
 } from './rfc.test'
+import { parseRFCId } from './rfc'
 import {
   ApiClient,
   type PaginatedRfcMetadataList
 } from '~/generated/red-client'
-import path from 'node:path'
-import {} from 'vue'
-import { renderToString } from 'vue/server-renderer'
-import { parseRFCId } from './rfc'
+
+test('rfcCommaList', () => {
+  const result = rfcCommaList([{ number: 1 }, { number: 2 }])
+  expect(result).toHaveLength(3)
+  expect(isVNode(result[0])).toBeTruthy()
+  expect(result[1]).toBe(' , ')
+  expect(isVNode(result[2])).toBeTruthy()
+})
+
+describe('rfcToRfcSummary for /rfc-index/', () => {
+  beforeEach(() => {
+    // tell vitest we use mocked time
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+  })
+
+  afterEach(() => {
+    // restoring date after each test run
+    vi.useRealTimers()
+  })
+
+  test('rfcToRfcSummary', async () => {
+    const apiClient = getTestApiClient({
+      oldestRfcResponse: twoDigitOldestRfcResponse,
+      seekingResponses: [twoDigitRFCDocListResponse]
+    })
+    const rfcs = await getAllRFCs(apiClient)
+    const rfcSummariesAsVNodes = rfcs.map(
+      // This is the thing we're testing
+      rfcToRfcSummary
+    )
+    const rfcSummariesWithExtraHTML = await Promise.all(
+      rfcSummariesAsVNodes.map((rfcSummaryAsVNode) =>
+        // Returns HTML that looks like
+        //   <span><!--[-->S. Crocker<!--]--> [ April 1969 ] (TXT, HTML)<!--[--><!--]--> (Status: unknown) (Stream: Legacy)(doi: 10.17487/RFC0001)</span>"
+        renderToString(rfcSummaryAsVNode.body, {})
+      )
+    )
+    const rfcSummaries = rfcSummariesWithExtraHTML.map(
+      (rfcSummaryWithExtraHTML) =>
+        rfcSummaryWithExtraHTML
+          .replace(/<!--[\s\S]*?-->/g, '')
+          .replace(/^<span>/i, '')
+          .replace(/<\/span>$/i, '')
+    )
+
+    rfcSummaries.forEach((rfcSummary, index) => {
+      const originalRfcSummary = originalRfcSummaries[index][1]
+      expect(rfcSummary).toBe(originalRfcSummary)
+    })
+  })
+})
 
 const originalRfcIndexHtml = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.html'), 'utf-8')
@@ -25,6 +76,7 @@ const originalRfcIndexHtml = fs
 
 const parseHtml = (html: string) => {
   const parser = new XMLParser({
+    // Makes it parse HTML too
     preserveOrder: true,
     ignoreAttributes: false,
     unpairedTags: ['hr', 'br', 'link', 'meta'],
@@ -57,7 +109,7 @@ const extractRfcSummaries = (document: unknown) => {
   }
   const root = document[0]['html']
   const body = root[1]['body']
-  const tables = body.filter((row: { table?: any }) => Boolean(row.table))
+  const tables = body.filter((row: { table?: unknown }) => Boolean(row.table))
   const rfcsTable = tables[2]
   const rows = rfcsTable.table
   if (!Array.isArray(rows)) {
@@ -65,10 +117,12 @@ const extractRfcSummaries = (document: unknown) => {
     throw Error('Bad param rows')
   }
   const builder = new XMLBuilder(xmlBuilderOptions)
-  const htmlRows = rows.map((row: any) => {
-    /** Don't use regex for HTML...unless it's a very specific structure which this is
-        (ie, we're not dealing with arbitrary HTML so this is safe)
-    */
+  const htmlRows = rows.map((row: { tr: { td: unknown }[] }) => {
+    /** Everyone knows you shouldn't use regex for HTML
+     *
+     *  ...unless it's a very specific structure which this is
+     *  (ie, we're not dealing with arbitrary HTML so this is safe)
+     */
 
     const numCell = row.tr[0]
     const numWithScripts: string = builder.build(numCell.td)
@@ -90,7 +144,7 @@ const extractRfcSummaries = (document: unknown) => {
 
            <a href="/info/rfc9280/">RFC9280</a>
         */
-        return `<a href="${rfcPathBuilder(`RFC${rfcNumber}`)}">${parseInt(rfcNumber, 10)}</a>`
+        return `<a href="${rfcPathBuilder(`RFC${parseInt(rfcNumber, 10)}`)}">${parseInt(rfcNumber, 10)}</a>`
       })
       .replace(/[\s]+/g, ' ') // normalise the whitespace
       .trim()
@@ -158,43 +212,3 @@ const getTestApiClient = (responses: TestHelperResponses) => {
 
   return redApiMock
 }
-
-describe('renderRfcIndexDotTxt', () => {
-  beforeEach(() => {
-    // tell vitest we use mocked time
-    vi.useFakeTimers({ shouldAdvanceTime: true })
-  })
-
-  afterEach(() => {
-    // restoring date after each test run
-    vi.useRealTimers()
-  })
-
-  it('original rfc-index.html rendering', async () => {
-    const apiClient = getTestApiClient({
-      oldestRfcResponse: twoDigitOldestRfcResponse,
-      seekingResponses: [twoDigitRFCDocListResponse]
-    })
-    const rfcs = await getAllRFCs(apiClient)
-    const rfcSummariesAsVNodes = rfcs.map(rfcToRfcSummary)
-    const rfcSummariesWithExtraHTML = await Promise.all(
-      rfcSummariesAsVNodes.map((rfcSummaryAsVNode) =>
-        // Returns HTML that looks like
-        //   <span><!--[-->S. Crocker<!--]--> [ April 1969 ] (TXT, HTML)<!--[--><!--]--> (Status: unknown) (Stream: Legacy)(doi: 10.17487/RFC0001)</span>"
-        renderToString(rfcSummaryAsVNode.body, {})
-      )
-    )
-    const rfcSummaries = rfcSummariesWithExtraHTML.map(
-      (rfcSummaryWithExtraHTML) =>
-        rfcSummaryWithExtraHTML
-          .replace(/<!--[\s\S]*?-->/g, '')
-          .replace(/^<span>/i, '')
-          .replace(/<\/span>$/i, '')
-    )
-
-    rfcSummaries.forEach((rfcSummary, index) => {
-      const originalRfcSummary = originalRfcSummaries[index][1]
-      expect(rfcSummary).toBe(originalRfcSummary)
-    })
-  })
-})

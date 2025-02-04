@@ -1,6 +1,6 @@
-import { ApiClient } from '~/generated/red-client'
 import { getRFCWithExtraFields } from './rfc.mocks'
 import { setTimeoutPromise } from './promises'
+import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
