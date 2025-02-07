@@ -1,0 +1,329 @@
+<!DOCTYPE html SYSTEM 'about:legacy-compat'>
+<html>
+<head>
+
+	<title>The Use of Non-ASCII Characters in RFCs</title>
+	<meta name='description' content='non-ASCII in RFCs' />
+	<meta name='keywords' content='RFC, ASCII, UTF-8' />
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+
+	<link rel='stylesheet' type='text/css' href='css/main.css' />
+
+</head>
+
+<body>
+
+	<div id='document'>
+		<div class='identifiers'>
+			<div>Posted: <span class='published'>2014-05-05</span></div>
+			<div class='docName'>draft-flanagan-nonascii</div>
+			<div>Version: <span class='version'>02</span></div>
+		</div>
+		<div class='authors'>
+			<div class='author'>
+				<span class='initial'>H.</span>
+				<span class='surname'>Flanagan</span>
+				<span class='company'>RFC Editor</span>
+			</div>
+		</div>
+	</div>
+
+	<h1 id='title'>The Use of Non-ASCII Characters in RFCs</h1>
+
+	<div id='abstract'>
+		<h2>Abstract</h2>
+		<p id='abstract-p-0'>In order to support the internationalization of protocols and a more diverse Internet community, the RFC Series must evolve to allow for the use of non-ASCII characters in RFCs.  While English remains the accepted language of the Series, the encoding of future RFCs will be in UTF-8.  This document describes the RFC Editor requirements and guidance regarding the use of non-ASCII characters in RFCs.</p>
+	</div>
+
+<!--	<h2>Copyright Notice</h2>
+	<p>Copyright © 2014 IETF Trust and the persons identified as the document authors. All rights reserved.</p>-->
+
+	<div id='toc'>
+	<h2>Table of Contents</h2>
+	<ul class='toc'>
+		<li><div>1. <a href='#introduction'>Introduction</a></div></li>
+		<li><div>2. <a href='#requirements'>Basic requirements</a></div></li>
+		<li><div>3. <a href='#rules'>Rules for the use of non-ASCII characters</a></div>
+			<ul>
+				<li><div>3.1. <a href='#gen-usage'>General usage throughout a document</a></div></li>
+				<li><div>3.2. <a href='#person'>Authors, Contributors, and Acknowledgments</a></div></li>
+				<li><div>3.3. <a href='#company'>Company Names</a></div></li>
+				<li><div>3.4. <a href='#body-doc'>Body of the document</a></div></li>
+				<li><div>3.5. <a href='#tables'>Tables</a></div></li>
+				<li><div>3.6. <a href='#code'>Code components</a></div></li>
+				<li><div>3.7. <a href='#biblio'>Bibliographic text</a></div></li>
+				<li><div>3.8. <a href='#keyw'>Keywords</a></div></li>
+				<li><div>3.9. <a href='#address'>Address Information</a></div></li>
+			</ul></li>
+		<li><div>4. <a href='#normalization'>Normalization Forms</a></div></li>
+		<li><div>5. <a href='#iana'>IANA Considerations</a></div></li>
+		<li><div>6. <a href='#i18n'>Internationalization Considerations</a></div></li>
+		<li><div>7. <a href='#security'>Security Considerations</a></div></li>
+		<li><div>8. <a href='#references'>References</a></div></li>
+		<li><div><a href='#acknowledgements'>Acknowledgements</a></div></li>
+		<li><div><a href='#authors'>Author's Address</a></div></li>
+	</ul>
+</div>
+
+
+	<div id='introduction' class='section'>
+	<h2><a class='self-ref' href='#introduction'>1.</a>  Introduction</h2>
+	<a class='self' href='#p1'>[#p1]</a>
+
+	<p id='introduction-p-0'>For much of the history of the RFC Series, the character encoding used for RFCs has been ASCII [<a href='#ASCII'>ASCII</a>].  This was a sensible choice at the time: the language of the Series is English, a language that only uses ASCII-encoded characters (ignoring for a moment words borrowed from more richly decorated alphabets); and, ASCII is the 'lowest common denominator' for character encoding, making cross-platform viewing trivial.</p>
+	<p id='introduction-p-1'>There are limits ASCII, however, that hinder its continued use as the exclusive character encoding for the Series.  The increasing need for easily readable, internationalized content suggests it is time to allow non-ASCII characters in RFCs where necessary.  To support this move away from ASCII, RFCs will switch to supporting UTF-8 as the default character encoding [<a href='#RFC6949'>RFC6949</a>].</p>
+	<p id='introduction-p-2'>Given the continuing goal of maximum readability across platforms, the use of non-ASCII characters should be limited in a document to only where necessary within the text.  This document describes the rules under which non-ASCII characters may be used in an RFC.  These rules will be applied as the necessary changes are made to submission checking and editorial tools.</p>
+</div>
+
+	<div id='requirements' class='section'>
+	<h2><a class='self-ref' href='#requirements'>2.</a>  Basic requirements</h2>
+	<p id='requirements-p-0'>Two fundamental requirements inform the guidance and examples provided in this document.  They are: </p>
+	<ul>
+		<li>Searches against RFC indexes and database tables need to return expected results andsupport appropriate Unicode string matching behaviors;</li>
+		<li>RFCs must be able to display correctly across a wide range of readers and browsers.  People whose system does not have the fonts needed to display a particular RFC need to be able to read the non- canonical HTML, text, or PDF RFC correctly.</li>
+	</ul>
+</div>
+
+	<div id='rules' class='section'>
+	<h2><a class='self-ref' href='#rules'>3.</a>  Rules for the use of non-ASCII characters</h2>
+	<p id='rules-p-0'>This section describes the guidelines for the use of non-ASCII characters in the header, body, and reference sections of an RFC.  If the RFC Editor identifies areas where the use of non-ASCII characters negatively impacts the readability of the text, they will request alternate text.</p>
+	<p id='rules-p-1'>The RFC Editor may, in cases of entire words represented in non-ASCII characters, ask for a set of reviewers to verify the meaning, spelling, characters, and grammar of the text.</p>
+</div>
+
+		<div class='section' id='gen-usage'>
+	<h3><a class='self-ref' href='#gen-usage'>3.1.</a>  General usage throughout a document</h3>
+	<p id='gen-usage-p-0'>Where the use of non-ASCII characters is purely as part of an example and not otherwise required for correct protocol operation, escaping the Unicode character is not required.  Note, however, that as the language of the RFC Series is English, the use of non-ASCII characters is based on the spelling of words commonly used in the English language following the guidance in the Merriam-Webster dictionary [<a href='#MerrWeb'>MerrWeb</a>].</p>
+	<p id='gen-usage-p-1'>The RFC Editor will use the primary spelling listed in the dictionary by default.</p>
+
+	Example of non-ASCII characters that do not require escaping[<a href='#RFC4475'>RFC4475</a>]:
+
+	<figure id='fig-1'>
+		<pre>This particular response contains unreserved and non-ascii UTF-8 characters.
+This response is well formed.  A parser must accept this message.
+Message Details : unreason
+SIP/2.0 200 = 2**3 * 5**2 но сто девяносто девять - простое
+Via: SIP/2.0/UDP 192.0.2.198;branch=z9hG4bK1324923
+Call-ID: unreason.1234ksdfak3j2erwedfsASdf
+CSeq: 35 INVITE
+From: sip:user@example.com;tag=11141343
+To: sip:user@example.edu;tag=2229 Content-Length: 154
+Content-Type: application/sdp
+		</pre>
+		<figcaption>Figure 1: Sample output derived from original, ASCII-only example in <a href='#RFC4475'>RFC 4475</a></figcaption>
+	</figure>
+</div>
+
+		<div class='section' id='person'>
+	<h3><a class='self-ref' href='#person'>3.2.</a>  Authors, Contributors, and Acknowledgments</h3>
+	<p id='person-p-0'>Person names may appear in several places within an RFC.  In all cases, valid Unicode is required.  For names that include non-ASCII characters, an author-provided, ASCII-only identifier is required to assist in search and indexing of the document.</p>
+	
+	Example for the header:
+	<figure>
+		<div class='preformatted'>
+			<div class='authors'>
+				<div class='author'>
+					<span class='initial'>L.</span>
+					<span class='surname'>Daigle</span>
+					<div>(<span class='company'>Thinking Cat Enterprises</span>)</div>
+				</div>
+				<div class='author'>
+					<span class='initial'>D.</span>
+					<span class='surname'>van Gulik</span>
+					<div>(<span class='company'>ISIS/CEO, JRC Ispra</span>)</div>
+				</div>
+				<div class='author'>
+					<span class='initial'>R.</span>
+					<span class='surname'>Iannella</span>
+					<div>(<span class='company'>DSTC Pty Ltd</span>)</div>
+				</div>
+				<div class='author'>
+					<span class='initial'>P.</span>
+					<span class='surname'>Fältström</span>
+					<div>(<span class='surname-ascii'>Falstrom</span>)</div>
+					<div>(<span class='company'>Tele2/Swipnet</span>)</div>
+				</div>
+			</div>
+			<div class='identifiers'>
+				<div class='workgroup'>Network Working Group</div>
+				<div class='series'>Requests for Comments</div>
+				<div class='number'>2611</div>
+				<div class='status'>BCP</div>
+				<div class='seriesNo'>33</div>
+				<div class='published'>June 1999</div>
+			</div>
+		</div>
+		<figcaption>Figure 2: Sample output derived from original, ASCII-only example in <a href='#RFC2611'>RFC 2611</a></figcaption>
+	</figure>
+
+	Example for the Acknowledgements:
+	<figure>
+		<div class='preformatted'>
+			The following people contributed significant text to early versions of this draft: Patrik Fältström (Patrik Faltstrom), 陈智昌 (William Chan), and Fred Baker.
+		</div>
+		<figcaption>Figure 3: Sample output dervied from original, ASCII-only example in ???</figcaption>
+	</figure>
+
+	Example of Code:
+	<figure>
+<pre><code>
+&lt;div class='section' id='example'>
+	&lt;h2>&lt;a class='self-ref' href='#example'>1.&lt;/a> Example Section&lt;/h2>
+	&lt;p>This is a description of the example&lt;/p>
+	&lt;div class='section' id='nested'>
+		&lt;h3>&lt;a class='self-ref' href='#nested'>1.1.&lt;/a> Nested Section&lt;/h3>
+		&lt;p>This is a description of the nested section.&lt;/p>
+		&lt;p>This is the second description paragraph.&lt;/p>
+	&lt;/div>
+&lt;/div>
+</code></pre>
+		<figcaption>This is an example of code.</figcaption>
+	</figure>
+</div> <!-- TODO: This closing div was missing -->
+
+		<div class='section' id='company'>
+	<h3><a class='self-ref' href='#company'>3.3.</a> Company Names</h3>
+	<p id='company-p-0'>Company names may appear in several places within an RFC.  The rules for company names follow similar guidance to that of person names.  Valid Unicode is required.  For company names that include non-ASCII characters, an ASCII-only identifier is required to assist in search and indexing of the document.</p>
+</div>
+
+		<div class='section' id='body-doc'>
+	<h3><a class='self-ref' href='#body-doc'>3.4.</a>  Body of the document</h3>
+	<p id='body-doc-p-0'>When the mention of non-ASCII characters is required for correct protocol operation and understanding, the characters' Unicode character name or code point MUST be included in the text.</p>
+	<ul>
+		<li>Non-ASCII characters will require identifying the Unicode code point.</li>
+		<li>Use of the actual UTF-8 character (e.g., Δ) is encouraged so that a reader can more easily see what the character is, if their device can render the text.</li>
+		<li>The use of the Unicode character names like 'INCREMENT' in addition to the use of Unicode code points is also encouraged.  When used, Unicode character names should be in all capital letters.</li>
+	</ul>
+
+	Examples of inclusion of non-ASCII characters in the body of the text:</p>
+	<figure>
+		<div class='preformatted'>
+			However, the problem is made more serious by introducing the full range of Unicode code points into protocol strings.  For example, the characters U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2 (ᏚᎢᎵᎬᎢᎬᏒ) from the Cherokee block look similar to the ASCII characters 'STPETER' as they might appear when presented using a 'creative' font family.
+		</div>
+		<figcaption>Figure 4: Sample of allowed output derived from original, ASCII-only document <a href='#precis'>draft-ietf-precis-framework</a></figcaption>
+	</figure>
+
+	Valid alternative:
+	<figure>
+		<div class='preformatted'>
+			However, the problem is made more serious by introducing the full range of Unicode code points into protocol strings.  For example, the characters 'ᏚᎢᎵᎬᎢᎬᏒ' (U+13DA U+13A2 U+13B5 U+13AC U+13A2 U+13AC U+13D2) from the Cherokee block look similar to the ASCII characters 'STPETER' as they might appear when presented using a 'creative' font family.
+		</div>
+		<figcaption>Figure 5: Sample of allowed output derived from original, ASCII-only document <a href='#precis'>draft-ietf-precis-framework</a></figcaption>
+	</figure>
+
+	Examples of proper identification of Unicode characters in an RFC:
+	<ol>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the U+2206 character.</li>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the U+2206 character ('Δ').</li>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the U+2206 character (INCREMENT).</li>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the U+2206 character ('Δ', INCREMENT).</li>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the U+2206 character (INCREMENT, 'Δ').</li>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the [Delta] character 'Δ' (U+2206).</li>
+		<li>Temperature changes in the Temperature Control Protocol are indicated by the character 'Δ' (INCREMENT, U+2206).</li>
+	</ol>
+
+	<p id='body-doc-p-1'>Which option of the above options is preferred in a given RFC may depend on context and the specific character(s) in question.  All are acceptable within an RFC.  BCP 137, 'ASCII Escaping of Unicode Character' describes the pros and cons of different options for identifying Unicode characters in an ASCII document [<a href='#BCP137'>BCP137</a>].</p>
+</div>
+
+		<div class='section' id='tables'>
+	<h3><a class='self-ref' href='#tables'>3.5.</a>  Tables</h3>
+	<p id='tables-p-0'>Tables follow the same rules for identifiers and characters as in 'Section 3.4 Body of the document'.  If it is sensible (i.e., more understandable for a reader) for a given document to have two tables -- one including the identifiers and non-ASCII characters and a second with just the non-ASCII characters -- that will be allowed on a case-by-case basis.</p>
+	
+	Example: TBD
+</div>
+
+		<div class='section' id='code'>
+	<h3><a class='self-ref' href='#code'>3.6.</a>  Code components</h3>
+	<p id='code-p-0'>The RFC Editor encourages the use of the U+ notation except within a code component whereyou must follow the rules of the programming language in which you are writing the code.</p>
+	Example: TBD
+</div>
+
+		<div class='section' id='biblio'>
+	<h3><a class='self-ref' href='#biblio'>3.7.</a>  Bibliographic text</h3>
+	<p id='biblio-p-0'>The reference entry must be in English; whatever subfields are present must be available in ASCII-encoded characters.  As long as good sense is used, the reference entry may also include non-ASCII characters at the author's discretion and as provided by the author.  The RFC Editor will request a review of the non-ASCII reference entry.</p>
+	<p id='biblio-p-1'>This applies to both normative and informative references.</p>
+
+	Example:
+	<pre> 
+[GOST3410] 'Information technology. Cryptographic data security. Signature and verification processes of [electronic] digital signature.', GOST R 34.10-2001, Gosudarstvennyi Standard of Russian Federation, Government Committee of Russia for Standards, 2001. (In Russian)
+	</pre>
+	
+	Allowable addition to the above citation:
+	<pre> 
+'Информационная технология. Криптографическая защита информации. Процессы формирования и проверки электронной цифровой подписи', GOST R 34.10-2001, Государственный стандарт Российской Федерации, 2001.</pre>
+</div>
+
+		<div class='section' id='keyw'>
+	<h3><a class='self-ref' href='#keyw'>3.8.</a>  Keywords</h3>
+	<p id='keyw-p-0'>Keywords used in metadata must be ASCII only.</p>
+</div>
+
+		<div class='section' id='address'>
+	<h3><a class='self-ref' href='#address'>3.9.</a>  Address Information</h3>
+	<p id='address-p-0'>The purpose of providing address information, either postal or e-mail, is to assist readers of an RFC to contact the author or authors.  Authors may include the official postal address as recognized by their company or local postal service without additional non-ASCII character escapes.  If the email address includes non-ASCII characters and is a valid email address at the time of publication, non-ASCII character escapes are not required.</p>
+</div>
+
+	<div id='normalization' class='section'>
+	<h2><a class='self-ref' href='#normalization'>4.</a>  Normalization Forms</h2>
+	<p id='normalization-p-0'>Authors should not expect normalization forms to be preserved. If a particular normalization form is expected, note that in the text of the RFC.</p>
+</div>
+
+	<div id='iana' class='section'>
+	<h2><a class='self-ref' href='#iana'>5.</a>  IANA Considerations</h2>
+	<p id='iana-p-0'>This document makes no request of IANA.</p>
+	<p id='iana-p-1'>Note to RFC Editor: this section may be removed on publication as an RFC.</p>
+</div>
+
+	<div id='i18n' class='section'>
+	<h2><a class='self-ref' href='#i18n'>6.</a>  Internationalization Considerations</h2>
+	<p id='i18n-p-0'>The ability to use non-ASCII characters in RFCs in a clear and consistent manner will improve the ability to describe internationalized protocols and will recognize the diversity of authors.</p>
+</div>
+
+	<div id='security' class='section'>
+	<h2><a class='self-ref' href='#security'>7.</a>  Security Considerations</h2>
+	<p id='security-p-0'>Valid Unicode that matches the expected text must be verified in order to preserve expected behavior and protocol information.</p>
+</div>
+
+	<div id='references' class='section'>
+	<h2><a class='self-ref' href='#references'>8.</a> References</h2>
+	<table>
+		<tr>
+			<td class='reference'><b id='ASCII'>[ASCII]</b></td>
+			<td class='top'>ANSI, 'Coded Character Sets - 7-Bit American National Standard Code for Information Interchange (7-Bit ASCII)', ANSI&nbsp;X.34-1986, March 26, 1986.</td>
+		</tr>
+		<tr>
+			<td class='reference'><b id='BCP137'>[BCP137]</b></td>
+			<td class='top'>Klensin, J., 'ASCII Escaping of Unicode Characters', STD&nbsp;137, RFC&nbsp;5137, February&nbsp;2008, <a href="https://www.rfc-editor.org/info/bcp137">http://www.rfc-editor.org/info/bcp137</a>.</td>
+		</tr>
+		<tr>
+			<td class='reference'><b id='STD63'>[STD63]</b></td>
+			<td class='top'>Yergeau, F., 'UTF-8, a transformation format of ISO 10646', STD&nbsp;63, RFC&nbsp;3629, November&nbsp;2003, <a href="https://www.rfc-editor.org/info/std63">http://www.rfc-editor.org/info/std63</a>.</td>
+		</tr>
+		<tr>
+			<td class='reference'><b id='RFC6949'>[RFC6949]</b></td>
+			<td class='top'>Flanagan, H. and N. Brownlee, 'RFC Series Format Requirements and Future Development', RFC&nbsp;6949, May&nbsp;2013, <a href="https://www.rfc-editor.org/info/rfc6949">http://www.rfc-editor.org/info/rfc6949</a>.</td>
+		</tr>
+	</table>
+</div>
+
+	<div id='acknowledgements' class='section'>
+	<h2><a class='self-ref' href='#acknowledgements'>Acknowledgements</a></h2>
+	<p id='acknowledgmenets-p-0'>With many thanks to the members of the IAB i18n program and the RFC Format Design Team.</p>
+</div>
+
+	<div id='authors' class='section'>
+	<h2><a class='self-ref' href='#authors'>Author's Address</a></h2>
+	<address class='vcard'>
+		<span class='n hidden'>
+			<span class='given-name'>Heather</span>
+			<span class='family-name'>Flanagan</span>
+		</span>
+		<a class='email' href='mailto:rse@rfc-editor.org'>rse@rfc-editor.org</a>
+	</address>
+</div>
+
+<div class="section">
+	<em>This page was last updated on 7 May 2014</em>
+</div>
+</body>
+</html>

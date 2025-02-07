@@ -1,0 +1,127 @@
+<html>
+<pre>
+A quick lesson on nroffing....
+
+Nroffing is a process of formatting a document using commands called
+macros that are essentially two letters preceded by a period and
+sometimes followed with a number, for example: .in 3 (which means
+indent following text by 3 spaces)
+
+Basic nroff commands:
+
+.in # = # is the number of spaces you want the text indented, this
+command will be in place until you put in a new .in command...if you
+want something to not be indented you put in .in 0
+
+.bp = break page
+
+.ti # = .ti also indents but only for one line, so if you have one
+sentence that needs to be indented 8 spaces but the rest of the page
+is indented 3 you can use .ti 8 for that single sentence
+
+.ce # = centers by the # of sentences you enter
+
+.ne # = keeps the # of lines together (avoids widows)
+
+.fi = fill-in, extra space will be ignored and text that is entered
+like this, the fill-in command will continue until you enter a .nf
+command and vice-versa
+
+  .fi
+  the quick brown fox
+  jumps over
+  the lazy dog
+
+ will look like this
+ 
+  the quick brown fox jumps over the lazy dog
+
+.nf = no-fill, you use for graphs or text that you don't want spaces
+to be ignored...so
+
+  .nf
+  the quick brown fox
+  jumps over
+  the lazy dog
+
+ will look like this
+
+  the quick brown fox
+  jumps over
+  the lazy dog 
+
+Also, all nroff commands must be all the way to the right, the nroff
+program recognizes the period as a command only if it is all the way
+to the left of the document.
+
+So...if a document is formatted like this:
+
+.nf
+Network Working Group                                           D. Cohen
+Request for Comments: 2441				         Myricom
+Category: Informational                                    November 1998
+ 
+ 
+.ce
+Working with Jon
+.ce
+Tribute delivered at UCLA, October 30, 1998
+ 
+.ti 0
+Status of this Memo
+ 
+.fi
+.in 3
+This memo provides information for the Internet community.  It does
+not specify an Internet standard of any kind.  Distribution of this
+memo is unlimited.
+ 
+.ti 0
+Copyright Notice
+ 
+Copyright (C) The Internet Society (1998).  All Rights Reserved.
+ 
+.ti 0
+Tribute
+ 
+.fi
+.in 3
+In 1973, after doing interactive flight simulation over the ARPAnet, I
+joined ISI and applied that experience to interactive speech over the
+ARPAnet.
+
+***It will look like this:***
+
+Network Working Group                                           D. Cohen
+Request for Comments: 2441				         Myricom
+Category: Informational                                    November 1998
+ 
+ 
+                            Working with Jon
+              Tribute delivered at UCLA, October 30, 1998
+ 
+Status of this Memo
+ 
+   This memo provides information for the Internet community.  It does
+   not specify an Internet standard of any kind.  Distribution of this
+   memo is unlimited.
+ 
+Copyright Notice
+ 
+   Copyright (C) The Internet Society (1998).  All Rights Reserved.
+ 
+Tribute
+ 
+   In 1973, after doing interactive flight simulation over the
+   ARPAnet, I joined ISI and applied that experience to interactive 
+   speech over the ARPAnet.
+
+
+
+Don't worry about how to actually run the nroff program, just send
+me text with the nroff commands and I will do the rest.
+
+
+THANKS!!!
+
+</html>

@@ -1,0 +1,3358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Han,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>xml2rfc Frequently Asked Questions</title>
+<meta content="Alice Russo" name="author">
+<meta content="
+       
+ This is a list of frequently asked questions regarding xml2rfc, a tool
+ that can be used to create Internet-Drafts or RFCs. 
+       This FAQ is for version 3 of xml2rfc; the vocabulary has been
+      changed significantly from version 2.  For guidance on version
+      2, please see the  FAQ for xml2rfc
+      v2 .
+       
+    " name="description">
+<meta content="xml2rfc 3.21.0" name="generator">
+<meta content="FAQ-xml2rfcv3-15" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.21.0
+    Python 3.9.15
+    ConfigArgParse 1.5.3
+    google-i18n-address 3.0.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.0
+    platformdirs 3.8.0
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.28.0
+    setuptools 44.1.1
+    six 1.16.0
+    wcwidth 0.2.5
+    weasyprint 56.1
+-->
+<link href="FAQ-xml2rfcv3-15.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necessary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
+@viewport {
+  zoom: 1.0;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  overflow-wrap: break-word;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  display: table;
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre {
+  background-color: #f9f9f9;
+  font-family: var(--font-mono);
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+blockquote > *:last-child {
+  margin-bottom: 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+.xref {
+  overflow-wrap: normal;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    float: none;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.refSubseries {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: var(--font-sans);
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  .breakable pre {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The following is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+.sourcecode pre,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .artwork > pre,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background slightly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottom margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the compact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div.sourcecode:first-child,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type:only-child {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+</head>
+<body class="xml2rfc">
+<script src="https://www.rfc-editor.org/js/metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left"></td>
+<td class="center">xml2rfc FAQ</td>
+<td class="right">June 2024</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Russo</td>
+<td class="center">Informational</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2024-06-13" class="published">13 June 2024</time>
+    </dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">A. Russo</div>
+<div class="org">RFC Production Center</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">xml2rfc Frequently Asked Questions</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">
+ This is a list of frequently asked questions regarding xml2rfc, a tool
+ that can be used to create Internet-Drafts or RFCs.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2"><strong>This FAQ is for version 3 of xml2rfc; the vocabulary has been
+      changed significantly from version 2.</strong> For guidance on version
+      2, please see the <a href="https://www.rfc-editor.org/materials/xml2rfcFAQ.html">FAQ for xml2rfc
+      v2</a>.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+</section>
+<section class="note" id="section-note.1">
+      <h2 id="name-note">
+<a href="#name-note" class="section-name selfRef">Note</a>
+      </h2>
+<p id="section-note.1-1">This document has been replaced by <span><a href="https://authors.ietf.org">https://authors.ietf.org</a></span>.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+</section>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-the-basics" class="internal xref">The Basics</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-what-is-xml2rfc" class="internal xref">What is xml2rfc?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-why-should-i-use-xml2rfc" class="internal xref">Why should I use xml2rfc?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
+                <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="auto internal xref">1.3</a>.  <a href="#name-how-much-xml-do-i-need-to-k" class="internal xref">How much XML do I need to know?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.4">
+                <p id="section-toc.1-1.1.2.4.1"><a href="#section-1.4" class="auto internal xref">1.4</a>.  <a href="#name-where-can-i-get-more-inform" class="internal xref">Where can I get more information?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-creating-a-draft" class="internal xref">Creating a Draft</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-whats-the-recommended-setup" class="internal xref">What's the recommended setup?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-where-can-i-get-a-template" class="internal xref">Where can I get a template?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-how-can-i-do-it-without-a-t" class="internal xref">How can I do it without a template?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-how-do-i-use-the-rfc-elemen" class="internal xref">How do I use the <code>rfc</code> element to create an Internet-Draft?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-using-references" class="internal xref">Using References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-how-do-i-put-in-a-reference" class="internal xref">How do I put in a reference?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-how-do-i-insert-the-full-re" class="internal xref">How do I insert the full reference?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-how-do-i-change-the-referen" class="internal xref">How do I change the reference tags from symbolic to numeric, i.e., from [RFC2119] to [1]?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-how-do-i-make-the-reference" class="internal xref">How do I make the reference tag [IKEv2] instead of [RFC4306]?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-how-do-i-get-the-references" class="internal xref">How do I get the references listed in alphabetical order?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-how-do-i-reference-a-url" class="internal xref">How do I reference a URL?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
+                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="auto internal xref">3.7</a>.  <a href="#name-how-do-i-get-two-sections-o" class="internal xref">How do I get two sections of references: Normative and Informative References?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8">
+                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="auto internal xref">3.8</a>.  <a href="#name-how-do-i-create-a-reference" class="internal xref">How do I create a reference to a BCP (or STD) that contains
+ multiple RFCs?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.9">
+                <p id="section-toc.1-1.3.2.9.1"><a href="#section-3.9" class="auto internal xref">3.9</a>.  <a href="#name-how-do-i-make-a-cross-refer" class="internal xref">How do I make a cross-reference to another section?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.10">
+                <p id="section-toc.1-1.3.2.10.1"><a href="#section-3.10" class="auto internal xref">3.10</a>. <a href="#name-what-about-referring-to-a-s" class="internal xref">What about referring to a section in another document?
+ or How do I link to a section in another RFC?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.11">
+                <p id="section-toc.1-1.3.2.11.1"><a href="#section-3.11" class="auto internal xref">3.11</a>. <a href="#name-how-do-i-link-to-multiple-s" class="internal xref">How do I link to multiple sections within a document (e.g., 'see Sections 3 and 4')?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.12">
+                <p id="section-toc.1-1.3.2.12.1"><a href="#section-3.12" class="auto internal xref">3.12</a>. <a href="#name-how-do-i-link-to-multiple-se" class="internal xref">How do I link to multiple sections in another document
+ (e.g., 'see Sections 5 and 6 in RFC 3550')?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-using-lists" class="internal xref">Using Lists</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-how-do-i-get-different-kind" class="internal xref">How do I get different kinds of lists?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-how-do-i-get-a-list-like-1-" class="internal xref">How do I get a list like (1), (2), (3) or (a), (b), (c)?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-how-do-i-get-continuous-num" class="internal xref">How do I get continuous numbering in a list that is split by
+text (or across sections)?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-how-do-i-get-indentation-or" class="internal xref">How do I get indentation? or How do I use definition lists?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-how-do-i-create-nested-list" class="internal xref">How do I create nested lists?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-the-finer-points" class="internal xref">The Finer Points</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-what-is-cdata-for" class="internal xref">What is CDATA for?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-what-are-the-entities-used-" class="internal xref">What are the entities used for special characters?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-how-do-i-indicate-the-edito" class="internal xref">How do I indicate the editor of the document?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-how-do-i-list-the-contribut" class="internal xref">How do I list the contributors or include acknowledgments?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-how-do-i-insert-questions-f" class="internal xref">How do I insert questions for my coauthors?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-miscellaneous" class="internal xref">Miscellaneous</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-how-do-i-know-if-my-xml-is-" class="internal xref">How do I know if my XML is valid?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-can-i-get-a-different-kind-" class="internal xref">Can I get a different kind of HTML output?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-is-there-a-tool-that-will-t" class="internal xref">Is there a tool that will turn my text file into an XML file (i.e., id2xml)?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-new-with-v3" class="internal xref">New with v3</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-how-do-i-convert-my-xml-fil" class="internal xref">How do I convert my XML file from v2 to v3 so I can make
+      use of the new features?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-after-converting-an-xml-fil" class="internal xref">After converting an XML file from v2 to v3, what further
+      updates might be needed for the v3 XML file?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-how-do-i-fix-common-errors-" class="internal xref">How do I fix common errors after the upgrade from v2 to v3?</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3.2.1">
+                    <p id="section-toc.1-1.7.2.3.2.1.1"><a href="#section-7.3.1" class="auto internal xref">7.3.1</a>.  <a href="#name-kramdown-rfc2629" class="internal xref">kramdown-rfc2629</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3.2.2">
+                    <p id="section-toc.1-1.7.2.3.2.2.1"><a href="#section-7.3.2" class="auto internal xref">7.3.2</a>.  <a href="#name-i-d-template" class="internal xref">i-d-template</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-what-are-the-new-features-w" class="internal xref">What are the new features with v3?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.5">
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="auto internal xref">7.5</a>.  <a href="#name-how-do-i-insert-non-ascii-c" class="internal xref">How do I insert non-ASCII characters?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.6">
+                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="auto internal xref">7.6</a>.  <a href="#name-how-do-i-insert-a-table" class="internal xref">How do I insert a table?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.7">
+                <p id="section-toc.1-1.7.2.7.1"><a href="#section-7.7" class="auto internal xref">7.7</a>.  <a href="#name-how-do-i-generate-svg-that-" class="internal xref">How do I generate SVG that will be accepted in an RFC?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.8">
+                <p id="section-toc.1-1.7.2.8.1"><a href="#section-7.8" class="auto internal xref">7.8</a>.  <a href="#name-how-do-i-include-svg-in-my-" class="internal xref">How do I include SVG in my document?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.9">
+                <p id="section-toc.1-1.7.2.9.1"><a href="#section-7.9" class="auto internal xref">7.9</a>.  <a href="#name-how-do-i-get-bold-italics-o" class="internal xref">How do I get bold, italics, or a fixed-width font?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.10">
+                <p id="section-toc.1-1.7.2.10.1"><a href="#section-7.10" class="auto internal xref">7.10</a>. <a href="#name-how-do-i-get-subscript-and-" class="internal xref">How do I get subscript and superscript?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.11">
+                <p id="section-toc.1-1.7.2.11.1"><a href="#section-7.11" class="auto internal xref">7.11</a>. <a href="#name-what-are-the-preferred-valu" class="internal xref">What are the preferred values for the type of the &lt;sourcecode&gt; element?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.12">
+                <p id="section-toc.1-1.7.2.12.1"><a href="#section-7.12" class="auto internal xref">7.12</a>. <a href="#name-how-should-a-yang-module-ap" class="internal xref">How should a YANG module appear?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.13">
+                <p id="section-toc.1-1.7.2.13.1"><a href="#section-7.13" class="auto internal xref">7.13</a>. <a href="#name-do-i-have-to-use-the-bcp14-" class="internal xref">Do I have to use the bcp14 element each time a
+ keyword (e.g., "MUST") appears in my document?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.14">
+                <p id="section-toc.1-1.7.2.14.1"><a href="#section-7.14" class="auto internal xref">7.14</a>. <a href="#name-what-is-the-best-way-to-pri" class="internal xref">What is the best way to print a hard copy?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.15">
+                <p id="section-toc.1-1.7.2.15.1"><a href="#section-7.15" class="auto internal xref">7.15</a>. <a href="#name-how-do-i-download-the-xml-s" class="internal xref">How do I download the XML source files for all RFCs?</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.16">
+                <p id="section-toc.1-1.7.2.16.1"><a href="#section-7.16" class="auto internal xref">7.16</a>. <a href="#name-what-has-been-deprecated-fr" class="internal xref">What has been deprecated from xml2rfc v2?</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<section id="section-1">
+      <h2 id="name-the-basics">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-the-basics" class="section-name selfRef">The Basics</a>
+      </h2>
+<section id="section-1.1">
+        <h3 id="name-what-is-xml2rfc">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-what-is-xml2rfc" class="section-name selfRef">What is xml2rfc?</a>
+        </h3>
+<p id="section-1.1-1">
+xml2rfc is a tool that lets you convert an XML source file into a text, HTML,
+PDF, expanded XML file, or various other options.  It is available as
+a web-based service (<span><a href="https://author-tools.ietf.org/">https://author-tools.ietf.org/</a></span>) or for download (<span><a href="https://pypi.org/project/xml2rfc/">https://pypi.org/project/xml2rfc/</a></span>. Version 3 of the tool adds new
+features and is used by the RFC Editor to create RFCs.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-1.2">
+        <h3 id="name-why-should-i-use-xml2rfc">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-why-should-i-use-xml2rfc" class="section-name selfRef">Why should I use xml2rfc?</a>
+        </h3>
+<p id="section-1.2-1">
+It's an easy way to create an Internet-Draft in the proper
+format. It handles boilerplate text and reference text. The HTML
+and PDF output formats have new features (such as including SVG figures and non-ASCII
+characters), and the source file can be used for metadata
+extraction.  Also, the RFC Editor will make use of your source file.
+(For background, see the <a href="https://www.rfc-editor.org/rse/format-faq/">RFC Format FAQ</a>.)<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-1.3">
+        <h3 id="name-how-much-xml-do-i-need-to-k">
+<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-how-much-xml-do-i-need-to-k" class="section-name selfRef">How much XML do I need to know?</a>
+        </h3>
+<p id="section-1.3-1">
+You need the essentials. XML uses start and end tags, which are
+nested and matching, and they are case-sensitive. See
+"XML basics" in <a href="#howto" class="internal xref">Writing I-Ds and RFCs using XML (revised)</a> for
+more details.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-1.4">
+        <h3 id="name-where-can-i-get-more-inform">
+<a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-where-can-i-get-more-inform" class="section-name selfRef">Where can I get more information?</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-1.4-1.1">Web service to convert a file: <span><a href="https://author-tools.ietf.org">https://author-tools.ietf.org</a></span> (Previously: <span><a href="https://xml2rfc.tools.ietf.org/experimental.html">https://xml2rfc.tools.ietf.org/experimental.html</a></span>)<a href="#section-1.4-1.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.4-1.2">
+     The v3 vocabulary: See <a href="https://xml2rfc.tools.ietf.org/xml2rfc-doc.html">"Xml2rfc
+     Vocabulary Version 3 Schema"</a>.
+     (Earlier documentation is in <span>[<a href="#RFC7991" class="cite xref">RFC7991</a>]</span> and <span>[<a href="#I-D.levkowetz-xml2rfc-v3-implementation-notes" class="cite xref">I-D.levkowetz-xml2rfc-v3-implementation-notes</a>]</span>.)<a href="#section-1.4-1.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.4-1.3">The schema in RelaxNG: <a href="https://svn.ietf.org/svn/tools/xml2rfc/trunk/cli/xml2rfc/data/v3.rnc">v3.rnc</a>
+   (which includes the schema of the SVG profile: <a href="https://svn.ietf.org/svn/tools/xml2rfc/trunk/cli/xml2rfc/data/SVG-1.2-RFC.rnc">SVG-1.2-RFC.rnc</a>).<a href="#section-1.4-1.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.4-1.4">
+     xml2rfc mailing list: <span><a href="https://www.ietf.org/mailman/listinfo/xml2rfc">https://www.ietf.org/mailman/listinfo/xml2rfc</a></span><a href="#section-1.4-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.4-1.5">Report a bug in xml2rfc: <span><a href="https://trac.ietf.org/tools/xml2rfc/trac/report/1">https://trac.ietf.org/tools/xml2rfc/trac/report/1</a></span><a href="#section-1.4-1.5" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</section>
+<div id="s_creating_draft">
+<section id="section-2">
+      <h2 id="name-creating-a-draft">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-creating-a-draft" class="section-name selfRef">Creating a Draft</a>
+      </h2>
+<section id="section-2.1">
+        <h3 id="name-whats-the-recommended-setup">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-whats-the-recommended-setup" class="section-name selfRef">What's the recommended setup?</a>
+        </h3>
+<p id="section-2.1-1">
+You have several choices when getting started with xml2rfc, such as:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1-2.1">
+Use the tool on the web (<span><a href="https://author-tools.ietf.org">https://author-tools.ietf.org</a></span> via UI or API) or install it locally (<span><a href="https://pypi.org/project/xml2rfc">https://pypi.org/project/xml2rfc</a></span>).<a href="#section-2.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-2.2">
+Use the citation libraries online or maintain a local copy.<a href="#section-2.1-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-2.3">
+Edit in your favorite editor or use an XML editor.<a href="#section-2.1-2.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.1-3">
+There are also tools available to let you edit non-XML source and then compile
+it to xml2rfc XML:<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1-4.1">
+            <a href="https://github.com/cabo/kramdown-rfc2629">kramdown-rfc2629</a><a href="#section-2.1-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-2.1-4.2">
+            <a href="https://mmark.miek.nl/post/about/">mmark</a><a href="#section-2.1-4.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-2.1-5">
+If you intend to host your draft in <code>git</code> or on Github, see
+<span><a href="https://ietf-gitwg.github.io/">https://ietf-gitwg.github.io/</a></span> for advice.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
+</section>
+<div id="q_templates">
+<section id="section-2.2">
+        <h3 id="name-where-can-i-get-a-template">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-where-can-i-get-a-template" class="section-name selfRef">Where can I get a template?</a>
+        </h3>
+<p id="section-2.2-1">
+There is a v3 template available here: <span><a href="https://tools.ietf.org/tools/templates/draft-davies-template-bare-07.xml">https://tools.ietf.org/tools/templates/draft-davies-template-bare-07.xml</a></span>. In
+addition, several templates for xml2rfc v2 are available
+from <span><a href="#templates" class="internal xref">https://tools.ietf.org/tools/templates</a> [<a href="#templates" class="cite xref">templates</a>]</span>. They
+include templates for a generic draft (e.g., draft-davies-template-bare.xml), as well as for a draft
+containing a MIB module (e.g., mib-doc-template-xml.txt).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-2.3">
+        <h3 id="name-how-can-i-do-it-without-a-t">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-how-can-i-do-it-without-a-t" class="section-name selfRef">How can I do it without a template?</a>
+        </h3>
+<p id="section-2.3-1">
+You can convert an existing XML file from the v2 vocabulary to the v3
+vocabulary using xml2rfc --v2v3 (see <a href="#q_convert_v2v3" class="auto internal xref">Section 7.1</a>), and go
+from there. Use &lt;t&gt; elements for paragraphs, and
+&lt;figure&gt;&lt;artwork&gt; elements for figures. Use &lt;![CDATA[
+... ]]&gt; within &lt;sourcecode&gt; or &lt;artwork&gt; elements that contain
+the less than character (&lt;). (See <a href="#q_CDATA" class="internal xref">What is CDATA for?</a>
+for more information.)<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-2">
+To get a citation like "[RFC2119]", use <code>&lt;xref
+target="RFC2119"/&gt;</code>. See <a href="#s_using_refs" class="internal xref">Using References</a> for more information.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
+</section>
+<section id="section-2.4">
+        <h3 id="name-how-do-i-use-the-rfc-elemen">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-how-do-i-use-the-rfc-elemen" class="section-name selfRef">How do I use the <code>rfc</code> element to create an Internet-Draft?</a>
+        </h3>
+<p id="section-2.4-1">
+Use the <code>category</code> attribute to indicate the intended category of your
+  draft, where <code>std</code> is Standards Track, <code>info</code> is
+  Informational, <code>exp</code> is Experimental, <code>bcp</code> is Best Current
+  Practice, and <code>historic</code> is Historic.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">Use the <code>submissionType</code> attribute to indicate the intended
+document stream, where the value can be <code>IETF</code>, <code>IAB</code>,
+  <code>IRTF</code>, or <code>independent</code>.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.4-3">
+See <span><a href="https://www.rfc-editor.org/rfc/rfc7991#appendix-A.1" class="relref">Appendix A.1</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span> for information about the ipr attribute.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.4-4">
+Use the docName attribute to indicate the filename.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.4-5">
+If the document potentially updates or obsoletes any RFCs, use the
+updates and obsoletes attributes to indicate the relevant RFC
+numbers. For Internet-Drafts, this information will be displayed in
+the header, followed by "(if approved)".<a href="#section-2.4-5" class="pilcrow">¶</a></p>
+<p id="section-2.4-6">
+For example, putting it together:<a href="#section-2.4-6" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-2.4-7">
+<pre>
+&lt;rfc
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   category="info"
+   submissionType="IETF"
+   ipr="trust200902"
+   docName="draft-ietf-wgname-topic-00"
+   updates="1234, 1235"
+   obsoletes="1236"
+   sortRefs="true"
+   version="3"&gt;
+</pre><a href="#section-2.4-7" class="pilcrow">¶</a>
+</div>
+<p id="section-2.4-8">
+   Note: The attributes number and seriesNo will be added by the RFC Editor
+   if your draft is approved for publication as an RFC.<a href="#section-2.4-8" class="pilcrow">¶</a></p>
+<p id="section-2.4-9">
+   Note: Some features that used to be processing instructions (in v2)
+   are now attributes of the rfc element (in v3) -- for
+   example, <code>sortRefs</code> and <code>symRefs</code>.<a href="#section-2.4-9" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<div id="s_using_refs">
+<section id="section-3">
+      <h2 id="name-using-references">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-using-references" class="section-name selfRef">Using References</a>
+      </h2>
+<div id="q_add_reference">
+<section id="section-3.1">
+        <h3 id="name-how-do-i-put-in-a-reference">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-how-do-i-put-in-a-reference" class="section-name selfRef">How do I put in a reference?</a>
+        </h3>
+<p id="section-3.1-1">
+A set of online citation libraries are maintained on <span><a href="#xml2rfc" class="internal xref">xml2rfc.tools.ietf.org</a> [<a href="#xml2rfc" class="cite xref">xml2rfc</a>]</span>.  They include citations for
+RFCs, Internet-Drafts, and documents produced by the W3C and 3GPP, among
+others.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">
+To make use of the citation libraries, use an xi:include in the references
+section as follows.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.1-3">
+<pre>
+&lt;xi:include
+    href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/&gt;
+</pre><a href="#section-3.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-4">
+
+For an Internet-Draft, the citation filename uses the draft string. For example:<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.1-5">
+<pre>
+&lt;xi:include
+    href="https://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-wgname-topic.xml"/&gt;
+</pre><a href="#section-3.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-6">Preferably, use the citation libraries when possible. However,
+another option is to include the complete reference element (see
+<a href="#q_full_ref" class="auto internal xref">Section 3.2</a>). Here's a template of a
+reference element:<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.1-7">
+<pre>
+    &lt;reference anchor="" target=""&gt;
+        &lt;front&gt;
+            &lt;title&gt;&lt;/title&gt;
+            &lt;author initials="" surname="" fullname=""&gt;
+                &lt;organization /&gt;
+            &lt;/author&gt;
+            &lt;date month="" year="" /&gt;
+        &lt;/front&gt;
+        &lt;seriesInfo name="" value="" /&gt;
+        &lt;refcontent&gt;&lt;/refcontent&gt;
+    &lt;/reference&gt;
+</pre><a href="#section-3.1-7" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-8">
+All are cited textually in the same manner -- by using xref elements where the
+target corresponds to the anchor of the reference element, e.g., &lt;xref
+target="RFC2119" /&gt;. The anchors for RFCs are "RFCNNNN" (4 digits, using
+leading zeros) and the anchors for Internet-Drafts are "I-D.&lt;name without
+"draft-" or the version number&gt;".<a href="#section-3.1-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_full_ref">
+<section id="section-3.2">
+        <h3 id="name-how-do-i-insert-the-full-re">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-how-do-i-insert-the-full-re" class="section-name selfRef">How do I insert the full reference?</a>
+        </h3>
+<p id="section-3.2-1">
+There are several ways to insert the full reference element from the
+citation library:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.2-2">
+          <li id="section-3.2-2.1">
+Keep a local copy of the citation libraries. They are available from
+<span><a href="#xml2rfc" class="internal xref">https://xml2rfc.tools.ietf.org</a> [<a href="#xml2rfc" class="cite xref">xml2rfc</a>]</span>.<a href="#section-3.2-2.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-3.2-2.2">
+Use a browser to look it up online, e.g.,
+<span><a href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml</a></span>, and
+copy the page source.<a href="#section-3.2-2.2" class="pilcrow">¶</a>
+</li>
+          <li id="section-3.2-2.3">Run xml2rfc with output mode set to XML. The output will include the
+  complete reference elements for any entities and includes.<a href="#section-3.2-2.3" class="pilcrow">¶</a>
+</li>
+        </ol>
+</section>
+</div>
+<section id="section-3.3">
+        <h3 id="name-how-do-i-change-the-referen">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-how-do-i-change-the-referen" class="section-name selfRef">How do I change the reference tags from symbolic to numeric, i.e., from [RFC2119] to [1]?</a>
+        </h3>
+<p id="section-3.3-1">
+In the <code>rfc</code> element, set the attribute <code>symRefs="no"</code> for
+symbolic references. This makes reference tags be numeric, e.g., [1], instead
+of symbolic, e.g., [RFC2119].<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-3.4">
+        <h3 id="name-how-do-i-make-the-reference">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-how-do-i-make-the-reference" class="section-name selfRef">How do I make the reference tag [IKEv2] instead of [RFC4306]?</a>
+        </h3>
+<p id="section-3.4-1">
+Use the <code>displayreference</code> element and set the <code>to</code> attribute to
+the nickname. Tip: place it before the first <code>references</code> element. For example:<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.4-2">
+<pre>
+&lt;displayreference target="RFC7296" to="IKEv2"/&gt;
+&lt;references&gt;
+[...]
+&lt;xi:include
+    href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7296.xml"/&gt;
+</pre><a href="#section-3.4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.4-3">
+yields:<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.4-4">
+          <dt id="section-3.4-4.1"><strong>[IKEv2]</strong></dt>
+          <dd style="margin-left: 1.5em" id="section-3.4-4.2">Kaufman, C., Hoffman, P., Nir, Y., Eronen, P., and T. Kivinen, "Internet Key Exchange Protocol Version 2 (IKEv2)", STD 79, RFC 7296, DOI 10.17487/RFC7296, October 2014,  &lt;<span><a href="https://www.rfc-editor.org/info/rfc7296">https://www.rfc-editor.org/info/rfc7296</a></span>&gt;.<a href="#section-3.4-4.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+<section id="section-3.5">
+        <h3 id="name-how-do-i-get-the-references">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-how-do-i-get-the-references" class="section-name selfRef">How do I get the references listed in alphabetical order?</a>
+        </h3>
+<p id="section-3.5-1">
+In the rfc element, set the attribute <code>sortRefs="yes"</code>.  Note that sortRefs only has an effect if <code>symRefs="yes"</code>.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+</section>
+<div id="q_using_eref">
+<section id="section-3.6">
+        <h3 id="name-how-do-i-reference-a-url">
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-how-do-i-reference-a-url" class="section-name selfRef">How do I reference a URL?</a>
+        </h3>
+<p id="section-3.6-1">
+The eref element for an external reference creates a link in the HTML output.  For example:<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.6-2">
+<pre>
+&lt;eref target="https://www.w3.org"&gt;
+</pre><a href="#section-3.6-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.6-3">
+yields <span><a href="https://www.w3.org">https://www.w3.org</a></span>.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.6-4">
+<pre>
+&lt;eref target="https://www.w3.org"&gt;W3C Home Page&lt;/eref&gt;
+</pre><a href="#section-3.6-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.6-5">yields
+<a href="https://www.w3.org">W3C Home Page</a>.<a href="#section-3.6-5" class="pilcrow">¶</a></p>
+<p id="section-3.6-6">
+Another option is using xref and creating a reference that uses the target attribute for the URL. For example:<a href="#section-3.6-6" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.6-7">
+<pre>
+    &lt;reference anchor="W3C" target="https://www.w3.org/"&gt;
+        &lt;front&gt;
+            &lt;title&gt;World Wide Web Consortium (W3C)&lt;/title&gt;
+            &lt;author/&gt;
+        &lt;/front&gt;
+    &lt;/reference&gt;
+</pre><a href="#section-3.6-7" class="pilcrow">¶</a>
+</div>
+<p id="section-3.6-8">
+yields<a href="#section-3.6-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-9">
+<pre>
+[W3C]     "World Wide Web Consortium (W3C)", &lt;https://www.w3.org/&gt;.
+</pre><a href="#section-3.6-9" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<section id="section-3.7">
+        <h3 id="name-how-do-i-get-two-sections-o">
+<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-how-do-i-get-two-sections-o" class="section-name selfRef">How do I get two sections of references: Normative and Informative References?</a>
+        </h3>
+<p id="section-3.7-1">
+Use the name element (child of the references element) as follows:<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.7-2">
+<pre>
+    &lt;back&gt;
+      &lt;references&gt;
+        &lt;name&gt;Normative References&lt;/name&gt;
+        ...
+      &lt;/references&gt;
+      &lt;references&gt;
+        &lt;name&gt;Informative References&lt;/name&gt;
+        ...
+      &lt;/references&gt;
+    &lt;/back&gt;
+</pre><a href="#section-3.7-2" class="pilcrow">¶</a>
+</div>
+</section>
+<section id="section-3.8">
+        <h3 id="name-how-do-i-create-a-reference">
+<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-how-do-i-create-a-reference" class="section-name selfRef">How do I create a reference to a BCP (or STD) that contains
+ multiple RFCs?</a>
+        </h3>
+<p id="section-3.8-1">
+Use &lt;referencegroup&gt; with an xi:include for each RFC inside of it:<a href="#section-3.8-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.8-2">
+<pre>
+&lt;referencegroup anchor="STD78" target="https://www.rfc-editor.org/info/std78"&gt;
+  &lt;xi:include
+   href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5343.xml"/&gt;
+  &lt;xi:include
+   href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5590.xml"/&gt;
+  &lt;xi:include
+   href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5591.xml"/&gt;
+  &lt;xi:include
+   href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6353.xml"/&gt;
+&lt;/referencegroup&gt;
+</pre><a href="#section-3.8-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.8-3">which yields<a href="#section-3.8-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.8-4">
+<pre>
+  [STD78]    Schoenwaelder, J., "Simple Network Management Protocol
+             (SNMP) Context EngineID Discovery", STD 78, RFC 5343,
+             September 2008.
+
+             Harrington, D. and J. Schoenwaelder, "Transport Subsystem
+             for the Simple Network Management Protocol (SNMP)",
+             STD 78, RFC 5590, June 2009.
+
+             Harrington, D. and W. Hardaker, "Transport Security Model
+             for the Simple Network Management Protocol (SNMP)",
+             STD 78, RFC 5591, June 2009.
+
+             Hardaker, W., "Transport Layer Security (TLS) Transport
+             Model for the Simple Network Management Protocol (SNMP)",
+             STD 78, RFC 6353, July 2011.
+
+             &lt;https://www.rfc-editor.org/info/std78&gt;
+</pre><a href="#section-3.8-4" class="pilcrow">¶</a>
+</div>
+</section>
+<section id="section-3.9">
+        <h3 id="name-how-do-i-make-a-cross-refer">
+<a href="#section-3.9" class="section-number selfRef">3.9. </a><a href="#name-how-do-i-make-a-cross-refer" class="section-name selfRef">How do I make a cross-reference to another section?</a>
+        </h3>
+<p id="section-3.9-1">
+Make sure the section you want to reference has an anchor attribute.
+For example:<a href="#section-3.9-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.9-2">
+<pre>
+   &lt;section anchor="s_using_lists"&gt;
+</pre><a href="#section-3.9-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.9-3">
+Then, refer to it with an &lt;xref&gt; element:<a href="#section-3.9-3" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.9-4">
+<pre>
+  See &lt;xref target="s_using_lists" /&gt;.
+</pre><a href="#section-3.9-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.9-5">
+which yields<a href="#section-3.9-5" class="pilcrow">¶</a></p>
+<blockquote id="section-3.9-6">
+  See <a href="#s_using_lists" class="auto internal xref">Section 4</a>.<a href="#section-3.9-6" class="pilcrow">¶</a>
+</blockquote>
+<p id="section-3.9-7">
+(where the number of that section is determined dynamically).<a href="#section-3.9-7" class="pilcrow">¶</a></p>
+</section>
+<div id="q_link_to_a_section">
+<section id="section-3.10">
+        <h3 id="name-what-about-referring-to-a-s">
+<a href="#section-3.10" class="section-number selfRef">3.10. </a><a href="#name-what-about-referring-to-a-s" class="section-name selfRef">What about referring to a section in another document?
+ or How do I link to a section in another RFC?</a>
+        </h3>
+<p id="section-3.10-1">
+Use &lt;xref&gt; and set the sectionFormat attribute to various options.<a href="#section-3.10-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-3.10-2">
+          <dt id="section-3.10-2.1">
+          sectionFormat="of":
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-3.10-2.2">
+          See <span><a href="https://www.rfc-editor.org/rfc/rfc7991#section-1.3" class="relref">Section 1.3</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span>.<a href="#section-3.10-2.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-3.10-2.3">
+          sectionFormat="comma":
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-3.10-2.4">
+          See <span>[<a href="#RFC7991" class="cite xref">RFC7991</a>], <a href="https://www.rfc-editor.org/rfc/rfc7991#section-1.3" class="relref">Section 1.3</a></span>.<a href="#section-3.10-2.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-3.10-2.5">
+          sectionFormat="parens":
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-3.10-2.6">
+          See <span>[<a href="#RFC7991" class="cite xref">RFC7991</a>] (<a href="https://www.rfc-editor.org/rfc/rfc7991#section-1.3" class="relref">Section 1.3</a>)</span>.<a href="#section-3.10-2.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-3.10-2.7">
+          sectionFormat="bare":
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-3.10-2.8">
+          See <a href="https://www.rfc-editor.org/rfc/rfc7991#section-1.3" class="relref">1.3</a>.<a href="#section-3.10-2.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-3.10-2.9">
+          (default) When sectionFormat is not set at all, the output is the same as
+   "of":
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-3.10-2.10">
+          See <span><a href="https://www.rfc-editor.org/rfc/rfc7991#section-1.3" class="relref">Section 1.3</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span>.<a href="#section-3.10-2.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd></dl>
+</section>
+</div>
+<section id="section-3.11">
+        <h3 id="name-how-do-i-link-to-multiple-s">
+<a href="#section-3.11" class="section-number selfRef">3.11. </a><a href="#name-how-do-i-link-to-multiple-s" class="section-name selfRef">How do I link to multiple sections within a document (e.g., 'see Sections 3 and 4')?</a>
+        </h3>
+<p id="section-3.11-1">
+Use &lt;xref&gt; with the format attribute.  For example, assuming the anchors
+for the relevant sections match the targets:<a href="#section-3.11-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.11-2">
+<pre>
+See Sections &lt;xref target="s_using_refs" format="counter" /&gt; and
+&lt;xref target="s_using_lists" format="counter" /&gt;.
+</pre><a href="#section-3.11-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.11-3">
+yields the output:<a href="#section-3.11-3" class="pilcrow">¶</a></p>
+<blockquote id="section-3.11-4">
+See Sections <a href="#s_using_refs" class="auto internal xref">3</a> and
+<a href="#s_using_lists" class="auto internal xref">4</a>.<a href="#section-3.11-4" class="pilcrow">¶</a>
+</blockquote>
+<p id="section-3.11-5">
+Note: The format attribute can have the value "title", which displays the title of the
+section.  For example,<a href="#section-3.11-5" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.11-6">
+<pre>
+See Sections &lt;xref target="s_using_refs" format="title" /&gt; and
+&lt;xref target="s_using_lists" format="title" /&gt;.
+</pre><a href="#section-3.11-6" class="pilcrow">¶</a>
+</div>
+<p id="section-3.11-7">
+yields the output:<a href="#section-3.11-7" class="pilcrow">¶</a></p>
+<blockquote id="section-3.11-8">
+See <a href="#s_using_refs" class="internal xref">Using References</a> and <a href="#s_using_lists" class="internal xref">Using Lists</a>.<a href="#section-3.11-8" class="pilcrow">¶</a>
+</blockquote>
+</section>
+<section id="section-3.12">
+        <h3 id="name-how-do-i-link-to-multiple-se">
+<a href="#section-3.12" class="section-number selfRef">3.12. </a><a href="#name-how-do-i-link-to-multiple-se" class="section-name selfRef">How do I link to multiple sections in another document
+ (e.g., 'see Sections 5 and 6 in RFC 3550')?</a>
+        </h3>
+<p id="section-3.12-1">Use &lt;xref&gt; with sectionFormat="bare". For example:<a href="#section-3.12-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-3.12-2">
+<pre>
+See Sections &lt;xref target="RFC3550" section="5" sectionFormat="bare" /&gt; and
+&lt;xref target="RFC3550" section="6" sectionFormat="bare" /&gt; in
+&lt;xref target="RFC3550"/&gt;.
+</pre><a href="#section-3.12-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.12-3">
+yields the output:<a href="#section-3.12-3" class="pilcrow">¶</a></p>
+<blockquote id="section-3.12-4">
+          <p id="section-3.12-4.1">
+See Sections <a href="https://www.rfc-editor.org/rfc/rfc3550#section-5" class="relref">5</a>
+and <a href="https://www.rfc-editor.org/rfc/rfc3550#section-6" class="relref">6</a> in
+<span>[<a href="#RFC3550" class="cite xref">RFC3550</a>]</span>.<a href="#section-3.12-4.1" class="pilcrow">¶</a></p>
+</blockquote>
+</section>
+</section>
+</div>
+<div id="s_using_lists">
+<section id="section-4">
+      <h2 id="name-using-lists">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-using-lists" class="section-name selfRef">Using Lists</a>
+      </h2>
+<section id="section-4.1">
+        <h3 id="name-how-do-i-get-different-kind">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-how-do-i-get-different-kind" class="section-name selfRef">How do I get different kinds of lists?</a>
+        </h3>
+<p id="section-4.1-1">
+     For bulleted lists, use the &lt;ul&gt; element.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">
+     For an empty list (indentation only), use the &lt;ul&gt; element with
+     <code>empty="true"</code>.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">
+     For definition lists (a.k.a. hanging lists in xml2rfc v2),
+     use the &lt;dl&gt; element. See <a href="#q_def_lists" class="auto internal xref">Section 4.4</a>.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">
+     For numbers or letters, use the type attribute of the &lt;ol&gt;
+     element; examples below.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">
+For full details, see <span><a href="https://www.rfc-editor.org/rfc/rfc7991#section-2.34.5" class="relref">Section 2.34.5</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span> and the <a href="https://xml2rfc.tools.ietf.org/xml2rfc-doc.html#name-type-attribute-5">schema documentation</a>.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-4.1-6.1">
+    type="1" --&gt; 1, 2, 3, ...<a href="#section-4.1-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal ulEmpty" id="section-4.1-6.2">
+    type="I" --&gt; I, II, III, ...<a href="#section-4.1-6.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal ulEmpty" id="section-4.1-6.3">
+    type="i" --&gt; i, ii, iii, ...<a href="#section-4.1-6.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal ulEmpty" id="section-4.1-6.4">
+    type="a" --&gt; a, b, c, ...<a href="#section-4.1-6.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal ulEmpty" id="section-4.1-6.5">
+    type="A" --&gt; A, B, C, ...<a href="#section-4.1-6.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal ulEmpty" id="section-4.1-6.6">
+    type="REQ%d:" --&gt; [See <a href="#q_fancy_lists" class="auto internal xref">Section 4.2</a>.]<a href="#section-4.1-6.6" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+<div id="q_fancy_lists">
+<section id="section-4.2">
+        <h3 id="name-how-do-i-get-a-list-like-1-">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-how-do-i-get-a-list-like-1-" class="section-name selfRef">How do I get a list like (1), (2), (3) or (a), (b), (c)?</a>
+        </h3>
+<div class="alignLeft art-text artwork" id="section-4.2-1">
+<pre>
+(1)
+(2)    is   &lt;ol type="(%d)"&gt;
+(3)
+
+(a)
+(b)    is   &lt;ol type="(%c)"&gt;
+(c)
+
+REQ1:
+REQ2:  is   &lt;ol type="REQ%d:"&gt;
+REQ3:
+</pre><a href="#section-4.2-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="q_continued_numbering">
+<section id="section-4.3">
+        <h3 id="name-how-do-i-get-continuous-num">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-how-do-i-get-continuous-num" class="section-name selfRef">How do I get continuous numbering in a list that is split by
+text (or across sections)?</a>
+        </h3>
+<p id="section-4.3-1">
+Set the group attribute to the same value for each &lt;ol&gt; element. For example:<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-4.3-2">
+<pre> &lt;ol type="REQ%d:" group="reqs"&gt;
+  &lt;li&gt;do a&lt;/li&gt;
+  &lt;li&gt;do b&lt;/li&gt;
+&lt;/ol&gt;
+&lt;t&gt;Here is text in between.&lt;/t&gt;
+&lt;ol type="REQ%d:" group="reqs"&gt;
+  &lt;li&gt;do c&lt;/li&gt;
+  &lt;li&gt;do d&lt;/li&gt;
+&lt;/ol&gt;
+&lt;t&gt;Here is more text in between.&lt;/t&gt;
+&lt;ol type="REQ%d:" group="reqs"&gt;
+  &lt;li&gt;do e&lt;/li&gt;
+  &lt;li&gt;do f&lt;/li&gt;
+&lt;/ol&gt;
+</pre><a href="#section-4.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-4.3-3">yields:<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-4.3-4">
+  <dt>REQ1:</dt>
+<dd id="section-4.3-4.1">do a<a href="#section-4.3-4.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>REQ2:</dt>
+<dd id="section-4.3-4.2">do b<a href="#section-4.3-4.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.3-5">Here is text in between.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-4.3-6">
+  <dt>REQ3:</dt>
+<dd id="section-4.3-6.1">do c<a href="#section-4.3-6.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>REQ4:</dt>
+<dd id="section-4.3-6.2">do d<a href="#section-4.3-6.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.3-7">Here is more text in between.<a href="#section-4.3-7" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-4.3-8">
+  <dt>REQ5:</dt>
+<dd id="section-4.3-8.1">do e<a href="#section-4.3-8.1" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt>REQ6:</dt>
+<dd id="section-4.3-8.2">do f<a href="#section-4.3-8.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="q_def_lists">
+<section id="section-4.4">
+        <h3 id="name-how-do-i-get-indentation-or">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-how-do-i-get-indentation-or" class="section-name selfRef">How do I get indentation? or How do I use definition lists?</a>
+        </h3>
+<p id="section-4.4-1">
+Use a &lt;dl&gt; element (definition list), where each &lt;dt&gt; (term) in
+has a corresponding &lt;dd&gt; (description).<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">
+For example:<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-4.4-3">
+<pre>
+&lt;dl&gt;
+  &lt;dt&gt;Unassigned:&lt;/dt&gt;
+  &lt;dd&gt;Unused and available for assignment via
+  documented procedures.&lt;/dd&gt;
+
+  &lt;dt&gt;Reserved:&lt;/dt&gt;
+  &lt;dd&gt;Not to be assigned.  Reserved values are
+  held for special uses, such as to extend the namespace
+  when it become exhausted.  Reserved values are not
+  available for general assignment.&lt;/dd&gt;
+&lt;/dl&gt;
+</pre><a href="#section-4.4-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4.4-4">yields:<a href="#section-4.4-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4.4-5">
+          <dt id="section-4.4-5.1">Unassigned:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.4-5.2">Unused and available for assignment via
+  documented procedures.<a href="#section-4.4-5.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.4-5.3">Reserved:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.4-5.4">Not to be assigned.  Reserved values are
+  held for special uses, such as to extend the namespace
+  when it become exhausted.  Reserved values are not
+  available for general assignment.<a href="#section-4.4-5.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.4-6">Note: The appearance is slightly different in the text output.<a href="#section-4.4-6" class="pilcrow">¶</a></p>
+<p id="section-4.4-7">
+Use <code>newline="true"</code> to get a line
+break after the term. For example:<a href="#section-4.4-7" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-4.4-8">
+<pre>
+&lt;dl newline="true"&gt;
+  &lt;dt&gt;Unassigned:&lt;/dt&gt;
+  &lt;dd&gt;Unused and available for assignment via
+  documented procedures.&lt;/dd&gt;
+
+  &lt;dt&gt;Reserved:&lt;/dt&gt;
+  &lt;dd&gt;Not to be assigned.  Reserved values are
+  held for special uses, such as to extend the namespace
+  when it become exhausted.  Reserved values are not
+  available for general assignment.&lt;/dd&gt;
+&lt;/dl&gt;
+</pre><a href="#section-4.4-8" class="pilcrow">¶</a>
+</div>
+<p id="section-4.4-9">yields:<a href="#section-4.4-9" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-4.4-10">
+          <dt id="section-4.4-10.1">Unassigned:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.4-10.2">Unused and available for assignment via
+  documented procedures.<a href="#section-4.4-10.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.4-10.3">Reserved:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.4-10.4">Not to be assigned.  Reserved values are
+  held for special uses, such as to extend the namespace
+  when it become exhausted.  Reserved values are not
+  available for general assignment.<a href="#section-4.4-10.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="q_nested_lists">
+<section id="section-4.5">
+        <h3 id="name-how-do-i-create-nested-list">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-how-do-i-create-nested-list" class="section-name selfRef">How do I create nested lists?</a>
+        </h3>
+<p id="section-4.5-1">The key is that any text before or after the inner list must be in a &lt;t&gt; element.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+<p id="section-4.5-2">Example: &lt;ol&gt; nested within &lt;dl&gt;<a href="#section-4.5-2" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-4.5-3">
+<pre>
+&lt;dl&gt;
+[...]
+ &lt;dt&gt;Foo validator:&lt;/dt&gt;
+ &lt;dd&gt;
+    &lt;t&gt;It performs the following actions:&lt;/t&gt;
+    &lt;ol type="1" spacing="compact"&gt;
+      &lt;li&gt;runs&lt;/li&gt;
+      &lt;li&gt;jumps&lt;/li&gt;
+      &lt;li&gt;walks&lt;/li&gt;
+    &lt;/ol&gt;
+ &lt;/dd&gt;
+[...]
+&lt;/dl&gt;
+</pre><a href="#section-4.5-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4.5-4">yields:<a href="#section-4.5-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4.5-5">
+          <dt id="section-4.5-5.1">Foo validator:</dt>
+          <dd style="margin-left: 1.5em" id="section-4.5-5.2">
+            <p id="section-4.5-5.2.1">It performs the following actions:<a href="#section-4.5-5.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="compact type-1" id="section-4.5-5.2.2">
+      <li id="section-4.5-5.2.2.1">runs<a href="#section-4.5-5.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li id="section-4.5-5.2.2.2">jumps<a href="#section-4.5-5.2.2.2" class="pilcrow">¶</a>
+</li>
+              <li id="section-4.5-5.2.2.3">walks<a href="#section-4.5-5.2.2.3" class="pilcrow">¶</a>
+</li>
+            </ol>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.5-6">Example: &lt;ul&gt; nested within &lt;ol&gt;<a href="#section-4.5-6" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-4.5-7">
+<pre>
+&lt;ol type="Step %d:"&gt;
+[...]
+ &lt;li&gt;&lt;t&gt;Send it to&lt;/t&gt;
+    &lt;ul spacing="compact"&gt;
+      &lt;li&gt;Alice&lt;/li&gt;
+      &lt;li&gt;Bob&lt;/li&gt;
+      &lt;li&gt;Carol&lt;/li&gt;
+    &lt;/ul&gt;
+ &lt;/li&gt;
+[...]
+&lt;/ol&gt;
+</pre><a href="#section-4.5-7" class="pilcrow">¶</a>
+</div>
+<p id="section-4.5-8">yields:<a href="#section-4.5-8" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="olPercent" id="section-4.5-9">
+  <dt>Step 1:</dt>
+<dd id="section-4.5-9.1">
+            <p id="section-4.5-9.1.1">Send it to:<a href="#section-4.5-9.1.1" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-4.5-9.1.2.1">Alice<a href="#section-4.5-9.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="compact" id="section-4.5-9.1.2.2">Bob<a href="#section-4.5-9.1.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="compact" id="section-4.5-9.1.2.3">Carol<a href="#section-4.5-9.1.2.3" class="pilcrow">¶</a>
+</li>
+            </ul>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<section id="section-5">
+      <h2 id="name-the-finer-points">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-finer-points" class="section-name selfRef">The Finer Points</a>
+      </h2>
+<div id="q_CDATA">
+<section id="section-5.1">
+        <h3 id="name-what-is-cdata-for">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-what-is-cdata-for" class="section-name selfRef">What is CDATA for?</a>
+        </h3>
+<p id="section-5.1-1">
+A CDATA block is left alone by xml2rfc.  It does not try to parse XML
+inside of a CDATA block.  (For example, if a figure contains "&lt;", you don't
+have to use &amp;lt;)  So it is especially good for when there are XML
+examples in the document.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-5.2">
+        <h3 id="name-what-are-the-entities-used-">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-what-are-the-entities-used-" class="section-name selfRef">What are the entities used for special characters?</a>
+        </h3>
+<p id="section-5.2-1">To prevent these characters from being parsed as XML, use<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2-2">
+<pre>
+&amp;amp; for &amp;
+&amp;lt; for &lt;
+&amp;gt; for &gt;
+</pre><a href="#section-5.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.2-3">In addition, the following entities are defined:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2-4">
+<pre>
+&amp;nbsp; for non-breaking space
+&amp;nbhy; for non-breaking hyphen
+&amp;wj; for word joiner
+</pre><a href="#section-5.2-4" class="pilcrow">¶</a>
+</div>
+</section>
+<section id="section-5.3">
+        <h3 id="name-how-do-i-indicate-the-edito">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-how-do-i-indicate-the-edito" class="section-name selfRef">How do I indicate the editor of the document?</a>
+        </h3>
+<p id="section-5.3-1">Use the role attribute of the author element. For example:<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-5.3-2">
+<pre>
+&lt;author initials="J" surname="Doe" fullname="John Doe" role="editor"&gt;
+</pre><a href="#section-5.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+<div id="using_contact">
+<section id="section-5.4">
+        <h3 id="name-how-do-i-list-the-contribut">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-how-do-i-list-the-contribut" class="section-name selfRef">How do I list the contributors or include acknowledgments?</a>
+        </h3>
+<p id="section-5.4-1">In a "Contributors" section, you can use the &lt;contact&gt;
+ element, which has the same structure as the &lt;author&gt; element.
+ Including address information is optional.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">In an "Acknowledgments" section, you can use the &lt;contact&gt; element
+ within &lt;t&gt; to list inviduals' names (typically without address information).<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-5.5">
+        <h3 id="name-how-do-i-insert-questions-f">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-how-do-i-insert-questions-f" class="section-name selfRef">How do I insert questions for my coauthors?</a>
+        </h3>
+<p id="section-5.5-1">
+   You can use comments &lt;!-- --&gt; or &lt;cref&gt; elements.
+   Comments are only visible in the XML source file.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2">
+   Example of using comments:<a href="#section-5.5-2" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-5.5-3">
+<pre>
+&lt;!-- [JD] This point needs revision.--&gt;
+</pre><a href="#section-5.5-3" class="pilcrow">¶</a>
+</div>
+<p id="section-5.5-4">
+       &lt;cref&gt; will show up in
+       the output when the attribute display="true" (which is the default).<a href="#section-5.5-4" class="pilcrow">¶</a></p>
+<p id="section-5.5-5">
+Example of using &lt;cref&gt;:<a href="#section-5.5-5" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-5.5-6">
+<pre>
+&lt;cref anchor="Q1" source="JD"&gt;This point needs revision.&lt;/cref&gt;
+</pre><a href="#section-5.5-6" class="pilcrow">¶</a>
+</div>
+<p id="section-5.5-7">
+       yields<a href="#section-5.5-7" class="pilcrow">¶</a></p>
+<p id="section-5.5-8"><span class="cref" id="Q1">This point needs revision.<span class="crefSource">JD</span></span><a href="#section-5.5-8" class="pilcrow">¶</a></p>
+</section>
+</section>
+<section id="section-6">
+      <h2 id="name-miscellaneous">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-miscellaneous" class="section-name selfRef">Miscellaneous</a>
+      </h2>
+<div id="q_valid">
+<section id="section-6.1">
+        <h3 id="name-how-do-i-know-if-my-xml-is-">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-how-do-i-know-if-my-xml-is-" class="section-name selfRef">How do I know if my XML is valid?</a>
+        </h3>
+<p id="section-6.1-1">xml2rfc validates it.
+Also, you can run rfclint: <span><a href="https://pypi.org/project/rfclint/">https://pypi.org/project/rfclint/</a></span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_HTMLoutput">
+<section id="section-6.2">
+        <h3 id="name-can-i-get-a-different-kind-">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-can-i-get-a-different-kind-" class="section-name selfRef">Can I get a different kind of HTML output?</a>
+        </h3>
+<p id="section-6.2-1">
+Yes, rfc2629.xslt by Julian Reschke provides a different kind of
+HTML output than the HTML output mode of
+xml2rfc.  See <a href="https://greenbytes.de/tech/webdav/rfc2629xslt/rfc2629xslt.html">"Transforming
+RFC7749-formatted XML through XSLT"</a> for more information.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_id2xml">
+<section id="section-6.3">
+        <h3 id="name-is-there-a-tool-that-will-t">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-is-there-a-tool-that-will-t" class="section-name selfRef">Is there a tool that will turn my text file into an XML file (i.e., id2xml)?</a>
+        </h3>
+<p id="section-6.3-1">
+Yes, id2xml is available here: <span><a href="https://pypi.org/project/id2xml/">https://pypi.org/project/id2xml/</a></span>. It is available as a web
+service on <span><a href="https://xml2rfc.tools.ietf.org/">https://xml2rfc.tools.ietf.org/</a></span>.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+<div id="s_new_with_v3">
+<section id="section-7">
+      <h2 id="name-new-with-v3">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-new-with-v3" class="section-name selfRef">New with v3</a>
+      </h2>
+<div id="q_convert_v2v3">
+<section id="section-7.1">
+        <h3 id="name-how-do-i-convert-my-xml-fil">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-how-do-i-convert-my-xml-fil" class="section-name selfRef">How do I convert my XML file from v2 to v3 so I can make
+      use of the new features?</a>
+        </h3>
+<p id="section-7.1-1">On the command line: <code>xml2rfc --v2v3 inputfile.xml</code>. You can
+      use the <code>--add-xinclude</code> option to replace RFC and I-D reference elements
+      with the appropriate xi:include element.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">Or, using the web service
+      (<span><a href="https://xml2rfc.tools.ietf.org/experimental.html">https://xml2rfc.tools.ietf.org/experimental.html</a></span>),
+      select "Output format: convert v2 to v3 XML".<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">After converting it to v3, please see <a href="#q_post_conversion_review" class="auto internal xref">Section 7.2</a>.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_post_conversion_review">
+<section id="section-7.2">
+        <h3 id="name-after-converting-an-xml-fil">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-after-converting-an-xml-fil" class="section-name selfRef">After converting an XML file from v2 to v3, what further
+      updates might be needed for the v3 XML file?</a>
+        </h3>
+<p id="section-7.2-1">You may want to do the following (for the sake of generating good
+      output and having a semantically accurate XML file):<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-2.1">
+            <p id="section-7.2-2.1.1">Review each list.<a href="#section-7.2-2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-2.1.2.1">Is it really a list? Or should indentation be added in another manner,
+   e.g., &lt;blockquote&gt;.<a href="#section-7.2-2.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-7.2-2.1.2.2">If so, should it be &lt;dl&gt;, &lt;ul&gt;, or &lt;ol&gt;? See <a href="#s_using_lists" class="auto internal xref">Section 4</a>.<a href="#section-7.2-2.1.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-7.2-2.2">
+            <p id="section-7.2-2.2.1">Review each &lt;artwork&gt;.<a href="#section-7.2-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-2.2.2.1">Should it be &lt;sourcecode&gt;? If so, what type? See <a href="#q_sourcecode" class="auto internal xref">Section 7.11</a>.<a href="#section-7.2-2.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-7.2-2.2.2.2">Should it be a table? See <a href="#q_table" class="auto internal xref">Section 7.6</a>.<a href="#section-7.2-2.2.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-7.2-2.3">Search for URLs; should these be &lt;eref&gt;? See <a href="#q_using_eref" class="auto internal xref">Section 3.6</a>.<a href="#section-7.2-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.2-2.4">Look for equations or other text where new features may improve
+clarity. See <a href="#q_new_features" class="auto internal xref">Section 7.4</a>.<a href="#section-7.2-2.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.2-2.5">Search for hardcoded citation tags (e.g., [RFC5234]) and update to
+&lt;xref&gt;s. See <a href="#q_add_reference" class="auto internal xref">Section 3.1</a>.<a href="#section-7.2-2.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.2-2.6">Search for "section" and make a link for any section number in RFCs and
+I-Ds (using &lt;xref&gt; with section and sectionFormat attributes). See <a href="#q_link_to_a_section" class="auto internal xref">Section 3.10</a>.<a href="#section-7.2-2.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.2-2.7">Review postal addresses of authors; has each address been tagged correctly?<a href="#section-7.2-2.7" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<div id="q_fix_upgrade_errors">
+<section id="section-7.3">
+        <h3 id="name-how-do-i-fix-common-errors-">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-how-do-i-fix-common-errors-" class="section-name selfRef">How do I fix common errors after the upgrade from v2 to v3?</a>
+        </h3>
+<span class="break"></span><dl class="dlParallel" id="section-7.3-1">
+          <dt id="section-7.3-1.1">
+        <code>xml2rfc</code> warns "Setting consensus="true" for IETF STD document".
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-7.3-1.2">
+        This is being discussed <a href="https://mailarchive.ietf.org/arch/msg/xml2rfc-dev/mSSiTDx40dUuRH_f8QJmK0b7ths">on
+        the xml2rfc-dev list</a>. You should disregard this warning for now.<a href="#section-7.3-1.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.3-1.3">
+        <code>xml2rfc</code> fails with "Reserved anchor name: section-....  Don't
+        use anchor names beginning with one of u-, section-, iref-, figure-,
+        table-".
+          </dt>
+          <dd style="margin-left: 1.5em" id="section-7.3-1.4">
+        Rename your section.<a href="#section-7.3-1.4" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-7.3-2">
+      Other errors can appear if you're using a helper tool to write your XML:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<div id="upgrade_errors_kramdown-rfc2629">
+<section id="section-7.3.1">
+          <h4 id="name-kramdown-rfc2629">
+<a href="#section-7.3.1" class="section-number selfRef">7.3.1. </a><a href="#name-kramdown-rfc2629" class="section-name selfRef">kramdown-rfc2629</a>
+          </h4>
+<p id="section-7.3.1-1">If you're using <a href="https://github.com/cabo/kramdown-rfc2629">kramdown-rfc2629</a>:<a href="#section-7.3.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.3.1-2">
+            <dt id="section-7.3.1-2.1">
+          If you don't specify a <code>date</code> for a reference, <code>xml2rfc</code>
+          fails with "Expected &lt;date&gt; attribute "year" to be an integer, but
+          found "n.d.""
+            </dt>
+            <dd style="margin-left: 1.5em" id="section-7.3.1-2.2">
+          This issue is tracked in <span><a href="https://github.com/cabo/kramdown-rfc2629/issues/64">https://github.com/cabo/kramdown-rfc2629/issues/64</a></span>.
+          Add <code>date: false</code> to your reference to avoid the error.<a href="#section-7.3.1-2.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="upgrade_errors_i_d_template">
+<section id="section-7.3.2">
+          <h4 id="name-i-d-template">
+<a href="#section-7.3.2" class="section-number selfRef">7.3.2. </a><a href="#name-i-d-template" class="section-name selfRef">i-d-template</a>
+          </h4>
+<p id="section-7.3.2-1">If you're using <a href="https://github.com/martinthomson/i-d-template">i-d-template</a>:<a href="#section-7.3.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.3.2-2">
+            <dt id="section-7.3.2-2.1">
+          <code>xml2rfc</code> warns that "The 'docName' attribute of the &lt;rfc/&gt;
+          element should have a revision number as the last component:
+          docName="draft-foo-bar-02"."
+            </dt>
+            <dd style="margin-left: 1.5em" id="section-7.3.2-2.2">
+          This issue is tracked in <span><a href="https://trac.ietf.org/tools/xml2rfc/trac/ticket/439">https://trac.ietf.org/tools/xml2rfc/trac/ticket/439</a></span>.
+          You can't modify your source to avoid it.<a href="#section-7.3.2-2.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="q_new_features">
+<section id="section-7.4">
+        <h3 id="name-what-are-the-new-features-w">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-what-are-the-new-features-w" class="section-name selfRef">What are the new features with v3?</a>
+        </h3>
+<p id="section-7.4-1">Some highlights are including Unicode characters,
+ text formatting, and SVG diagrams. For complete details, see <span><a href="https://www.rfc-editor.org/rfc/rfc7991#section-1.3" class="relref">Section 1.3</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span>.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_nonascii">
+<section id="section-7.5">
+        <h3 id="name-how-do-i-insert-non-ascii-c">
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-how-do-i-insert-non-ascii-c" class="section-name selfRef">How do I insert non-ASCII characters?</a>
+        </h3>
+<p id="section-7.5-1">With <code>encoding="utf-8"</code> in your XML file, you can use non-ASCII
+ characters in the following locations:<a href="#section-7.5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.5-2.1">&lt;author&gt; element (using the <code>fullname</code>,
+   <code>initials</code>, and <code>surname</code> attributes, while the
+   <code>asciiFullname</code>, <code>asciiInitials</code>, and
+   <code>asciiSurname</code> attributes hold the ASCII equivalents)<a href="#section-7.5-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.5-2.2">&lt;organization&gt; element<a href="#section-7.5-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.5-2.3">author's postal address (using &lt;street&gt;, &lt;city&gt;,
+   &lt;region&gt;, &lt;code&gt;, and &lt;country&gt; elements) and
+   email address. Each of these elements has an <code>ascii</code>
+   attribute to hold the ASCII equivalent, which will also appear in
+   the output format.<a href="#section-7.5-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.5-2.4">&lt;contact&gt; element (same structure as for the
+   &lt;author&gt; element)<a href="#section-7.5-2.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.5-2.5">contact's postal address and email
+   address (same structure as for the &lt;author&gt; element)<a href="#section-7.5-2.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.5-2.6">
+            <p id="section-7.5-2.6.1">body of the document<a href="#section-7.5-2.6.1" class="pilcrow">¶</a></p>
+<ul class="compact normal">
+<li class="compact normal" id="section-7.5-2.6.2.1">by using the &lt;u&gt; element if you need to specifiy non-ASCII characters for correct protocol operation; see examples below, or<a href="#section-7.5-2.6.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="compact normal" id="section-7.5-2.6.2.2">directly in &lt;t&gt; when the use of non-ASCII characters is purely part of an example and not otherwise required for correct protocol operation, or<a href="#section-7.5-2.6.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="compact normal" id="section-7.5-2.6.2.3">directly in &lt;sourcecode&gt; or &lt;artwork&gt; elements.<a href="#section-7.5-2.6.2.3" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+        </ul>
+<p id="section-7.5-3">
+The &lt;u&gt; element goes around a Unicode character;
+set the <code>format</code> attribute (using the keywords num, name, lit, char, and ascii)
+to indicate what is rendered in the output. See the <a href="https://xml2rfc.tools.ietf.org/xml2rfc-doc.html#name-u-new-2">schema documentation</a>.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
+<p id="section-7.5-4">Below are examples of using<a href="#section-7.5-4" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-7.5-5">
+<pre>&lt;u format="num-lit"&gt;水&lt;/u&gt;</pre><a href="#section-7.5-5" class="pilcrow">¶</a>
+</div>
+<p id="section-7.5-6">and various other options for the format attribute.<a href="#section-7.5-6" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-7.5-7">
+          <dt id="section-7.5-7.1">
+      format="num-lit":
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.2">
+   a single character <span class="unicode">U+6C34 ("水")</span>, often representing "water"<a href="#section-7.5-7.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.5-7.3">
+      format="num-name":
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.4">
+   a single character <span class="unicode">U+6C34 (CJK UNIFIED IDEOGRAPH-6C34)</span>, often representing "water"<a href="#section-7.5-7.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.5-7.5">
+      format="num-lit-name":
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.6">
+   a single character <span class="unicode">U+6C34 ("水", CJK UNIFIED IDEOGRAPH-6C34)</span>, often representing "water"<a href="#section-7.5-7.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.5-7.7">
+      format="num-name-lit":
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.8">
+   a single character <span class="unicode">U+6C34 (CJK UNIFIED IDEOGRAPH-6C34, "水")</span>, often representing "water"<a href="#section-7.5-7.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.5-7.9">
+      format="name-lit-num":
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.10">
+   a single character <span class="unicode">CJK UNIFIED IDEOGRAPH-6C34 ("水", U+6C34)</span>, often representing "water"<a href="#section-7.5-7.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.5-7.11">
+      format="lit-name-num" (default):
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.12">
+   a single character <span class="unicode">"水" (CJK UNIFIED IDEOGRAPH-6C34, U+6C34)</span>, often representing "water"<a href="#section-7.5-7.12" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.5-7.13">
+format="{lit} character ({num})":
+</dt>
+          <dd style="margin-left: 1.5em" id="section-7.5-7.14">
+the <span class="unicode">"水" character (U+6C34)</span>, often representing "water"<a href="#section-7.5-7.14" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-7.5-8">For background, see <span>[<a href="#RFC7997" class="cite xref">RFC7997</a>]</span>.<a href="#section-7.5-8" class="pilcrow">¶</a></p>
+<aside id="section-7.5-9">
+          <p id="section-7.5-9.1">Note: If the non-ASCII characters are in the Unicode Latin blocks, then
+it's not necessary to use the attributes for ASCII equivalents. (For example,
+when a <code>surname</code> contains <span class="unicode">"ä" (LATIN SMALL LETTER A WITH DIAERESIS, U+00E4)</span>, it's not necessary to include
+<code>asciiSurname</code>.)<a href="#section-7.5-9.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="q_table">
+<section id="section-7.6">
+        <h3 id="name-how-do-i-insert-a-table">
+<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-how-do-i-insert-a-table" class="section-name selfRef">How do I insert a table?</a>
+        </h3>
+<p id="section-7.6-1">For example:<a href="#section-7.6-1" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-7.6-2">
+<pre>
+&lt;table anchor="table_ex"&gt;
+  &lt;name&gt;IETF Meetings in 2005&lt;/name&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th align='center'&gt;IETF #&lt;/th&gt;
+      &lt;th align='center'&gt;City&lt;/th&gt;
+      &lt;th align='center'&gt;# of Attendees&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td align="center"&gt;62&lt;/td&gt;
+      &lt;td align="center"&gt;Minneapolis&lt;/td&gt;
+      &lt;td align="center"&gt;1133&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td align="center"&gt;63&lt;/td&gt;
+      &lt;td align="center"&gt;Paris&lt;/td&gt;
+      &lt;td align="center"&gt;1450&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td align="center"&gt;64&lt;/td&gt;
+      &lt;td align="center"&gt;Vancouver&lt;/td&gt;
+      &lt;td align="center"&gt;1240&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre><a href="#section-7.6-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.6-3">yields:<a href="#section-7.6-3" class="pilcrow">¶</a></p>
+<span id="name-ietf-meetings-in-2005"></span><div id="table_ex">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-ietf-meetings-in-2005" class="selfRef">IETF Meetings in 2005</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">IETF #</th>
+              <th class="text-center" rowspan="1" colspan="1">City</th>
+              <th class="text-center" rowspan="1" colspan="1"># of Attendees</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">62</td>
+              <td class="text-center" rowspan="1" colspan="1">Minneapolis</td>
+              <td class="text-center" rowspan="1" colspan="1">1133</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">63</td>
+              <td class="text-center" rowspan="1" colspan="1">Paris</td>
+              <td class="text-center" rowspan="1" colspan="1">1450</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">64</td>
+              <td class="text-center" rowspan="1" colspan="1">Vancouver</td>
+              <td class="text-center" rowspan="1" colspan="1">1240</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-7.6-5">
+      Data from <span><a href="https://www.ietf.org/how/meetings/past/">https://www.ietf.org/how/meetings/past/</a></span>.<a href="#section-7.6-5" class="pilcrow">¶</a></p>
+<p id="section-7.6-6">For full details, see <span><a href="https://www.rfc-editor.org/rfc/rfc7991#section-2.54" class="relref">Section 2.54</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span>.<a href="#section-7.6-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_makeSVG">
+<section id="section-7.7">
+        <h3 id="name-how-do-i-generate-svg-that-">
+<a href="#section-7.7" class="section-number selfRef">7.7. </a><a href="#name-how-do-i-generate-svg-that-" class="section-name selfRef">How do I generate SVG that will be accepted in an RFC?</a>
+        </h3>
+<p id="section-7.7-1">You can check your SVG file against the SVG Tiny 1.2
+spec on the experimental page
+      (<span><a href="https://xml2rfc.tools.ietf.org/experimental.html">https://xml2rfc.tools.ietf.org/experimental.html</a></span>),
+and a script called <code>svgcheck</code> is available here: <span><a href="https://pypi.org/project/svgcheck/">https://pypi.org/project/svgcheck/</a></span>.<a href="#section-7.7-1" class="pilcrow">¶</a></p>
+<p id="section-7.7-2">For more information, see <span>[<a href="#RFC7996" class="cite xref">RFC7996</a>]</span> and
+<a href="https://www.rfc-editor.org/rse/wiki/doku.php?id=svg_files">Tips
+on creating SVG
+files</a>.<a href="#section-7.7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_includeSVG">
+<section id="section-7.8">
+        <h3 id="name-how-do-i-include-svg-in-my-">
+<a href="#section-7.8" class="section-number selfRef">7.8. </a><a href="#name-how-do-i-include-svg-in-my-" class="section-name selfRef">How do I include SVG in my document?</a>
+        </h3>
+<p id="section-7.8-1">From RFC 7991:<a href="#section-7.8-1" class="pilcrow">¶</a></p>
+<blockquote id="section-7.8-2" cite="https://www.rfc-editor.org/rfc/rfc7991.txt">
+          <p id="section-7.8-2.1">
+   There are at least five ways to include SVG in artwork in
+   Internet-Drafts:<a href="#section-7.8-2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.8-2.2.1">
+      Inline, by including all of the SVG in the content of the element,
+      such as: &lt;artwork type="svg"&gt;&lt;svg xmlns="http://www.w3.org/2000/
+      svg..."&gt;<a href="#section-7.8-2.2.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.8-2.2.2">
+   Inline, but using XInclude (see Appendix B.1), such as: &lt;artwork
+      type="svg"&gt;&lt;xi:include href=...&gt;<a href="#section-7.8-2.2.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.8-2.2.3">
+   As a data: URI, such as: &lt;artwork type="svg" src="data:image/
+      svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3..."&gt;<a href="#section-7.8-2.2.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.8-2.2.4">
+   As a URI to an external entity, such as: &lt;artwork type="svg"
+      src="http://www.example.com/..."&gt;<a href="#section-7.8-2.2.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-7.8-2.2.5">
+   As a local file, such as: &lt;artwork type="svg"
+   src="diagram12.svg"&gt;<a href="#section-7.8-2.2.5" class="pilcrow">¶</a>
+</li>
+          </ul>
+</blockquote>
+<p id="section-7.8-3">For any given SVG artwork, you can provide an ASCII art equivalent (for use
+in the text output) by using the &lt;artset&gt; element. For example:<a href="#section-7.8-3" class="pilcrow">¶</a></p>
+<div class="lang-xml sourcecode" id="section-7.8-4">
+<pre>
+&lt;figure&gt;
+  &lt;name&gt;TCP Header Format&lt;/name&gt;
+  &lt;artset&gt;
+    &lt;artwork alt="TCP Header" type="svg"
+     src="https://www.rfc-editor.org/materials/format/svg/tcp-header.svg"/&gt;
+    &lt;artwork alt="TCP Header from RFC 793" type="ascii-art"&gt;
+       [... ASCII ART ...]
+    &lt;/artwork&gt;
+ &lt;/artset&gt;
+&lt;/figure&gt;
+</pre><a href="#section-7.8-4" class="pilcrow">¶</a>
+</div>
+<p id="section-7.8-5">which yields:<a href="#section-7.8-5" class="pilcrow">¶</a></p>
+<span id="name-tcp-header-format"></span><figure id="figure-1">
+          <div id="section-7.8-6.1">
+            <div class="alignLeft art-svg artwork" id="section-7.8-6.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="tiny" preserveAspectRatio="xMidYMid meet" version="1.2" viewBox="0 0 700.6 278.1">
+                <desc>TCP Header</desc>
+                <defs>
+                  <g id="whole-drawing">
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="70.4" y="25.3">0</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="101.2" y="25.3">1</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="132.0" y="25.3">2</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="162.8" y="25.3">3</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="193.6" y="25.3">4</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="224.4" y="25.3">5</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="255.2" y="25.3">6</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="286.0" y="25.3">7</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="316.8" y="25.3">8</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="347.6" y="25.3">9</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="378.4" y="25.3">10</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="409.2" y="25.3">11</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="440.0" y="25.3">12</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="470.8" y="25.3">13</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="501.6" y="25.3">14</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="532.4" y="25.3">15</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="563.2" y="25.3">16</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="594.0" y="25.3">17</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="624.8" y="25.3">18</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="655.6" y="25.3">19</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="686.4" y="25.3">20</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="717.2" y="25.3">21</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="748.0" y="25.3">22</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="778.8" y="25.3">23</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="809.6" y="25.3">24</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="840.4" y="25.3">25</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="871.2" y="25.3">26</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="902.0" y="25.3">27</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="932.8" y="25.3">28</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="963.6" y="25.3">29</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="994.4" y="25.3">30</text>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="middle" x="1025.2" y="25.3">31</text>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="32.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="32.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="32.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="34.4" y2="37.4"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="37.4" y2="37.4"></line>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="301.4" y="60.7">Source Port</text>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="37.4" y2="71.5"></line>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="794.2" y="60.7">Destination Port</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="37.4" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="66.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="66.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="66.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="68.5" y2="71.5"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="71.5" y2="71.5"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="59.4">0</text>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="547.8" y="94.8">Sequence Number</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="71.5" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="100.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="100.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="100.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="102.6" y2="105.6"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="105.6" y2="105.6"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="93.5">8</text>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="547.8" y="128.9">Acknowledgement
+Number</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="105.6" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="134.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="134.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="134.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="136.7" y2="139.7"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="139.7" y2="139.7"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="127.6">16</text>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="116.6" y="163.0">Data Offset</text>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="270.6" y="163.0">Reserved</text>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="14" text-anchor="middle" x="378.4" y="163.0">Urg</text>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="14" text-anchor="middle" x="409.2" y="163.0">Ack</text>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="14" text-anchor="middle" x="440.0" y="163.0">Psh</text>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="14" text-anchor="middle" x="470.8" y="163.0">Rst</text>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="14" text-anchor="middle" x="501.6" y="163.0">Syn</text>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="14" text-anchor="middle" x="532.4" y="163.0">Fin</text>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="139.7" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="794.2" y="163.0">Window</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="139.7" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="168.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="168.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="168.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="170.8" y2="173.8"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="173.8" y2="173.8"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="161.7">24</text>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="301.4" y="197.1">Checksum</text>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="173.8" y2="207.9"></line>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="794.2" y="197.1">Urgent Pointer</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="173.8" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="202.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="202.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="202.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="204.9" y2="207.9"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="207.9" y2="207.9"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="195.8">32</text>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="424.6" y="231.2">Options</text>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="207.9" y2="242.0"></line>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="917.4" y="231.2">Padding</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="207.9" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="237.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="237.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="237.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="239.0" y2="242.0"></line>
+                    <line stroke="black" stroke-width="1" x1="55.0" x2="1040.6" y1="242.0" y2="242.0"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="229.9">40</text>
+                    <text font-family="sans-serif" font-size="20" text-anchor="middle" x="547.8" y="265.3">Data</text>
+                    <line stroke="black" stroke-width="1" x1="1040.6" x2="1040.6" y1="242.0" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="85.8" x2="85.8" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="116.6" x2="116.6" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="147.4" x2="147.4" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="178.2" x2="178.2" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="209.0" x2="209.0" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="239.8" x2="239.8" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="270.6" x2="270.6" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="301.4" x2="301.4" y1="271.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="332.2" x2="332.2" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="363.0" x2="363.0" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="393.8" x2="393.8" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="424.6" x2="424.6" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="455.4" x2="455.4" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="486.2" x2="486.2" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="517.0" x2="517.0" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="547.8" x2="547.8" y1="271.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="578.6" x2="578.6" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="609.4" x2="609.4" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="640.2" x2="640.2" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="671.0" x2="671.0" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="701.8" x2="701.8" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="732.6" x2="732.6" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="763.4" x2="763.4" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="794.2" x2="794.2" y1="271.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="825.0" x2="825.0" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="855.8" x2="855.8" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="886.6" x2="886.6" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="917.4" x2="917.4" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="948.2" x2="948.2" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="979.0" x2="979.0" y1="273.1" y2="276.1"></line>
+                    <line stroke="black" stroke-width="1" x1="1009.8" x2="1009.8" y1="273.1" y2="276.1"></line>
+                    <text font-family="sans-serif" font-size="16.0" text-anchor="end" x="39.0" y="264.0">48</text>
+                    <rect fill="none" height="238.7" stroke="black" stroke-width="1" width="985.6" x="55.0" y="37.4"></rect>
+                  </g>
+                </defs>
+                <use transform="scale(0.65,0.65)" x="0" xlink:href="#whole-drawing" y="0"></use>
+              </svg><a href="#section-7.8-6.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-tcp-header-format" class="selfRef">TCP Header Format</a>
+          </figcaption></figure>
+</section>
+</div>
+<div id="q_bold_italics">
+<section id="section-7.9">
+        <h3 id="name-how-do-i-get-bold-italics-o">
+<a href="#section-7.9" class="section-number selfRef">7.9. </a><a href="#name-how-do-i-get-bold-italics-o" class="section-name selfRef">How do I get bold, italics, or a fixed-width font?</a>
+        </h3>
+<p id="section-7.9-1">Use<a href="#section-7.9-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.9-2.1">
+&lt;em&gt; for <em>italics</em>,<a href="#section-7.9-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.9-2.2">
+&lt;strong&gt; for <strong>bold</strong>, and<a href="#section-7.9-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.9-2.3">
+&lt;tt&gt; for <code>fixed-width font</code>.<a href="#section-7.9-2.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<aside id="section-7.9-3">
+          <p id="section-7.9-3.1">Note: in the text output, &lt;em&gt; yields underscores, and &lt;strong&gt; yields
+asterisks. (&lt;tt&gt; yields nothing as of xml2rfc 3.10.0 in Sept. 2021; previously it yielded quotation marks.)<a href="#section-7.9-3.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="q_subscript">
+<section id="section-7.10">
+        <h3 id="name-how-do-i-get-subscript-and-">
+<a href="#section-7.10" class="section-number selfRef">7.10. </a><a href="#name-how-do-i-get-subscript-and-" class="section-name selfRef">How do I get subscript and superscript?</a>
+        </h3>
+<p id="section-7.10-1">Use &lt;sub&gt; for subscript and &lt;sup&gt; for superscript.<a href="#section-7.10-1" class="pilcrow">¶</a></p>
+<p id="section-7.10-2">Example (using text from RFC 6330):<a href="#section-7.10-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.10-3.1">
+   x<sub>0</sub> = (y + i) mod 2<sup>8</sup><a href="#section-7.10-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.10-3.2">
+   x<sub>1</sub> = (floor(y / 2<sup>8</sup>) + i) mod 2<sup>8</sup><a href="#section-7.10-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.10-3.3">
+   x<sub>2</sub> = (floor(y / 2<sup>16</sup>) + i) mod 2<sup>8</sup><a href="#section-7.10-3.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-7.10-3.4">
+   x<sub>3</sub> = (floor(y / 2<sup>24</sup>) + i) mod 2<sup>8</sup><a href="#section-7.10-3.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+<aside id="section-7.10-4">
+          <p id="section-7.10-4.1">Note: in the text output, &lt;sub&gt; yields underscore and parentheses,
+  e.g., <code>x_(n-1)</code>,
+ &lt;sup&gt; yields caret and parentheses, e.g., <code>2^(n-1)</code>.<a href="#section-7.10-4.1" class="pilcrow">¶</a></p>
+<p id="section-7.10-4.2">As of xml2rfc 3.6.0, &lt;sub&gt; and &lt;sup&gt; no longer yield parentheses around simple numbers.<a href="#section-7.10-4.2" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="q_sourcecode">
+<section id="section-7.11">
+        <h3 id="name-what-are-the-preferred-valu">
+<a href="#section-7.11" class="section-number selfRef">7.11. </a><a href="#name-what-are-the-preferred-valu" class="section-name selfRef">What are the preferred values for the type of the &lt;sourcecode&gt; element?</a>
+        </h3>
+<p id="section-7.11-1">Please see the list on <span><a href="https://www.rfc-editor.org/materials/sourcecode-types.txt">https://www.rfc-editor.org/materials/sourcecode-types.txt</a></span>.<a href="#section-7.11-1" class="pilcrow">¶</a></p>
+<p id="section-7.11-2">For more information, see <span><a href="https://www.rfc-editor.org/rfc/rfc7991#section-2.48.4" class="relref">Section 2.48.4</a> of [<a href="#RFC7991" class="cite xref">RFC7991</a>]</span>.<a href="#section-7.11-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_yang">
+<section id="section-7.12">
+        <h3 id="name-how-should-a-yang-module-ap">
+<a href="#section-7.12" class="section-number selfRef">7.12. </a><a href="#name-how-should-a-yang-module-ap" class="section-name selfRef">How should a YANG module appear?</a>
+        </h3>
+<p id="section-7.12-1">For a YANG module, please use &lt;sourcecode&gt; with type="yang"
+ and markers="true". The latter creates the &lt;CODE BEGINS&gt; and
+ &lt;CODE ENDS&gt; tags in the output. If you set the name attribute, the
+ filename will appear in the output. For example:<a href="#section-7.12-1" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-7.12-2">
+<pre>
+&lt;sourcecode type="yang" markers="true" name="foo.yang"&gt;
+</pre><a href="#section-7.12-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.12-3">yields<a href="#section-7.12-3" class="pilcrow">¶</a></p>
+<div class="sourcecode" id="section-7.12-4">
+<pre>
+&lt;CODE BEGINS&gt; file "foo.yang"
+  [...]
+&lt;CODE ENDS&gt;
+</pre><a href="#section-7.12-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="q_bcp14">
+<section id="section-7.13">
+        <h3 id="name-do-i-have-to-use-the-bcp14-">
+<a href="#section-7.13" class="section-number selfRef">7.13. </a><a href="#name-do-i-have-to-use-the-bcp14-" class="section-name selfRef">Do I have to use the bcp14 element each time a
+ keyword (e.g., "MUST") appears in my document?</a>
+        </h3>
+<p id="section-7.13-1">It is not a <span class="bcp14">MUST</span>, but it makes the usage more
+clear.<a href="#section-7.13-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_printing">
+<section id="section-7.14">
+        <h3 id="name-what-is-the-best-way-to-pri">
+<a href="#section-7.14" class="section-number selfRef">7.14. </a><a href="#name-what-is-the-best-way-to-pri" class="section-name selfRef">What is the best way to print a hard copy?</a>
+        </h3>
+<p id="section-7.14-1">Print the PDF.<a href="#section-7.14-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_rfcfiles">
+<section id="section-7.15">
+        <h3 id="name-how-do-i-download-the-xml-s">
+<a href="#section-7.15" class="section-number selfRef">7.15. </a><a href="#name-how-do-i-download-the-xml-s" class="section-name selfRef">How do I download the XML source files for all RFCs?</a>
+        </h3>
+<p id="section-7.15-1">The source files of RFCs have changed over time. Most RFCs have NROFF
+source files; sometimes an XML file has been archived. You can request an XML
+source file directly from rfc-editor@rfc-editor.org. For RFCs created after
+the transition to xml2rfc v3, the XML files will be available
+for bulk download from <span><a href="https://www.rfc-editor.org/retrieve/bulk">https://www.rfc-editor.org/retrieve/bulk</a></span>.<a href="#section-7.15-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="q_deprecated">
+<section id="section-7.16">
+        <h3 id="name-what-has-been-deprecated-fr">
+<a href="#section-7.16" class="section-number selfRef">7.16. </a><a href="#name-what-has-been-deprecated-fr" class="section-name selfRef">What has been deprecated from xml2rfc v2?</a>
+        </h3>
+<p id="section-7.16-1">Please see <a href="https://xml2rfc.tools.ietf.org/xml2rfc-doc.html#name-deprecated-elements-and-attr">"Deprecated Elements and Attributes"</a> in the schema documentation.<a href="#section-7.16-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<section id="section-8">
+      <h2 id="name-informative-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+      </h2>
+<dl class="references">
+<dt id="howto">[howto]</dt>
+      <dd>
+<span class="refAuthor">Rose, M.</span>, <span class="refTitle">"Writing I-Ds and RFCs using XML (revised)"</span>, <time datetime="2006-07-22" class="refDate">22 July 2006</time>, <span>&lt;<a href="https://xml2rfc.ietf.org/authoring/draft-mrose-writing-rfcs.html">https://xml2rfc.ietf.org/authoring/draft-mrose-writing-rfcs.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.levkowetz-xml2rfc-v3-implementation-notes">[I-D.levkowetz-xml2rfc-v3-implementation-notes]</dt>
+      <dd>
+<span class="refAuthor">Levkowetz, H.</span>, <span class="refTitle">"Implementation notes for RFC7991,"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-levkowetz-xml2rfc-v3-implementation-notes-13</span>, <time datetime="2021-09-16" class="refDate">16 September 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-levkowetz-xml2rfc-v3-implementation-notes-13">https://datatracker.ietf.org/doc/html/draft-levkowetz-xml2rfc-v3-implementation-notes-13</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7296">[IKEv2]</dt>
+      <dd>
+<span class="refAuthor">Kaufman, C.</span>, <span class="refAuthor">Hoffman, P.</span>, <span class="refAuthor">Nir, Y.</span>, <span class="refAuthor">Eronen, P.</span>, and <span class="refAuthor">T. Kivinen</span>, <span class="refTitle">"Internet Key Exchange Protocol Version 2 (IKEv2)"</span>, <span class="seriesInfo">STD 79</span>, <span class="seriesInfo">RFC 7296</span>, <span class="seriesInfo">DOI 10.17487/RFC7296</span>, <time datetime="2014-10" class="refDate">October 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7296">https://www.rfc-editor.org/info/rfc7296</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3550">[RFC3550]</dt>
+      <dd>
+<span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Casner, S.</span>, <span class="refAuthor">Frederick, R.</span>, and <span class="refAuthor">V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD 64</span>, <span class="seriesInfo">RFC 3550</span>, <span class="seriesInfo">DOI 10.17487/RFC3550</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3550">https://www.rfc-editor.org/info/rfc3550</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7991">[RFC7991]</dt>
+      <dd>
+<span class="refAuthor">Hoffman, P.</span>, <span class="refTitle">"The "xml2rfc" Version 3 Vocabulary"</span>, <span class="seriesInfo">RFC 7991</span>, <span class="seriesInfo">DOI 10.17487/RFC7991</span>, <time datetime="2016-12" class="refDate">December 2016</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc7991">https://tools.ietf.org/html/rfc7991</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7996">[RFC7996]</dt>
+      <dd>
+<span class="refAuthor">Brownlee, N.</span>, <span class="refTitle">"SVG Drawings for RFCs: SVG 1.2 RFC"</span>, <span class="seriesInfo">RFC 7996</span>, <span class="seriesInfo">DOI 10.17487/RFC7996</span>, <time datetime="2016-12" class="refDate">December 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7996">https://www.rfc-editor.org/info/rfc7996</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7997">[RFC7997]</dt>
+      <dd>
+<span class="refAuthor">Flanagan, H., Ed.</span>, <span class="refTitle">"The Use of Non-ASCII Characters in RFCs"</span>, <span class="seriesInfo">RFC 7997</span>, <span class="seriesInfo">DOI 10.17487/RFC7997</span>, <time datetime="2016-12" class="refDate">December 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7997">https://www.rfc-editor.org/info/rfc7997</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="templates">[templates]</dt>
+      <dd>
+<span class="refTitle">"Templates directory"</span>, <span>&lt;<a href="https://tools.ietf.org/tools/templates/">https://tools.ietf.org/tools/templates/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="W3C">[W3C]</dt>
+      <dd>
+<span class="refTitle">"World Wide Web Consortium (W3C)"</span>, <span>&lt;<a href="https://www.w3.org/">https://www.w3.org/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="xml2rfc">[xml2rfc]</dt>
+    <dd>
+<span class="refTitle">"xml2rfc"</span>, <span>&lt;<a href="https://author-tools.ietf.org/">https://author-tools.ietf.org/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">
+This FAQ was made possible by the tools, documentation, and test files
+created by <span class="contact-name">Henrik Levkowetz</span>, <span class="contact-name">Julian Reschke</span>, <span class="contact-name">Paul Hoffman</span>, and <span class="contact-name">Sandy Ginoza</span>. Also, thanks to <span class="contact-name">Jeffrey Yaskin</span> for contributing.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Alice Russo</span></div>
+<div dir="auto" class="left"><span class="org">RFC Production Center</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:arusso@amsl.com" class="email">arusso@amsl.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

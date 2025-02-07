@@ -1,0 +1,3691 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head profile="http://dublincore.org/documents/2008/08/04/dc-html/">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="index,follow">
+    <meta name="creator" content="rfcmarkup version 1.116">
+    <link rel="schema.DC" href="https://purl.org/dc/elements/1.1/
+<view-source:http://purl.org/dc/elements/1.1/>">
+<meta name="DC.Identifier" content="urn:ietf:id:brownlee-svg-rfc">
+<meta name="DC.Description.Abstract" content="This document specifies SVG 1.2 RFC - an SVG profile for use in diagrams
+that may appear in RFCs - and considers some of the issues concerning
+the creation and use of such diagrams.">
+<meta name="DC.Creator" content="Brownlee, Nevil">
+<meta name="DC.Creator" content="IAB, ">
+<meta name="DC.Date.Issued" content="2015-09-23">
+<meta name="DC.Title" content="SVG Drawings for RFCs: SVG 1.2 RFC">
+
+    <link rel="icon" href="https://tools.ietf.org/images/id.png
+<view-source:https://tools.ietf.org/images/id.png>" type="image/png">
+    <link rel="shortcut icon" href="https://tools.ietf.org/images/id.png
+<view-source:https://tools.ietf.org/images/id.png>" type="image/png">
+    <title>draft-brownlee-svg-rfc-13 - SVG Drawings for RFCs: SVG 1.2 RFC</title>
+    
+    
+    <style type="text/css">
+	@media only screen 
+	  and (min-width: 992px)
+	  and (max-width: 1199px) {
+	    body { font-size: 14pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (min-width: 768px)
+	  and (max-width: 991px) {
+            body { font-size: 14pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (min-width: 480px)
+	  and (max-width: 767px) {
+            body { font-size: 11pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (max-width: 479px) {
+            body { font-size: 8pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (min-device-width : 375px) 
+	  and (max-device-width : 667px) {
+            body { font-size: 9.5pt; }
+            div.content { width: 96ex; margin: 0 1px; }
+        }
+	@media only screen 
+	  and (min-device-width: 1200px) {
+            body { font-size: 10pt; margin: 0 4em; }
+            div.content { width: 96ex; margin: 0; }
+        }
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	    font-weight: bold;
+            line-height: 0pt;
+            display: inline;
+            white-space: pre;
+            font-family: monospace;
+            font-size: 1em;
+	    font-weight: bold;
+        }
+        pre {
+            font-size: 1em;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+	.pre {
+	    white-space: pre;
+	    font-family: monospace;
+	}
+	.header{
+	    font-weight: bold;
+	}
+        .newpage {
+            page-break-before: always;
+        }
+        .invisible {
+            text-decoration: none;
+            color: white;
+        }
+        a.selflink {
+          color: black;
+          text-decoration: none;
+        }
+        @media print {
+            body {
+                font-family: monospace;
+                font-size: 10.5pt;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-size: 1em;
+            }
+        
+            a:link, a:visited {
+                color: inherit;
+                text-decoration: none;
+            }
+            .noprint {
+                display: none;
+            }
+        }
+	@media screen {
+	    .grey, .grey a:link, .grey a:visited {
+		color: #777;
+	    }
+            .docinfo {
+                background-color: #EEE;
+            }
+            .top {
+                border-top: 7px solid #EEE;
+            }
+            .bgwhite  { background-color: white; }
+            .bgred    { background-color: #F44; }
+            .bggrey   { background-color: #666; }
+            .bgbrown  { background-color: #840; }            
+            .bgorange { background-color: #FA0; }
+            .bgyellow { background-color: #EE0; }
+            .bgmagenta{ background-color: #F4F; }
+            .bgblue   { background-color: #66F; }
+            .bgcyan   { background-color: #4DD; }
+            .bggreen  { background-color: #4F4; }
+
+            .legend   { font-size: 90%; }
+            .cplate   { font-size: 70%; border: solid grey 1px; }
+	}
+    </style>
+    <!--[if IE]>
+    <style>
+    body {
+       font-size: 13px;
+       margin: 10px 10px;
+    }
+    </style>
+    <![endif]-->
+
+    <script type="text/javascript"><!--
+    function addHeaderTags() {
+	var spans = document.getElementsByTagName("span");
+	for (var i=0; i < spans.length; i++) {
+	    var elem = spans[i];
+	    if (elem) {
+		var level = elem.getAttribute("class");
+                if (level == "h1" || level == "h2" || level == "h3" || level == "h4" || level == "h5" || level == "h6") {
+                    elem.innerHTML = "<"+level+">"+elem.innerHTML+"</"+level+">";		
+                }
+	    }
+	}
+    }
+    var legend_html = "Colour legend:<br />      <table>         <tr><td>Unknown:</td>                   <td><span class='cplate bgwhite'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Draft:</td>                     <td><span class='cplate bgred'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Informational:</td>             <td><span class='cplate bgorange'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Experimental:</td>              <td><span class='cplate bgyellow'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Best Common Practice:</td>      <td><span class='cplate bgmagenta'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Proposed Standard:</td>         <td><span class='cplate bgblue'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Draft Standard (old designation):</td> <td><span class='cplate bgcyan'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Internet Standard:</td>         <td><span class='cplate bggreen'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Historic:</td>                  <td><span class='cplate bggrey'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Obsolete:</td>                  <td><span class='cplate bgbrown'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>     </table>";
+    function showElem(id) {
+        var elem = document.getElementById(id);
+        elem.innerHTML = eval(id+"_html");
+        elem.style.visibility='visible';
+    }
+    function hideElem(id) {
+        var elem = document.getElementById(id);
+        elem.style.visibility='hidden';        
+        elem.innerHTML = "";
+    }
+    // -->
+    </script>
+</head>
+<body onload="addHeaderTags()">
+  <div class="content">
+   <div style="height: 13px;">
+      <div onmouseover="this.style.cursor='pointer';" onclick="showElem('legend');" onmouseout="hideElem('legend')" style="height: 6px; position: absolute;" class="pre noprint docinfo bgred" title="Click for colour legend.">                                                                        </div>
+      <div id="legend" class="docinfo noprint pre legend" style="position:absolute; top: 4px; left: 4ex; visibility:hidden;
+background-color: white; padding: 4px 9px 5px 7px; border: solid #345 1px; " onmouseover="showElem('legend');" onmouseout="hideElem('legend');">
+      </div>
+   </div>
+<span class="pre noprint docinfo top">[<a href="https://tools.ietf.org/html/ <view-source:https://tools.ietf.org/html/>" title="Document search and retrieval page">Docs</a>] [<a href="https://tools.ietf.org/id/draft-brownlee-svg-rfc-13.txt
+<view-source:https://tools.ietf.org/id/draft-brownlee-svg-rfc-13.txt>" title="Plaintext version of this document">txt</a>|<a href="https://tools.ietf.org/pdf/draft-brownlee-svg-rfc-13.txt
+<view-source:https://tools.ietf.org/pdf/draft-brownlee-svg-rfc-13.txt>" title="PDF version of this document">pdf</a>|<a href="https://tools.ietf.org/id/draft-brownlee-svg-rfc-13.xml
+<view-source:https://tools.ietf.org/id/draft-brownlee-svg-rfc-13.xml>" title="XML source for this document">xml</a>] [<a href="https://datatracker.ietf.org/doc/draft-brownlee-svg-rfc
+<view-source:https://datatracker.ietf.org/doc/draft-brownlee-svg-rfc>" title="IESG Datatracker information for this document">Tracker</a>] [<a href="mailto:draft-brownlee-svg-rfc@tools.ietf.org?subject=draft-brownlee-svg-rfc%20" title="Send email to the document authors">Email</a>] [<a href="https://tools.ietf.org/rfcdiff?difftype=--hwdiff&amp;url2=draft-brownlee-svg-rfc-13.txt
+<view-source:https://tools.ietf.org/rfcdiff?difftype=--hwdiff&url2=draft-brownlee-svg-rfc-13.txt>" title="Inline diff (wdiff)">Diff1</a>] [<a href="https://tools.ietf.org/rfcdiff?url2=draft-brownlee-svg-rfc-13.txt
+<view-source:https://tools.ietf.org/rfcdiff?url2=draft-brownlee-svg-rfc-13.txt>" title="Side-by-side diff">Diff2</a>] [<a href="https://tools.ietf.org/idnits?url=https://tools.ietf.org/id/draft-brownlee-svg-rfc-13.txt
+<view-source:https://tools.ietf.org/idnits?url=https://tools.ietf.org/id/draft-brownlee-svg-rfc-13.txt>" title="Run an idnits check of this document">Nits</a>]           </span><br>
+<span class="pre noprint docinfo">                                                                        </span><br>
+<span class="pre noprint docinfo">Versions: <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-00
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-00>">00</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-01
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-01>">01</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-02
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-02>">02</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-03
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-03>">03</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-04
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-04>">04</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-05
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-05>">05</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-06
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-06>">06</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-07
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-07>">07</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-08
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-08>">08</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-09
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-09>">09</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-10
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-10>">10</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-11
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-11>">11</a>                           
+          <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-12
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-12>">12</a> <a href="https://tools.ietf.org/html/draft-brownlee-svg-rfc-13
+<view-source:https://tools.ietf.org/html/draft-brownlee-svg-rfc-13>">13</a>                                                  <span style="font-weight: bold; ">Expired</span></span><br>
+<span class="pre noprint docinfo">                                                                        </span><br>
+<pre>Network Working Group                                        N. Brownlee
+Internet-Draft                                The University of Auckland
+Intended status: Informational                                       IAB
+Expires: April 18, 2016                                 October 16, 2015
+
+
+                   <span class="h1"><h1>SVG Drawings for RFCs: SVG 1.2 RFC</h1></span>
+                       <span class="h1"><h1>draft-brownlee-svg-rfc-13</h1></span>
+
+Abstract
+
+   This document specifies SVG 1.2 RFC - an SVG profile for use in
+   diagrams that may appear in RFCs - and considers some of the issues
+   concerning the creation and use of such diagrams.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of <a href="https://tools.ietf.org/html/bcp78
+<view-source:https://tools.ietf.org/html/bcp78>">BCP 78</a> and <a href="https://tools.ietf.org/html/bcp79
+<view-source:https://tools.ietf.org/html/bcp79>">BCP 79</a>.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at <a href="http://datatracker.ietf.org/drafts/current/
+<view-source:http://datatracker.ietf.org/drafts/current/>">http://datatracker.ietf.org/drafts/current/</a>.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on April 18, 2016.
+
+Copyright Notice
+
+   Copyright (c) 2015 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to <a href="https://tools.ietf.org/html/bcp78
+<view-source:https://tools.ietf.org/html/bcp78>">BCP 78</a> and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (<a href="http://trustee.ietf.org/license-info
+<view-source:http://trustee.ietf.org/license-info>">http://trustee.ietf.org/license-info</a>) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in <a href="#section-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-4>">Section 4</a>.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 1]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-2" id="page-2" href="#page-2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-2>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+Table of Contents
+
+   <a href="#section-1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-1>">1</a>.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-2>">2</a>
+   <a href="#section-2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2>">2</a>.  SVG 1.2 RFC: An SVG profile for RFCs  . . . . . . . . . . . .   <a href="#page-3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-3>">3</a>
+     2.1.  Elements, properties and attributes allowed in SVG 1.2
+           RFC . . . . . . . . . . . . . . . . . . . . . . . . . . .   <a href="#page-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-4>">4</a>
+   <a href="#section-3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-3>">3</a>.  How to create SVG drawings  . . . . . . . . . . . . . . . . .   <a href="#page-6
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-6>">6</a>
+   <a href="#section-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-4>">4</a>.  Accessibility Considerations  . . . . . . . . . . . . . . . .   <a href="#page-7
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-7>">7</a>
+   <a href="#section-5
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5>">5</a>.  Meta-language for diagrams common in RFCs . . . . . . . . . .   <a href="#page-8
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-8>">8</a>
+     <a href="#section-5.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5.1>">5.1</a>.  Packet Layout Diagrams  . . . . . . . . . . . . . . . . .   <a href="#page-8
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-8>">8</a>
+     <a href="#section-5.2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5.2>">5.2</a>.  Sequence Diagrams (1) . . . . . . . . . . . . . . . . . .   <a href="#page-9
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-9>">9</a>
+     <a href="#section-5.3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5.3>">5.3</a>.  Sequence Diagrams (2) . . . . . . . . . . . . . . . . . .  <a href="#page-11
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-11>">11</a>
+   <a href="#section-6
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-6>">6</a>.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  <a href="#page-13
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-13>">13</a>
+   <a href="#section-7
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-7>">7</a>.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-13
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-13>">13</a>
+   <a href="#section-8
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-8>">8</a>.  Revision History [RFC Editor please delete] . . . . . . . . .  <a href="#page-14
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-14>">14</a>
+   <a href="#section-9
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-9>">9</a>.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-15
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-15>">15</a>
+     <a href="#section-9.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-9.1>">9.1</a>.  Normative References  . . . . . . . . . . . . . . . . . .  <a href="#page-15
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-15>">15</a>
+     <a href="#section-9.2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-9.2>">9.2</a>.  Informative References  . . . . . . . . . . . . . . . . .  <a href="#page-16
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-16>">16</a>
+   <a href="#appendix-A
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#appendix-A>">Appendix A</a>.  RELAX NG Compact (rnc) Schema for SVG 1.2 RFC  . . .  <a href="#page-17
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-17>">17</a>
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  <a href="#page-58
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-58>">58</a>
+
+<span class="h2"><h2><a class="selflink" name="section-1" href="#section-1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-1>">1</a>.  Introduction</h2></span>
+
+   Over the last two years the RFC Editor has worked with the Internet
+   community to develop specifications for changes in the format of
+   RFCs.  An outline of the resulting specifications was published as
+   [<a href="https://tools.ietf.org/html/rfc6949
+<view-source:https://tools.ietf.org/html/rfc6949>" title="&quot;RFC Series Format Requirements and Future Development&quot;">RFC6949</a>] in May 2013.  Since then a Design Team has been working
+   with the RFC Editor to flesh out those specifications.  One aspect of
+   the changes is to allow line drawings in RFCs; [<a href="https://tools.ietf.org/html/rfc6949
+<view-source:https://tools.ietf.org/html/rfc6949>" title="&quot;RFC Series Format Requirements and Future Development&quot;">RFC6949</a>] says
+
+      "Graphics may include ASCII art and a more complex form to be
+      defined, such as SVG line art [SVG].  Color and grayscale will not
+      be accepted.  RFCs must correctly display in monochromatic black-
+      and-white to allow for monochrome displays, black-and-white
+      printing, and support for visual disabilities."
+
+   SVG (Scalable Vector Graphics) has been developed by W3C, the World
+   Wide Web Consortium; its current standard is SVG 1.1 Full
+   [<a href="#ref-W3C.REC-SVG11-20110816
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-W3C.REC-SVG11-20110816>">W3C.REC-SVG11-20110816</a>].  This document defines SVG 1.2 RFC, an SVG
+   profile (i.e. a subset of SVG) that is suitable for RFC line
+   drawings.
+
+   Note that in RFCs, the text provides normative descriptions of
+   protocols, systems, etc.  Diagrams may be used to help explain
+   concepts more clearly, but they provide supporting detail, and should
+   not be considered to be complete specifications in themselves.
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 2]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-3" id="page-3" href="#page-3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-3>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   The details (particularly any vocabularies) described in this
+   document are expected to change based on experience gained in
+   implementing the RFC production center's toolset.  Revised documents
+   will be published capturing those changes as the toolset is
+   completed.  Other implementors must not expect those changes to
+   remain backwards-compatible with the details described in this
+   document.
+
+<span class="h2"><h2><a class="selflink" name="section-2" href="#section-2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2>">2</a>.  SVG 1.2 RFC: An SVG profile for RFCs</h2></span>
+
+   As a starting point for SVG 1.2 RFC, the Design Team decided to use
+   SVG 1.2 Tiny [<a href="#ref-W3C.REC-SVGTiny12-20081222
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-W3C.REC-SVGTiny12-20081222>">W3C.REC-SVGTiny12-20081222</a>].  SVG 1.2 Tiny is an SVG
+   subset intended to be implemented on small, mobile devices such as
+   cellphones and smartphones.  That should allow RFCs to be rendered
+   well on such devices, especially those that have small screens.
+   However, RFCs are self-contained documents that do not change once
+   they are published.  The use of SVG drawings in RFCs is intended to
+   allow authors to create drawings that are simple to produce, and
+   easier to understand than our traditional 'ASCII Art' ones.  In
+   short, we are also trying to improve access to the content in RFCs,
+   so SVG drawings need to be kept as simple as possible.
+
+   SVG can provide a complete User Interface, but within RFCs, all we
+   need are simple diagrams that do not change once the RFC is
+   published.  Therefore, SVG RFC does not allow anything from the
+   following sections in SVG Tiny 1.2 [<a href="#ref-W3C.REC-SVGTiny12-20081222
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-W3C.REC-SVGTiny12-20081222>">W3C.REC-SVGTiny12-20081222</a>]:
+
+   12  Multimedia
+   13  Interactivity
+   15  Scripting
+   16  Animation
+   18  Metadata
+   19  Extensibility
+
+   Note that SVG Tiny 1.2 elements may have many properties or
+   attributes that are needed to support aspects of the above sections.
+   Those are not allowed in SVG 1.2 RFC.
+
+   Considering the other sections in SVG Tiny 1.2
+   [<a href="#ref-W3C.REC-SVGTiny12-20081222
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-W3C.REC-SVGTiny12-20081222>">W3C.REC-SVGTiny12-20081222</a>]:
+
+    9 Basic Shapes
+   10 Text
+        Everything in these sections is allowed in SVG 1.2 RFC.
+
+   11 Painting: Filling, Stroking, Colors and Paint Servers
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 3]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-4" id="page-4" href="#page-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-4>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        Anything relating to 'color' is not allowed in SVG 1.2 RFC,
+        everything else is allowed.  This is a requirement documented in
+        [<a href="https://tools.ietf.org/html/rfc6949
+<view-source:https://tools.ietf.org/html/rfc6949>" title="&quot;RFC Series Format Requirements and Future Development&quot;">RFC6949</a>].
+
+   14 Linking
+        SVG Tiny 1.2 allows internationalized IRIs in references.  In
+        SVG 1.2 RFC such links must be ASCII only.  That should not
+        cause problems, since one can just use the URI form of any IRI.
+        Authors should try to use links only to URIs that are long-term
+        stable.
+
+
+   17 Fonts
+        SVG 1.2 RFC only allows 'serif', 'sans-serif' and 'monospace'
+        generic font families from the WebFonts facility, described in
+        CSS 2.1, [<a href="#ref-W3C.REC-CSS2-20110607
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-W3C.REC-CSS2-20110607>">W3C.REC-CSS2-20110607</a>], section 15, Fonts.  In
+        particular, the SVG 'font' element is not allowed.
+
+<span class="h3"><h3><a class="selflink" name="section-2.1" href="#section-2.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.1>">2.1</a>.  Elements, properties and attributes allowed in SVG 1.2 RFC</h3></span>
+
+   Elements, properties and attributes selected for SVG 1.2 RFC from
+   [<a href="#ref-W3C.REC-SVGTiny12-20081222
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-W3C.REC-SVGTiny12-20081222>">W3C.REC-SVGTiny12-20081222</a>].
+
+ In the list below, elements and properties are listed on the
+ left,and their allowed values are given in parentheses on the
+ right.
+
+ &lt;color&gt; is the list of allowed colors, a black-and-white
+         subset of the SVG color names.
+
+ &lt;style&gt; is a set of CSS attributes that are commonly used (by SVG
+         drawing applications).  They are not part of SVG Tiny 1.2,
+         but are included here for compatibility.  Note that
+         - There is no guarantee that any renderer will implement
+           all the CSS attributes a drawing application may use.
+         - Authors will need to consider the compatibility of their
+           drawings with rendering devices.
+
+ Elements:
+
+   svg              (version, baseProfile=tiny, width, viewBox,
+                     preserveAspectRatio, snapshotTime, height,
+                     id, role)
+   g                (label, class, id, role, fill, &lt;style&gt;, transform)
+   defs             (id, role, fill)
+   title            (id, role)
+   desc             (id, role)
+   a                (id, role, fill, transform)
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 4]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-5" id="page-5" href="#page-5
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-5>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   use              (x, y, href, xlink:href, id, role, fill, transform)
+
+   rect             (x, y, width, height, rx, ry, stroke-miterlimit
+                     id, role, fill, &lt;style&gt;, transform)
+   circle           (cx, cy, r,
+                     id, role, fill, &lt;style&gt;, transform)
+   ellipse          (cx, cy, rx, ry,
+                     id, role, fill, &lt;style&gt;, transform)
+   line             (x1, y1, x2, y2,  id, role, fill, transform)
+   polyline         (points, id, role, fill, transform)
+   polygon          (points, id, role, fill, &lt;style&gt;, transform)
+   text             (x, y, rotate, id, role, fill, &lt;style&gt;, transform)
+   tspan            (id, role, fill)
+   textArea         (x, y, width, height, auto, id, role, fill, transform)
+   tbreak           (id, role)
+
+   solidColor       (id, role, fill)
+   linearGradient   (gradientUnits, x1, y1, x2, y2, id, role, fill)
+   radialGradient   (gradientUnits, cx, cy, r, id, role, fill)
+   stop             (id, role, fill)
+   path             (d, pathLength, stroke-miterlimit,
+                     id, role, fill, &lt;style&gt;, transform)
+
+ Properties:  (most allow inherit as a value)
+
+   &lt;style&gt;          (font-family, font-weight, font-style,
+                     font-variant, direction, unicode-bidi, text-anchor,
+                     fill, fill-rule)
+
+   &lt;color&gt;          (black, white, #000000, #ffffff, #FFFFFF)
+
+   stroke           (&lt;color&gt;, none, currentColor)
+   stroke-width
+   stroke-linecap   (butt, round, square)
+   stroke-linejoin  (miter, round, bevel)
+   stroke-mitrelimit
+   stroke-dasharray
+   stroke-dashoffset
+   stroke-opacity
+   vector-effect    (non-scaling-stroke, none)
+   viewport-fill    (none, currentColor)
+   viewport-fill-opacity
+
+   display          (inline, block, list-item, run-in, compact,
+                      marker, table, inline-table, table-row-group,
+                      table-header-group, table-footer-group,
+                      table-row, table-column-group,
+                      table-column, table-cell, table-caption,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 5]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-6" id="page-6" href="#page-6
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-6>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+                      none)
+   visibility       (visible, hidden, collapse)
+   color-rendering  (auto, optimizeSpeed, optimizeQuality)
+   shape-rendering  (auto, optimizeSpeed, crispEdges,
+                      geometricPrecision)
+   text-rendering   (auto, optimizeSpeed, optimizeLegibility,
+                      geometricPrecision)
+   buffered-rendering  (auto, dynamic, static)
+
+   opacity
+   solid-opacity
+   solid-color    (currentColor, &lt;color&gt;)
+   color          (currentColor, &lt;color&gt;)
+
+   line-increment (auto)
+   text-align     (start,end, center)
+   display-align  (auto, before, center, after)
+
+   font-size
+   font-family    (serif, sans-serif, monospace)
+   font-weight    (normal, bold, bolder, lighter)
+   font-style     (normal, italic, oblique)
+   font-variant   (normal, small-caps)
+   direction      (ltr, rtl)
+   unicode-bidi   (normal, embed, bidi-override)
+   text-anchor    (start, middle, end)
+   fill           (none, &lt;color&gt;)
+   fill-rule      (nonzero, evenodd)
+   fill-opacity
+
+
+
+<span class="h2"><h2><a class="selflink" name="section-3" href="#section-3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-3>">3</a>.  How to create SVG drawings</h2></span>
+
+   Many drawing packages can be used to create SVG drawings, for example
+   Open Source packages Inkscape and Dia.  Be aware that such packages
+   may use SVG elements or attributes that are not allowed in SVG 1.2
+   RFC.
+
+   -For example, the 'marker' attribute is often used to place symbols
+    such as arrowheads on lines, but 'marker' is not allowed in SVG 1.2
+    Tiny or SVG 1.2 RFC.  In such cases one has to draw the arrowhead in
+    another, simpler way.
+
+   -SVG clip paths are used to define a shape; objects outside that
+    shape become invisible.  The 'clipPath' element is not allowed in
+    SVG 1.2 Tiny or SVG 1.2 RFC.
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 6]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-7" id="page-7" href="#page-7
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-7>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   Diagrams produced with these packages may contain elements, their
+   attributes or properties, or values of attributes or properties that
+   are not allowed in SVG 1.2 RFC.  We will need to provide a tool to
+   strip out anything that is not allowed in SVG 1.2 RFC, or to replace
+   disallowed values, e.g., 'sans-serif' for 'Sans' as values for 'font-
+   family'.  Experience with a simple test version of a tool for this
+   has shown that such deletion and replacement can be effective for
+   making SVG files from drawing packages conform to SVG 1.2 RFC,
+   without visibly changing the diagrams they produce.
+
+   The tool described above can also be used by Authors simply to check
+   that their diagrams conform to SVG 1.2 RFC.  To help with this, if
+   visible changes do occur, the tool should produce a list of non-
+   allowed keywords and the context in which they were found.
+
+   Another way to create SVG drawings is to write programs to draw them.
+   For example, using python and its svgwrite module is a pleasant
+   environment (for those who like writing code).
+
+   To include a diagram into an RFC, the xml2rfc (v3) tool will need to
+   provide a way to include SVG drawings in Internet Drafts, as
+   described in [<a href="#ref-XML2RFCv3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-XML2RFCv3>">XML2RFCv3</a>] sections <a href="#section-2.5
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.5>">2.5</a> and <a href="#section-2.67
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.67>">2.67</a>.
+
+<span class="h2"><h2><a class="selflink" name="section-4" href="#section-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-4>">4</a>.  Accessibility Considerations</h2></span>
+
+   One of the long-term goals for RFCs is to make them more accessible,
+   e.g. to sight-impaired readers.  For diagrams, it would be useful for
+   authors to provide alternative forms of the diagram, so that voice-
+   reading software could be used to 'talk through' the diagram.  Simply
+   reading the SVG code for a complex diagram seems unlikely to work.
+
+   SVG 1.2 RFC allows SVG's 'title' and 'desc' elements.  'title'
+   provides a brief text caption for an SVG object (much like a figure
+   caption), and 'desc' provides a longer text description of what the
+   object actually represents.  As well, the SVG 'role' attribute can be
+   used to indicate to a browser how an SVG object is to be interpreted.
+   Good suggestions on how to use these elements are given in
+   [<a href="#ref-SVG-ACCESS-TIPS
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-SVG-ACCESS-TIPS>">SVG-ACCESS-TIPS</a>].
+
+   ARIA is a W3C Recommendation for using SVG to create 'Accessible Rich
+   Internet Applications.'  A helpful introduction to ARIA is provided
+   by [<a href="#ref-SVG-ARIA-PRIMER
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-SVG-ARIA-PRIMER>">SVG-ARIA-PRIMER</a>], while [<a href="#ref-SVG-USING-ARIA
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-SVG-USING-ARIA>">SVG-USING-ARIA</a>] gives examples of how to
+   use ARIA to enhance SVG accessibility.
+
+
+
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 7]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-8" id="page-8" href="#page-8
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-8>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+<span class="h2"><h2><a class="selflink" name="section-5" href="#section-5
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5>">5</a>.  Meta-language for diagrams common in RFCs</h2></span>
+
+   This section presents a few examples of possible meta-languages which
+   could be used to create the kinds of diagrams that are most common in
+   RFCs.  Note that they are merely examples, they do not imply that
+   these particular experimental languages might be more widely
+   implemented or used.  Instead, they seem to show that designing meta-
+   languages simple enough to serve as audible representations of
+   complex diagrams is difficult indeed!
+
+   The SVG diagrams produced from the following examples can be seen at
+   [<a href="#ref-This-I-D-with-SVG-included
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-This-I-D-with-SVG-included>">This-I-D-with-SVG-included</a>] along with an html version of this draft
+   that includes the SVG diagrams.
+
+<span class="h3"><h3><a class="selflink" name="section-5.1" href="#section-5.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5.1>">5.1</a>.  Packet Layout Diagrams</h3></span>
+
+   Example: Figure 3 from [<a href="https://tools.ietf.org/html/rfc0793
+<view-source:https://tools.ietf.org/html/rfc0793>" title="&quot;Transmission Control Protocol&quot;">RFC0793</a>].
+
+   In these examples the first line specifies the generated SVG
+   filename.  The scale factor determines the size of the SVG drawing;
+   it needs to be set so that the drawing fits nicely into the final
+   document.
+
+   'packet;' starts the packet description; it's followed by a
+   description of the fields in each row.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 8]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-9" id="page-9" href="#page-9
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-9>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   info;
+     output "tcp-header.svg", scale 0.65;
+
+   packet;
+     row 0;
+       field "Source Port", 0 to 15;
+       field "Destination Port", 16 to 31;
+     row 1;
+       field "Sequence Number", 0 to 31;
+     row 2;
+       field "Acknowledgement Number", 0 to 31;
+     row 3;
+       field "Data Offset", 0 to 3;
+       field "Reserved", 4 to 9;
+       field "Urg", 10 to 10, fsize 14;  # 14 px font so the flags fit
+       field "Ack", 11 to 11, fsize 14;
+       field "Psh", 12 to 12, fsize 14;
+       field "Rst", 13 to 13, fsize 14;
+       field "Syn", 14 to 14, fsize 14;
+       field "Fin", 15 to 15, fsize 14;
+       field "Window", 16 to 31;
+     row 4;
+       field "Checksum", 0 to 15;
+       field "Urgent Pointer", 16 to 31;
+     row 5;
+       field "Options", 0 to 23;
+       field "Padding", 24 to 31;
+     row 6;
+       field "Data", 0 to 31;
+
+<img src="tcp-header.svg
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/tcp-header.svg>" width="679" height="180"
+ alt="RFC 793 Fig 3, TCP header layout" />
+
+<span class="h3"><h3><a class="selflink" name="section-5.2" href="#section-5.2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5.2>">5.2</a>.  Sequence Diagrams (1)</h3></span>
+
+   Example: Figure 6 from [<a href="#ref-ExpTrustedProxy
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#ref-ExpTrustedProxy>">ExpTrustedProxy</a>].
+
+   In this example, columns are vertical lines with a text header above
+   them.  There are three columns, and columns 1 and 2 are spaced 250
+   pixels apart.
+
+   The rest of the file describes objects to be drawn; most of them are
+   plines (polylines) from one column to another, but object 3 only
+   extends across to 0.3 of the distance between columns 1 and 2.
+
+   info;
+     output "httpbis-proxy20-fig6.svg", scale 0.9;
+
+   #Thu, 30 Jan 14 (NZDT)
+
+   #Figure 6 of <a href="https://tools.ietf.org/html/draft-loreto-httpbis-trusted-proxy20-00.txt
+<view-source:https://tools.ietf.org/html/draft-loreto-httpbis-trusted-proxy20-00.txt>">draft-loreto-httpbis-trusted-proxy20-00.txt</a>
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                 [Page 9]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-10" id="page-10" href="#page-10
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-10>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   column 1 width 250;  # columns have vertical line to bottom
+     text above "user-agent";
+
+   column 2 width 250;
+     text "Proxy";
+
+   column 3; # Last col
+     text "Server";
+
+   object 1;  # Only need polylines
+     pline 1 to 2, arrowhead at end;
+     text above "(1) TLS ClientHello";
+     text below "(ALPN ProtocolName: http)";
+
+   object 2;
+     pline 1 to 2, arrowhead at start;
+     text above "(2) TLS Error";
+     text below "(Proxy Cert)";
+
+   object 3;
+     pline 1 to 1.3, down, back to 1, arrowhead at end;
+     text seg 2 centre "(inform user of the SecureProxy)";
+
+   object 4;
+     pline 1 to 2, arrowhead at end;
+     text above "(3) TLS ClientHello";
+
+   object 5;
+     pline 1 to 2, arrowhead at start;
+     text above "(4) ServerHello";
+
+   object 6;
+     blank 1 to 2;
+
+   object 7;
+     block 1 to 2, objects 8 to 15;
+     text above "HTTP2.0";
+
+   object 8;
+     pline 1 to 2, arrowhead at end;
+     text seg 1 centre "(5) stream(X) GET";
+
+   object 9;
+     pline 2 to 3, arrowhead at end;
+     text seg 1 above "(6) TLS ClientHello";
+
+   object 10;
+     pline 2 to 3, arrowhead at start;
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 10]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-11" id="page-11" href="#page-11
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-11>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     text seg 1 above "TLS ServerHello";
+
+   object 11;
+     blank 2 to 3;
+
+   object 12;
+     block 2 to 3, objects 13 to 15;
+     text seg 1 above "HTTP2.0";
+
+   object 13;
+     pline 2 to 3, arrowhead at end;
+     text seg 1 centre "(7) stream(Z) GET";
+
+   object 14;
+     pline 2 to 3, arrowhead at start;
+     text seg 1 centre "(8) stream(Z) 200 OK";
+
+   object 15;
+     pline 1 to 2, arrowhead at start;
+     text seg 1 centre "(9) stream(X) 200 OK";
+
+<span class="h3"><h3><a class="selflink" name="section-5.3" href="#section-5.3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-5.3>">5.3</a>.  Sequence Diagrams (2)</h3></span>
+
+<img src="httpbis-proxy20-fig6.svg
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/httpbis-proxy20-fig6.svg>" width="541" height="584"
+   alt="Fig 6, draft-loreto-httpbis-trusted-proxy20-00" />
+
+   Example: Figure 3 from [<a href="https://tools.ietf.org/html/rfc4321
+<view-source:https://tools.ietf.org/html/rfc4321>" title="&quot;Problems Identified Associated with the Session Initiation Protocol's
+(SIP) Non-INVITE Transaction&quot;">RFC4321</a>].
+
+   This example uses (x,y) coordinates to specify points in in plines.
+   For these, the x units are columns and the y units are lines
+   (positive means 'down the diagram').
+
+   both x and y may be absolute, e.g. 4.3, or relative, e.g.  +1.5).
+   For the first point of a pline, relative means 'relative to the
+   starting point of the previous pline,' for other points in a pline it
+   means 'relative to the last point.'
+
+   Note that column 1 is drawn in white, i.e. nothing is drawn for it.
+   It's simply used to make a blank area where objects 8 and 9 can place
+   text.  For both those objects a pline is used to specify the text's
+   position.
+
+   Last, the metalanguage allows simple macros, introduced by 'define
+   foo = '.  These make it easier to re-use definitions, for example of
+   line types.
+
+   info;
+     output "<a href="https://tools.ietf.org/html/rfc4321
+<view-source:https://tools.ietf.org/html/rfc4321>">rfc4321</a>-fig3.svg", scale 0.9;
+
+   # Sat,  5 Apr 14 (NZDT)
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 11]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-12" id="page-12" href="#page-12
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-12>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   #Figure 3 of <a href="https://tools.ietf.org/html/rfc4321
+<view-source:https://tools.ietf.org/html/rfc4321>">RFC 4321</a>
+
+   define hw = width 110;  # Hop width
+
+   column 1 width 130, color "white";  # No heading or vertical line
+
+   column 2 hw;  text above "UAC";
+
+   column 3 hw;  text "P1";
+
+   column 4 hw;  text "P2";
+
+   column 5 hw;  text "P3";
+
+   column 6 hw;  text "UAS";
+
+   define tgrey = width 5;  # Thick grey
+   define ahe = arrowhead at end;
+
+   object 1;
+     pline 1.8
+       to 2.3 tgrey, to (2.4,+0), to (2.6,+1.5), to (2.7,+0) ahe,
+       to 3.3 tgrey, to (3.4,+0), to (3.6,+1.5), to (3.7,+0) ahe,
+       to 4.3 tgrey, to (4.4,+0), to (4.6,+1.5), to (4.7,+0) ahe,
+       to 5.3 tgrey, to (5.4,+0), to (5.6,+1.5), to (5.7,+0) ahe,
+       to 6.3 tgrey;
+
+   object 2;
+     pline (1.8,+10) to 2.3 tgrey;
+
+   object 3;
+     pline (3.3,+2)
+       to 2.85 tgrey, to (2.7,+0) tgrey,
+       to (2.5,+0), to (2.25,+1.5), to (2.0,+0) ahe;
+     text seg 2 centre "408";
+
+   object 4;
+     pline (4.3,+1.5)
+       to 3.9 tgrey, to (3.7,+0) tgrey,
+       to (3.5,+0), to (3.3,+1.5), to (3.1,+0) ahe,
+       to 2.9 tgrey, to (2.7,+0) tgrey,
+       to (2.5,+0), to (2.25,+1.5), to (2.0,+0) ahe;
+     text seg 2 centre "408";
+     text seg 7 centre "408";
+
+   object 5;
+     pline (5.3,+1.5)
+       to 4.9 tgrey, to (4.7,+0) tgrey,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 12]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-13" id="page-13" href="#page-13
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-13>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+       to (4.5,+0), to (4.3,+1.5), to (4.1,+0) ahe,
+       to 3.9 tgrey, to (3.7,+0) tgrey,
+       to (3.5,+0), to (3.3,+1.5), to (3.1,+0) ahe,
+       to 2.9 tgrey, to (2.7,+0) tgrey,
+       to (2.5,+0), to (2.25,+1.5), to (2.0,+0) ahe;
+     text seg  2 centre "408";
+     text seg  7 centre "408";
+     text seg 12 centre "408";
+
+   object 6;
+     pline (6.3,+1.5)
+       to 5.9 tgrey, to (5.7,+0) tgrey,
+       to (5.5,+0), to (5.3,+1.5), to (5.1,+0) ahe;
+       to 4.9 tgrey, to (4.7,+0) tgrey,
+       to (4.5,+0), to (4.3,+1.5), to (4.1,+0) ahe;
+       to 3.9 tgrey, to (3.7,+0) tgrey,
+       to (3.5,+0), to (3.3,+1.5), to (3.1,+0) ahe;
+       to 2.9 tgrey, to (2.7,+0) tgrey,
+       to (2.5,+0), to (2.25,+1.5), to (2.0,+0) ahe;
+     text seg  2 centre "408";
+     text seg  7 centre "408";
+     text seg 12 centre "408";
+     text seg 17 centre "408";
+
+   object 7:
+     pline (1.63,4.1) to (1.73,+0);
+
+   object 8;
+     pline (1.68,4.1) to (+0,14) arrowhead at end;
+     text centre "64*T1";
+
+   object 9;
+     pline (1.2,13.1) to (1.5,+0) color "white";
+     text centre "(timeout)";
+
+<img src="rfc4321-fig3.svg
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/rfc4321-fig3.svg>" width="539" height="348"
+   alt="Fig 3, RFC 4321" />
+
+<span class="h2"><h2><a class="selflink" name="section-6" href="#section-6
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-6>">6</a>.  IANA Considerations</h2></span>
+
+   This document does not create a new registry nor does it register any
+   values in existing registries; no IANA action is required.
+
+<span class="h2"><h2><a class="selflink" name="section-7" href="#section-7
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-7>">7</a>.  Acknowledgements</h2></span>
+
+   Thanks to the RSE and the Design Team members for their helpful
+   comments and suggestions for SVG 1.2 RFC.
+
+
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 13]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-14" id="page-14" href="#page-14
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-14>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+<span class="h2"><h2><a class="selflink" name="section-8" href="#section-8
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-8>">8</a>.  Revision History [RFC Editor please delete]</h2></span>
+
+   version -13, 16 Oct 15:
+      Added Informative Reference to XML2RFC v3 draft on 'how to include
+      SVG diagrams'.
+      IAdded nformative Reference to Nevil's home page for a version of
+      this I-D with its SVG diagrams included.
+      Added Informative References to <a href="https://tools.ietf.org/html/rfc0793
+<view-source:https://tools.ietf.org/html/rfc0793>">RFC0793</a> and I-Ds for the example
+      diagrams.
+      Changed 'colour' to 'color' so as to be consistent.
+      Fixed other typos (thanks to Dave Thaler for all these)!
+      Removed 'grey' color from example diagrams.
+
+   version -12, 24 Sep 15:
+      <a href="#appendix-A
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#appendix-A>">Appendix A</a> added: a complete relax-ng compact (rnc) schema for
+      SVG-1.2-RFC.
+      <a href="#section-2.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.1>">Section 2.1</a>: Elements/attributes/properties table updated to match
+      the schema in <a href="#appendix-A
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#appendix-A>">Appendix A</a>.
+
+   version -11, 17 Aug 15:
+      <a href="#section-1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-1>">Section 1</a>: Fixed typo in "Details are expected to change"
+      paragraph.
+
+   version -10, 14 Aug 15:
+      <a href="#section-1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-1>">Section 1</a>: Added "Details are expected to change" paragraph.
+
+   version -09, 31 Mar 15:
+      No changes, version number incremented to keep draft alive
+
+   version -08, 29 Sep 14:
+      <a href="#section-1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-1>">Section 1</a>: Changed comment about diagrams 'not being normative' to
+      'not complete specifications in themselves.
+      <a href="#section-2.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.1>">Section 2.1</a>: Added SVG 1.2 Tiny 'id' attribute because most
+      drawing packages use it in constructing drawings.
+      <a href="#section-2.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.1>">Section 2.1</a>: Added SVG 1.2 Tiny 'role' attribute so that ARIA can
+      use it.
+      <a href="#section-3
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-3>">Section 3</a>: added comment about changes to xml2rfc required to
+      include SVG diagrams.
+      <a href="#section-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-4>">Section 4</a>: Added reference to svg-aria-primer.
+
+   version -07, 3 Jul 14:
+      Expanded text about Accessibility in 'how to create SVG drawings'
+      section into 'Accessibility Considerations section.  Added two SVG
+      Accessibility references to support that.
+
+   version -06, 26 Jun 14:
+      Remove trailing / from URL in <a href="#section-4
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-4>">section 4</a>; the html version on
+      tools.ietf.org/html assumed the next word was part of that URL.
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 14]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-15" id="page-15" href="#page-15
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-15>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   version -05, 25 Jun 14:
+      Improved section on 'how to create SVG drawings' By adding some
+      text about which elements aren't allowed in SVG 1.2 RFC.
+      Added more text describing the tool for checking, stripping out or
+      replacing incompatible elements and attributes from an SVG file.
+
+   version -04, 30 Apr 14:
+      Fixed typos, used full references for two of the w3c refs - each
+      had an author name using UTF8 characters.
+      Moved the Elements and Attributes appendix up earlier to make it
+      sub-<a href="#section-2.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-2.1>">section 2.1</a>.
+      Disclaimer added to the Meta-languages section.
+
+   version -03, 14 Apr 14:
+      Added two more example diagrams; a simple packet layout, and a
+      diagram that uses lots of diagonal lines.
+
+   version -02, 12 Feb 14:
+      Added metalanguage example to make time-sequence drawings.
+
+   version -01, 11 Feb 14:
+      Allow links to 'long-term stable URIs'
+      Link URIs must be ASCII only
+      Need for tools to check SVG 1.2 RFC compatibility and to strip
+      'unnecessary' attributes explicitly stated.
+      Statement that drawings can't be normative removed; Postscript-
+      only RFCs already exist.
+      Added most attributes and elements to the Appendix.
+
+   version -00, 29 Jan 14:
+      Initial version, using content from Nevil's
+      emails to the Design Team.
+
+<span class="h2"><h2><a class="selflink" name="section-9" href="#section-9
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-9>">9</a>.  References</h2></span>
+
+<span class="h3"><h3><a class="selflink" name="section-9.1" href="#section-9.1
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-9.1>">9.1</a>.  Normative References</h3></span>
+
+   [<a name="ref-RFC6949" id="ref-RFC6949">RFC6949</a>]  Flanagan, H. and N. Brownlee, "RFC Series Format
+              Requirements and Future Development", <a href="https://tools.ietf.org/html/rfc6949
+<view-source:https://tools.ietf.org/html/rfc6949>">RFC 6949</a>,
+              DOI 10.17487/RFC6949, May 2013,
+              &lt;<a href="https://www.rfc-editor.org/info/rfc6949
+<view-source:http://www.rfc-editor.org/info/rfc6949>">http://www.rfc-editor.org/info/rfc6949</a>&gt;.
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 15]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-16" id="page-16" href="#page-16
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-16>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   [<a name="ref-W3C.REC-SVGTiny12-20081222" id="ref-W3C.REC-SVGTiny12-20081222">W3C.REC-SVGTiny12-20081222</a>]
+              Andersson, O., Berjon, R., Dahlstrom, E., Emmons, A.,
+              Ferraiolo, J., Grasso, A., Hardy, V., Hayman, S., Jackson,
+              D., Lilley, C., McCormack, C., Neumann, A., Northway, C.,
+              Quint, A., Ramani, N., Schepers, D., and A. Shellshear,
+              "Scalable Vector Graphics (SVG) Tiny 1.2 Specification",
+              World Wide Web Consortium Recommendation REC-
+              SVGTiny12-20081222, December 2008,
+              &lt;<a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222
+<view-source:http://www.w3.org/TR/2008/REC-SVGTiny12-20081222>">http://www.w3.org/TR/2008/REC-SVGTiny12-20081222</a>&gt;.
+
+   [<a name="ref-W3C.REC-CSS2-20110607" id="ref-W3C.REC-CSS2-20110607">W3C.REC-CSS2-20110607</a>]
+              Bos, B., Celik, T., Hickson, I., and H. Lie, "Cascading
+              Style Sheets Level 2 Revision 1 (CSS 2.1) Specification",
+              World Wide Web Consortium Recommendation REC-
+              CSS2-20110607, June 2011,
+              &lt;<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607
+<view-source:http://www.w3.org/TR/2011/REC-CSS2-20110607>">http://www.w3.org/TR/2011/REC-CSS2-20110607</a>&gt;.
+
+<span class="h3"><h3><a class="selflink" name="section-9.2" href="#section-9.2
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#section-9.2>">9.2</a>.  Informative References</h3></span>
+
+   [<a name="ref-W3C.REC-SVG11-20110816" id="ref-W3C.REC-SVG11-20110816">W3C.REC-SVG11-20110816</a>]
+              Dahlstrom, E., Dengler, P., Grasso, A., Lilley, C.,
+              McCormack, C., Schepers, D., Watt, J., Ferraiolo, J.,
+              Fujisawa, J., and D. Jackson, "Scalable Vector Graphics
+              (SVG) 1.1 (Second Edition)", World Wide Web Consortium
+              Recommendation REC-SVG11-20110816, August 2011,
+              &lt;<a href="http://www.w3.org/TR/2011/REC-SVG11-20110816
+<view-source:http://www.w3.org/TR/2011/REC-SVG11-20110816>">http://www.w3.org/TR/2011/REC-SVG11-20110816</a>&gt;.
+
+   [<a name="ref-SVG-ACCESS-TIPS" id="ref-SVG-ACCESS-TIPS">SVG-ACCESS-TIPS</a>]
+              Watson, L., "Tips for Creating Accessible SVG", SitePoint
+              tips-accessible-svg, May 2014,
+              &lt;<a href="http://www.sitepoint.com/tips-accessible-svg
+<view-source:http://www.sitepoint.com/tips-accessible-svg>">http://www.sitepoint.com/tips-accessible-svg</a>&gt;.
+
+   [<a name="ref-SVG-ARIA-PRIMER" id="ref-SVG-ARIA-PRIMER">SVG-ARIA-PRIMER</a>]
+              Pappas, L., Schwerdtfeger, R., and M. Cooper, "WAI-ARIA
+              1.0 Primer", World Wide Web Consortium WD WD-wai-aria-
+              primer-20100916, September 2010,
+              &lt;<a href="http://www.w3.org/TR/2010/WD-wai-aria-primer-20100916
+<view-source:http://www.w3.org/TR/2010/WD-wai-aria-primer-20100916>">http://www.w3.org/TR/2010/WD-wai-aria-primer-20100916</a>&gt;.
+
+   [<a name="ref-SVG-USING-ARIA" id="ref-SVG-USING-ARIA">SVG-USING-ARIA</a>]
+              Watson, L., "Using ARIA to enhance SVG accessibility", The
+              Paciello Group 2013/12/using-aria-enhance-svg-
+              accessibility, December 2013,
+              &lt;<a href="http://blog.paciellogroup.com/2013/12/using-aria-enhance-svg-accessibility
+<view-source:http://blog.paciellogroup.com/2013/12/using-aria-enhance-svg-accessibility>">http://blog.paciellogroup.com/2013/12/</a>
+              <a href="http://blog.paciellogroup.com/2013/12/using-aria-enhance-svg-accessibility
+<view-source:http://blog.paciellogroup.com/2013/12/using-aria-enhance-svg-accessibility>">using-aria-enhance-svg-accessibility</a>&gt;.
+
+   [<a name="ref-XML2RFCv3" id="ref-XML2RFCv3">XML2RFCv3</a>]
+              Hoffman, P., <a style="text-decoration: none" href="https://www.google.com/search?sitesearch=tools.ietf.org%2Fhtml%2F&amp;q=inurl:draft-+%22The+XML2RFC+version+3+Vocabulary%22
+<view-source:https://www.google.com/search?sitesearch=tools.ietf.org%2Fhtml%2F&q=inurl:draft-+%22The+XML2RFC+version+3+Vocabulary%22>">"The XML2RFC version 3 Vocabulary"</a>, Work in
+              Progress, <a href="https://tools.ietf.org/html/draft-hoffman-xml2rfc-23
+<view-source:https://tools.ietf.org/html/draft-hoffman-xml2rfc-23>">draft-hoffman-xml2rfc-23</a>, September 4 2015.
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 16]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-17" id="page-17" href="#page-17
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-17>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   [<a name="ref-This-I-D-with-SVG-included" id="ref-This-I-D-with-SVG-included">This-I-D-with-SVG-included</a>]
+              Brownlee, N., "Example html version of this I-D with its
+              SVG diagrams included", Nevil's home
+              page, <a href="https://www.cs.auckland.ac.nz/%7Enevil/SVG_RFC_1.2
+<view-source:https://www.cs.auckland.ac.nz/%7Enevil/SVG_RFC_1.2>">https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2</a>,
+              October 16 2015.
+
+   [<a name="ref-RFC0793" id="ref-RFC0793">RFC0793</a>]  Postel, J., "Transmission Control Protocol", STD 7,
+              <a href="https://tools.ietf.org/html/rfc793
+<view-source:https://tools.ietf.org/html/rfc793>">RFC 793</a>, DOI 10.17487/RFC0793, September 1981,
+              &lt;<a href="https://www.rfc-editor.org/info/rfc793
+<view-source:http://www.rfc-editor.org/info/rfc793>">http://www.rfc-editor.org/info/rfc793</a>&gt;.
+
+   [<a name="ref-ExpTrustedProxy" id="ref-ExpTrustedProxy">ExpTrustedProxy</a>]
+              Loretto, S., Mattson, J., Skog, R., Spaak, H., Gus, G.,
+              Druta, D., and M. Hafeez, "Explicit Trusted Proxy in
+              HTTP/2.0", Work in Progress, <a href="https://tools.ietf.org/html/draft-loreto-httpbis-trusted-proxy20-01
+<view-source:https://tools.ietf.org/html/draft-loreto-httpbis-trusted-proxy20-01>">draft-loreto-httpbis-trusted-</a>
+              <a href="https://tools.ietf.org/html/draft-loreto-httpbis-trusted-proxy20-01
+<view-source:https://tools.ietf.org/html/draft-loreto-httpbis-trusted-proxy20-01>">proxy20-01</a>, February 14 2014.
+
+   [<a name="ref-RFC4321" id="ref-RFC4321">RFC4321</a>]  Sparks, R., "Problems Identified Associated with the
+              Session Initiation Protocol's (SIP) Non-INVITE
+              Transaction", <a href="https://tools.ietf.org/html/rfc4321
+<view-source:https://tools.ietf.org/html/rfc4321>">RFC 4321</a>, DOI 10.17487/RFC4321, January
+              2006, &lt;<a href="https://www.rfc-editor.org/info/rfc4321
+<view-source:http://www.rfc-editor.org/info/rfc4321>">http://www.rfc-editor.org/info/rfc4321</a>&gt;.
+
+<span class="h2"><h2><a class="selflink" name="appendix-A" href="#appendix-A
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#appendix-A>">Appendix A</a>.  RELAX NG Compact (rnc) Schema for SVG 1.2 RFC</h2></span>
+
+   The following rnc schema can be used to check whether an svg file
+   conforms to SVG 1.2 RFC.  For example, if this schema were contained
+   in a file called SVG-1.2-RFC.rnc, the following command will test
+   whether svg file diagram.svg is a conformant SVG 1.2 RFC drawing.
+
+   jing -c SVG-1.2-RFC.rnc diagram.svg
+
+#---  SVG 1.2 RFC rnc schema;  Nevil Brownlee, Thu 24 Sep 2015 (NZST)
+
+default namespace = "<a href="http://www.w3.org/2000/svg <view-source:http://www.w3.org/2000/svg>">http://www.w3.org/2000/svg</a>"
+namespace ns1 = "<a href="http://www.w3.org/1999/xlink <view-source:http://www.w3.org/1999/xlink>">http://www.w3.org/1999/xlink</a>"
+
+rfc-color = (  # SVG-1.2-RFC doesn't allow "color or grey-scale"
+  "black" | "white" | "#000000" | "#FFFFFF" | "#ffffff" | "inherit" )
+start = svg
+svg =
+  element svg {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 17]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-18" id="page-18" href="#page-18
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-18>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+
+
+}?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 18]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-19" id="page-19" href="#page-19
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-19>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+
+    attribute width { xsd:string }?,
+    attribute height { xsd:string }?,
+    attribute preserveAspectRatio {
+      xsd:string { pattern = "\s*(none|xMidYMid)\s*(meet)?\s*" }
+    }?,
+    attribute viewBox { text }?,
+    attribute zoomAndPan { "disable" | "magnify" }?,
+    attribute version {
+      xsd:string "1.0" | xsd:string "1.1" | xsd:string "1.2"
+    }?,
+    attribute baseProfile {
+      xsd:string "none"
+      | xsd:string "tiny"
+      | xsd:string "basic"
+      | xsd:string "full"
+    }?,
+    attribute contentScriptType { xsd:string }?,
+    attribute snapshotTime { xsd:string "none" | xsd:string }?,
+    attribute timelineBegin {
+      xsd:string "onLoad" | xsd:string "onStart"
+    }?,
+    attribute playbackOrder {
+      xsd:string "all" | xsd:string "forwardOnly"
+    }?,
+    (desc
+     | title
+     | path
+     | rect
+     | circle
+     | line
+     | ellipse
+     | polyline
+     | polygon
+     | solidColor
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 19]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-20" id="page-20" href="#page-20
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-20>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     | textArea
+     | linearGradient
+     | radialGradient
+     | \text
+     | g
+     | defs
+     | use
+     | a)*
+  }
+desc =
+  element desc {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    ((attribute display {
+        "inline"
+        | "block"
+        | "list-item"
+        | "run-in"
+        | "compact"
+        | "marker"
+        | "table"
+        | "inline-table"
+        | "table-row-group"
+        | "table-header-group"
+        | "table-footer-group"
+        | "table-row"
+        | "table-column-group"
+        | "table-column"
+        | "table-cell"
+        | "table-caption"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 20]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-21" id="page-21" href="#page-21
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-21>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        | "none"
+        | "inherit"
+      }?,
+      attribute visibility { "visible" | "hidden" | "collapse" | "inherit" }?,
+      attribute image-rendering {
+        "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+      }?,
+      attribute shape-rendering {
+        "auto"
+        | "optimizeSpeed"
+        | "crispEdges"
+        | "geometricPrecision"
+        | "inherit"
+      }?,
+      attribute text-rendering {
+        "auto"
+        | "optimizeSpeed"
+        | "optimizeLegibility"
+        | "geometricPrecision"
+        | "inherit"
+      }?,
+      attribute buffered-rendering {
+        "auto" | "dynamic" | "static" | "inherit"
+      }?)
+     &amp; (attribute viewport-fill { "none" | rfc-color }?,
+        attribute viewport-fill-opacity { "inherit" | xsd:string }?)),
+    text
+  }
+title =
+  element title {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 21]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-22" id="page-22" href="#page-22
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-22>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    ((attribute display {
+        "inline"
+        | "block"
+        | "list-item"
+        | "run-in"
+        | "compact"
+        | "marker"
+        | "table"
+        | "inline-table"
+        | "table-row-group"
+        | "table-header-group"
+        | "table-footer-group"
+        | "table-row"
+        | "table-column-group"
+        | "table-column"
+        | "table-cell"
+        | "table-caption"
+        | "none"
+        | "inherit"
+      }?,
+      attribute visibility { "visible" | "hidden" | "collapse" | "inherit" }?,
+      attribute image-rendering {
+        "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+      }?,
+      attribute shape-rendering {
+        "auto"
+        | "optimizeSpeed"
+        | "crispEdges"
+        | "geometricPrecision"
+        | "inherit"
+      }?,
+      attribute text-rendering {
+        "auto"
+        | "optimizeSpeed"
+        | "optimizeLegibility"
+        | "geometricPrecision"
+        | "inherit"
+      }?,
+      attribute buffered-rendering {
+        "auto" | "dynamic" | "static" | "inherit"
+      }?)
+     &amp; (attribute viewport-fill { "none" | rfc-color }?,
+        attribute viewport-fill-opacity { "inherit" | xsd:string }?)),
+    text
+  }
+path =
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 22]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-23" id="page-23" href="#page-23
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-23>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+  element path {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 23]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-24" id="page-24" href="#page-24
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-24>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute d { xsd:string }?,
+    attribute pathLength { xsd:string }?,
+    attribute style { xsd:string }?,  # Added to SVG-1.2-RFC (Inkscape)
+    (desc
+     | title)*
+  }
+rect =
+  element rect {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 24]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-25" id="page-25" href="#page-25
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-25>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 25]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-26" id="page-26" href="#page-26
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-26>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute x { xsd:string }?,
+    attribute y { xsd:string }?,
+    attribute width { xsd:string }?,
+    attribute height { xsd:string }?,
+    attribute rx { xsd:string }?,
+    attribute ry { xsd:string }?,
+    attribute style { xsd:string }?,  # Added to SVG-1.2-RFC (Inkscape)
+    (desc
+     | title)*
+  }
+circle =
+  element circle {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 26]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-27" id="page-27" href="#page-27
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-27>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 27]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-28" id="page-28" href="#page-28
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-28>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute cx { xsd:string }?,
+    attribute cy { xsd:string }?,
+    attribute r { xsd:string }?,
+    attribute style { xsd:string }?,  # Added to SVG-1.2-RFC (Inkscape)
+    (desc
+     | title)*
+  }
+line =
+  element line {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 28]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-29" id="page-29" href="#page-29
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-29>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute x1 { xsd:string }?,
+    attribute y1 { xsd:string }?,
+    attribute x2 { xsd:string }?,
+    attribute y2 { xsd:string }?,
+    (desc
+     | title)*
+  }
+ellipse =
+  element ellipse {
+    (attribute id { xsd:NCName }
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 29]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-30" id="page-30" href="#page-30
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-30>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 30]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-31" id="page-31" href="#page-31
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-31>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute rx { xsd:string }?,
+    attribute ry { xsd:string }?,
+    attribute cx { xsd:string }?,
+    attribute cy { xsd:string }?,
+    attribute style { xsd:string }?,  # Added to SVG-1.2-RFC (Inkscape)
+    (desc
+     | title)*
+  }
+polyline =
+  element polyline {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 31]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-32" id="page-32" href="#page-32
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-32>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 32]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-33" id="page-33" href="#page-33
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-33>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute points { xsd:string }?,
+    (desc
+     | title)*
+  }
+polygon =
+  element polygon {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute transform { xsd:string | "none" }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 33]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-34" id="page-34" href="#page-34
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-34>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute points { xsd:string }?,
+    attribute style { xsd:string }?,  # Added to SVG-1.2-RFC (Inkscape)
+    (desc
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 34]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-35" id="page-35" href="#page-35
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-35>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     | title)*
+  }
+solidColor =
+  element solidColor {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 35]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-36" id="page-36" href="#page-36
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-36>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    (desc
+     | title)*
+  }
+textArea =
+  element textArea {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 36]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-37" id="page-37" href="#page-37
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-37>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 37]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-38" id="page-38" href="#page-38
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-38>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute transform { xsd:string | "none" }?,
+    attribute x { xsd:string }?,
+    attribute y { xsd:string }?,
+    attribute width { xsd:string | "auto" }?,
+    attribute height { xsd:string | "auto" }?,
+    (tspan
+     | desc
+     | title
+     | tspan_2
+     | text
+     | a_2)+
+  }
+linearGradient =
+  element linearGradient {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 38]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-39" id="page-39" href="#page-39
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-39>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute gradientUnits { "userSpaceOnUse" | "objectBoundingBox" }?,
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute x1 { xsd:string }?,
+    attribute y1 { xsd:string }?,
+    attribute x2 { xsd:string }?,
+    attribute y2 { xsd:string }?,
+    (desc
+     | title)*
+  }
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 39]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-40" id="page-40" href="#page-40
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-40>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+radialGradient =
+  element radialGradient {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 40]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-41" id="page-41" href="#page-41
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-41>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute gradientUnits { "userSpaceOnUse" | "objectBoundingBox" }?,
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute cx { xsd:string }?,
+    attribute cy { xsd:string }?,
+    attribute r { xsd:string }?,
+    (desc
+     | title)*
+  }
+\text =
+  element text {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 41]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-42" id="page-42" href="#page-42
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-42>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 42]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-43" id="page-43" href="#page-43
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-43>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute transform { xsd:string | "none" }?,
+    attribute x { xsd:string }?,
+    attribute y { xsd:string }?,
+    attribute rotate { xsd:string }?,
+    attribute style { xsd:string }?,  # Added to SVG-1.2-RFC (Inkscape)
+    (desc
+     | title
+     | tspan_2
+     | text
+     | a_2)+
+  }
+g =
+  element g {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 43]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-44" id="page-44" href="#page-44
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-44>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute transform { xsd:string | "none" }?,
+    attribute style { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 44]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-45" id="page-45" href="#page-45
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-45>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        # Added to SVG-1.2-RFC (for Inkscape)
+    attribute visibility {
+      "visible" | "hidden" | "collapse" | "inherit" }?,
+        # Added to SVG-1.2-RFC (for LibreOffice)
+    (desc
+     | title
+     | path
+     | rect
+     | circle
+     | line
+     | ellipse
+     | polyline
+     | polygon
+     | solidColor
+     | textArea
+     | linearGradient
+     | radialGradient
+     | \text
+     | g
+     | defs
+     | use
+     | a)*
+  }
+defs =
+  element defs {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 45]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-46" id="page-46" href="#page-46
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-46>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    (desc
+     | title
+     | path
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 46]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-47" id="page-47" href="#page-47
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-47>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     | rect
+     | circle
+     | line
+     | ellipse
+     | polyline
+     | polygon
+     | solidColor
+     | textArea
+     | linearGradient
+     | radialGradient
+     | \text
+     | g
+     | defs
+     | use
+     | a)*
+  }
+use =
+  element use {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 47]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-48" id="page-48" href="#page-48
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-48>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute transform { xsd:string | "none" }?,
+    attribute ns1:show { "embed" }?,
+    attribute ns1:actuate { "onLoad" }?,
+    attribute ns1:type { "simple" }?,
+    attribute ns1:role { xsd:anyURI | xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 48]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-49" id="page-49" href="#page-49
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-49>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute ns1:arcrole { xsd:anyURI | xsd:string }?,
+    attribute ns1:title { text }?,
+    attribute ns1:href { xsd:anyURI | xsd:string }?,
+    attribute x { xsd:string }?,
+    attribute y { xsd:string }?,
+    (desc
+     | title)*
+  }
+a =
+  element a {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 49]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-50" id="page-50" href="#page-50
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-50>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute transform { xsd:string | "none" }?,
+    attribute ns1:show { "new" | "replace" }?,
+    attribute ns1:actuate { "onRequest" }?,
+    attribute ns1:type { "simple" }?,
+    attribute ns1:role { xsd:anyURI | xsd:string }?,
+    attribute ns1:arcrole { xsd:anyURI | xsd:string }?,
+    attribute ns1:title { text }?,
+    attribute ns1:href { xsd:anyURI | xsd:string }?,
+    attribute target {
+      "_replace" | "_self" | "_parent" | "_top" | "_blank" | xsd:Name
+    }?,
+    (desc
+     | title
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 50]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-51" id="page-51" href="#page-51
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-51>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+     | path
+     | rect
+     | circle
+     | line
+     | ellipse
+     | polyline
+     | polygon
+     | solidColor
+     | textArea
+     | linearGradient
+     | radialGradient
+     | \text
+     | g
+     | defs
+     | use)*
+  }
+stop =
+  element stop {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "inherit" | xsd:string }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { "inherit" | xsd:string }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { "inherit" | xsd:string }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 51]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-52" id="page-52" href="#page-52
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-52>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { "inherit" | xsd:string }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute offset { xsd:string }?,
+    (desc
+     | title)*
+  }
+tspan =
+  element tspan {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 52]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-53" id="page-53" href="#page-53
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-53>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 53]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-54" id="page-54" href="#page-54
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-54>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute x { xsd:string }?,  # For SVG-1.2-RFC
+    attribute y { xsd:string }?,
+    (tbreak
+     | desc
+     | title
+     | tspan_2
+     | text
+     | a_2)+
+  }
+tspan_2 =
+  element tspan {
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 54]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-55" id="page-55" href="#page-55
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-55>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 55]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-56" id="page-56" href="#page-56
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-56>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    attribute x { xsd:string }?,  # For SVG-1.2-RFC
+    attribute y { xsd:string }?,
+    (desc
+     | title
+     | tspan_2
+     | text
+     | a_2)+
+  }
+a_2 =
+  element a {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?,
+    ((attribute fill-opacity { "inherit" | xsd:string }?,
+      attribute stroke-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute fill { "none" | rfc-color }?,
+        attribute fill-rule { "inherit" | "nonzero" | "evenodd" }?,
+        attribute stroke { rfc-color }?,
+        attribute stroke-dasharray { "inherit" | "none" | xsd:string }?,
+        attribute stroke-dashoffset { "inherit" | xsd:string }?,
+        attribute stroke-linecap {
+          "butt" | "round" | "square" | "inherit"
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 56]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-57" id="page-57" href="#page-57
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-57>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+        }?,
+        attribute stroke-linejoin {
+          "miter" | "round" | "bevel" | "inherit"
+        }?,
+        attribute stroke-miterlimit { "inherit" | xsd:string }?,
+        attribute stroke-width { "inherit" | xsd:string }?,
+        attribute color { rfc-color }?,
+        attribute color-rendering {
+          "auto" | "optimizeSpeed" | "optimizeQuality" | "inherit"
+        }?)
+     &amp; attribute vector-effect {
+         "none" | "non-scaling-stroke" | "inherit"
+       }?
+     &amp; (attribute direction { "ltr" | "rtl" | "inherit" }?,
+        attribute unicode-bidi {
+          "normal" | "embed" | "bidi-override" | "inherit"
+        }?)
+     &amp; (attribute solid-color { rfc-color }?,
+        attribute solid-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute display-align {
+          "auto" | "before" | "center" | "after" | "inherit"
+        }?,
+        attribute line-increment { "auto" | "inherit" | xsd:string }?)
+     &amp; (attribute stop-color { rfc-color }?,
+        attribute stop-opacity { "inherit" | xsd:string }?)
+     &amp; (attribute font-family { "inherit" | xsd:string }?,
+        attribute font-size { "inherit" | xsd:string }?,
+        attribute font-style {
+          "normal" | "italic" | "oblique" | "inherit"
+        }?,
+        attribute font-variant { "normal" | "small-caps" | "inherit" }?,
+        attribute font-weight {
+          "normal"
+          | "bold"
+          | "bolder"
+          | "lighter"
+          | "inherit"
+        }?,
+        attribute text-anchor {
+          "start" | "middle" | "end" | "inherit"
+        }?,
+        attribute text-align {
+          "start" | "center" | "end" | "inherit"
+        }?)),
+    attribute transform { xsd:string | "none" }?,
+    attribute ns1:show { "new" | "replace" }?,
+    attribute ns1:actuate { "onRequest" }?,
+    attribute ns1:type { "simple" }?,
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 57]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-58" id="page-58" href="#page-58
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-58>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+    attribute ns1:role { xsd:anyURI | xsd:string }?,
+    attribute ns1:arcrole { xsd:anyURI | xsd:string }?,
+    attribute ns1:title { text }?,
+    attribute ns1:href { xsd:anyURI | xsd:string }?,
+    attribute target {
+      "_replace" | "_self" | "_parent" | "_top" | "_blank" | xsd:Name
+    }?,
+    (desc
+     | title
+     | tspan_2
+     | text)+
+  }
+tbreak =
+  element tbreak {
+    (attribute id { xsd:NCName }
+     | attribute xml:id { xsd:NCName })?,
+    attribute xml:base { xsd:anyURI | xsd:string }?,
+    attribute xml:lang { xsd:language? }?,
+    attribute class { xsd:NMTOKENS }?,
+    attribute role { xsd:string }?,
+    attribute rel { xsd:string }?,
+    attribute rev { xsd:string }?,
+    attribute typeof { xsd:string }?,
+    attribute content { xsd:string }?,
+    attribute datatype { xsd:string }?,
+    attribute resource { xsd:string }?,
+    attribute about { xsd:string }?,
+    attribute property { xsd:string }?,
+    attribute xml:space { "default" | "preserve" }?,
+    attribute requiredFeatures { xsd:string }?,
+    attribute requiredExtensions { xsd:string }?,
+    attribute requiredFormats { xsd:string }?,
+    attribute requiredFonts { xsd:string }?,
+    attribute systemLanguage { xsd:string }?
+  }
+
+#---  End of SVG 1.2 RFC rnc schema
+
+Authors' Addresses
+
+   Nevil Brownlee
+   The University of Auckland
+
+   Email: n.brownlee@auckland.ac.nz
+
+
+
+
+
+
+
+<span class="grey">Brownlee &amp; IAB           Expires April 18, 2016                [Page 58]</span></pre>
+<hr class="noprint" style="width: 96ex;" align="left"><!--NewPage--><pre class="newpage"><a name="page-59" id="page-59" href="#page-59
+<view-source:https://www.cs.auckland.ac.nz/~nevil/SVG_RFC_1.2/draft-brownlee-svg-rfc-13.html#page-59>" class="invisible"> </a>
+<span class="grey">Internet-Draft     SVG Drawings for RFCs: SVG 1.2 RFC       October 2015</span>
+
+
+   Internet Architecture Board
+
+   Email: iab@iab.org
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Brownlee &amp; IAB           Expires April 18, 2016                [Page 59]
+
+</pre><br>
+    <span class="noprint"><small><small>Html markup produced by rfcmarkup 1.116, available from
+      <a href="https://tools.ietf.org/tools/rfcmarkup/
+<view-source:https://tools.ietf.org/tools/rfcmarkup/>">https://tools.ietf.org/tools/rfcmarkup/</a>
+    </small></small></span>
+  </div>
+
+
+</body></html>
+
