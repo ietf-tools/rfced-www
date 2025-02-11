@@ -6,7 +6,7 @@ import { XMLBuilder } from 'fast-xml-parser'
 import { isVNode } from 'vue'
 import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
 import { getAllRFCs } from './redClientWrappers'
-import { PRIVATE_API_URL, rfcPathBuilder } from './url'
+import { PRIVATE_API_URL, infoRfcPathBuilder } from './url'
 import {
   blankRfcResponse,
   twoDigitOldestRfcResponse,
@@ -132,7 +132,7 @@ const extractRfcSummaries = (document: unknown) => {
 
            <a href="/info/rfc9280/">RFC9280</a>
         */
-        return `<a href="${rfcPathBuilder(`RFC${parseInt(rfcNumber, 10)}`)}">${parseInt(rfcNumber, 10)}</a>`
+        return `<a href="${infoRfcPathBuilder(`RFC${parseInt(rfcNumber, 10)}`)}">${parseInt(rfcNumber, 10)}</a>`
       })
       .replace(/[\s]+/g, ' ') // normalise the whitespace
       .trim()
@@ -156,7 +156,7 @@ const extractRfcSummaries = (document: unknown) => {
 
            <a href="/info/rfc9280/">RFC9280</a>
         */
-        return `<a href="${rfcPathBuilder(rfcId)}">RFC${parseRFCId(rfcId).number}</a>`
+        return `<a href="${infoRfcPathBuilder(rfcId)}">RFC${parseRFCId(rfcId).number}</a>`
       })
       .replace(/[\s]+/g, ' ') // normalise the whitespace
       .trim()

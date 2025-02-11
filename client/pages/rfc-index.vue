@@ -48,13 +48,13 @@
         </li>
         <li>
           The Status field gives the document's current status (see
-          <a :href="rfcPathBuilder('RFC2026')">RFC 2026</a> and
-          <a :href="rfcPathBuilder('RFC6410')">RFC 6410</a>).
+          <a :href="infoRfcPathBuilder('RFC2026')">RFC 2026</a> and
+          <a :href="infoRfcPathBuilder('RFC6410')">RFC 6410</a>).
         </li>
         <li>
           The Stream field gives the document's stream (see
-          <a :href="rfcPathBuilder('RFC4844')">RFC 4844</a>), followed by Area
-          and WG when relevant.
+          <a :href="infoRfcPathBuilder('RFC4844')">RFC 4844</a>), followed by
+          Area and WG when relevant.
         </li>
         <li>The DOI field gives the Digital Object Identifier.</li>
       </ul>
@@ -83,7 +83,11 @@ import { DateTime } from 'luxon'
 import { ApiClient } from '~/generated/red-client'
 import { getAllRFCs } from '~/utilities/redClientWrappers'
 import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
-import { PRIVATE_API_URL, PUBLIC_SITE, rfcPathBuilder } from '~/utilities/url'
+import {
+  PRIVATE_API_URL,
+  PUBLIC_SITE,
+  infoRfcPathBuilder
+} from '~/utilities/url'
 
 const DE_DUP_KEY = 'rfc-index.html'
 const createdOn = DateTime.now().toFormat('d LLLL yyyy')

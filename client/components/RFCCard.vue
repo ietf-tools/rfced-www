@@ -1,6 +1,6 @@
 <template>
   <Card
-    :href="rfcPathBuilder(`RFC${props.rfc.number}`)"
+    :href="infoRfcPathBuilder(`RFC${props.rfc.number}`)"
     :heading-level="props.headingLevel"
     has-cover-link
     :chevron-position="
@@ -113,7 +113,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import type { Rfc, RfcMetadata } from '../generated/red-client'
-import { rfcPathBuilder } from '../utilities/url'
+import { infoRfcPathBuilder } from '../utilities/url'
 import { formatTitle, formatTitlePlaintext } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 
@@ -170,7 +170,7 @@ function formatObsoletedBy(
           h(
             'a',
             {
-              href: rfcPathBuilder(`rfc${obsoletedByItem.number}`),
+              href: infoRfcPathBuilder(`rfc${obsoletedByItem.number}`),
               title: `${formatTitlePlaintext(`RFC${obsoletedByItem.number}`)}: ${obsoletedByItem.title}`,
               class: 'relative z-50 underline p-1 -m-1 hover:bg-gray-100'
             },

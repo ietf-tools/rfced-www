@@ -10,10 +10,16 @@ export const SEARCH_PATH = '/search/' as const
 
 export const SEARCH_API_PATH = '/api/search/' as const
 
-export const rfcPathBuilder = (rfc: string) => {
-  const rfcParts = parseRFCId(rfc)
+export const infoRfcPathBuilder = (rfcId: string) => {
+  const rfcParts = parseRFCId(rfcId)
 
   return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
+}
+
+export const rfcPathBuilder = (rfcId: string) => {
+  const rfcParts = parseRFCId(rfcId)
+
+  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
 }
 
 export const rfcCitePathBuilder = (
