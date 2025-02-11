@@ -14,9 +14,10 @@ const git = simpleGit()
 
 export type ContentMetadata = Record<
   string, // path within content directory
-  {
-    mtime: string // timestamp ISO 8601
-  } | undefined
+  | {
+      mtime: string // timestamp ISO 8601
+    }
+  | undefined
 >
 
 const markdownMetadataArray = await Promise.all(
@@ -31,15 +32,15 @@ const markdownMetadataArray = await Promise.all(
           })
           .then((gitLog) => {
             const relativePath = contentMarkdownPath
-                .substring(contentPath.length)
-                .replace(/\.md$/, '')
+              .substring(contentPath.length)
+              .replace(/\.md$/, '')
             if (gitLog.latest?.date) {
               resolve({
                 [relativePath]: { mtime: gitLog.latest?.date }
               })
             } else {
               console.warn(
-                `Unable to extract latest Git log time from path ${contentMarkdownPath}`
+                `Unable to extract latest Git log time from path ${contentMarkdownPath}. Was it commited to Git?`
               )
               resolve({ [relativePath]: undefined })
             }
@@ -53,7 +54,11 @@ const contentMetadata: ContentMetadata = Object.assign(
   ...markdownMetadataArray
 )
 
-const contentMetadataPath = path.join(clientPath, 'generated', 'content-metadata.json')
+const contentMetadataPath = path.join(
+  clientPath,
+  'generated',
+  'content-metadata.json'
+)
 
 fs.writeFileSync(contentMetadataPath, JSON.stringify(contentMetadata, null, 2))
 

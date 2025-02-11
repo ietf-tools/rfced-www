@@ -2,7 +2,7 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { renderToString } from 'vue/server-renderer'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
-import { XMLBuilder, XMLParser } from 'fast-xml-parser'
+import { XMLBuilder } from 'fast-xml-parser'
 import { isVNode } from 'vue'
 import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
 import { getAllRFCs } from './redClientWrappers'
@@ -14,6 +14,7 @@ import {
   type DocListResponse
 } from './rfc.test'
 import { parseRFCId } from './rfc'
+import { parseHtml } from './html'
 import {
   ApiClient,
   type PaginatedRfcMetadataList
@@ -73,19 +74,6 @@ describe('rfcToRfcIndexRow for /rfc-index/', () => {
 const originalRfcIndexHtml = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.html'), 'utf-8')
   .toString()
-
-const parseHtml = (html: string) => {
-  const parser = new XMLParser({
-    // Makes it parse HTML too
-    preserveOrder: true,
-    ignoreAttributes: false,
-    unpairedTags: ['hr', 'br', 'link', 'meta'],
-    stopNodes: ['*.pre', '*.script'],
-    processEntities: true,
-    htmlEntities: true
-  })
-  return parser.parse(html)
-}
 
 const originalRfcIndex = parseHtml(originalRfcIndexHtml)
 
