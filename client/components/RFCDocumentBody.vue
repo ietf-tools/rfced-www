@@ -51,13 +51,13 @@
         >
           <p class="leading-6">
             For the definition of <b>Status</b>, see
-            <a :href="rfcPathBuilder('rfc2026')">
+            <a :href="infoRfcPathBuilder('rfc2026')">
               <component :is="formatTitle('rfc2026')" />
             </a>
           </p>
           <p class="leading-6">
             For the definition of <b>Stream</b>, see
-            <a :href="rfcPathBuilder('rfc8729')">
+            <a :href="infoRfcPathBuilder('rfc8729')">
               <component :is="formatTitle('rfc8729')" /> </a
             >.
           </p>
@@ -92,7 +92,7 @@
             .obsoleted_by"
           :key="obsoletedByItemIndex"
         >
-          <a :href="rfcPathBuilder(`RFC${obsoletedByItem.id}`)">
+          <a :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
             <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
             {{ obsoletedByItem.title }}
           </a>
@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import type { Rfc } from '../generated/red-client'
 import { formatTitle, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
-import { rfcPathBuilder } from '~/utilities/url'
+import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {

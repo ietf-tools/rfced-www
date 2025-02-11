@@ -1,6 +1,6 @@
 import { Feed } from 'feed'
 import type { FeedOptions } from 'feed'
-import { PUBLIC_SITE, PRIVATE_API_URL, rfcPathBuilder } from './url'
+import { PUBLIC_SITE, PRIVATE_API_URL, infoRfcPathBuilder } from './url'
 import { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
@@ -34,7 +34,7 @@ export const getFeedForLatestRFCs = async (
   })
 
   response.results.forEach((rfcMetadata) => {
-    const url = `${PUBLIC_SITE}${rfcPathBuilder(`RFC${rfcMetadata.number}`)}`
+    const url = `${PUBLIC_SITE}${infoRfcPathBuilder(`RFC${rfcMetadata.number}`)}`
     feed.addItem({
       title: `RFC ${rfcMetadata.number}: ${rfcMetadata.title}`,
       link: url,

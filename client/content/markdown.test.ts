@@ -5,6 +5,7 @@ import { test, expect } from 'vitest'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
 import { parseHtml } from '~/utilities/html'
+import { infoRfcPathBuilder, rfcPathBuilder } from '~/utilities/url'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
@@ -36,8 +37,7 @@ test('Markdown links validation', async () => {
     const pathname = new URL(href, 'http://localhost/').pathname // removes #hash link
 
     /**
-     * In order to ensure validate links (ie trailing slashes in most cases)
-     * we want to generate
+     * After we've extracted the pathname we can accept some URLs that are valid
      */
     if (
       pathname.endsWith('/') ||
@@ -47,7 +47,7 @@ test('Markdown links validation', async () => {
       pathname.endsWith('.xsd') ||
       pathname.endsWith('.png')
     ) {
-      // these links probably adhere to the new URL structure
+      // these links appear to adhere to the new URL structure
       return
     }
 
@@ -63,15 +63,28 @@ test('Markdown links validation', async () => {
     }
 
     if (pathname.endsWith('.php')) {
-      return expectLink(href, href.replace(/\.php/gi, '/'), markdownPath)
+      // if it ends in .php then it's the old URL structure which is a test failure
+      // we'll use expectLink to generate a nice error message
+      const expectedUrl = href.replace(/\.php$/gi, '/')
+      return expectLink(href, expectedUrl, markdownPath)
     }
 
     if (pathname.endsWith('.html')) {
-      return expectLink(href, href.replace(/\.html/gi, '/'), markdownPath)
+      // if it ends in .html then it's the old URL structure which is a test failure
+      // we'll use expectLink to generate a nice error message
+      return expectLink(href, href.replace(/\.html$/gi, '/'), markdownPath)
     }
 
-    if (pathname.startsWith('/rfc') || pathname.startsWith('/info')) {
-      return expectLink(href, `${href} with a / at the end`, markdownPath)
+    if (pathname.startsWith('/rfc/')) {
+      const expectedUrl = rfcPathBuilder(pathname.substring('/rfc/'.length))
+      return expectLink(href, expectedUrl, markdownPath)
+    }
+
+    if (pathname.startsWith('/info/')) {
+      const expectedUrl = infoRfcPathBuilder(
+        pathname.substring('/info/'.length)
+      )
+      return expectLink(href, expectedUrl, markdownPath)
     }
 
     throw Error(

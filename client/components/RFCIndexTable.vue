@@ -27,7 +27,10 @@
         :key="rfcRow.number.toString()"
       >
         <td class="text-right align-top p-1">
-          <a :href="rfcPathBuilder(`rfc${rfcRow.number}`)" class="font-mono">
+          <a
+            :href="infoRfcPathBuilder(`rfc${rfcRow.number}`)"
+            class="font-mono"
+          >
             {{ rfcRow.number }}
           </a>
         </td>
@@ -42,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { rfcPathBuilder } from '~/utilities/url'
+import { infoRfcPathBuilder } from '~/utilities/url'
 
 type RfcRow = { number: number; information: VNode }
 
