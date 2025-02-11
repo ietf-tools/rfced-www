@@ -18,7 +18,7 @@ title: Site Map
 ## [Errata](/errata/)
 
 — [How to Report Errata](/how-to-report/)
-— [How to Verify Errata](/how-to-verify)
+— [How to Verify Errata](/how-to-verify/)
 — [Status and Type of RFC Errata](/errata-definitions/)
 — [Description of “Source of an RFC”](/source-definitions/)
 
@@ -46,7 +46,7 @@ title: Site Map
 — [Publication Queue in HTML](/current_queue/)
     – [About the Queue](/about/queue/)  
     – [Publication Queue in XML](/queue2.xml)  
-— [Document Clusters in the Queue](/all_clusters.php)  
+— [Document Clusters in the Queue](/all_clusters/)  
     – [About Clusters](/about/clusters/)
 
 ## Reports
@@ -58,7 +58,7 @@ title: Site Map
 — [Annual Publication Rate](/rfcs-per-year/)  
 — [Reports for IETF Meetings](/report-summary/ietf/)
 
-## [Search](/search)
+## [Search](/search/)
 
 — [About RFC Search](/about/search/)
 

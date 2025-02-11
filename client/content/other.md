@@ -24,6 +24,6 @@ This tutorial shows how to use a markdown file to generate an I-D. (March 2019)
 
 ### RFCs and the RFC Editor ([PDF](/materials/tutorial76.pdf))
 
-**Description:** This tutorial covers the basics that are required to understand the metadata related to an RFC (e.g., updates/obsoletes relationships, [status changes](/status_changes.php), and [errata](/errata.php)). This session also describes the publication process and provides some tips for writing good RFCs.
+**Description:** This tutorial covers the basics that are required to understand the metadata related to an RFC (e.g., updates/obsoletes relationships, [status changes](/status_changes/), and [errata](/errata/)). This session also describes the publication process and provides some tips for writing good RFCs.
 
 Here is [a list of past tutorials that were offered by the IETF EDU team](//datatracker.ietf.org/group/edu/materials/).
