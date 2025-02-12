@@ -71,6 +71,10 @@ export default defineNuxtConfig({
       swr: oneDayInSeconds,
       prerender: true
     },
+    '/rfc/rfc*.json': {
+      swr: oneDayInSeconds,
+      prerender: false // there are too many RFCs to prerender them, but we can at least `swr: true` cache them
+    },
     // https://nitro.build/config#routerules
     ...redirects.redirects.reduce((acc, redirect) => {
       acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
