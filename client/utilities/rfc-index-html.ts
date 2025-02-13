@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
-import type { getAllRFCs } from './redClientWrappers'
+import type { getRFCs } from './redClientWrappers'
 import { formatAuthor } from './rfc'
 import { infoRfcPathBuilder } from './url'
 import { COMMA } from './strings'
 
-type Rfc = Awaited<ReturnType<typeof getAllRFCs>>[number]
+type Rfc = Awaited<ReturnType<typeof getRFCs>>[number]
 
 export const rfcToRfcIndexRow = (rfc: Rfc) => {
   const [month, year] = DateTime.fromISO(rfc.published)
