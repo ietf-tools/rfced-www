@@ -44,7 +44,7 @@ describe('rfcToRfcIndexRow for /rfc-index/', () => {
       oldestRfcResponse: twoDigitOldestRfcResponse,
       seekingResponses: [twoDigitRFCDocListResponse]
     })
-    const rfcs = await getRFCs(apiClient)
+    const rfcs = await getRFCs({ apiClient, sort: 'ascending' })
     const rfcSummariesAsVNodes = rfcs.map(
       // This is the thing we're testing
       rfcToRfcIndexRow
