@@ -71,7 +71,7 @@ export async function renderRfcIndexDotTxt({
     .map((_, index) => ' '.repeat(index))
 
   docListArg.sort = ['number'] // sort by earliest RFC number
-  docListArg.limit = 1000 // load RFC in chunks
+  docListArg.limit = 1000
 
   let offset = 0
 

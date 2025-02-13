@@ -13,6 +13,7 @@ const contentPath = path.resolve(clientPath, 'content')
 
 test('Markdown links validation', async () => {
   // Unfortunately Nuxt Content's queryCollection can't run in tests only in server routes
+  // so we have to read the markdown files directly from the filesystem
   const markdownPaths = await globby('**/*.md', {
     cwd: contentPath
   })
@@ -30,16 +31,16 @@ test('Markdown links validation', async () => {
       href.startsWith('https://') ||
       href.startsWith('mailto:')
     ) {
-      // external links aren't validated
+      // external links, and mailto: links, are assumed to be valid
       return
     }
 
-    const pathname = new URL(href, 'http://localhost/').pathname // removes #hash link
+    const { pathname } = new URL(href, 'http://localhost/') // extract pathname to remove #hash
 
-    /**
-     * After we've extracted the pathname we can accept some URLs that are valid
-     */
     if (
+      /**
+       * Some valid paths
+       */
       pathname.endsWith('/') ||
       pathname.endsWith('.pdf') ||
       pathname.endsWith('.txt') ||
