@@ -49,8 +49,11 @@ export default defineNuxtConfig({
       }
     }
   },
+  // https://nitro.build/config#routerules
+  // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
   routeRules: {
-    // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
+    // The prerenders can increase build time A LOT but it's better than
+    // users waiting for responses.
     '/': {
       swr: oneDayInSeconds,
       prerender: true
@@ -63,6 +66,18 @@ export default defineNuxtConfig({
       swr: oneDayInSeconds,
       prerender: true
     },
+    '/rfc-index2/': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
+    '/rfc-index-100a/': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
+    '/rfc-index-100d/': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
     '/rfcatom.xml': {
       swr: oneDayInSeconds,
       prerender: true
@@ -71,11 +86,10 @@ export default defineNuxtConfig({
       swr: oneDayInSeconds,
       prerender: true
     },
-    '/rfc/rfc*.json': {
+    '/rfc/rfc**.json': {
       swr: oneDayInSeconds,
       prerender: false // there are too many RFCs to prerender them, but we can at least `swr: true` cache them
     },
-    // https://nitro.build/config#routerules
     ...redirects.redirects.reduce((acc, redirect) => {
       acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
       return acc

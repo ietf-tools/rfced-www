@@ -35,8 +35,22 @@ export const getRFCs = async ({
     return largestRfcNumber
   }
 
-  const endOfResultsRfcNumber =
-    sort === 'ascending' ? await getLargestRfcNumber() : FIRST_RFC_NUMBER
+  const getEndOfResults = async (): Promise<number> => {
+    if (sort === 'ascending') {
+      if (rfcNumberLimit === undefined) {
+        return getLargestRfcNumber()
+      }
+      return rfcNumberLimit
+    }
+    // sort is descending
+    if (rfcNumberLimit !== undefined) {
+      const largestRfcNumber = await getLargestRfcNumber()
+      return Math.max(largestRfcNumber - rfcNumberLimit, FIRST_RFC_NUMBER)
+    }
+    return FIRST_RFC_NUMBER
+  }
+
+  const endOfResultsRfcNumber = await getEndOfResults()
 
   const docListArg: DocListArg = {}
   docListArg.sort = [sort === 'ascending' ? 'number' : '-number']
@@ -45,20 +59,34 @@ export const getRFCs = async ({
   while (!abortController.signal.aborted) {
     docListArg.offset = offset
     docListArg.limit = Math.min(
-      //      rfcNumberLimit !== undefined ? rfcNumberLimit : Infinity,
+      rfcNumberLimit !== undefined ? rfcNumberLimit : Infinity,
       MAX_LIMIT_PER_REQUEST
     ) // as an API optimisation use rfcNumberLimit if not greater than MAX_LIMIT_PER_REQUEST
 
+    // For debugging...
+    // const collectedRfcNumbers = rfcs.map((rfcMetadata) => rfcMetadata.number)
+    // console.log(
+    //   'Making API request...',
+    //   docListArg.sort,
+    //   docListArg.limit,
+    //   `(ending on ${endOfResultsRfcNumber})`,
+    //   Math.min(...collectedRfcNumbers),
+    //   Math.max(...collectedRfcNumbers)
+    // )
     const response = await apiClient.red.docList(docListArg)
 
     rfcs.push(
       ...response.results
-        .filter((rfcMetadata) =>
-          // if there's an rfcLimit use it to discard extra results
-          rfcNumberLimit !== undefined ?
-            rfcMetadata.number <= rfcNumberLimit
-          : true
-        )
+        .filter((rfcMetadata) => {
+          // if there's an rfcNumberLimit use it to discard extra results
+          if (rfcNumberLimit === undefined) {
+            return true
+          }
+          if (sort === 'ascending') {
+            return rfcMetadata.number <= endOfResultsRfcNumber
+          }
+          return rfcMetadata.number >= endOfResultsRfcNumber
+        })
         .map((rfcMetadata) => getRFCWithExtraFields(rfcMetadata))
     )
 
@@ -66,8 +94,15 @@ export const getRFCs = async ({
       rfcNumberLimit !== undefined ?
         response.results.some((rfcMetadata) =>
           sort === 'ascending' ?
-            rfcMetadata.number > rfcNumberLimit
-          : rfcMetadata.number < rfcNumberLimit
+            // some RFC numbers may be missing (ie Not Issued) so it's possible for
+            // endOfResultsRfcNumber to not be in the results, that's why we check for numbers
+            // beyond the endOfResultsRfcNumber too to know when we've passed it.
+            //
+            // There's a bug here if the endOfResultsRfcNumber isn't in the results AND if
+            // there were no results beyond that. E.g. a rfcNumberLimit of 99999999 will never
+            // be found
+            rfcMetadata.number >= endOfResultsRfcNumber
+          : rfcMetadata.number <= endOfResultsRfcNumber
         )
       : response.results.some(
           (rfcMetadata) => rfcMetadata.number === endOfResultsRfcNumber

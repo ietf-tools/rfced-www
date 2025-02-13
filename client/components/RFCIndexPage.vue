@@ -10,8 +10,8 @@
     </SectionHeader>
     <div class="container mx-auto mt-10">
       <p class="leading-6 mb-2 pl-5 md:p-0 md:w-1/2">
-        This file contains citations for all RFCs in numeric order. RFC
-        citations appear in this format:
+        This file contains entries for all RFCs in numeric order. RFC entries
+        appear in this format:
       </p>
       <RFCIndexTable
         :rfc-rows="exampleRfcInformations"
@@ -21,7 +21,7 @@
       <p>For example:</p>
       <RFCIndexTable :rfc-rows="exampleRfcInformations"></RFCIndexTable>
 
-      <Heading level="2" class="mt-4 mb-2">Key to Citations</Heading>
+      <Heading level="2" class="mt-4 mb-2">Key to Entries</Heading>
       <ul class="list-disc ml-6">
         <li>#### is the RFC number.</li>
         <li>
@@ -107,7 +107,8 @@ const { data: rfcs, error } = await useAsyncData(
     getRFCs({
       apiClient,
       sort: props.sort,
-      rfcNumberLimit: props.rfcNumberLimit
+      rfcNumberLimit: props.rfcNumberLimit,
+      delayBetweenRequestsMs: 0
     })
 )
 const rfcRows = computed(() => {
