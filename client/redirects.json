@@ -1,16 +1,18 @@
 {
-    "//": "this is a separate file so that we can potentially migrate it to a worker later",
-    "redirects": [
-        ["/rfc-index.html", "/rfc-index/"],
-        ["/rfc-index2.html", "/rfc-index2/"],
-        ["/search", "/search/"],
-        ["/status_changes.php", "/status_changes/"],
-        ["/all_clusters.php", "/all_clusters/"],
-        ["/standards", "/standards/"],
-        ["/errata.php", "/errata/"],
-        ["/source-definitions", "/source-definitions/"],
-        ["/how-to-verify", "/how-to-verify/"],
-        ["/ien/ien-index.html", "/ien/ien-index/"],
-        ["/current_queue.php", "/current_queue/"]
-    ]
+  "//": "this is a separate file so that we can potentially migrate it to a worker later",
+  "redirects": [
+    ["/rfc-index.html", "/rfc-index/"],
+    ["/rfc-index2.html", "/rfc-index2/"],
+    ["/rfc-index-100a.html", "/rfc-index-100a/"],
+    ["/rfc-index-100d.html", "/rfc-index-100d/"],
+    ["/search", "/search/"],
+    ["/status_changes.php", "/status_changes/"],
+    ["/all_clusters.php", "/all_clusters/"],
+    ["/standards", "/standards/"],
+    ["/errata.php", "/errata/"],
+    ["/source-definitions", "/source-definitions/"],
+    ["/how-to-verify", "/how-to-verify/"],
+    ["/ien/ien-index.html", "/ien/ien-index/"],
+    ["/current_queue.php", "/current_queue/"]
+  ]
 }

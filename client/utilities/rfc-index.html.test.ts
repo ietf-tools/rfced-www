@@ -5,7 +5,7 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLBuilder } from 'fast-xml-parser'
 import { isVNode } from 'vue'
 import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
-import { getAllRFCs } from './redClientWrappers'
+import { getRFCs } from './redClientWrappers'
 import { PRIVATE_API_URL, infoRfcPathBuilder } from './url'
 import {
   blankRfcResponse,
@@ -44,7 +44,7 @@ describe('rfcToRfcIndexRow for /rfc-index/', () => {
       oldestRfcResponse: twoDigitOldestRfcResponse,
       seekingResponses: [twoDigitRFCDocListResponse]
     })
-    const rfcs = await getAllRFCs(apiClient)
+    const rfcs = await getRFCs({ apiClient, sort: 'ascending' })
     const rfcSummariesAsVNodes = rfcs.map(
       // This is the thing we're testing
       rfcToRfcIndexRow
