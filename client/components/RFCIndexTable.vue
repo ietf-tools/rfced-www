@@ -34,7 +34,7 @@
             {{ rfcRow.number }}
           </a>
         </td>
-        <td class="p-1">
+        <td class="p-1 align-top">
           <p>
             <Renderable :val="rfcRow.information" />
           </p>

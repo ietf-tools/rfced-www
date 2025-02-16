@@ -10,16 +10,33 @@
     </SectionHeader>
     <div class="container mx-auto mt-10">
       <p class="leading-6 mb-2 pl-5 md:p-0 md:w-1/2">
-        This file contains entries for all RFCs in numeric order. RFC entries
-        appear in this format:
+        <template v-if="props.rfcNumberLimit !== undefined">
+          <template v-if="props.sort === 'ascending'">
+            This page shows the first {{ props.rfcNumberLimit }} RFCs published.
+            Click <a :href="RFC_INDEX_ALL_ASCENDING">Show All</a> to get the
+            full list (ascending). RFCs are listed in this format:
+          </template>
+          <template v-else-if="props.sort === 'descending'">
+            This page shows the last {{ props.rfcNumberLimit }} RFCs published.
+            Click <a :href="RFC_INDEX_ALL_DESCENDING">Show All</a> to get the
+            full list (descending). RFCs are listed in this format:
+          </template>
+        </template>
+        <template v-else>
+          <template v-if="props.sort === 'ascending'">
+            This file contains entries for all RFCs in numeric order. RFC
+            entries appear in this format:
+          </template>
+          <template v-else-if="props.sort === 'descending'">
+            This file contains entries for all RFCs in reverse numeric order.
+            RFC entries appear in this format:
+          </template>
+        </template>
       </p>
-      <RFCIndexTable
-        :rfc-rows="exampleRfcInformations"
-        is-example
-      ></RFCIndexTable>
+      <RFCIndexTable :rfc-rows="exampleRfcInformations" is-example />
 
       <p>For example:</p>
-      <RFCIndexTable :rfc-rows="exampleRfcInformations"></RFCIndexTable>
+      <RFCIndexTable :rfc-rows="exampleRfcInformations" />
 
       <Heading level="2" class="mt-4 mb-2">Key to Entries</Heading>
       <ul class="list-disc ml-6">
@@ -76,7 +93,18 @@
       <Heading v-if="rfcs" level="2" style-level="1" class="mt-6 mb-3">
         RFC Index
       </Heading>
-      <RFCIndexTable v-if="rfcs" :rfc-rows="rfcRows"></RFCIndexTable>
+      <RFCIndexTable v-if="rfcs" :rfc-rows="rfcRows" />
+
+      <template v-if="props.rfcNumberLimit !== undefined">
+        <p class="pt-4">
+          <template v-if="props.sort === 'ascending'">
+            <a :href="RFC_INDEX_ALL_ASCENDING">Show All</a>
+          </template>
+          <template v-else-if="props.sort === 'descending'">
+            <a :href="RFC_INDEX_ALL_DESCENDING">Show All</a>
+          </template>
+        </p>
+      </template>
     </div>
   </div>
 </template>
@@ -89,6 +117,8 @@ import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
 import {
   PRIVATE_API_URL,
   PUBLIC_SITE,
+  RFC_INDEX_ALL_ASCENDING,
+  RFC_INDEX_ALL_DESCENDING,
   infoRfcPathBuilder
 } from '~/utilities/url'
 
@@ -98,6 +128,16 @@ type Props = {
   rfcNumberLimit?: number
 }
 const props = defineProps<Props>()
+
+useSeoMeta({
+  title:
+    props.rfcNumberLimit === undefined ?
+      props.sort === 'ascending' ?
+        'RFC Index'
+      : 'RFC Index (descending)'
+    : props.sort === 'ascending' ? `RFC Index first ${props.rfcNumberLimit}`
+    : `RFC Index last ${props.rfcNumberLimit}`
+})
 
 const createdOn = DateTime.now().toFormat('d LLLL yyyy')
 const apiClient = new ApiClient({ baseUrl: PRIVATE_API_URL })

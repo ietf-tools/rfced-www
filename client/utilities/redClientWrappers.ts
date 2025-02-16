@@ -63,17 +63,9 @@ export const getRFCs = async ({
       MAX_LIMIT_PER_REQUEST
     ) // as an API optimisation use rfcNumberLimit if not greater than MAX_LIMIT_PER_REQUEST
 
-    // For debugging...
-    // const collectedRfcNumbers = rfcs.map((rfcMetadata) => rfcMetadata.number)
-    // console.log(
-    //   'Making API request...',
-    //   docListArg.sort,
-    //   docListArg.limit,
-    //   `(ending on ${endOfResultsRfcNumber})`,
-    //   Math.min(...collectedRfcNumbers),
-    //   Math.max(...collectedRfcNumbers)
-    // )
     const response = await apiClient.red.docList(docListArg)
+
+    const existingRfcNumbers = rfcs.map((rfcMetadata) => rfcMetadata.number)
 
     rfcs.push(
       ...response.results
@@ -87,8 +79,25 @@ export const getRFCs = async ({
           }
           return rfcMetadata.number >= endOfResultsRfcNumber
         })
+        .filter(
+          (rfcMetadata) =>
+            // the API's database could change during pagination and return the same result
+            // so we should ensure we don't already have the RFC (by number)
+            !existingRfcNumbers.includes(rfcMetadata.number)
+        )
         .map((rfcMetadata) => getRFCWithExtraFields(rfcMetadata))
     )
+
+    if (
+      // if we got no results then stop
+      response.results.length === 0 ||
+      // we got some of same results twice while paginating so stop
+      response.results.some((rfcMetadata) =>
+        existingRfcNumbers.includes(rfcMetadata.number)
+      )
+    ) {
+      break
+    }
 
     if (
       rfcNumberLimit !== undefined ?

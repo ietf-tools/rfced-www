@@ -10,6 +10,14 @@ export const SEARCH_PATH = '/search/' as const
 
 export const SEARCH_API_PATH = '/api/search/' as const
 
+export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/' as const
+
+export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/' as const
+
+export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/' as const
+
+export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/' as const
+
 export const infoRfcPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
 
