@@ -3,8 +3,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { vi, test, expect } from 'vitest'
 import { PRIVATE_API_URL } from './url'
-import { ApiClient } from '~/generated/red-client'
 import { renderCurrQstatsDotTxt } from './CurrQstats-txt'
+import { ApiClient } from '~/generated/red-client'
 
 const currQStatsTxt = fs
   .readFileSync(path.join(import.meta.dirname, 'CurrQstats.txt'), 'utf-8')

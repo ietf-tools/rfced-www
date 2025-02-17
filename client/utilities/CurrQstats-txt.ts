@@ -1,6 +1,6 @@
-import type { ApiClient } from '~/generated/red-client'
-import type { TestHelperResponses } from './CurrQstats.txt.test'
 import { padStart } from 'lodash-es'
+import type { TestHelperResponses } from './CurrQstats.txt.test'
+import type { ApiClient } from '~/generated/red-client'
 
 type Props = {
   redApi: ApiClient
@@ -18,11 +18,7 @@ ${TABLE_OFFSET}                  docs          pages        in state      in sta
 }
 
 export const renderCurrQstatsDotTxt = async (
-  {
-    // FIXME:
-    // Use redApi when the API is available
-    // redApi,
-  }: Props
+  _props: Props
 ): Promise<string> => {
   let txt = getHeader()
 
