@@ -45,12 +45,14 @@ export default defineEventHandler(async (event) => {
           return null
         }
       }
+
+      console.error(e)
+      throw createError({
+        statusCode: 500,
+        message: 'Unhandled Red API response',
+        fatal: true
+      })
     }
-    throw createError({
-      statusCode: 500,
-      message: 'Unhandled Red API response',
-      fatal: true
-    })
   }
 
   const rfc = await docRetrieve(rfcNumber)
