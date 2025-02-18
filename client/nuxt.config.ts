@@ -86,6 +86,10 @@ export default defineNuxtConfig({
       swr: oneDayInSeconds,
       prerender: true
     },
+    '/reports/CurrQstats.txt': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
     '/rfc/rfc**.json': {
       swr: oneDayInSeconds,
       prerender: false // there are too many RFCs to prerender them, but we can at least `swr: true` cache them

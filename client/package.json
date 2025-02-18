@@ -13,6 +13,7 @@
     "test:lint:fix": "eslint . --fix",
     "test:types": "npx nuxi typecheck",
     "test:unittests": "vitest run",
+    "test:unittests:watch": "vitest",
     "test:story": "npm run story:build && LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker",
     "test:story:view": "npx --no -c 'vite dev ./visual-regression-viewer'",
     "test:story:approve": "npm run story:build && LOST_PIXEL_DISABLE_TELEMETRY=1 npx --no lost-pixel docker update",
