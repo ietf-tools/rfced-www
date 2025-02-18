@@ -2,8 +2,8 @@ import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
 import { SPACE } from './strings'
 import type { ExtraFieldsNeeded } from './rfc.mocks'
-import { getRFCWithExtraFields } from './rfc.mocks'
-import { formatAuthor } from './rfc'
+import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
+import { formatAuthor, formatIdentifiers } from './rfc'
 import { setTimeoutPromise } from './promises'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
@@ -137,17 +137,6 @@ export async function renderRfcIndexDotTxt({
   }
 }
 
-const stringifyIdentifiers = (
-  identifiers: RfcMetadata['identifiers']
-): string => {
-  if (!identifiers || identifiers.length === 0) return ''
-  return ` ${identifiers
-    .map(
-      (identifier) => `(${identifier.type.toUpperCase()}: ${identifier.value})`
-    )
-    .join(' ')}`
-}
-
 const formatRfcNumber = (number: number): string => {
   return `RFC${number.toString()}`
 }
@@ -166,7 +155,7 @@ const stringifyRFC = (
   let also = ''
   let doi = ''
 
-  const rfc = getRFCWithExtraFields(rfcMetadata)
+  const rfc = FIXME_getRFCMetadataWithMissingData(rfcMetadata)
 
   if (rfc.title === 'Not Issued') {
     return 'Not Issued.'
@@ -211,8 +200,10 @@ const stringifyRFC = (
       also = ` (Also ${alsolist.join(', ')})`
     }
 
-    doi = stringifyIdentifiers(rfc.identifiers)
-    return `${rfc.title}. ${rfc.authors.map(formatAuthor).join(', ')}. ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
+    doi = ` ${formatIdentifiers(rfc.identifiers)
+      .map((identifier) => `(${identifier})`)
+      .join(' ')}`
+    return `${rfc.title}. ${rfc.authors.map((author) => formatAuthor(author, 'regular')).join(', ')}. ${rfcdate}. (${rfcformat})${obsups}${also} (Status: ${rfc.status.name.toUpperCase()})${doi}`
   }
 }
 

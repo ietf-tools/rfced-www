@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { XMLBuilder } from 'fast-xml-parser'
-import { getRFCWithExtraFields } from './rfc.mocks'
+import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { formatAuthor } from './rfc'
 import { rfcErrataPathBuilder } from './url'
 import { setTimeoutPromise } from './promises'
@@ -77,7 +77,7 @@ const renderRFCs = async ({
     const response = await redApi.red.docList(docListArg)
 
     response.results.forEach((rfcMetadata) => {
-      const rfc = getRFCWithExtraFields(rfcMetadata)
+      const rfc = FIXME_getRFCMetadataWithMissingData(rfcMetadata)
 
       const [month, year] = DateTime.fromISO(rfcMetadata.published)
         .toFormat('LLLL yyyy')
@@ -91,7 +91,9 @@ const renderRFCs = async ({
           ...(rfc.authors.length > 0 ?
             {
               author: {
-                name: rfc.authors.map(formatAuthor)
+                name: rfc.authors.map((author) =>
+                  formatAuthor(author, 'regular')
+                )
               }
             }
           : {}),

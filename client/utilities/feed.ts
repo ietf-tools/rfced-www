@@ -1,7 +1,8 @@
 import { Feed } from 'feed'
 import type { FeedOptions } from 'feed'
-import { PUBLIC_SITE, PRIVATE_API_URL, infoRfcPathBuilder } from './url'
-import { ApiClient } from '~/generated/red-client'
+import { PUBLIC_SITE, infoRfcPathBuilder } from './url'
+import { getRedClient } from './redClientWrappers'
+import type { ApiClient } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
@@ -9,7 +10,7 @@ export const getFeedForLatestRFCs = async (
   numberOfRFCs: number,
   feedOptions?: FeedOptions
 ) => {
-  const redApi = new ApiClient({ baseUrl: PRIVATE_API_URL })
+  const redApi = getRedClient()
 
   const docListArg: DocListArg = {}
 

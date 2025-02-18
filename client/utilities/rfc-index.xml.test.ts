@@ -5,16 +5,16 @@ import { z } from 'zod'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLParser } from 'fast-xml-parser'
 import { renderRfcIndexDotXml } from './rfc-index-xml'
-import { PRIVATE_API_URL } from './url'
 import { parseRFCId } from './rfc'
 import {
   blankRfcResponse,
   twoDigitOldestRfcResponse,
   twoDigitRFCDocListResponse
 } from './rfc.test'
-import {
+import { getRedClient } from './redClientWrappers'
+import type {
   ApiClient,
-  type PaginatedRfcMetadataList
+  PaginatedRfcMetadataList
 } from '~/generated/red-client'
 
 const originalXMLString = fs
@@ -62,7 +62,7 @@ type TestHelperResponses = {
 
 const testHelper = (responses: TestHelperResponses) =>
   new Promise<string>((resolve) => {
-    const redApiMock = new ApiClient({ baseUrl: PRIVATE_API_URL })
+    const redApiMock = getRedClient()
     type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
     // clone so that we don't mutate original array

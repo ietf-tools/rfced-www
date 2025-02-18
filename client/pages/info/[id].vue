@@ -14,9 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { ApiClient } from '../../generated/red-client'
+import { getRedClient } from '~/utilities/redClientWrappers'
 import { parseRFCId } from '~/utilities/rfc'
-import { PRIVATE_API_URL } from '~/utilities/url'
 
 const route = useRoute()
 
@@ -26,7 +25,7 @@ const {
   error: rfcError
 } = await useAsyncData(`info-${route.params.id}`, async () => {
   const id = parseRFCId(route.params.id.toString())
-  const redApi = new ApiClient({ baseUrl: PRIVATE_API_URL })
+  const redApi = getRedClient()
   const rfcNumber = parseInt(id.number, 10)
   return redApi.red.docRetrieve(rfcNumber)
 })

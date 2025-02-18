@@ -1,8 +1,9 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { parseRFCId } from './rfc'
+import { parseRFCId, refsRefRfcIdTxt } from './rfc'
 import { NONBREAKING_SPACE } from './strings'
-import type { ApiClient } from '~/generated/red-client'
+import rfcRefs from './rfc-refs.json'
+import type { ApiClient, Rfc, RfcMetadata } from '~/generated/red-client'
 
 test('parseRFCId', () => {
   expect(parseRFCId('rfc1234')).toEqual({
@@ -251,3 +252,47 @@ export const blankRfcResponse: DocListResponse = {
   count: 0,
   results: []
 }
+
+const rfcMetadataToRfc = (rfcMetadata: RfcMetadata): Rfc => ({
+  ...rfcMetadata,
+  text: ''
+})
+
+test('refsRefRfcIdTxt', () => {
+  expect(rfcRefs.snapshots.length).toBeGreaterThan(10)
+
+  rfcRefs.snapshots
+    .filter((rfcRef) => {
+      const filename = rfcRef[0]
+      const rfcId = parseRFCId(filename)
+      return parseFloat(rfcId.number) < 14
+    })
+    .forEach((rfcRef) => {
+      const filename = rfcRef[0]
+      const originalResult = rfcRef[1]
+      const expectedResult = originalResult.replace(/>\.\n$/, '/>.\n') // expectedResult is same as originalResult except the url has a trailing slash
+
+      const filenameMatches = filename.match(/^ref([0-9]+)\.txt$/)
+
+      if (!filenameMatches) {
+        throw Error(`Unable to parse filename ${filename}`)
+      }
+
+      const rfcNumberString = filenameMatches[1]
+      const rfcNumber = parseInt(rfcNumberString, 10)
+
+      const rfcMetadata = twoDigitRFCDocListResponse.results.find(
+        (rfcMetadata) => rfcMetadata.number === rfcNumber
+      )
+
+      if (!rfcMetadata) {
+        throw Error(
+          `Couldn't find RFC ${rfcNumber} in twoDigitRFCDocListResponse.results`
+        )
+      }
+
+      const rfc: Rfc = rfcMetadataToRfc(rfcMetadata)
+
+      expect(refsRefRfcIdTxt(rfc)).toEqual(expectedResult)
+    })
+})

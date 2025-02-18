@@ -116,7 +116,10 @@ export type ExtraFieldsNeeded = {
   errata: ExtraFieldNeededErrata[]
 }
 
-const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
+const missingData: Record<
+  number,
+  Partial<(RfcMetadata & ExtraFieldsNeeded) | undefined>
+> = {
   1: {
     authors: [
       {
@@ -196,21 +199,54 @@ const missingData: Record<number, Partial<RfcMetadata & ExtraFieldsNeeded>> = {
   }
 }
 
-export const getRFCWithExtraFields = (
+/**
+ * Enriches an RFC with hardcoded data that wasn't in the API response.
+ * This function should be removed when the API provides this information, hence the FIXME_ prefix.
+ */
+export const FIXME_getRFCWithMissingData = (
+  rfc: Rfc
+): Rfc & Partial<ExtraFieldsNeeded> => {
+  const missingRfcData = missingData[rfc.number]
+
+  // Clone so that we don't mutate original value
+  // we can't just `{...rfc}` spread into a new object as there are deep refs
+  const enrichedRfc: Rfc & Partial<ExtraFieldsNeeded> = {
+    ...structuredClone(rfc),
+    ...missingRfcData,
+    authors: [...toArray(rfc?.authors), ...toArray(missingRfcData?.authors)]
+  }
+
+  return enrichedRfc
+}
+
+/**
+ * Enriches an RFC with hardcoded data that wasn't in the API response.
+ * This function should be removed when the API provides this information, hence the FIXME_ prefix.
+ */
+export const FIXME_getRFCMetadataWithMissingData = (
   rfcMetadata: RfcMetadata
 ): RfcMetadata & Partial<ExtraFieldsNeeded> => {
-  const toArray = (obj: unknown) => {
-    if (!obj) return []
-    return Array.isArray(obj) ? obj : [obj]
-  }
+  const missingRfcData = missingData[rfcMetadata.number]
 
-  const missingRfc = missingData[rfcMetadata.number]
-
-  const rfc: RfcMetadata & Partial<ExtraFieldsNeeded> = {
-    ...missingRfc,
+  const enrichedRfcMetadata: RfcMetadata & Partial<ExtraFieldsNeeded> = {
+    ...missingRfcData,
     ...rfcMetadata,
-    authors: [...toArray(missingRfc?.authors), ...toArray(rfcMetadata?.authors)]
+    authors: [
+      ...toArray(missingRfcData?.authors),
+      ...toArray(rfcMetadata?.authors)
+    ]
   }
 
-  return rfc
+  return enrichedRfcMetadata
+}
+
+type UnwrapArray<A> = A extends unknown[] ? UnwrapArray<A[number]> : A
+
+const toArray = <T, ReturnValue extends UnwrapArray<NonNullable<T>>[]>(
+  obj: T
+): ReturnValue => {
+  if (!obj) return [] as ReturnValue
+  return Array.isArray(obj) ?
+      (obj as unknown as ReturnValue)
+    : ([obj] as ReturnValue)
 }
