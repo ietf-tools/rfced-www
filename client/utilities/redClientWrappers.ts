@@ -1,6 +1,9 @@
-import { getRFCWithExtraFields } from './rfc.mocks'
+import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { setTimeoutPromise } from './promises'
-import type { ApiClient } from '~/generated/red-client'
+import { PRIVATE_API_URL } from './url'
+import { ApiClient } from '~/generated/red-client'
+
+export const getRedClient = () => new ApiClient({ baseUrl: PRIVATE_API_URL })
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
@@ -24,7 +27,7 @@ export const getRFCs = async ({
   const abortController = new AbortController()
   const delayBetweenRequestsMs =
     customDelayBetweenRequests ?? DEFAULT_DELAY_BETWEEN_REQUESTS
-  const rfcs: ReturnType<typeof getRFCWithExtraFields>[] = []
+  const rfcs: ReturnType<typeof FIXME_getRFCMetadataWithMissingData>[] = []
 
   const getLargestRfcNumber = async (): Promise<number> => {
     const docListArg: DocListArg = {}
@@ -85,7 +88,7 @@ export const getRFCs = async ({
             // so we should ensure we don't already have the RFC (by number)
             !existingRfcNumbers.includes(rfcMetadata.number)
         )
-        .map((rfcMetadata) => getRFCWithExtraFields(rfcMetadata))
+        .map((rfcMetadata) => FIXME_getRFCMetadataWithMissingData(rfcMetadata))
     )
 
     if (

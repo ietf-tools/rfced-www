@@ -14,7 +14,7 @@ export const rfcToRfcIndexRow = (rfc: Rfc) => {
   const information = h('span', [
     h('b', rfc.title),
     ' ',
-    ...rfc.authors.map(formatAuthor),
+    ...rfc.authors.map((author) => formatAuthor(author, 'regular')),
     ` [ ${month} ${year} ] `,
     rfc.formats ?
       `(${rfc.formats.map((format) => format.type).join(', ')})`

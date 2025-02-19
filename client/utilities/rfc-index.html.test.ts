@@ -5,8 +5,8 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLBuilder } from 'fast-xml-parser'
 import { isVNode } from 'vue'
 import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
-import { getRFCs } from './redClientWrappers'
-import { PRIVATE_API_URL, infoRfcPathBuilder } from './url'
+import { getRedClient, getRFCs } from './redClientWrappers'
+import { infoRfcPathBuilder } from './url'
 import {
   blankRfcResponse,
   twoDigitOldestRfcResponse,
@@ -15,9 +15,9 @@ import {
 } from './rfc.test'
 import { parseRFCId } from './rfc'
 import { parseHtml } from './html'
-import {
+import type {
   ApiClient,
-  type PaginatedRfcMetadataList
+  PaginatedRfcMetadataList
 } from '~/generated/red-client'
 
 test('rfcCommaList', () => {
@@ -178,7 +178,7 @@ type TestHelperResponses = {
 }
 
 const getTestApiClient = (responses: TestHelperResponses) => {
-  const redApiMock = new ApiClient({ baseUrl: PRIVATE_API_URL })
+  const redApiMock = getRedClient()
   type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
   // clone so that we don't mutate original array

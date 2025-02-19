@@ -1,0 +1,765 @@
+{
+  "//": "This is a snapshot of rendering of https://www.rfc-editor.org/refs/ref0001.txt etc",
+  "snapshots": [
+    [
+      "ref9000.txt",
+      "Iyengar, J., Ed., and M. Thomson, Ed., \"QUIC: A UDP-Based Multiplexed and Secure Transport\", RFC 9000, DOI 10.17487/RFC9000, May 2021, <https://www.rfc-editor.org/info/rfc9000>.\n"
+    ],
+    [
+      "ref5432.txt",
+      "Polk, J., Dhesikan, S., and G. Camarillo, \"Quality of Service (QoS) Mechanism Selection in the Session Description Protocol (SDP)\", RFC 5432, DOI 10.17487/RFC5432, March 2009, <https://www.rfc-editor.org/info/rfc5432>.\n"
+    ],
+    [
+      "ref5010.txt",
+      "Kinnear, K., Normoyle, M., and M. Stapp, \"The Dynamic Host Configuration Protocol Version 4 (DHCPv4) Relay Agent Flags Suboption\", RFC 5010, DOI 10.17487/RFC5010, September 2007, <https://www.rfc-editor.org/info/rfc5010>.\n"
+    ],
+    [
+      "ref5009.txt",
+      "Ejzak, R., \"Private Header (P-Header) Extension to the Session Initiation Protocol (SIP) for Authorization of Early Media\", RFC 5009, DOI 10.17487/RFC5009, September 2007, <https://www.rfc-editor.org/info/rfc5009>.\n"
+    ],
+    [
+      "ref5008.txt",
+      "Housley, R. and J. Solinas, \"Suite B in Secure/Multipurpose Internet Mail Extensions (S/MIME)\", RFC 5008, DOI 10.17487/RFC5008, September 2007, <https://www.rfc-editor.org/info/rfc5008>.\n"
+    ],
+    [
+      "ref5007.txt",
+      "Brzozowski, J., Kinnear, K., Volz, B., and S. Zeng, \"DHCPv6 Leasequery\", RFC 5007, DOI 10.17487/RFC5007, September 2007, <https://www.rfc-editor.org/info/rfc5007>.\n"
+    ],
+    [
+      "ref5006.txt",
+      "Jeong, J., Ed., Park, S., Beloeil, L., and S. Madanapalli, \"IPv6 Router Advertisement Option for DNS Configuration\", RFC 5006, DOI 10.17487/RFC5006, September 2007, <https://www.rfc-editor.org/info/rfc5006>.\n"
+    ],
+    [
+      "ref5005.txt",
+      "Nottingham, M., \"Feed Paging and Archiving\", RFC 5005, DOI 10.17487/RFC5005, September 2007, <https://www.rfc-editor.org/info/rfc5005>.\n"
+    ],
+    [
+      "ref5004.txt",
+      "Chen, E. and S. Sangli, \"Avoid BGP Best Path Transitions from One External to Another\", RFC 5004, DOI 10.17487/RFC5004, September 2007, <https://www.rfc-editor.org/info/rfc5004>.\n"
+    ],
+    [
+      "ref5003.txt",
+      "Metz, C., Martini, L., Balus, F., and J. Sugimoto, \"Attachment Individual Identifier (AII) Types for Aggregation\", RFC 5003, DOI 10.17487/RFC5003, September 2007, <https://www.rfc-editor.org/info/rfc5003>.\n"
+    ],
+    [
+      "ref5002.txt",
+      "Camarillo, G. and G. Blanco, \"The Session Initiation Protocol (SIP) P-Profile-Key Private Header (P-Header)\", RFC 5002, DOI 10.17487/RFC5002, August 2007, <https://www.rfc-editor.org/info/rfc5002>.\n"
+    ],
+    [
+      "ref5001.txt",
+      "Austein, R., \"DNS Name Server Identifier (NSID) Option\", RFC 5001, DOI 10.17487/RFC5001, August 2007, <https://www.rfc-editor.org/info/rfc5001>.\n"
+    ],
+    [
+      "ref5000.txt",
+      "RFC Editor, \"Internet Official Protocol Standards\", RFC 5000, DOI 10.17487/RFC5000, May 2008, <https://www.rfc-editor.org/info/rfc5000>.\n"
+    ],
+    [
+      "ref2010.txt",
+      "Manning, B. and P. Vixie, \"Operational Criteria for Root Name Servers\", RFC 2010, DOI 10.17487/RFC2010, October 1996, <https://www.rfc-editor.org/info/rfc2010>.\n"
+    ],
+    [
+      "ref2009.txt",
+      "Imielinski, T. and J. Navas, \"GPS-Based Addressing and Routing\", RFC 2009, DOI 10.17487/RFC2009, November 1996, <https://www.rfc-editor.org/info/rfc2009>.\n"
+    ],
+    [
+      "ref2008.txt",
+      "Rekhter, Y. and T. Li, \"Implications of Various Address Allocation Policies for Internet Routing\", BCP 7, RFC 2008, DOI 10.17487/RFC2008, October 1996, <https://www.rfc-editor.org/info/rfc2008>.\n"
+    ],
+    [
+      "ref2007.txt",
+      "Foster, J., Isaacs, M., and M. Prior, \"Catalogue of Network Training Materials\", FYI 29, RFC 2007, DOI 10.17487/RFC2007, October 1996, <https://www.rfc-editor.org/info/rfc2007>.\n"
+    ],
+    [
+      "ref2006.txt",
+      "Cong, D., Hamlen, M., and C. Perkins, \"The Definitions of Managed Objects for IP Mobility Support using SMIv2\", RFC 2006, DOI 10.17487/RFC2006, October 1996, <https://www.rfc-editor.org/info/rfc2006>.\n"
+    ],
+    [
+      "ref2005.txt",
+      "Solomon, J., \"Applicability Statement for IP Mobility Support\", RFC 2005, DOI 10.17487/RFC2005, October 1996, <https://www.rfc-editor.org/info/rfc2005>.\n"
+    ],
+    [
+      "ref2004.txt",
+      "Perkins, C., \"Minimal Encapsulation within IP\", RFC 2004, DOI 10.17487/RFC2004, October 1996, <https://www.rfc-editor.org/info/rfc2004>.\n"
+    ],
+    [
+      "ref2003.txt",
+      "Perkins, C., \"IP Encapsulation within IP\", RFC 2003, DOI 10.17487/RFC2003, October 1996, <https://www.rfc-editor.org/info/rfc2003>.\n"
+    ],
+    [
+      "ref2002.txt",
+      "Perkins, C., Ed., \"IP Mobility Support\", RFC 2002, DOI 10.17487/RFC2002, October 1996, <https://www.rfc-editor.org/info/rfc2002>.\n"
+    ],
+    [
+      "ref2001.txt",
+      "Stevens, W., \"TCP Slow Start, Congestion Avoidance, Fast Retransmit, and Fast Recovery Algorithms\", RFC 2001, DOI 10.17487/RFC2001, January 1997, <https://www.rfc-editor.org/info/rfc2001>.\n"
+    ],
+    [
+      "ref2000.txt",
+      "Postel, J., Ed., \"Internet Official Protocol Standards\", RFC 2000, DOI 10.17487/RFC2000, February 1997, <https://www.rfc-editor.org/info/rfc2000>.\n"
+    ],
+    [
+      "ref1010.txt",
+      "Reynolds, J. and J. Postel, \"Assigned numbers\", RFC 1010, DOI 10.17487/RFC1010, May 1987, <https://www.rfc-editor.org/info/rfc1010>.\n"
+    ],
+    [
+      "ref1009.txt",
+      "Braden, R. and J. Postel, \"Requirements for Internet gateways\", RFC 1009, DOI 10.17487/RFC1009, June 1987, <https://www.rfc-editor.org/info/rfc1009>.\n"
+    ],
+    [
+      "ref1008.txt",
+      "McCoy, W., \"Implementation guide for the ISO Transport Protocol\", RFC 1008, DOI 10.17487/RFC1008, June 1987, <https://www.rfc-editor.org/info/rfc1008>.\n"
+    ],
+    [
+      "ref1007.txt",
+      "McCoy, W., \"Military supplement to the ISO Transport Protocol\", RFC 1007, DOI 10.17487/RFC1007, June 1987, <https://www.rfc-editor.org/info/rfc1007>.\n"
+    ],
+    [
+      "ref1006.txt",
+      "Rose, M. and D. Cass, \"ISO Transport Service on top of the TCP Version: 3\", STD 35, RFC 1006, DOI 10.17487/RFC1006, May 1987, <https://www.rfc-editor.org/info/rfc1006>.\n"
+    ],
+    [
+      "ref1005.txt",
+      "Khanna, A. and A. Malis, \"ARPANET AHIP-E Host Access Protocol (enhanced AHIP)\", RFC 1005, DOI 10.17487/RFC1005, May 1987, <https://www.rfc-editor.org/info/rfc1005>.\n"
+    ],
+    [
+      "ref1004.txt",
+      "Mills, D., \"Distributed-protocol authentication scheme\", RFC 1004, DOI 10.17487/RFC1004, April 1987, <https://www.rfc-editor.org/info/rfc1004>.\n"
+    ],
+    [
+      "ref1003.txt",
+      "Katz, A., \"Issues in defining an equations representation standard\", RFC 1003, DOI 10.17487/RFC1003, March 1987, <https://www.rfc-editor.org/info/rfc1003>.\n"
+    ],
+    [
+      "ref1002.txt",
+      "NetBIOS Working Group in the Defense Advanced Research Projects Agency, Internet Activities Board, and End-to-End Services Task Force, \"Protocol standard for a NetBIOS service on a TCP/UDP transport: Detailed specifications\", STD 19, RFC 1002, DOI 10.17487/RFC1002, March 1987, <https://www.rfc-editor.org/info/rfc1002>.\n"
+    ],
+    [
+      "ref1001.txt",
+      "NetBIOS Working Group in the Defense Advanced Research Projects Agency, Internet Activities Board, and End-to-End Services Task Force, \"Protocol standard for a NetBIOS service on a TCP/UDP transport: Concepts and methods\", STD 19, RFC 1001, DOI 10.17487/RFC1001, March 1987, <https://www.rfc-editor.org/info/rfc1001>.\n"
+    ],
+    [
+      "ref1000.txt",
+      "Reynolds, J. and J. Postel, \"Request For Comments reference guide\", RFC 1000, DOI 10.17487/RFC1000, August 1987, <https://www.rfc-editor.org/info/rfc1000>.\n"
+    ],
+    [
+      "ref0250.txt",
+      "Brodie, H., \"Some thoughts on file transfer\", RFC 250, DOI 10.17487/RFC0250, October 1971, <https://www.rfc-editor.org/info/rfc250>.\n"
+    ],
+    [
+      "ref0249.txt",
+      "Borelli, R., \"Coordination of equipment and supplies purchase\", RFC 249, DOI 10.17487/RFC0249, October 1971, <https://www.rfc-editor.org/info/rfc249>.\n"
+    ],
+    [
+      "ref0247.txt",
+      "Karp, P., \"Proffered set of standard host names\", RFC 247, DOI 10.17487/RFC0247, October 1971, <https://www.rfc-editor.org/info/rfc247>.\n"
+    ],
+    [
+      "ref0246.txt",
+      "Vezza, A., \"Network Graphics meeting\", RFC 246, DOI 10.17487/RFC0246, October 1971, <https://www.rfc-editor.org/info/rfc246>.\n"
+    ],
+    [
+      "ref0245.txt",
+      "Falls, C., \"Reservations for Network Group meeting\", RFC 245, DOI 10.17487/RFC0245, October 1971, <https://www.rfc-editor.org/info/rfc245>.\n"
+    ],
+    [
+      "ref0243.txt",
+      "Mullery, A., \"Network and data sharing bibliography\", RFC 243, DOI 10.17487/RFC0243, October 1971, <https://www.rfc-editor.org/info/rfc243>.\n"
+    ],
+    [
+      "ref0242.txt",
+      "Haibt, L. and A. Mullery, \"Data Descriptive Language for Shared Data\", RFC 242, DOI 10.17487/RFC0242, July 1971, <https://www.rfc-editor.org/info/rfc242>.\n"
+    ],
+    [
+      "ref0241.txt",
+      "McKenzie, A., \"Connecting computers to MLC ports\", RFC 241, DOI 10.17487/RFC0241, September 1971, <https://www.rfc-editor.org/info/rfc241>.\n"
+    ],
+    [
+      "ref0240.txt",
+      "McKenzie, A., \"Site Status\", RFC 240, DOI 10.17487/RFC0240, September 1971, <https://www.rfc-editor.org/info/rfc240>.\n"
+    ],
+    [
+      "ref0239.txt",
+      "Braden, R., \"Host mnemonics proposed in RFC 226 (NIC 7625)\", RFC 239, DOI 10.17487/RFC0239, September 1971, <https://www.rfc-editor.org/info/rfc239>.\n"
+    ],
+    [
+      "ref0238.txt",
+      "Braden, R., \"Comments on DTP and FTP proposals\", RFC 238, DOI 10.17487/RFC0238, September 1971, <https://www.rfc-editor.org/info/rfc238>.\n"
+    ],
+    [
+      "ref0237.txt",
+      "Watson, R., \"NIC view of standard host names\", RFC 237, DOI 10.17487/RFC0237, October 1971, <https://www.rfc-editor.org/info/rfc237>.\n"
+    ],
+    [
+      "ref0236.txt",
+      "Postel, J., \"Standard host names\", RFC 236, DOI 10.17487/RFC0236, September 1971, <https://www.rfc-editor.org/info/rfc236>.\n"
+    ],
+    [
+      "ref0235.txt",
+      "Westheimer, E., \"Site status\", RFC 235, DOI 10.17487/RFC0235, September 1971, <https://www.rfc-editor.org/info/rfc235>.\n"
+    ],
+    [
+      "ref0234.txt",
+      "Vezza, A., \"Network Working Group meeting schedule\", RFC 234, DOI 10.17487/RFC0234, October 1971, <https://www.rfc-editor.org/info/rfc234>.\n"
+    ],
+    [
+      "ref0233.txt",
+      "Bhushan, A. and R. Metcalfe, \"Standardization of host call letters\", RFC 233, DOI 10.17487/RFC0233, September 1971, <https://www.rfc-editor.org/info/rfc233>.\n"
+    ],
+    [
+      "ref0232.txt",
+      "Vezza, A., \"Postponement of network graphics meeting\", RFC 232, DOI 10.17487/RFC0232, September 1971, <https://www.rfc-editor.org/info/rfc232>.\n"
+    ],
+    [
+      "ref0231.txt",
+      "Heafner, J. and E. Harslem, \"Service center standards for remote usage: A user's view\", RFC 231, DOI 10.17487/RFC0231, September 1971, <https://www.rfc-editor.org/info/rfc231>.\n"
+    ],
+    [
+      "ref0230.txt",
+      "Pyke, T., \"Toward reliable operation of minicomputer-based terminals on a TIP\", RFC 230, DOI 10.17487/RFC0230, September 1971, <https://www.rfc-editor.org/info/rfc230>.\n"
+    ],
+    [
+      "ref0229.txt",
+      "Postel, J., \"Standard host names\", RFC 229, DOI 10.17487/RFC0229, September 1971, <https://www.rfc-editor.org/info/rfc229>.\n"
+    ],
+    [
+      "ref0228.txt",
+      "Walden, D., \"Clarification\", RFC 228, DOI 10.17487/RFC0228, September 1971, <https://www.rfc-editor.org/info/rfc228>.\n"
+    ],
+    [
+      "ref0227.txt",
+      "Heafner, J. and E. Harslem, \"Data transfer rates (Rand/UCLA)\", RFC 227, DOI 10.17487/RFC0227, September 1971, <https://www.rfc-editor.org/info/rfc227>.\n"
+    ],
+    [
+      "ref0226.txt",
+      "Karp, P., \"Standardization of host mnemonics\", RFC 226, DOI 10.17487/RFC0226, September 1971, <https://www.rfc-editor.org/info/rfc226>.\n"
+    ],
+    [
+      "ref0225.txt",
+      "Harslem, E. and R. Stoughton, \"Rand/UCSB network graphics experiment\", RFC 225, DOI 10.17487/RFC0225, September 1971, <https://www.rfc-editor.org/info/rfc225>.\n"
+    ],
+    [
+      "ref0224.txt",
+      "McKenzie, A., \"Comments on Mailbox Protocol\", RFC 224, DOI 10.17487/RFC0224, September 1971, <https://www.rfc-editor.org/info/rfc224>.\n"
+    ],
+    [
+      "ref0223.txt",
+      "Melvin, J. and R. Watson, \"Network Information Center schedule for network users\", RFC 223, DOI 10.17487/RFC0223, September 1971, <https://www.rfc-editor.org/info/rfc223>.\n"
+    ],
+    [
+      "ref0222.txt",
+      "Metcalfe, R., \"Subject: System programmer's workshop\", RFC 222, DOI 10.17487/RFC0222, September 1971, <https://www.rfc-editor.org/info/rfc222>.\n"
+    ],
+    [
+      "ref0221.txt",
+      "Watson, R., \"Mail Box Protocol: Version 2\", RFC 221, DOI 10.17487/RFC0221, August 1971, <https://www.rfc-editor.org/info/rfc221>.\n"
+    ],
+    [
+      "ref0219.txt",
+      "Winter, R., \"User's View of the Datacomputer\", RFC 219, DOI 10.17487/RFC0219, September 1971, <https://www.rfc-editor.org/info/rfc219>.\n"
+    ],
+    [
+      "ref0218.txt",
+      "Cosell, B., \"Changing the IMP status reporting facility\", RFC 218, DOI 10.17487/RFC0218, September 1971, <https://www.rfc-editor.org/info/rfc218>.\n"
+    ],
+    [
+      "ref0217.txt",
+      "White, J., \"Specifications changes for OLS, RJE/RJOR, and SMFS\", RFC 217, DOI 10.17487/RFC0217, September 1971, <https://www.rfc-editor.org/info/rfc217>.\n"
+    ],
+    [
+      "ref0216.txt",
+      "White, J., \"Telnet Access to UCSB's On-Line System\", RFC 216, DOI 10.17487/RFC0216, September 1971, <https://www.rfc-editor.org/info/rfc216>.\n"
+    ],
+    [
+      "ref0215.txt",
+      "McKenzie, A., \"NCP, ICP, and Telnet: The Terminal IMP implementation\", RFC 215, DOI 10.17487/RFC0215, August 1971, <https://www.rfc-editor.org/info/rfc215>.\n"
+    ],
+    [
+      "ref0214.txt",
+      "Harslem, E., \"Network checkpoint\", RFC 214, DOI 10.17487/RFC0214, August 1971, <https://www.rfc-editor.org/info/rfc214>.\n"
+    ],
+    [
+      "ref0213.txt",
+      "Cosell, B., \"IMP System change notification\", RFC 213, DOI 10.17487/RFC0213, August 1971, <https://www.rfc-editor.org/info/rfc213>.\n"
+    ],
+    [
+      "ref0212.txt",
+      "Information Sciences Institute University of Southern California, \"NWG meeting on network usage\", RFC 212, DOI 10.17487/RFC0212, August 1971, <https://www.rfc-editor.org/info/rfc212>.\n"
+    ],
+    [
+      "ref0211.txt",
+      "North, J., \"ARPA Network Mailing Lists\", RFC 211, DOI 10.17487/RFC0211, August 1971, <https://www.rfc-editor.org/info/rfc211>.\n"
+    ],
+    [
+      "ref0210.txt",
+      "Conrad, W., \"Improvement of Flow Control\", RFC 210, DOI 10.17487/RFC0210, August 1971, <https://www.rfc-editor.org/info/rfc210>.\n"
+    ],
+    [
+      "ref0209.txt",
+      "Cosell, B., \"Host/IMP interface documentation\", RFC 209, DOI 10.17487/RFC0209, August 1971, <https://www.rfc-editor.org/info/rfc209>.\n"
+    ],
+    [
+      "ref0208.txt",
+      "McKenzie, A., \"Address tables\", RFC 208, DOI 10.17487/RFC0208, August 1971, <https://www.rfc-editor.org/info/rfc208>.\n"
+    ],
+    [
+      "ref0207.txt",
+      "Vezza, A., \"September Network Working Group meeting\", RFC 207, DOI 10.17487/RFC0207, August 1971, <https://www.rfc-editor.org/info/rfc207>.\n"
+    ],
+    [
+      "ref0206.txt",
+      "White, J., \"A User TELNET Description of an Initial Implementation\", RFC 206, DOI 10.17487/RFC0206, August 1971, <https://www.rfc-editor.org/info/rfc206>.\n"
+    ],
+    [
+      "ref0205.txt",
+      "Braden, R., \"NETCRT - a character display protocol\", RFC 205, DOI 10.17487/RFC0205, August 1971, <https://www.rfc-editor.org/info/rfc205>.\n"
+    ],
+    [
+      "ref0204.txt",
+      "Postel, J., \"Sockets in use\", RFC 204, DOI 10.17487/RFC0204, August 1971, <https://www.rfc-editor.org/info/rfc204>.\n"
+    ],
+    [
+      "ref0203.txt",
+      "Kalin, R., \"Achieving reliable communication\", RFC 203, DOI 10.17487/RFC0203, August 1971, <https://www.rfc-editor.org/info/rfc203>.\n"
+    ],
+    [
+      "ref0202.txt",
+      "Wolfe, S. and J. Postel, \"Possible Deadlock in ICP\", RFC 202, DOI 10.17487/RFC0202, July 1971, <https://www.rfc-editor.org/info/rfc202>.\n"
+    ],
+    [
+      "ref0200.txt",
+      "North, J., \"RFC list by number\", RFC 200, DOI 10.17487/RFC0200, August 1971, <https://www.rfc-editor.org/info/rfc200>.\n"
+    ],
+    [
+      "ref0150.txt",
+      "Kalin, R., \"Use of IPC Facilities: A Working Paper\", RFC 150, DOI 10.17487/RFC0150, May 1971, <https://www.rfc-editor.org/info/rfc150>.\n"
+    ],
+    [
+      "ref0149.txt",
+      "Crocker, S., \"Best Laid Plans\", RFC 149, DOI 10.17487/RFC0149, May 1971, <https://www.rfc-editor.org/info/rfc149>.\n"
+    ],
+    [
+      "ref0148.txt",
+      "Bhushan, A., \"Comments on RFC 123\", RFC 148, DOI 10.17487/RFC0148, May 1971, <https://www.rfc-editor.org/info/rfc148>.\n"
+    ],
+    [
+      "ref0147.txt",
+      "Winett, J., \"Definition of a socket\", RFC 147, DOI 10.17487/RFC0147, May 1971, <https://www.rfc-editor.org/info/rfc147>.\n"
+    ],
+    [
+      "ref0146.txt",
+      "Karp, P., McKay, D., and D. Wood, \"Views on issues relevant to data sharing on computer networks\", RFC 146, DOI 10.17487/RFC0146, May 1971, <https://www.rfc-editor.org/info/rfc146>.\n"
+    ],
+    [
+      "ref0145.txt",
+      "Postel, J., \"Initial Connection Protocol Control Commands\", RFC 145, DOI 10.17487/RFC0145, May 1971, <https://www.rfc-editor.org/info/rfc145>.\n"
+    ],
+    [
+      "ref0144.txt",
+      "Shoshani, A., \"Data sharing on computer networks\", RFC 144, DOI 10.17487/RFC0144, April 1971, <https://www.rfc-editor.org/info/rfc144>.\n"
+    ],
+    [
+      "ref0143.txt",
+      "Naylor, W., Wong, J., Kline, C., and J. Postel, \"Regarding proffered official ICP\", RFC 143, DOI 10.17487/RFC0143, May 1971, <https://www.rfc-editor.org/info/rfc143>.\n"
+    ],
+    [
+      "ref0142.txt",
+      "Kline, C. and J. Wong, \"Time-Out Mechanism in the Host-Host Protocol\", RFC 142, DOI 10.17487/RFC0142, May 1971, <https://www.rfc-editor.org/info/rfc142>.\n"
+    ],
+    [
+      "ref0141.txt",
+      "Harslem, E. and J. Heafner, \"Comments on RFC 114: A File Transfer Protocol\", RFC 141, DOI 10.17487/RFC0141, April 1971, <https://www.rfc-editor.org/info/rfc141>.\n"
+    ],
+    [
+      "ref0140.txt",
+      "Crocker, S., \"Agenda for the May NWG meeting\", RFC 140, DOI 10.17487/RFC0140, May 1971, <https://www.rfc-editor.org/info/rfc140>.\n"
+    ],
+    [
+      "ref0139.txt",
+      "O'Sullivan, T., \"Discussion of Telnet Protocol\", RFC 139, DOI 10.17487/RFC0139, May 1971, <https://www.rfc-editor.org/info/rfc139>.\n"
+    ],
+    [
+      "ref0138.txt",
+      "Anderson, R., Cerf, V., Harslem, E., Heafner, J., Madden, J., Metcalfe, R., Shoshani, A., White, J., and D. Wood, \"Status report on proposed Data Reconfiguration Service\", RFC 138, DOI 10.17487/RFC0138, April 1971, <https://www.rfc-editor.org/info/rfc138>.\n"
+    ],
+    [
+      "ref0137.txt",
+      "O'Sullivan, T., \"Telnet Protocol - a proposed document\", RFC 137, DOI 10.17487/RFC0137, April 1971, <https://www.rfc-editor.org/info/rfc137>.\n"
+    ],
+    [
+      "ref0136.txt",
+      "Kahn, R., \"Host accounting and administrative procedures\", RFC 136, DOI 10.17487/RFC0136, April 1971, <https://www.rfc-editor.org/info/rfc136>.\n"
+    ],
+    [
+      "ref0135.txt",
+      "Hathaway, W., \"Response to NWG/RFC 110\", RFC 135, DOI 10.17487/RFC0135, April 1971, <https://www.rfc-editor.org/info/rfc135>.\n"
+    ],
+    [
+      "ref0134.txt",
+      "Vezza, A., \"Network Graphics meeting\", RFC 134, DOI 10.17487/RFC0134, April 1971, <https://www.rfc-editor.org/info/rfc134>.\n"
+    ],
+    [
+      "ref0133.txt",
+      "Sunberg, R., \"File Transfer and Error Recovery\", RFC 133, DOI 10.17487/RFC0133, April 1971, <https://www.rfc-editor.org/info/rfc133>.\n"
+    ],
+    [
+      "ref0132.txt",
+      "White, J., \"Typographical Error in RFC 107\", RFC 132, DOI 10.17487/RFC0132, April 1971, <https://www.rfc-editor.org/info/rfc132>.\n"
+    ],
+    [
+      "ref0131.txt",
+      "Harslem, E. and J. Heafner, \"Response to RFC 116: May NWG meeting\", RFC 131, DOI 10.17487/RFC0131, April 1971, <https://www.rfc-editor.org/info/rfc131>.\n"
+    ],
+    [
+      "ref0130.txt",
+      "Heafner, J., \"Response to RFC 111: Pressure from the chairman\", RFC 130, DOI 10.17487/RFC0130, April 1971, <https://www.rfc-editor.org/info/rfc130>.\n"
+    ],
+    [
+      "ref0129.txt",
+      "Harslem, E., Heafner, J., and E. Meyer, \"Request for comments on socket name structure\", RFC 129, DOI 10.17487/RFC0129, April 1971, <https://www.rfc-editor.org/info/rfc129>.\n"
+    ],
+    [
+      "ref0128.txt",
+      "Postel, J., \"Bytes\", RFC 128, DOI 10.17487/RFC0128, April 1971, <https://www.rfc-editor.org/info/rfc128>.\n"
+    ],
+    [
+      "ref0127.txt",
+      "Postel, J., \"Comments on RFC 123\", RFC 127, DOI 10.17487/RFC0127, April 1971, <https://www.rfc-editor.org/info/rfc127>.\n"
+    ],
+    [
+      "ref0126.txt",
+      "McConnell, J., \"Graphics Facilities at Ames Research Center\", RFC 126, DOI 10.17487/RFC0126, April 1971, <https://www.rfc-editor.org/info/rfc126>.\n"
+    ],
+    [
+      "ref0125.txt",
+      "McConnell, J., \"Response to RFC 86: Proposal for Network Standard Format for a Graphics Data Stream\", RFC 125, DOI 10.17487/RFC0125, April 1971, <https://www.rfc-editor.org/info/rfc125>.\n"
+    ],
+    [
+      "ref0124.txt",
+      "Melvin, J., \"Typographical error in RFC 107\", RFC 124, DOI 10.17487/RFC0124, April 1971, <https://www.rfc-editor.org/info/rfc124>.\n"
+    ],
+    [
+      "ref0123.txt",
+      "Crocker, S., \"Proffered Official ICP\", RFC 123, DOI 10.17487/RFC0123, April 1971, <https://www.rfc-editor.org/info/rfc123>.\n"
+    ],
+    [
+      "ref0122.txt",
+      "White, J., \"Network specifications for UCSB's Simple-Minded File System\", RFC 122, DOI 10.17487/RFC0122, April 1971, <https://www.rfc-editor.org/info/rfc122>.\n"
+    ],
+    [
+      "ref0121.txt",
+      "Krilanovich, M., \"Network on-line operators\", RFC 121, DOI 10.17487/RFC0121, April 1971, <https://www.rfc-editor.org/info/rfc121>.\n"
+    ],
+    [
+      "ref0120.txt",
+      "Krilanovich, M., \"Network PL1 subprograms\", RFC 120, DOI 10.17487/RFC0120, April 1971, <https://www.rfc-editor.org/info/rfc120>.\n"
+    ],
+    [
+      "ref0119.txt",
+      "Krilanovich, M., \"Network Fortran Subprograms\", RFC 119, DOI 10.17487/RFC0119, April 1971, <https://www.rfc-editor.org/info/rfc119>.\n"
+    ],
+    [
+      "ref0118.txt",
+      "Watson, R., \"Recommendations for facility documentation\", RFC 118, DOI 10.17487/RFC0118, April 1971, <https://www.rfc-editor.org/info/rfc118>.\n"
+    ],
+    [
+      "ref0117.txt",
+      "Wong, J., \"Some comments on the official protocol\", RFC 117, DOI 10.17487/RFC0117, April 1971, <https://www.rfc-editor.org/info/rfc117>.\n"
+    ],
+    [
+      "ref0116.txt",
+      "Crocker, S., \"Structure of the May NWG Meeting\", RFC 116, DOI 10.17487/RFC0116, April 1971, <https://www.rfc-editor.org/info/rfc116>.\n"
+    ],
+    [
+      "ref0115.txt",
+      "Watson, R. and J. North, \"Some Network Information Center policies on handling documents\", RFC 115, DOI 10.17487/RFC0115, April 1971, <https://www.rfc-editor.org/info/rfc115>.\n"
+    ],
+    [
+      "ref0114.txt",
+      "Bhushan, A., \"File Transfer Protocol\", RFC 114, DOI 10.17487/RFC0114, April 1971, <https://www.rfc-editor.org/info/rfc114>.\n"
+    ],
+    [
+      "ref0113.txt",
+      "Harslem, E., Heafner, J., and J. White, \"Network activity report: UCSB Rand\", RFC 113, DOI 10.17487/RFC0113, April 1971, <https://www.rfc-editor.org/info/rfc113>.\n"
+    ],
+    [
+      "ref0112.txt",
+      "O'Sullivan, T., \"User/Server Site Protocol: Network Host Questionnaire\", RFC 112, DOI 10.17487/RFC0112, April 1971, <https://www.rfc-editor.org/info/rfc112>.\n"
+    ],
+    [
+      "ref0111.txt",
+      "Crocker, S., \"Pressure from the Chairman\", RFC 111, DOI 10.17487/RFC0111, March 1971, <https://www.rfc-editor.org/info/rfc111>.\n"
+    ],
+    [
+      "ref0110.txt",
+      "Winett, J., \"Conventions for Using an IBM 2741 Terminal as a User Console for Access to Network Server Hosts\", RFC 110, DOI 10.17487/RFC0110, March 1971, <https://www.rfc-editor.org/info/rfc110>.\n"
+    ],
+    [
+      "ref0109.txt",
+      "Winett, J., \"Level III Server Protocol for the Lincoln Laboratory 360/67 Host\", RFC 109, DOI 10.17487/RFC0109, March 1971, <https://www.rfc-editor.org/info/rfc109>.\n"
+    ],
+    [
+      "ref0108.txt",
+      "Watson, R., \"Attendance list at the Urbana NWG meeting, February 17-19, 1971\", RFC 108, DOI 10.17487/RFC0108, March 1971, <https://www.rfc-editor.org/info/rfc108>.\n"
+    ],
+    [
+      "ref0107.txt",
+      "Bressler, R., Crocker, S., Crowther, W., Grossman, G., Tomlinson, R., and J. White, \"Output of the Host-Host Protocol Glitch Cleaning Committee\", RFC 107, DOI 10.17487/RFC0107, March 1971, <https://www.rfc-editor.org/info/rfc107>.\n"
+    ],
+    [
+      "ref0106.txt",
+      "O'Sullivan, T., \"User/Server Site Protocol Network Host Questionnaire\", RFC 106, DOI 10.17487/RFC0106, March 1971, <https://www.rfc-editor.org/info/rfc106>.\n"
+    ],
+    [
+      "ref0105.txt",
+      "White, J., \"Network Specifications for Remote Job Entry and Remote Job Output Retrieval at UCSB\", RFC 105, DOI 10.17487/RFC0105, March 1971, <https://www.rfc-editor.org/info/rfc105>.\n"
+    ],
+    [
+      "ref0104.txt",
+      "Postel, J. and S. Crocker, \"Link 191\", RFC 104, DOI 10.17487/RFC0104, February 1971, <https://www.rfc-editor.org/info/rfc104>.\n"
+    ],
+    [
+      "ref0103.txt",
+      "Kalin, R., \"Implementation of Interrupt Keys\", RFC 103, DOI 10.17487/RFC0103, February 1971, <https://www.rfc-editor.org/info/rfc103>.\n"
+    ],
+    [
+      "ref0102.txt",
+      "Crocker, S., \"Output of the Host-Host Protocol glitch cleaning committee\", RFC 102, DOI 10.17487/RFC0102, February 1971, <https://www.rfc-editor.org/info/rfc102>.\n"
+    ],
+    [
+      "ref0101.txt",
+      "Watson, R., \"Notes on the Network Working Group meeting, Urbana, Illinois, February 17, 1971\", RFC 101, DOI 10.17487/RFC0101, February 1971, <https://www.rfc-editor.org/info/rfc101>.\n"
+    ],
+    [
+      "ref0100.txt",
+      "Karp, P., \"Categorization and guide to NWG/RFCs\", RFC 100, DOI 10.17487/RFC0100, February 1971, <https://www.rfc-editor.org/info/rfc100>.\n"
+    ],
+    [
+      "ref0059.txt",
+      "Meyer, E., \"Flow Control - Fixed Versus Demand Allocation\", RFC 59, DOI 10.17487/RFC0059, June 1970, <https://www.rfc-editor.org/info/rfc59>.\n"
+    ],
+    [
+      "ref0058.txt",
+      "Skinner, T., \"Logical Message Synchronization\", RFC 58, DOI 10.17487/RFC0058, June 1970, <https://www.rfc-editor.org/info/rfc58>.\n"
+    ],
+    [
+      "ref0057.txt",
+      "Kraley, M. and J. Newkirk, \"Thoughts and Reflections on NWG/RFC 54\", RFC 57, DOI 10.17487/RFC0057, June 1970, <https://www.rfc-editor.org/info/rfc57>.\n"
+    ],
+    [
+      "ref0056.txt",
+      "Belove, E., Black, D., Flegal, R., and L. Farquar, \"Third Level Protocol: Logger Protocol\", RFC 56, DOI 10.17487/RFC0056, June 1970, <https://www.rfc-editor.org/info/rfc56>.\n"
+    ],
+    [
+      "ref0055.txt",
+      "Newkirk, J., Kraley, M., Postel, J., and S. Crocker, \"Prototypical implementation of the NCP\", RFC 55, DOI 10.17487/RFC0055, June 1970, <https://www.rfc-editor.org/info/rfc55>.\n"
+    ],
+    [
+      "ref0054.txt",
+      "Crocker, S., Postel, J., Newkirk, J., and M. Kraley, \"Official Protocol Proffering\", RFC 54, DOI 10.17487/RFC0054, June 1970, <https://www.rfc-editor.org/info/rfc54>.\n"
+    ],
+    [
+      "ref0053.txt",
+      "Crocker, S., \"Official protocol mechanism\", RFC 53, DOI 10.17487/RFC0053, June 1970, <https://www.rfc-editor.org/info/rfc53>.\n"
+    ],
+    [
+      "ref0052.txt",
+      "Postel, J. and S. Crocker, \"Updated distribution list\", RFC 52, DOI 10.17487/RFC0052, July 1970, <https://www.rfc-editor.org/info/rfc52>.\n"
+    ],
+    [
+      "ref0051.txt",
+      "Elie, M., \"Proposal for a Network Interchange Language\", RFC 51, DOI 10.17487/RFC0051, May 1970, <https://www.rfc-editor.org/info/rfc51>.\n"
+    ],
+    [
+      "ref0050.txt",
+      "Harslen, E. and J. Heafner, \"Comments on the Meyer Proposal\", RFC 50, DOI 10.17487/RFC0050, April 1970, <https://www.rfc-editor.org/info/rfc50>.\n"
+    ],
+    [
+      "ref0049.txt",
+      "Meyer, E., \"Conversations with S. Crocker (UCLA)\", RFC 49, DOI 10.17487/RFC0049, April 1970, <https://www.rfc-editor.org/info/rfc49>.\n"
+    ],
+    [
+      "ref0048.txt",
+      "Postel, J. and S. Crocker, \"Possible protocol plateau\", RFC 48, DOI 10.17487/RFC0048, April 1970, <https://www.rfc-editor.org/info/rfc48>.\n"
+    ],
+    [
+      "ref0047.txt",
+      "Postel, J. and S. Crocker, \"BBN's Comments on NWG/RFC #33\", RFC 47, DOI 10.17487/RFC0047, April 1970, <https://www.rfc-editor.org/info/rfc47>.\n"
+    ],
+    [
+      "ref0046.txt",
+      "Meyer, E., \"ARPA Network protocol notes\", RFC 46, DOI 10.17487/RFC0046, April 1970, <https://www.rfc-editor.org/info/rfc46>.\n"
+    ],
+    [
+      "ref0045.txt",
+      "Postel, J. and S. Crocker, \"New Protocol is Coming\", RFC 45, DOI 10.17487/RFC0045, April 1970, <https://www.rfc-editor.org/info/rfc45>.\n"
+    ],
+    [
+      "ref0044.txt",
+      "Shoshani, A., Long, R., and A. Landsberg, \"Comments on NWG/RFC 33 and 36\", RFC 44, DOI 10.17487/RFC0044, April 1970, <https://www.rfc-editor.org/info/rfc44>.\n"
+    ],
+    [
+      "ref0043.txt",
+      "Nemeth, A., \"Proposed Meeting\", RFC 43, DOI 10.17487/RFC0043, April 1970, <https://www.rfc-editor.org/info/rfc43>.\n"
+    ],
+    [
+      "ref0042.txt",
+      "Ancona, E., \"Message Data Types\", RFC 42, DOI 10.17487/RFC0042, March 1970, <https://www.rfc-editor.org/info/rfc42>.\n"
+    ],
+    [
+      "ref0041.txt",
+      "Melvin, J., \"IMP-IMP Teletype Communication\", RFC 41, DOI 10.17487/RFC0041, March 1970, <https://www.rfc-editor.org/info/rfc41>.\n"
+    ],
+    [
+      "ref0040.txt",
+      "Harslem, E. and J. Heafner, \"More Comments on the Forthcoming Protocol\", RFC 40, DOI 10.17487/RFC0040, March 1970, <https://www.rfc-editor.org/info/rfc40>.\n"
+    ],
+    [
+      "ref0039.txt",
+      "Harslem, E. and J. Heafner, \"Comments on Protocol Re: NWG/RFC #36\", RFC 39, DOI 10.17487/RFC0039, March 1970, <https://www.rfc-editor.org/info/rfc39>.\n"
+    ],
+    [
+      "ref0038.txt",
+      "Wolfe, S., \"Comments on Network Protocol from NWG/RFC #36\", RFC 38, DOI 10.17487/RFC0038, March 1970, <https://www.rfc-editor.org/info/rfc38>.\n"
+    ],
+    [
+      "ref0037.txt",
+      "Crocker, S., \"Network Meeting Epilogue, etc\", RFC 37, DOI 10.17487/RFC0037, March 1970, <https://www.rfc-editor.org/info/rfc37>.\n"
+    ],
+    [
+      "ref0036.txt",
+      "Crocker, S., \"Protocol Notes\", RFC 36, DOI 10.17487/RFC0036, March 1970, <https://www.rfc-editor.org/info/rfc36>.\n"
+    ],
+    [
+      "ref0035.txt",
+      "Crocker, S., \"Network Meeting\", RFC 35, DOI 10.17487/RFC0035, March 1970, <https://www.rfc-editor.org/info/rfc35>.\n"
+    ],
+    [
+      "ref0034.txt",
+      "English, W., \"Some Brief Preliminary Notes on the Augmentation Research Center Clock\", RFC 34, DOI 10.17487/RFC0034, February 1970, <https://www.rfc-editor.org/info/rfc34>.\n"
+    ],
+    [
+      "ref0033.txt",
+      "Crocker, S., \"New Host-Host Protocol\", RFC 33, DOI 10.17487/RFC0033, February 1970, <https://www.rfc-editor.org/info/rfc33>.\n"
+    ],
+    [
+      "ref0032.txt",
+      "Cole, J., \"Some Thoughts on SRI's Proposed Real Time Clock\", RFC 32, DOI 10.17487/RFC0032, February 1970, <https://www.rfc-editor.org/info/rfc32>.\n"
+    ],
+    [
+      "ref0031.txt",
+      "Bobrow, D. and W. Sutherland, \"Binary Message Forms in Computer\", RFC 31, DOI 10.17487/RFC0031, February 1968, <https://www.rfc-editor.org/info/rfc31>.\n"
+    ],
+    [
+      "ref0030.txt",
+      "Crocker, S., \"Documentation Conventions\", RFC 30, DOI 10.17487/RFC0030, February 1970, <https://www.rfc-editor.org/info/rfc30>.\n"
+    ],
+    [
+      "ref0029.txt",
+      "Kahn, R., \"Response to RFC 28\", RFC 29, DOI 10.17487/RFC0029, January 1970, <https://www.rfc-editor.org/info/rfc29>.\n"
+    ],
+    [
+      "ref0028.txt",
+      "English, W., \"Time Standards\", RFC 28, DOI 10.17487/RFC0028, January 1970, <https://www.rfc-editor.org/info/rfc28>.\n"
+    ],
+    [
+      "ref0027.txt",
+      "Crocker, S., \"Documentation Conventions\", RFC 27, DOI 10.17487/RFC0027, December 1969, <https://www.rfc-editor.org/info/rfc27>.\n"
+    ],
+    [
+      "ref0025.txt",
+      "Crocker, S., \"No High Link Numbers\", RFC 25, DOI 10.17487/RFC0025, October 1969, <https://www.rfc-editor.org/info/rfc25>.\n"
+    ],
+    [
+      "ref0024.txt",
+      "Crocker, S., \"Documentation Conventions\", RFC 24, DOI 10.17487/RFC0024, November 1969, <https://www.rfc-editor.org/info/rfc24>.\n"
+    ],
+    [
+      "ref0023.txt",
+      "Gregg, G., \"Transmission of Multiple Control Messages\", RFC 23, DOI 10.17487/RFC0023, October 1969, <https://www.rfc-editor.org/info/rfc23>.\n"
+    ],
+    [
+      "ref0022.txt",
+      "Cerf, V., \"Host-host control message formats\", RFC 22, DOI 10.17487/RFC0022, October 1969, <https://www.rfc-editor.org/info/rfc22>.\n"
+    ],
+    [
+      "ref0021.txt",
+      "Cerf, V., \"Network meeting\", RFC 21, DOI 10.17487/RFC0021, October 1969, <https://www.rfc-editor.org/info/rfc21>.\n"
+    ],
+    [
+      "ref0020.txt",
+      "Cerf, V., \"ASCII format for network interchange\", STD 80, RFC 20, DOI 10.17487/RFC0020, October 1969, <https://www.rfc-editor.org/info/rfc20>.\n"
+    ],
+    [
+      "ref0019.txt",
+      "Kreznar, J., \"Two protocol suggestions to reduce congestion at swap bound nodes\", RFC 19, DOI 10.17487/RFC0019, October 1969, <https://www.rfc-editor.org/info/rfc19>.\n"
+    ],
+    [
+      "ref0018.txt",
+      "Cerf, V., \"IMP-IMP and HOST-HOST Control Links\", RFC 18, DOI 10.17487/RFC0018, September 1969, <https://www.rfc-editor.org/info/rfc18>.\n"
+    ],
+    [
+      "ref0017.txt",
+      "Kreznar, J., \"Some questions re: Host-IMP Protocol\", RFC 17, DOI 10.17487/RFC0017, August 1969, <https://www.rfc-editor.org/info/rfc17>.\n"
+    ],
+    [
+      "ref0016.txt",
+      "Crocker, S., \"M.I.T\", RFC 16, DOI 10.17487/RFC0016, August 1969, <https://www.rfc-editor.org/info/rfc16>.\n"
+    ],
+    [
+      "ref0015.txt",
+      "Carr, C., \"Network subsystem for time sharing hosts\", RFC 15, DOI 10.17487/RFC0015, September 1969, <https://www.rfc-editor.org/info/rfc15>.\n"
+    ],
+    [
+      "ref0013.txt",
+      "Cerf, V., \"Zero Text Length EOF Message\", RFC 13, DOI 10.17487/RFC0013, August 1969, <https://www.rfc-editor.org/info/rfc13>.\n"
+    ],
+    [
+      "ref0012.txt",
+      "Wingfield, M., \"IMP-Host interface flow diagrams\", RFC 12, DOI 10.17487/RFC0012, August 1969, <https://www.rfc-editor.org/info/rfc12>.\n"
+    ],
+    [
+      "ref0011.txt",
+      "Deloche, G., \"Implementation of the Host - Host Software Procedures in GORDO\", RFC 11, DOI 10.17487/RFC0011, August 1969, <https://www.rfc-editor.org/info/rfc11>.\n"
+    ],
+    [
+      "ref0010.txt",
+      "Crocker, S., \"Documentation conventions\", RFC 10, DOI 10.17487/RFC0010, July 1969, <https://www.rfc-editor.org/info/rfc10>.\n"
+    ],
+    [
+      "ref0009.txt",
+      "Deloche, G., \"Host Software\", RFC 9, DOI 10.17487/RFC0009, May 1969, <https://www.rfc-editor.org/info/rfc9>.\n"
+    ],
+    [
+      "ref0008.txt",
+      "Deloche, G., \"ARPA Network Functional Specifications\", RFC 8, DOI 10.17487/RFC0008, May 1969, <https://www.rfc-editor.org/info/rfc8>.\n"
+    ],
+    [
+      "ref0007.txt",
+      "Deloche, G., \"Host-IMP interface\", RFC 7, DOI 10.17487/RFC0007, May 1969, <https://www.rfc-editor.org/info/rfc7>.\n"
+    ],
+    [
+      "ref0006.txt",
+      "Crocker, S., \"Conversation with Bob Kahn\", RFC 6, DOI 10.17487/RFC0006, April 1969, <https://www.rfc-editor.org/info/rfc6>.\n"
+    ],
+    [
+      "ref0005.txt",
+      "Rulifson, J., \"Decode Encode Language (DEL)\", RFC 5, DOI 10.17487/RFC0005, June 1969, <https://www.rfc-editor.org/info/rfc5>.\n"
+    ],
+    [
+      "ref0004.txt",
+      "Shapiro, E., \"Network timetable\", RFC 4, DOI 10.17487/RFC0004, March 1969, <https://www.rfc-editor.org/info/rfc4>.\n"
+    ],
+    [
+      "ref0003.txt",
+      "Crocker, S., \"Documentation conventions\", RFC 3, DOI 10.17487/RFC0003, April 1969, <https://www.rfc-editor.org/info/rfc3>.\n"
+    ],
+    [
+      "ref0002.txt",
+      "Duvall, B., \"Host software\", RFC 2, DOI 10.17487/RFC0002, April 1969, <https://www.rfc-editor.org/info/rfc2>.\n"
+    ],
+    [
+      "ref0001.txt",
+      "Crocker, S., \"Host Software\", RFC 1, DOI 10.17487/RFC0001, April 1969, <https://www.rfc-editor.org/info/rfc1>.\n"
+    ]
+  ]
+}

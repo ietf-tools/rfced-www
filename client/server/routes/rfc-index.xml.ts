@@ -1,6 +1,5 @@
-import { ApiClient } from '~/generated/red-client'
+import { getRedClient } from '~/utilities/redClientWrappers'
 import { renderRfcIndexDotXml } from '~/utilities/rfc-index-xml'
-import { PRIVATE_API_URL } from '~/utilities/url'
 
 const DELAY_BETWEEN_REQUESTS_MS = 50
 
@@ -24,7 +23,7 @@ export default defineEventHandler(async (event) => {
         controller.close()
       }
 
-      const redApi = new ApiClient({ baseUrl: PRIVATE_API_URL })
+      const redApi = getRedClient()
 
       // this is a promise but we don't care about waiting for the result
       void renderRfcIndexDotXml({

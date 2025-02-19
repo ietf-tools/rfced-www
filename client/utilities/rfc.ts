@@ -1,5 +1,8 @@
+import { DateTime } from 'luxon'
 import type { RfcMetadata, Rfc } from '../generated/red-client'
 import { NONBREAKING_SPACE } from './strings'
+import { infoRfcPathBuilder, PUBLIC_SITE } from './url'
+import { FIXME_getRFCWithMissingData } from './rfc.mocks'
 
 const cache: Record<string, Rfc> = {}
 
@@ -124,23 +127,68 @@ export const formatTitlePlaintext = (title: string) => {
 type Author = RfcMetadata['authors'][number]
 
 /**
- * Formats author names into an initialised format, eg.
+ * Formats author names into an initialised format.
+ *
+ * , eg.
  * author.name:
  * * "First Name" becomes "F. Name"
  * * "First Second Name" becomes "F.S. Name"
  * ...and if they're an editor they get an "Ed." suffix
+ *
  */
-export const formatAuthor = (author: Author): string => {
+export const formatAuthor = (
+  author: Author,
+  style: 'regular' | 'brief'
+): string => {
   const name = author.name
     .split(/[\s.]/g)
     .filter(Boolean)
+    .filter((part, index, arr) => {
+      if (style === 'regular') {
+        return true
+      }
+
+      // if style === 'brief' then discard middlenames
+      return index === 0 || index === arr.length - 1
+    })
     .reduce((acc, item, index, arr) => {
-      return `${acc}${
+      if (style === 'regular') {
+        const newBit =
+          index === arr.length - 1 ?
+            ` ${item}`
+          : `${item.substring(0, 1).toUpperCase()}.`
+        return `${acc}${newBit}`
+      }
+
+      const newBit =
         index === arr.length - 1 ?
-          ` ${item}`
+          `${item}, `
         : `${item.substring(0, 1).toUpperCase()}.`
-      }`
+      return `${newBit}${acc}`
     }, '')
 
   return author.affiliation === 'Editor' ? `${name}, Ed.` : name
+}
+
+export const formatIdentifiers = (
+  identifiers: RfcMetadata['identifiers'],
+  separator: string = ': '
+): string[] => {
+  if (!identifiers || identifiers.length === 0) return []
+  return identifiers.map(
+    (identifier) =>
+      `${identifier.type.toUpperCase()}${separator}${identifier.value}`
+  )
+}
+
+/**
+ * Renders RFC summary txt. Eg.
+ *
+ * Crocker, S., "Host Software", RFC 1, DOI 10.17487/RFC0001, April 1969, <https://www.rfc-editor.org/info/rfc1>.
+ *
+ * As used on https://www.rfc-editor.org/refs/ref0001.txt
+ */
+export const refsRefRfcIdTxt = (rfc: Rfc): string => {
+  const rfcWithMissingData = FIXME_getRFCWithMissingData(rfc)
+  return `${rfcWithMissingData.authors.map((author) => formatAuthor(author, 'brief'))}, "${rfcWithMissingData.title}", RFC ${rfcWithMissingData.number}, ${formatIdentifiers(rfcWithMissingData.identifiers, ' ').join('')}, ${DateTime.fromISO(rfcWithMissingData.published).toFormat('LLLL yyyy')}, <${PUBLIC_SITE}${infoRfcPathBuilder(`rfc${rfcWithMissingData.number}`)}>.\n`
 }

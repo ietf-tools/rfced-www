@@ -8,10 +8,10 @@ import {
   twoDigitRFCDocListResponse,
   type DocListResponse
 } from './rfc.test'
-import { PRIVATE_API_URL } from './url'
-import {
+import { getRedClient } from './redClientWrappers'
+import type {
   ApiClient,
-  type PaginatedRfcMetadataList
+  PaginatedRfcMetadataList
 } from '~/generated/red-client'
 
 const paragraph =
@@ -61,7 +61,7 @@ type TestHelperResponses = {
 
 const testHelper = (responses: TestHelperResponses) =>
   new Promise<string>((resolve) => {
-    const redApiMock = new ApiClient({ baseUrl: PRIVATE_API_URL })
+    const redApiMock = getRedClient()
     type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
     // clone so that we don't mutate original array

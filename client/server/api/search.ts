@@ -1,10 +1,9 @@
 import { z } from 'zod'
-import { ApiClient } from '../../generated/red-client'
 import type {
   PaginatedRfcMetadataList,
   SlugEnum
 } from '../../generated/red-client'
-import { PRIVATE_API_URL } from '../../utilities/url'
+import { getRedClient } from '~/utilities/redClientWrappers'
 
 export const SearchParamsSchema = z.object({
   q: z.string().optional(),
@@ -39,7 +38,7 @@ export default defineEventHandler(async (event): Promise<ResponseType> => {
     query.data.to
   )
 
-  const redApi = new ApiClient({ baseUrl: PRIVATE_API_URL })
+  const redApi = getRedClient()
   type DocListArg = Parameters<(typeof redApi)['red']['docList']>[0]
 
   const docListArg: DocListArg = {}
