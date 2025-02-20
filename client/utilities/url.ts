@@ -61,12 +61,6 @@ export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
   }
 }
 
-export const rfcErrataPathBuilder = (rfcId: string): string => {
-  const parsedRfcId = parseRFCId(rfcId)
-
-  return `${PUBLIC_SITE}/errata/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/`
-}
-
 export const authorPathBuilder = (author: Rfc['authors'][number]): string => {
   return `mailto:${author.email}`
 }

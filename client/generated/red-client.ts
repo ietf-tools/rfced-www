@@ -130,6 +130,7 @@ export class ApiClient {
         | 'experimental'
         | 'historic'
         | 'informational'
+        | 'not-issued'
         | 'standard'
         | 'unknown'
       )[]
@@ -175,6 +176,8 @@ export type ErrorResponse404 = {
   type: ClientErrorEnum
   errors: Error404[]
 }
+
+export type FormatsEnum = 'xml' | 'txt' | 'html' | 'htmlized' | 'pdf' | 'ps'
 
 export type Group = {
   acronym: string
@@ -256,7 +259,19 @@ export type RedDocListValidationError = {
 
 export type RedDocRetrieveErrorResponse400 = ParseErrorResponse
 
+export type RelatedDraft = {
+  id?: number
+  name: string
+  title: string
+}
+
 export type RelatedRfc = {
+  id: number
+  number: number
+  title: string
+}
+
+export type ReverseRelatedRfc = {
   id: number
   number: number
   title: string
@@ -273,9 +288,17 @@ export type Rfc = {
   area?: Group
   stream: StreamName
   identifiers?: DocIdentifier[]
-  obsoleted_by?: RelatedRfc[]
-  updated_by?: RelatedRfc[]
+  obsoletes?: RelatedRfc[]
+  obsoleted_by?: ReverseRelatedRfc[]
+  updates?: RelatedRfc[]
+  updated_by?: ReverseRelatedRfc[]
+  is_also?: string[]
+  see_also?: string[]
+  draft?: RelatedDraft
   abstract?: string
+  formats: FormatsEnum[]
+  keywords?: string[]
+  errata?: string[]
   text: string | null
 }
 
@@ -298,9 +321,17 @@ export type RfcMetadata = {
   area?: Group
   stream: StreamName
   identifiers?: DocIdentifier[]
-  obsoleted_by?: RelatedRfc[]
-  updated_by?: RelatedRfc[]
+  obsoletes?: RelatedRfc[]
+  obsoleted_by?: ReverseRelatedRfc[]
+  updates?: RelatedRfc[]
+  updated_by?: ReverseRelatedRfc[]
+  is_also?: string[]
+  see_also?: string[]
+  draft?: RelatedDraft
   abstract?: string
+  formats: FormatsEnum[]
+  keywords?: string[]
+  errata?: string[]
 }
 
 export type RfcStatus = {
@@ -315,6 +346,7 @@ export type SlugEnum =
   | 'experimental'
   | 'historic'
   | 'informational'
+  | 'not-issued'
   | 'standard'
   | 'unknown'
 

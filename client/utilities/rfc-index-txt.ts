@@ -163,7 +163,7 @@ const stringifyRFC = (
     rfcdate = DateTime.fromISO(rfc.published).toFormat('LLLL yyyy')
     rfcformat =
       rfc.formats && rfc.formats.length > 0 ?
-        `Format: ${rfc.formats.map((format) => format.type).join(', ')}`
+        `Format: ${rfc.formats.map((format) => format.toUpperCase()).join(', ')}`
       : ''
 
     if (rfc.obsoletes && rfc.obsoletes.length > 0) {
@@ -189,12 +189,8 @@ const stringifyRFC = (
     }
 
     const alsolist = [
-      ...(rfc.is_also && rfc.is_also.length > 0 ?
-        rfc.is_also.map((item) => formatRfcNumber(item.number))
-      : []),
-      ...(rfc.see_also && rfc.see_also.length > 0 ?
-        rfc.see_also.map((item) => formatRfcNumber(item.number))
-      : [])
+      ...(rfc.is_also && rfc.is_also.length > 0 ? rfc.is_also : []),
+      ...(rfc.see_also && rfc.see_also.length > 0 ? rfc.see_also : [])
     ]
     if (alsolist.length > 0) {
       also = ` (Also ${alsolist.join(', ')})`

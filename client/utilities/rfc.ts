@@ -56,6 +56,7 @@ export const blankRfc: Rfc = {
   identifiers: [],
   obsoleted_by: [],
   updated_by: [],
+  formats: [],
   abstract: '',
   text: ''
 }
