@@ -17,7 +17,7 @@ export const rfcToRfcIndexRow = (rfc: Rfc) => {
     ...rfc.authors.map((author) => formatAuthor(author, 'regular')),
     ` [ ${month} ${year} ] `,
     rfc.formats ?
-      `(${rfc.formats.map((format) => format.type).join(', ')})`
+      `(${rfc.formats.map((format) => format.toUpperCase()).join(', ')})`
     : '',
     ...(rfc.obsoletes && rfc.obsoletes.length > 0 ?
       [' (Obsoletes ', ...rfcCommaList(rfc.obsoletes), ' )']

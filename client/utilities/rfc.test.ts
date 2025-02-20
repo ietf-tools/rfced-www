@@ -34,204 +34,535 @@ export const twoDigitRFCDocListResponse: DocListResponse = {
       number: 1,
       title: 'Host Software',
       published: '1969-04-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 11,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0001' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0001'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 2,
       title: 'Host software',
       published: '1969-04-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 10,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0002' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0002'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'pdf', 'html'],
+      keywords: [],
+      errata: ['https://www.rfc-editor.org/errata/rfc2/']
     },
     {
       number: 3,
       title: 'Documentation conventions',
       published: '1969-04-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 2,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0003' }],
-      obsoleted_by: [
-        { id: 41973, number: 10, title: 'Documentation conventions' }
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0003'
+        }
       ],
+      obsoletes: [],
+      obsoleted_by: [
+        {
+          id: 41973,
+          number: 10,
+          title: 'Documentation conventions'
+        }
+      ],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 4,
       title: 'Network timetable',
       published: '1969-03-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 6,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0004' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0004'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 5,
       title: 'Decode Encode Language (DEL)',
       published: '1969-06-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 17,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0005' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0005'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: ['https://www.rfc-editor.org/errata/rfc5/']
     },
     {
       number: 6,
       title: 'Conversation with Bob Kahn',
       published: '1969-04-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 1,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0006' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0006'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 7,
       title: 'Host-IMP interface',
       published: '1969-05-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 7,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0007' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0007'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 8,
       title: 'ARPA Network Functional Specifications',
       published: '1969-05-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 0,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0008' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0008'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['pdf'],
+      keywords: [],
+      errata: []
     },
     {
       number: 9,
       title: 'Host Software',
       published: '1969-05-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 15,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0009' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0009'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['pdf'],
+      keywords: [],
+      errata: []
     },
     {
       number: 10,
       title: 'Documentation conventions',
       published: '1969-07-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 3,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0010' }],
-      obsoleted_by: [{ id: 41980, number: 16, title: 'M.I.T' }],
-      updated_by: [
-        { id: 41981, number: 24, title: 'Documentation Conventions' },
-        { id: 41982, number: 27, title: 'Documentation Conventions' },
-        { id: 41983, number: 30, title: 'Documentation Conventions' }
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0010'
+        }
       ],
-      abstract: ''
+      obsoletes: [
+        {
+          id: 41972,
+          number: 3,
+          title: 'Documentation conventions'
+        }
+      ],
+      obsoleted_by: [
+        {
+          id: 41980,
+          number: 16,
+          title: 'M.I.T'
+        }
+      ],
+      updates: [],
+      updated_by: [
+        {
+          id: 41981,
+          number: 24,
+          title: 'Documentation Conventions'
+        },
+        {
+          id: 41982,
+          number: 27,
+          title: 'Documentation Conventions'
+        },
+        {
+          id: 41983,
+          number: 30,
+          title: 'Documentation Conventions'
+        }
+      ],
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 11,
       title: 'Implementation of the Host - Host Software Procedures in GORDO',
       published: '1969-08-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 23,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0011' }],
-      obsoleted_by: [
-        { id: 41985, number: 33, title: 'New Host-Host Protocol' }
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0011'
+        }
       ],
+      obsoletes: [],
+      obsoleted_by: [
+        {
+          id: 41985,
+          number: 33,
+          title: 'New Host-Host Protocol'
+        }
+      ],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'pdf', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 12,
       title: 'IMP-Host interface flow diagrams',
       published: '1969-08-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 1,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0012' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0012'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'ps', 'pdf', 'html'],
+      keywords: [],
+      errata: []
     },
     {
       number: 13,
       title: 'Zero Text Length EOF Message',
       published: '1969-08-01',
-      status: { slug: 'unknown', name: 'unknown' },
+      status: {
+        slug: 'unknown',
+        name: 'unknown'
+      },
       pages: 1,
       authors: [],
-      group: { acronym: 'none', name: 'Individual Submissions' },
+      group: {
+        acronym: 'none',
+        name: 'Individual Submissions'
+      },
       area: undefined,
-      stream: { slug: 'legacy', name: 'Legacy', desc: 'Legacy' },
-      identifiers: [{ type: 'doi', value: '10.17487/RFC0013' }],
+      stream: {
+        slug: 'legacy',
+        name: 'Legacy',
+        desc: 'Legacy'
+      },
+      identifiers: [
+        {
+          type: 'doi',
+          value: '10.17487/RFC0013'
+        }
+      ],
+      obsoletes: [],
       obsoleted_by: [],
+      updates: [],
       updated_by: [],
-      abstract: ''
+      is_also: [],
+      see_also: [],
+      draft: undefined,
+      abstract: '',
+      formats: ['txt', 'html'],
+      keywords: [],
+      errata: []
     }
   ]
 }

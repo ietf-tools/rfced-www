@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { XMLBuilder } from 'fast-xml-parser'
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { formatAuthor } from './rfc'
-import { rfcErrataPathBuilder } from './url'
 import { setTimeoutPromise } from './promises'
 import type { ApiClient } from '~/generated/red-client'
 
@@ -102,16 +101,16 @@ const renderRFCs = async ({
             {
               format: {
                 'file-format': rfc.formats.map((format) => {
-                  if (format.type === 'TXT') {
+                  if (format === 'txt') {
                     return 'ASCII'
                   }
-                  return format.type
+                  return format.toUpperCase()
                 })
               }
             }
           : {}),
           'page-count': rfc.pages,
-          ...(rfc.keywords ?
+          ...(rfc.keywords && rfc.keywords.length > 0 ?
             {
               keywords: {
                 kw: rfc.keywords
@@ -172,7 +171,7 @@ const renderRFCs = async ({
             }),
           ...(rfc.errata && rfc.errata.length > 0 ?
             {
-              'errata-url': rfcErrataPathBuilder(`rfc${rfc.number}`)
+              'errata-url': rfc.errata
             }
           : {}),
           doi:
