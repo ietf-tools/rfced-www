@@ -107,22 +107,6 @@ const filterByRFCEntry = (entry: Entry): entry is RFCEntry => {
   return 'rfc-entry' in entry
 }
 
-// const summariseEntries = (entries: any[]) =>
-//   entries.reduce(
-//     (acc, entry) =>
-//       Object.keys(entry).reduce((acc, key, _index, arr) => {
-//         if (arr.length === 0) {
-//           throw Error(`Entry has no keys?`)
-//         }
-//         if (!acc[key]) {
-//           acc[key] = 0
-//         }
-//         acc[key]++
-//         return acc
-//       }, acc),
-//     {}
-//   )
-
 const getRFCItemByName = (rfcEntry: RFCEntry, key: string) => {
   const item = rfcEntry['rfc-entry'].find((item) => {
     return !!item[key]
@@ -211,14 +195,6 @@ describe('renderRfcIndexDotXml', () => {
         // FIXME: enable checking more RFCs
         i < 14
       ) {
-        // const keyToCheck = 'keywords'
-        // const originalItem = getRFCItemByName(originalRFC, keyToCheck)
-        // const resultItem = getRFCItemByName(resultRFC, keyToCheck)
-        // console.log(
-        //   JSON.stringify(originalItem, null, 2),
-        //   ' vs ',
-        //   JSON.stringify(resultItem, null, 2)
-        // )
         expect(resultRFC, `RFC${originalRFCNumber}`).toEqual(originalRFC)
       }
     })
