@@ -1,0 +1,10 @@
+{
+  "//": "this is a separate file so that we can potentially migrate it to CDN -> Store/bucket later as an optimisation",
+  "// DOCs": "Value of each route should adhere to https://github.com/unjs/httpxy/blob/main/src/types.ts#L22",
+  "redirects": [
+    [
+      "/rfc/*.pdf",
+      { "target": "https://bucket.cloudflare.com/", "changeOrigin": true }
+    ]
+  ]
+}
