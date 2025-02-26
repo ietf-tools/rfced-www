@@ -683,8 +683,9 @@ test('rfcToRfcJSON', () => {
           removeLeadingZeros(updated_by_item.trim())
         ),
         errata_url: normalizeUrlWithRfcNumber(expectedResult.errata_url),
-        // these RFC JSONs have spaces on either end of the title
-        title: expectedResult.title.trim()
+        // these RFC JSONs have spaces on either
+        title: expectedResult.title.trim(),
+        abstract: expectedResult.abstract?.trim()
       }
 
       const rfcMetadata = twoDigitRFCDocListResponse.results.find(

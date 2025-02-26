@@ -238,7 +238,7 @@ type RFCJSON = {
   pub_status: string
   status: string
   source: string
-  abstract: string
+  abstract?: string
   pub_date: string
   keywords: string[]
   obsoletes: string[]
@@ -258,8 +258,6 @@ type RFCJSON = {
 export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
   const date = DateTime.fromISO(rfc.published)
 
-  const padSpaces = (str: string = '') => ` ${str} `
-
   return {
     draft: rfc.draft?.name ?? '',
     doc_id: `RFC${rfc.number}`,
@@ -276,7 +274,7 @@ export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
     pub_status: rfc.status.name.toUpperCase(),
     status: rfc.status.name.toUpperCase(),
     source: rfc.stream.name,
-    abstract: padSpaces(rfc.abstract),
+    abstract: rfc.abstract,
     pub_date: formatDatePublished(date, false),
     keywords:
       rfc.keywords?.map((keyword) => keyword.trim()).filter(Boolean) ?? [],
