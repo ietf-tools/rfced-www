@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { XMLBuilder } from 'fast-xml-parser'
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
-import { formatAuthor } from './rfc'
+import { formatAuthor, formatFormat } from './rfc'
 import { setTimeoutPromise } from './promises'
 import type { ApiClient } from '~/generated/red-client'
 
@@ -100,12 +100,13 @@ const renderRFCs = async ({
           ...(rfc.formats ?
             {
               format: {
-                'file-format': rfc.formats.map((format) => {
-                  if (format === 'txt') {
-                    return 'ASCII'
-                  }
-                  return format.toUpperCase()
-                })
+                'file-format': rfc.formats.map((format) =>
+                  formatFormat(
+                    format,
+                    // FIXME: get info on whether it's a pre-V3 rfc.... or ensure API will return ASCII
+                    true
+                  )
+                )
               }
             }
           : {}),

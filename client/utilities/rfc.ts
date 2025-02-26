@@ -125,6 +125,29 @@ export const formatTitlePlaintext = (title: string) => {
   return `${parts.type}${NONBREAKING_SPACE}${parts.number}`
 }
 
+type UppercaseFormats = Uppercase<Rfc['formats'][number]> | 'ASCII'
+
+export const formatFormat = (
+  format: string,
+  isPreV3: boolean // we need to know whether it's pre-V3 https://www.rfc-editor.org/rpc/wiki/doku.php?id=rfc_metadata_in_the_v3_era
+): UppercaseFormats => {
+  switch (format) {
+    case 'txt':
+      return isPreV3 ? 'ASCII' : 'TXT'
+    case 'xml':
+      return 'XML'
+    case 'html':
+      return 'HTML'
+    case 'htmlized':
+      return 'HTMLIZED'
+    case 'pdf':
+      return 'PDF'
+    case 'ps':
+      return 'PS'
+  }
+  throw Error(`Unexpected format "${format}"`)
+}
+
 type Author = RfcMetadata['authors'][number]
 
 /**
@@ -144,7 +167,7 @@ export const formatAuthor = (
   const name = author.name
     .split(/[\s.]/g)
     .filter(Boolean)
-    .filter((part, index, arr) => {
+    .filter((_part, index, arr) => {
       if (style === 'regular') {
         return true
       }
@@ -182,6 +205,17 @@ export const formatIdentifiers = (
   )
 }
 
+export const formatDatePublished = (
+  dt: DateTime,
+  isAprilFirstMode: boolean
+): string => {
+  if (isAprilFirstMode && dt.month === 4 && dt.day === 1) {
+    // handle April 1st
+    return dt.toLocaleString(DateTime.DATE_FULL)
+  }
+  return dt.toFormat('LLLL yyyy')
+}
+
 /**
  * Renders RFC summary txt. Eg.
  *
@@ -192,4 +226,73 @@ export const formatIdentifiers = (
 export const refsRefRfcIdTxt = (rfc: Rfc): string => {
   const rfcWithMissingData = FIXME_getRFCWithMissingData(rfc)
   return `${rfcWithMissingData.authors.map((author) => formatAuthor(author, 'brief'))}, "${rfcWithMissingData.title}", RFC ${rfcWithMissingData.number}, ${formatIdentifiers(rfcWithMissingData.identifiers, ' ').join('')}, ${DateTime.fromISO(rfcWithMissingData.published).toFormat('LLLL yyyy')}, <${PUBLIC_SITE}${infoRfcPathBuilder(`rfc${rfcWithMissingData.number}`)}>.\n`
+}
+
+type RFCJSON = {
+  draft: string
+  doc_id: string
+  title: string
+  authors: string[]
+  format: string[]
+  page_count: string
+  pub_status: string
+  status: string
+  source: string
+  abstract: string
+  pub_date: string
+  keywords: string[]
+  obsoletes: string[]
+  obsoleted_by: string[]
+  updates: string[]
+  updated_by: string[]
+  see_also: string[]
+  doi: string
+  errata_url: string | null
+}
+
+/**
+ * Renders RFC JSON. Eg.
+ *
+ * As used on https://www.rfc-editor.org/rfc/rfc1.json
+ */
+export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
+  const date = DateTime.fromISO(rfc.published)
+
+  const padSpaces = (str: string = '') => ` ${str} `
+
+  return {
+    draft: rfc.draft?.name ?? '',
+    doc_id: `RFC${rfc.number}`,
+    title: rfc.title,
+    authors: rfc.authors.map((author) => formatAuthor(author, 'regular')) ?? [],
+    format: rfc.formats.map((format) =>
+      formatFormat(
+        format,
+        // FIXME: get info on whether it's a pre-V3 rfc.... or ensure API will return ASCII
+        true
+      )
+    ),
+    page_count: rfc.pages?.toString() ?? '0',
+    pub_status: rfc.status.name.toUpperCase(),
+    status: rfc.status.name.toUpperCase(),
+    source: rfc.stream.name,
+    abstract: padSpaces(rfc.abstract),
+    pub_date: formatDatePublished(date, false),
+    keywords:
+      rfc.keywords?.map((keyword) => keyword.trim()).filter(Boolean) ?? [],
+    obsoletes: rfc.obsoletes?.map((obsolete) => `RFC${obsolete.number}`) ?? [],
+    obsoleted_by:
+      rfc.obsoleted_by?.map((obsoleted_by) => `RFC${obsoleted_by.number}`) ??
+      [],
+    updates: rfc.updates?.map((update) => `RFC${update.number}`) ?? [],
+    updated_by:
+      rfc.updated_by?.map(
+        (updated_by_item) => `RFC${updated_by_item.number}`
+      ) ?? [],
+    see_also: rfc.see_also ?? [],
+    doi:
+      rfc.identifiers?.find((identifier) => identifier.type === 'doi')?.value ??
+      '',
+    errata_url: rfc.errata?.find(() => true) ?? null
+  }
 }

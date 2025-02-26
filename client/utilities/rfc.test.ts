@@ -1,8 +1,10 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { parseRFCId, refsRefRfcIdTxt } from './rfc'
+import { parseRFCId, refsRefRfcIdTxt, rfcToRfcJSON } from './rfc'
 import { NONBREAKING_SPACE } from './strings'
 import rfcRefs from './rfc-refs.json'
+import rfcJsons from './rfc-jsons.json'
+import { FIXME_getRFCWithMissingData } from './rfc.mocks'
 import type { ApiClient, Rfc, RfcMetadata } from '~/generated/red-client'
 
 test('parseRFCId', () => {
@@ -593,14 +595,14 @@ test('refsRefRfcIdTxt', () => {
   expect(rfcRefs.snapshots.length).toBeGreaterThan(10)
 
   rfcRefs.snapshots
-    .filter((rfcRef) => {
-      const filename = rfcRef[0]
+    .filter((snapshot) => {
+      const filename = snapshot[0]
       const rfcId = parseRFCId(filename)
       return parseFloat(rfcId.number) < 14
     })
-    .forEach((rfcRef) => {
-      const filename = rfcRef[0]
-      const originalResult = rfcRef[1]
+    .forEach((snapshot) => {
+      const filename = snapshot[0]
+      const originalResult = snapshot[1]
       const expectedResult = originalResult.replace(/>\.\n$/, '/>.\n') // expectedResult is same as originalResult except the url has a trailing slash
 
       const filenameMatches = filename.match(/^ref([0-9]+)\.txt$/)
@@ -625,5 +627,82 @@ test('refsRefRfcIdTxt', () => {
       const rfc: Rfc = rfcMetadataToRfc(rfcMetadata)
 
       expect(refsRefRfcIdTxt(rfc)).toEqual(expectedResult)
+    })
+})
+
+test('rfcToRfcJSON', () => {
+  expect(rfcJsons.snapshots.length).toBeGreaterThan(10)
+
+  rfcJsons.snapshots
+    .filter((snapshot) => {
+      const filename = snapshot[0].toString()
+      const rfcId = parseRFCId(filename)
+      return parseFloat(rfcId.number) < 14
+    })
+    .forEach((snapshot) => {
+      const filename = snapshot[0].toString()
+      const expectedResult = snapshot[1]
+      if (
+        // used to narrow TS type in following code
+        typeof expectedResult === 'string'
+      ) {
+        throw Error('Expected object not string')
+      }
+
+      const filenameMatches = filename.match(/^rfc([0-9]+)\.json$/)
+
+      if (!filenameMatches) {
+        throw Error(`Unable to parse filename ${filename}`)
+      }
+
+      const rfcNumberString = filenameMatches[1]
+      const rfcNumber = parseInt(rfcNumberString, 10)
+
+      const removeLeadingZeros = (rfcId: string): string =>
+        `RFC${parseRFCId(rfcId).number}`
+
+      const normalizeUrlWithRfcNumber = (url: string | null): string | null => {
+        if (!url) return null
+        const withoutLeadingZeros = url.replace(/rfc[0]+/g, 'rfc')
+        return `${withoutLeadingZeros}/`
+      }
+
+      const normalisedExpectedResult = {
+        ...expectedResult,
+        doc_id: removeLeadingZeros(expectedResult.doc_id),
+        keywords: expectedResult.keywords
+          .map((keyword) => keyword.trim())
+          .filter(Boolean),
+        obsoleted_by: expectedResult.obsoleted_by.map((obsoleted_by_item) =>
+          removeLeadingZeros(obsoleted_by_item.trim())
+        ),
+        obsoletes: expectedResult.obsoletes.map((obsoletes_item) =>
+          removeLeadingZeros(obsoletes_item.trim())
+        ),
+        updated_by: expectedResult.updated_by.map((updated_by_item) =>
+          removeLeadingZeros(updated_by_item.trim())
+        ),
+        errata_url: normalizeUrlWithRfcNumber(expectedResult.errata_url),
+        // these RFC JSONs have spaces on either end of the title
+        title: expectedResult.title.trim()
+      }
+
+      const rfcMetadata = twoDigitRFCDocListResponse.results.find(
+        (rfcMetadata) => rfcMetadata.number === rfcNumber
+      )
+
+      if (!rfcMetadata) {
+        throw Error(
+          `Couldn't find RFC ${rfcNumber} in twoDigitRFCDocListResponse.results`
+        )
+      }
+
+      const rfc: Rfc = FIXME_getRFCWithMissingData(
+        rfcMetadataToRfc(rfcMetadata)
+      )
+
+      expect(rfcToRfcJSON(rfc), `RFC ${rfcNumber} comparison`).toEqual(
+        normalisedExpectedResult
+      )
     })
 })
