@@ -18,7 +18,7 @@ export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/' as const
 
 export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/' as const
 
-export const refsRefTxtBuilder = (rfcId: string) => {
+export const refsRefTxtPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
 
   return `/refs/ref${rfcParts.number}.txt`
@@ -28,6 +28,12 @@ export const infoRfcPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
 
   return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
+}
+
+export const rfcJSONPathBuilder = (rfcId: string) => {
+  const rfcParts = parseRFCId(rfcId)
+
+  return `/api/v1/rfc${rfcParts.number}.json`
 }
 
 export const rfcPathBuilder = (rfcId: string) => {

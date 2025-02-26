@@ -1,4 +1,4 @@
-import { refsRefTxtBuilder } from '~/utilities/url'
+import { refsRefTxtPathBuilder } from '~/utilities/url'
 import { getRedClient } from '~/utilities/redClientWrappers'
 import { refsRefRfcIdTxt } from '~/utilities/rfc'
 
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const withoutLeadingZeroes = rfcNumber.toString()
   // if the rfcNumber has leading zeroes this will fail
   if (withoutLeadingZeroes !== rfcNumberMatch) {
-    sendRedirect(event, refsRefTxtBuilder(rfcId), 301)
+    sendRedirect(event, refsRefTxtPathBuilder(rfcId), 301)
     return
   }
 
