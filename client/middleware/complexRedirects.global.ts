@@ -1,6 +1,6 @@
 import 'core-js/actual/regexp/escape'
-import { isMiddlewareRedirect } from '~/utilities/redirects'
 import redirects from '../redirects.json'
+import { isMiddlewareRedirect } from '~/utilities/redirects'
 
 const middlewareRedirects = redirects.redirects
   .filter((redirect) => isMiddlewareRedirect(redirect[0]))
