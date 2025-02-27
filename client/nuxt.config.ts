@@ -1,6 +1,7 @@
 /// <reference types="histoire" />
 
 import redirects from './redirects.json'
+import { isMiddlewareRedirect } from './utilities/redirects'
 
 type RouteRules = NonNullable<
   Parameters<typeof defineNuxtConfig>[0]['routeRules']
@@ -94,9 +95,19 @@ export default defineNuxtConfig({
       swr: oneDayInSeconds,
       prerender: false // there are too many RFCs to prerender them, but we can at least `swr: true` cache them
     },
-    ...redirects.redirects.reduce((acc, redirect) => {
-      acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
-      return acc
-    }, {} as RouteRules)
+    ...redirects.redirects
+      .filter(
+        (redirect) =>
+          // nuxt.config.ts can only handle basic redirects and more complex redirects need to be handled in middleware
+          // so we filter complex redirects (those with wildcards) from this config.
+          //
+          // While Nuxt does support trailing '**' patterns see https://github.com/nitrojs/nitro/pull/1976
+          // these routing patterns aren't expressive enough to
+          !isMiddlewareRedirect(redirect[0])
+      )
+      .reduce((acc, redirect) => {
+        acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
+        return acc
+      }, {} as RouteRules)
   }
 })
