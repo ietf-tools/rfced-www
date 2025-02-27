@@ -598,6 +598,7 @@ test('refsRefRfcIdTxt', () => {
     .filter((snapshot) => {
       const filename = snapshot[0]
       const rfcId = parseRFCId(filename)
+      // FIXME: enable greater range of RFC comparison tests
       return parseFloat(rfcId.number) < 14
     })
     .forEach((snapshot) => {
@@ -637,6 +638,7 @@ test('rfcToRfcJSON', () => {
     .filter((snapshot) => {
       const filename = snapshot[0].toString()
       const rfcId = parseRFCId(filename)
+      // FIXME: enable greater range of RFC comparison tests
       return parseFloat(rfcId.number) < 14
     })
     .forEach((snapshot) => {

@@ -5,7 +5,7 @@ import { isMiddlewareRedirect } from '~/utilities/redirects'
 const middlewareRedirects = redirects.redirects
   .filter((redirect) => isMiddlewareRedirect(redirect[0]))
   .map((redirect): [RegExp, string] => {
-    // Convert '*' patterns into a regex for matching url paths in middleware
+    // Convert wildcard '*' patterns into a regex for matching routes
     // eg ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"]
     // becomes [new RegExp('^/rfc/rfc(.*?)\.json$'), '/api/v1/rfc/rfc$1.json']
 
