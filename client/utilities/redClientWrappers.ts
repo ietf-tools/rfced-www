@@ -133,3 +133,29 @@ export const getRFCs = async ({
 
   return rfcs
 }
+
+/** Safety wrapper around docRetrieve access to catch errors  */
+export const docRetrieve = async (redApi: ApiClient, rfcNumber: number) => {
+  try {
+    return await redApi.red.docRetrieve(rfcNumber)
+  } catch (e: unknown) {
+    // The API can throw to express 404s
+    if (
+      e &&
+      typeof e === 'object' &&
+      'type' in e &&
+      e.type === 'client_error' &&
+      'errors' in e &&
+      Array.isArray(e.errors) &&
+      e.errors.length > 0
+    ) {
+      const error = e.errors[0]
+      if ('code' in error && error.code === 'not_found') {
+        return null
+      }
+    }
+
+    console.error(e)
+    throw Error('Unhandled Red API response')
+  }
+}

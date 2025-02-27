@@ -1,4 +1,4 @@
-import { getRedClient } from '~/utilities/redClientWrappers'
+import { docRetrieve, getRedClient } from '~/utilities/redClientWrappers'
 import { rfcToRfcJSON } from '~/utilities/rfc'
 import { FIXME_getRFCWithMissingData } from '~/utilities/rfc.mocks'
 import { rfcJSONPathBuilder } from '~/utilities/url'
@@ -13,7 +13,9 @@ export default defineEventHandler(async (event) => {
   const { rfcId } = params
   const rfcPatterns = rfcId.match(rfcRegex)
   if (!rfcPatterns) {
-    throw Error(`Expected param to be a valid RFC id JSON`)
+    throw Error(
+      `Expected valid URL where the last part matches rfcN.json (N is a number)`
+    )
   }
   const rfcNumberMatch = rfcPatterns[1] // eg '0001'
   const rfcNumber = parseInt(rfcNumberMatch, 10)
@@ -24,11 +26,16 @@ export default defineEventHandler(async (event) => {
   }
 
   const redApi = getRedClient()
-  type DocRetrieveArg = Parameters<(typeof redApi)['red']['docRetrieve']>[0]
 
-  const docRetrieveArg: DocRetrieveArg = rfcNumber
+  const rfc = await docRetrieve(redApi, rfcNumber)
 
-  const rfc = await redApi.red.docRetrieve(docRetrieveArg)
+  if (!rfc) {
+    throw createError({
+      statusCode: 404,
+      message: 'not found',
+      fatal: true
+    })
+  }
 
   const rfcWithMissingData = FIXME_getRFCWithMissingData(rfc)
 
