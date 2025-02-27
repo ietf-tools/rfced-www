@@ -667,12 +667,14 @@ test('rfcToRfcJSON', () => {
         return `${withoutLeadingZeros}/`
       }
 
+      /**
+       * These JSONs have some things we'd like to change...
+       */
       const normalisedExpectedResult = {
         ...expectedResult,
         doc_id: removeLeadingZeros(expectedResult.doc_id),
-        keywords: expectedResult.keywords
-          .map((keyword) => keyword.trim())
-          .filter(Boolean),
+        keywords: expectedResult.keywords // filter 'keywords' array items that are just whitespace
+          .filter((keyword) => keyword.trim()),
         obsoleted_by: expectedResult.obsoleted_by.map((obsoleted_by_item) =>
           removeLeadingZeros(obsoleted_by_item.trim())
         ),
@@ -683,9 +685,8 @@ test('rfcToRfcJSON', () => {
           removeLeadingZeros(updated_by_item.trim())
         ),
         errata_url: normalizeUrlWithRfcNumber(expectedResult.errata_url),
-        // these RFC JSONs have spaces on either
-        title: expectedResult.title.trim(),
-        abstract: expectedResult.abstract?.trim()
+        title: expectedResult.title.trim(), // remove spaces on either end of 'title'
+        abstract: expectedResult.abstract?.trim() // remove spaces on either end of 'abstract'
       }
 
       const rfcMetadata = twoDigitRFCDocListResponse.results.find(

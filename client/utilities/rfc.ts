@@ -246,7 +246,7 @@ type RFCJSON = {
   updates: string[]
   updated_by: string[]
   see_also: string[]
-  doi: string
+  doi: string | null
   errata_url: string | null
 }
 
@@ -276,8 +276,7 @@ export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
     source: rfc.stream.name,
     abstract: rfc.abstract,
     pub_date: formatDatePublished(date, false),
-    keywords:
-      rfc.keywords?.map((keyword) => keyword.trim()).filter(Boolean) ?? [],
+    keywords: rfc.keywords ?? [],
     obsoletes: rfc.obsoletes?.map((obsolete) => `RFC${obsolete.number}`) ?? [],
     obsoleted_by:
       rfc.obsoleted_by?.map((obsoleted_by) => `RFC${obsoleted_by.number}`) ??
@@ -290,7 +289,7 @@ export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
     see_also: rfc.see_also ?? [],
     doi:
       rfc.identifiers?.find((identifier) => identifier.type === 'doi')?.value ??
-      '',
-    errata_url: rfc.errata?.find(() => true) ?? null
+      null,
+    errata_url: rfc.errata?.[0] ?? null
   }
 }

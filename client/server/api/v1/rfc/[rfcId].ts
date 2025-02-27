@@ -13,12 +13,12 @@ export default defineEventHandler(async (event) => {
   const { rfcId } = params
   const rfcPatterns = rfcId.match(rfcRegex)
   if (!rfcPatterns) {
-    throw Error(`Expected param to match ${rfcId}`)
+    throw Error(`Expected param to be a valid RFC id JSON`)
   }
   const rfcNumberMatch = rfcPatterns[1] // eg '0001'
   const rfcNumber = parseInt(rfcNumberMatch, 10)
   const withoutLeadingZeroes = rfcNumber.toString()
-  // if the rfcNumber has leading zeroes this will fail
+  // if the rfcNumber has leading zeroes this will be false
   if (withoutLeadingZeroes !== rfcNumberMatch) {
     return sendRedirect(event, rfcJSONPathBuilder(rfcId), 301)
   }
