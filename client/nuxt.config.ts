@@ -93,18 +93,10 @@ export default defineNuxtConfig({
     },
     '/rfc/rfc**.json': {
       swr: oneDayInSeconds,
-      prerender: false // there are too many RFCs to prerender them, but we can at least `swr: true` cache them
+      prerender: false // there are too many RFCs to prerender them, but we can at least cache them via `swr: true`
     },
     ...redirects.redirects
-      .filter(
-        (redirect) =>
-          // nuxt.config.ts can only handle basic redirects and more complex redirects need to be handled in middleware
-          // so we filter complex redirects (those with wildcards) from this config.
-          //
-          // While Nuxt does support trailing '**' patterns see https://github.com/nitrojs/nitro/pull/1976
-          // these routing patterns aren't expressive enough to
-          !isMiddlewareRedirect(redirect[0])
-      )
+      .filter((redirect) => !isMiddlewareRedirect(redirect[0]))
       .reduce((acc, redirect) => {
         acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
         return acc

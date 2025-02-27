@@ -5,17 +5,20 @@ import { isMiddlewareRedirect } from '~/utilities/redirects'
 const middlewareRedirects = redirects.redirects
   .filter((redirect) => isMiddlewareRedirect(redirect[0]))
   .map((redirect): [RegExp, string] => {
+    // Convert '*' patterns into a regex for matching url paths in middleware
+    // eg ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"]
+    // becomes [new RegExp('^/rfc/rfc(.*?)\.json$'), '/api/v1/rfc/rfc$1.json']
+
     // @ts-expect-error RegExp.escape isn't natively supported by Node 22, hence the core-js polyfill above, so TS complains thinking it doesn't exist
     const escapedPattern = RegExp.escape(redirect[0])
-    const regexPath = escapedPattern.replaceAll(
+
+    // Convert `*` to a regex pattern
+    const regexForPath = escapedPattern.replaceAll(
       '\\*', // we need to match the escaped '*' as '\\*'
       '(.*?)'
     )
-    return [
-      // Convert asterisk into regex match
-      new RegExp(`^${regexPath}$`),
-      redirect[1]
-    ]
+    const regex = new RegExp(`^${regexForPath}$`)
+    return [regex, redirect[1]]
   })
 
 export default defineNuxtRouteMiddleware((to, _from) => {
