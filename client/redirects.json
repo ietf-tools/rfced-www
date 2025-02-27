@@ -13,6 +13,7 @@
     ["/source-definitions", "/source-definitions/"],
     ["/how-to-verify", "/how-to-verify/"],
     ["/ien/ien-index.html", "/ien/ien-index/"],
-    ["/current_queue.php", "/current_queue/"]
+    ["/current_queue.php", "/current_queue/"],
+    ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"]
   ]
 }

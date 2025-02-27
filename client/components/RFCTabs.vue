@@ -164,6 +164,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import type { Rfc } from '~/generated/red-client'
+import { formatDatePublished } from '~/utilities/rfc'
 import { COMMA, SPACE } from '~/utilities/strings'
 import {
   authorPathBuilder,
@@ -185,11 +186,7 @@ function changeTab(index: number) {
 
 const formattedPublished = computed(() => {
   const dt = DateTime.fromISO(props.rfc.published)
-  if (dt.month === 4 && dt.day === 1) {
-    // handle April 1st
-    return dt.toLocaleString(DateTime.DATE_FULL)
-  }
-  return dt.toFormat('LLLL yyyy')
+  return formatDatePublished(dt, true)
 })
 
 const citations = computed(() => {

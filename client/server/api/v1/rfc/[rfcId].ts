@@ -1,8 +1,9 @@
-import { refsRefTxtPathBuilder } from '~/utilities/url'
 import { docRetrieve, getRedClient } from '~/utilities/redClientWrappers'
-import { refsRefRfcIdTxt } from '~/utilities/rfc'
+import { rfcToRfcJSON } from '~/utilities/rfc'
+import { FIXME_getRFCWithMissingData } from '~/utilities/rfc.mocks'
+import { rfcJSONPathBuilder } from '~/utilities/url'
 
-const refRegex = /^ref([0-9]+)\.txt$/
+const rfcRegex = /^rfc([0-9]+)\.json$/
 
 export default defineEventHandler(async (event) => {
   const { params } = event.context
@@ -10,17 +11,18 @@ export default defineEventHandler(async (event) => {
     throw Error('Expected params')
   }
   const { rfcId } = params
-  const rfcPatterns = rfcId.match(refRegex)
+  const rfcPatterns = rfcId.match(rfcRegex)
   if (!rfcPatterns) {
-    throw Error(`Expected param to match ${rfcId}`)
+    throw Error(
+      `Expected valid URL where the last part matches rfcN.json (N is a number)`
+    )
   }
   const rfcNumberMatch = rfcPatterns[1] // eg '0001'
   const rfcNumber = parseInt(rfcNumberMatch, 10)
   const withoutLeadingZeroes = rfcNumber.toString()
-  // if the rfcNumber has leading zeroes this will fail
+  // if the rfcNumber has leading zeroes this will be false
   if (withoutLeadingZeroes !== rfcNumberMatch) {
-    sendRedirect(event, refsRefTxtPathBuilder(rfcId), 301)
-    return
+    return sendRedirect(event, rfcJSONPathBuilder(rfcId), 301)
   }
 
   const redApi = getRedClient()
@@ -35,9 +37,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  setResponseHeaders(event, {
-    'Content-Type': 'text/plain; charset=utf-8'
-  })
+  const rfcWithMissingData = FIXME_getRFCWithMissingData(rfc)
 
-  return refsRefRfcIdTxt(rfc)
+  const rfcJson = rfcToRfcJSON(rfcWithMissingData)
+
+  return rfcJson
 })

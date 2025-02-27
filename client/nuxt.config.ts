@@ -1,6 +1,7 @@
 /// <reference types="histoire" />
 
 import redirects from './redirects.json'
+import { isMiddlewareRedirect } from './utilities/redirects'
 
 type RouteRules = NonNullable<
   Parameters<typeof defineNuxtConfig>[0]['routeRules']
@@ -92,11 +93,13 @@ export default defineNuxtConfig({
     },
     '/rfc/rfc**.json': {
       swr: oneDayInSeconds,
-      prerender: false // there are too many RFCs to prerender them, but we can at least `swr: true` cache them
+      prerender: false // there are too many RFCs to prerender them, but we can at least cache them via `swr: true`
     },
-    ...redirects.redirects.reduce((acc, redirect) => {
-      acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
-      return acc
-    }, {} as RouteRules)
+    ...redirects.redirects
+      .filter((redirect) => !isMiddlewareRedirect(redirect[0]))
+      .reduce((acc, redirect) => {
+        acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
+        return acc
+      }, {} as RouteRules)
   }
 })

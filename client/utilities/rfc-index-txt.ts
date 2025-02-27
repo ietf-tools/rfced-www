@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
 import { SPACE } from './strings'
-import type { ExtraFieldsNeeded } from './rfc.mocks'
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { formatAuthor, formatIdentifiers } from './rfc'
 import { setTimeoutPromise } from './promises'
@@ -145,9 +144,7 @@ type Layout = {
   longestRfcNumberLength: number
 }
 
-const stringifyRFC = (
-  rfcMetadata: RfcMetadata & Partial<ExtraFieldsNeeded>
-): string => {
+const stringifyRFC = (rfcMetadata: RfcMetadata): string => {
   // Based on https://github.com/rfc-editor/rpcwebsite/blob/edf4896c1d97fdd79a78ee6145e3a0c5ffb11fb9/rfc-ed/bin/rfc2txt.py#L97
   let obsups = ''
   let rfcdate = ''
