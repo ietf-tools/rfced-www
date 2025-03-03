@@ -6,11 +6,7 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { XMLParser } from 'fast-xml-parser'
 import { renderRfcIndexDotXml } from './rfc-index-xml'
 import { parseRFCId } from './rfc'
-import {
-  blankRfcResponse,
-  twoDigitOldestRfcResponse,
-  twoDigitRFCDocListResponse
-} from './rfc.test'
+import { blankRfcResponse, getTestApiResponses } from './rfc.test'
 import { getRedClient } from './redClientWrappers'
 import type {
   ApiClient,
@@ -158,10 +154,7 @@ describe('renderRfcIndexDotXml', () => {
       originalParsedEntries.filter(filterByRFCEntry)
     expect(originalRFCs.length).toBeGreaterThan(10)
 
-    const result = await testHelper({
-      oldestRfcResponse: twoDigitOldestRfcResponse,
-      seekingResponses: [twoDigitRFCDocListResponse]
-    })
+    const result = await testHelper(getTestApiResponses(13))
 
     const resultParser = new XMLParser({
       preserveOrder: true
