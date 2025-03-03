@@ -22,6 +22,8 @@ type Props = {
   longestRfcNumberStringLength?: number
 }
 
+const DEFAULT_MINIMUM_LENGTH = 4 // test suite may have a client that returns fewer, so we want 4 as the minimum
+
 // Incrementally pushes (streams) RFC results
 export async function renderRfcIndexDotTxt({
   push,
@@ -32,8 +34,6 @@ export async function renderRfcIndexDotTxt({
   longestRfcNumberStringLength: _longestRfcNumberStringLength
 }: Props) {
   const docListArg: DocListArg = {}
-
-  let longestRfcNumberStringLength = _longestRfcNumberStringLength
 
   // extract latest RFC to find largest RFC number for layout reasons.
   // the layout reasons are the two columns in the response, and the first
@@ -49,12 +49,11 @@ export async function renderRfcIndexDotTxt({
   }
   const largestRfcNumber = response.results[0].number
 
-  if (longestRfcNumberStringLength === undefined) {
-    longestRfcNumberStringLength = Math.max(
-      4, // test suite may have a client that returns fewer, so we want 4 as the minimum
-      largestRfcNumber.toString().length
-    )
-  }
+  const longestRfcNumberStringLength = Math.max(
+    DEFAULT_MINIMUM_LENGTH,
+    _longestRfcNumberStringLength ?? DEFAULT_MINIMUM_LENGTH,
+    largestRfcNumber.toString().length
+  )
 
   const layout: Layout = {
     longestRfcNumberLength: longestRfcNumberStringLength

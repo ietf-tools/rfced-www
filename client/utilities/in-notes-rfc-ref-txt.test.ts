@@ -27,7 +27,7 @@ const fourDigitRenderingUntilRfc20 = inNotesRfcRefs4Digit
 
 const inNotesRfcRefs5Digit = fs
   .readFileSync(
-    path.join(import.meta.dirname, 'in-notes-rfc-ref-4digit.txt'),
+    path.join(import.meta.dirname, 'in-notes-rfc-ref-5digit.txt'),
     'utf-8'
   )
   .toString()
@@ -35,7 +35,7 @@ const inNotesRfcRefs5Digit = fs
 const fiveDigitRenderingUntilRfc20 = inNotesRfcRefs5Digit
   .substring(
     0,
-    inNotesRfcRefs4Digit.indexOf('\n', inNotesRfcRefs4Digit.indexOf('RFC20')) +
+    inNotesRfcRefs5Digit.indexOf('\n', inNotesRfcRefs5Digit.indexOf('RFC20')) +
       1
   )
   .trimEnd()
@@ -45,7 +45,10 @@ type TestHelperResponses = {
   seekingResponses: PaginatedRfcMetadataList[]
 }
 
-const testHelper = (responses: TestHelperResponses) =>
+const testHelper = (
+  responses: TestHelperResponses,
+  longestRfcNumberStringLength: number
+) =>
   new Promise<string>((resolve) => {
     const redApiMock = getRedClient()
     type DocListArg = Parameters<ApiClient['red']['docList']>[0]
@@ -82,7 +85,8 @@ const testHelper = (responses: TestHelperResponses) =>
         close,
         abortController,
         redApi: redApiMock,
-        delayBetweenRequestsMs: 0
+        delayBetweenRequestsMs: 0,
+        longestRfcNumberStringLength
       })
       resolve(responseTxt)
     })()
@@ -103,7 +107,7 @@ describe('renderInNotesRfcRefDotTxt', () => {
     const date = new Date(2025, 0, 14)
     vi.setSystemTime(date)
 
-    const str = await testHelper(getTestApiResponses(20))
+    const str = await testHelper(getTestApiResponses(20), 4)
 
     // ensure that we read enough of a file
     expect(fourDigitRenderingUntilRfc20.length).toBeGreaterThan(1000)
@@ -114,11 +118,12 @@ describe('renderInNotesRfcRefDotTxt', () => {
     )
   })
 
-  test.skip('compare against 5 digit-wide rendering (RFC10k)', async () => {
+  test('compare against 5 digit-wide rendering (RFC10k)', async () => {
     const date = new Date(2025, 0, 14)
     vi.setSystemTime(date)
 
-    const str = await testHelper(getTestApiResponses(10000))
+    const testApiResponses = getTestApiResponses(20)
+    const str = await testHelper(testApiResponses, 5)
 
     // ensure that we read enough of a file
     expect(fiveDigitRenderingUntilRfc20.length).toBeGreaterThan(100)

@@ -47,7 +47,7 @@ const fiveDigitIndexRendering = fs
   .toString()
 
 const fiveDigitIndexRenderingUntilRfc13 = fiveDigitIndexRendering
-  .substring(0, fourDigitIndexRendering.indexOf(' 14'))
+  .substring(0, fiveDigitIndexRendering.indexOf(' 14'))
   .trimEnd()
 
 type TestHelperResponses = {
