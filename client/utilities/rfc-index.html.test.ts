@@ -9,8 +9,7 @@ import { getRedClient, getRFCs } from './redClientWrappers'
 import { infoRfcPathBuilder } from './url'
 import {
   blankRfcResponse,
-  twoDigitOldestRfcResponse,
-  twoDigitRFCDocListResponse,
+  getTestApiResponses,
   type DocListResponse
 } from './rfc.test'
 import { parseRFCId } from './rfc'
@@ -40,10 +39,7 @@ describe('rfcToRfcIndexRow for /rfc-index/', () => {
   })
 
   test('rfcToRfcIndexRow', async () => {
-    const apiClient = getTestApiClient({
-      oldestRfcResponse: twoDigitOldestRfcResponse,
-      seekingResponses: [twoDigitRFCDocListResponse]
-    })
+    const apiClient = getTestApiClient(getTestApiResponses(13))
     const rfcs = await getRFCs({ apiClient, sort: 'ascending' })
     const rfcSummariesAsVNodes = rfcs.map(
       // This is the thing we're testing

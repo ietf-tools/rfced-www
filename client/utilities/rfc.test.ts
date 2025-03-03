@@ -5,6 +5,7 @@ import { NONBREAKING_SPACE } from './strings'
 import rfcRefs from './rfc-refs.json'
 import rfcJsons from './rfc-jsons.json'
 import { FIXME_getRFCWithMissingData } from './rfc.mocks'
+import { testRFCDocListResponse } from './doc-list-all.mocks'
 import type { ApiClient, Rfc, RfcMetadata } from '~/generated/red-client'
 
 test('parseRFCId', () => {
@@ -27,558 +28,59 @@ test('parseRFCId', () => {
 
 export type DocListResponse = Awaited<ReturnType<ApiClient['red']['docList']>>
 
-export const twoDigitRFCDocListResponse: DocListResponse = {
-  count: 13,
-  next: 'http://localhost:8000/api/red/doc/?limit=50&offset=50&sort=number',
-  previous: null,
-  results: [
-    {
-      number: 1,
-      title: 'Host Software',
-      published: '1969-04-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 11,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0001'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 2,
-      title: 'Host software',
-      published: '1969-04-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 10,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0002'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'pdf', 'html'],
-      keywords: [],
-      errata: ['https://www.rfc-editor.org/errata/rfc2/']
-    },
-    {
-      number: 3,
-      title: 'Documentation conventions',
-      published: '1969-04-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 2,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0003'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [
-        {
-          id: 41973,
-          number: 10,
-          title: 'Documentation conventions'
-        }
-      ],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 4,
-      title: 'Network timetable',
-      published: '1969-03-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 6,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0004'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 5,
-      title: 'Decode Encode Language (DEL)',
-      published: '1969-06-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 17,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0005'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: ['https://www.rfc-editor.org/errata/rfc5/']
-    },
-    {
-      number: 6,
-      title: 'Conversation with Bob Kahn',
-      published: '1969-04-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 1,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0006'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 7,
-      title: 'Host-IMP interface',
-      published: '1969-05-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 7,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0007'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 8,
-      title: 'ARPA Network Functional Specifications',
-      published: '1969-05-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 0,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0008'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['pdf'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 9,
-      title: 'Host Software',
-      published: '1969-05-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 15,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0009'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['pdf'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 10,
-      title: 'Documentation conventions',
-      published: '1969-07-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 3,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0010'
-        }
-      ],
-      obsoletes: [
-        {
-          id: 41972,
-          number: 3,
-          title: 'Documentation conventions'
-        }
-      ],
-      obsoleted_by: [
-        {
-          id: 41980,
-          number: 16,
-          title: 'M.I.T'
-        }
-      ],
-      updates: [],
-      updated_by: [
-        {
-          id: 41981,
-          number: 24,
-          title: 'Documentation Conventions'
-        },
-        {
-          id: 41982,
-          number: 27,
-          title: 'Documentation Conventions'
-        },
-        {
-          id: 41983,
-          number: 30,
-          title: 'Documentation Conventions'
-        }
-      ],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 11,
-      title: 'Implementation of the Host - Host Software Procedures in GORDO',
-      published: '1969-08-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 23,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0011'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [
-        {
-          id: 41985,
-          number: 33,
-          title: 'New Host-Host Protocol'
-        }
-      ],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'pdf', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 12,
-      title: 'IMP-Host interface flow diagrams',
-      published: '1969-08-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 1,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0012'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'ps', 'pdf', 'html'],
-      keywords: [],
-      errata: []
-    },
-    {
-      number: 13,
-      title: 'Zero Text Length EOF Message',
-      published: '1969-08-01',
-      status: {
-        slug: 'unknown',
-        name: 'unknown'
-      },
-      pages: 1,
-      authors: [],
-      group: {
-        acronym: 'none',
-        name: 'Individual Submissions'
-      },
-      area: undefined,
-      stream: {
-        slug: 'legacy',
-        name: 'Legacy',
-        desc: 'Legacy'
-      },
-      identifiers: [
-        {
-          type: 'doi',
-          value: '10.17487/RFC0013'
-        }
-      ],
-      obsoletes: [],
-      obsoleted_by: [],
-      updates: [],
-      updated_by: [],
-      is_also: [],
-      see_also: [],
-      draft: undefined,
-      abstract: '',
-      formats: ['txt', 'html'],
-      keywords: [],
-      errata: []
-    }
-  ]
+type TestApiResponses = {
+  oldestRfcResponse: DocListResponse
+  seekingResponses: DocListResponse[]
 }
 
-export const twoDigitOldestRfcResponse: DocListResponse = {
-  count: 13, //
-  next: 'http://localhost:8000/api/red/doc/?limit=5&offset=5&sort=-number',
-  previous: null,
-  results: [
-    [...twoDigitRFCDocListResponse.results].sort(
-      // sort by highest number
-      (a, b) => b.number - a.number
-    )[0] // first result
-  ]
+export const getTestApiResponses = (
+  untilRfcNumber: number
+): TestApiResponses => {
+  const entireDocListResponse = structuredClone(testRFCDocListResponse)
+
+  const truncatedDocListResponse = {
+    ...entireDocListResponse,
+    results: entireDocListResponse.results
+      .filter((rfcMetadata) => rfcMetadata.number <= untilRfcNumber)
+      .sort((a, b) => a.number - b.number)
+  }
+
+  const oldestRfcResponse: DocListResponse = {
+    count: truncatedDocListResponse.results.length,
+    next: null,
+    previous: null,
+    results: [
+      truncatedDocListResponse.results[
+        truncatedDocListResponse.results.length - 1 // last result
+      ]
+    ]
+  }
+
+  const PAGING_SIZE = 20
+
+  const seekingResponses = truncatedDocListResponse.results.reduce(
+    (acc, _result, index) => {
+      if (index % PAGING_SIZE === 0) {
+        // add a new page
+        acc.push({
+          count: truncatedDocListResponse.results.length,
+          next: null,
+          previous: null,
+          results: truncatedDocListResponse.results.slice(
+            index,
+            index + PAGING_SIZE
+          )
+        })
+      }
+      return acc
+    },
+    [] as DocListResponse[]
+  )
+
+  return {
+    oldestRfcResponse,
+    seekingResponses
+  }
 }
 
 export const blankRfcResponse: DocListResponse = {
@@ -615,7 +117,7 @@ test('refsRefRfcIdTxt', () => {
       const rfcNumberString = filenameMatches[1]
       const rfcNumber = parseInt(rfcNumberString, 10)
 
-      const rfcMetadata = twoDigitRFCDocListResponse.results.find(
+      const rfcMetadata = testRFCDocListResponse.results.find(
         (rfcMetadata) => rfcMetadata.number === rfcNumber
       )
 
@@ -691,7 +193,7 @@ test('rfcToRfcJSON', () => {
         abstract: expectedResult.abstract?.trim() // remove spaces on either end of 'abstract'
       }
 
-      const rfcMetadata = twoDigitRFCDocListResponse.results.find(
+      const rfcMetadata = testRFCDocListResponse.results.find(
         (rfcMetadata) => rfcMetadata.number === rfcNumber
       )
 

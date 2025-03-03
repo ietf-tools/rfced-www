@@ -3,11 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 import { splitLinesAt, renderRfcIndexDotTxt } from './rfc-index-txt'
-import {
-  twoDigitOldestRfcResponse,
-  twoDigitRFCDocListResponse,
-  type DocListResponse
-} from './rfc.test'
+import { getTestApiResponses, type DocListResponse } from './rfc.test'
 import { getRedClient } from './redClientWrappers'
 import type {
   ApiClient,
@@ -51,7 +47,7 @@ const fiveDigitIndexRendering = fs
   .toString()
 
 const fiveDigitIndexRenderingUntilRfc13 = fiveDigitIndexRendering
-  .substring(0, fourDigitIndexRendering.indexOf(' 14'))
+  .substring(0, fiveDigitIndexRendering.indexOf(' 14'))
   .trimEnd()
 
 type TestHelperResponses = {
@@ -59,7 +55,10 @@ type TestHelperResponses = {
   seekingResponses: PaginatedRfcMetadataList[]
 }
 
-const testHelper = (responses: TestHelperResponses) =>
+const testHelper = (
+  responses: TestHelperResponses,
+  longestRfcNumberStringLength: number
+) =>
   new Promise<string>((resolve) => {
     const redApiMock = getRedClient()
     type DocListArg = Parameters<ApiClient['red']['docList']>[0]
@@ -96,7 +95,8 @@ const testHelper = (responses: TestHelperResponses) =>
         close,
         abortController,
         redApi: redApiMock,
-        delayBetweenRequestsMs: 0
+        delayBetweenRequestsMs: 0,
+        longestRfcNumberStringLength
       })
       resolve(responseTxt)
     })()
@@ -117,10 +117,13 @@ describe('renderRfcIndexDotTxt', () => {
     const date = new Date(2025, 0, 14)
     vi.setSystemTime(date)
 
-    const str = await testHelper({
-      oldestRfcResponse: twoDigitOldestRfcResponse,
-      seekingResponses: [twoDigitRFCDocListResponse]
-    })
+    const str = await testHelper(
+      getTestApiResponses(
+        // FIXME: handle more of the file
+        13
+      ),
+      4
+    )
 
     // ensure that we read enough of a file
     expect(fourDigitIndexRenderingUntilRfc13.length).toBeGreaterThan(1000)
@@ -135,30 +138,13 @@ describe('renderRfcIndexDotTxt', () => {
     const date = new Date(2025, 0, 14)
     vi.setSystemTime(date)
 
-    const fiveDigitRfcNumber = 10000
-    const fiveDigitOldestRfcResponse: DocListResponse = {
-      ...twoDigitOldestRfcResponse,
-      count: fiveDigitRfcNumber,
-      results: [
-        {
-          ...twoDigitOldestRfcResponse.results[0],
-          number: fiveDigitRfcNumber
-        }
-      ]
-    }
-
-    const str = await testHelper({
-      oldestRfcResponse: fiveDigitOldestRfcResponse,
-      seekingResponses: [
-        {
-          ...twoDigitRFCDocListResponse,
-          results: [
-            ...twoDigitRFCDocListResponse.results,
-            { ...fiveDigitOldestRfcResponse.results[0] }
-          ]
-        }
-      ]
-    })
+    const str = await testHelper(
+      getTestApiResponses(
+        // FIXME: handle more of the file
+        19
+      ),
+      5
+    )
 
     // ensure that we read enough of a file
     expect(fiveDigitIndexRenderingUntilRfc13.length).toBeGreaterThan(100)

@@ -19,7 +19,10 @@ type Props = {
   abortController: AbortController
   redApi: ApiClient
   delayBetweenRequestsMs: number
+  longestRfcNumberStringLength?: number
 }
+
+const DEFAULT_MINIMUM_LENGTH = 4 // test suite may have a client that returns fewer, so we want 4 as the minimum
 
 // Incrementally pushes (streams) RFC results
 export async function renderRfcIndexDotTxt({
@@ -27,7 +30,8 @@ export async function renderRfcIndexDotTxt({
   close,
   abortController,
   redApi,
-  delayBetweenRequestsMs
+  delayBetweenRequestsMs,
+  longestRfcNumberStringLength: _longestRfcNumberStringLength
 }: Props) {
   const docListArg: DocListArg = {}
 
@@ -40,15 +44,17 @@ export async function renderRfcIndexDotTxt({
   docListArg.limit = 1 // we only need one result
 
   const response = await redApi.red.docList(docListArg)
-
   if (response.results.length !== 1) {
     throw Error('Unable to retrieve single response of largest RFC number')
   }
   const largestRfcNumber = response.results[0].number
+
   const longestRfcNumberStringLength = Math.max(
-    4, // test suite may have a client that returns fewer, so we want 4 as the minimum
+    DEFAULT_MINIMUM_LENGTH,
+    _longestRfcNumberStringLength ?? DEFAULT_MINIMUM_LENGTH,
     largestRfcNumber.toString().length
   )
+
   const layout: Layout = {
     longestRfcNumberLength: longestRfcNumberStringLength
   }

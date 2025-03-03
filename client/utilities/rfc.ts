@@ -162,7 +162,7 @@ type Author = RfcMetadata['authors'][number]
  */
 export const formatAuthor = (
   author: Author,
-  style: 'regular' | 'brief'
+  style: 'regular' | 'brief' | 'reverse'
 ): string => {
   const name = author.name
     .split(/[\s.]/g)
@@ -184,11 +184,23 @@ export const formatAuthor = (
         return `${acc}${newBit}`
       }
 
-      const newBit =
-        index === arr.length - 1 ?
-          `${item}, `
-        : `${item.substring(0, 1).toUpperCase()}.`
-      return `${newBit}${acc}`
+      if (style === 'brief') {
+        const newBit =
+          index === arr.length - 1 ?
+            `${item}, `
+          : `${item.substring(0, 1).toUpperCase()}.`
+        return `${newBit}${acc}`
+      }
+
+      if (style === 'reverse') {
+        const newBit =
+          index === arr.length - 1 ?
+            `${item}, `
+          : `${item.substring(0, 1).toUpperCase()}.`
+        return `${newBit}${acc}`
+      }
+
+      return acc
     }, '')
 
   return author.affiliation === 'Editor' ? `${name}, Ed.` : name

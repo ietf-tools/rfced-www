@@ -100,13 +100,15 @@ const renderRFCs = async ({
           ...(rfc.formats ?
             {
               format: {
-                'file-format': rfc.formats.map((format) =>
-                  formatFormat(
-                    format,
-                    // FIXME: get info on whether it's a pre-V3 rfc.... or ensure API will return ASCII
-                    true
+                'file-format': rfc.formats
+                  .sort((a, b) => -a.localeCompare(b))
+                  .map((format) =>
+                    formatFormat(
+                      format,
+                      // FIXME: get info on whether it's a pre-V3 rfc.... or ensure API will return ASCII
+                      true
+                    )
                   )
-                )
               }
             }
           : {}),
