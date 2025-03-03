@@ -30,4 +30,4 @@ DOCS TODO ~~WIP: Here's [a sample file of the new `rfc/rfc*.json`](https://githu
 
 #### HTML pages
 
-Consumers that scrapes rfc-editor.org HTML pages should expect a different HTML structure, necessary for the new graphic design. No guarantees about maintaining HTML structure can be made. We recommend that software migrate to JSON or XML APIs instead of scraping HTML as this will be more resilient against these design changes.
+Consumers that scrapes rfc-editor.org HTML pages should expect a different HTML structure when the new site is released. This is necessary for the new graphic design. No guarantees about maintaining HTML structure can be made and further changes may occur even after the release of the site. We recommend that software migrate to JSON or XML APIs instead of scraping HTML as this will be more resilient against these design changes.
