@@ -6,9 +6,6 @@ import { setTimeoutPromise } from './promises'
 import { PUBLIC_SITE, infoRfcPathBuilder } from './url'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
-// Note: this file is intentionally named rfc-index-txt.ts not rfc-index.txt.ts
-// because vitest can't import that later filename
-
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
 type Props = {
@@ -168,7 +165,7 @@ const stringifyRFC = (rfcMetadata: RfcMetadata): string => {
 }
 
 /**
- * Just fyi although this looks superficially like a table, the individual rows can be wider
+ * Although this looks superficially like a table, the individual rows can be wider
  * than the column. So it's not really a table and we can't use conventional ASCII table formatters.
  */
 const getHeader = (layout: Layout): string => {
