@@ -24,9 +24,14 @@ The global changes. Here's [a sample file of the new `rfc-index.xml`](https://ra
 
 The generated feeds aren't identical as the new feed generator uses `<![CDATA[]]>` escaping but compliant RSS/ATOM clients should handle this. For the developer details see [#27](https://github.com/ietf-tools/rfced-www/pull/27). The global API changes apply to this API too. No redirects are expected.
 
-#### `/rfc/rfc*.json`
+TODO: sample files
 
-DOCS TODO ~~WIP: Here's [a sample file of the new `rfc/rfc*.json`](https://github.com/ietf-tools/rfced-www/blob/main/client/utilities/rfc-jsons.json). No redirect is expected.~~
+#### `/rfc/rfc*.json`
+(where * is a valid RFC number. For example, [rfc9000.json](https://www.rfc-editor.org/rfc/rfc9000.json))
+
+In earlier RFC JSON files (approximately RFC1-RFC4039) there's extra whitespace in earlier RFCs. For example, [rfc10.json](https://www.rfc-editor.org/rfc/rfc10.json) has an extra space character before and after the `title`, `abstract`, and `keywords`. This whitespace wasn't present in equivalent APIs like `/rfc-index.xml`, and this whitespace will be removed in the new version of the API.  The global API changes apply to this API too. No redirects are expected for this API.
+
+TODO: sample files
 
 #### HTML pages
 
