@@ -20,7 +20,7 @@
       v-if="props.hasInternalLink && anchorId"
       :href="`#${anchorId}`"
       class="ml-2 opacity-50 no-underline group-hover:opacity-100"
-      title="Internal link to this heading"
+      title="Link to this heading"
       >#</a
     >
   </component>

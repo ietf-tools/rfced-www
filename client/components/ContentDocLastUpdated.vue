@@ -1,15 +1,18 @@
 <template>
   <Popover v-if="thisContentMetadata" class="relative print:hidden">
     <PopoverButton
-      class="focus:bg-gray-300 dark:focus:bg-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-md px-2 -ml-2"
+      class="rounded-md text-sm px-2 py-4 -ml-2 focus:bg-gray-300 dark:focus:bg-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500"
     >
       Last updated {{ relativeDate }}
     </PopoverButton>
 
-    <PopoverPanel class="absolute z-10 border-2 rounded-md py-1 px-2">
+    <PopoverPanel
+      class="absolute z-10 border-2 rounded-md py-1 px-2 bg-white dark:bg-black"
+    >
       <p class="font-mono">Last updated {{ localisedDate }}</p>
     </PopoverPanel>
   </Popover>
+
   <p v-if="thisContentMetadata" class="hidden print:block font-mono">
     Last updated {{ relativeDate }}, {{ localisedDate }}
   </p>
@@ -32,6 +35,6 @@ let relativeDate: string | null = null
 if (thisContentMetadata) {
   const datetime = DateTime.fromISO(thisContentMetadata.mtime)
   relativeDate = datetime.toRelativeCalendar()
-  localisedDate = datetime.toLocaleString(DateTime.DATETIME_HUGE)
+  localisedDate = datetime.toISO()
 }
 </script>
