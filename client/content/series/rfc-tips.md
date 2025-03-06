@@ -1,8 +1,8 @@
-# Tips for Reading RFCs (/series/rfc-tips/) {#tips-for-reading-rfcs-(/series/rfc-tips/)}
+# Tips for Reading RFCs
 
 The RFC Series uses certain conventions that may not be familiar to all readers. Some of the most common are listed here; refer to this more [in-depth overview](https://www.ietf.org/blog/how-read-rfc/) for further information.
 
-### Status
+## Status
 
 Not all RFCs are standards, so Status is used to indicate the type of RFC. [Statuses may change over time](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-on-designating-rfcs-as-historic-20140720/).
 
@@ -20,14 +20,14 @@ Other RFC Statuses are:
 - **Best Current Practice** (BCP). BCPs have a dual role: one is to document IETF processes as agreed by the IETF community, and the other is explained in [RFC 2026, Section 5](/rfc/rfc2026.html#section-5) as: “since the Internet itself is composed of networks operated by a great variety of organizations, with diverse goals and rules, good user service requires that the operators and administrators of the Internet follow some common guidelines for policies and operations.”
 - **Unknown**. RFCs that were published before Statuses were introduced (before RFC 1128\) are mostly considered to have an Unknown Status, with a handful having had Statuses retroactively applied.
 
-### Subseries
+## Subseries
 
 There are two subseries within the RFC corpus. Not all RFCs are part of a subseries. Subseries identifiers are intended to be stable identifiers for an RFC or a group of related RFCs. When an RFC is obsoleted, the RFC is dropped from the subseries, but the subseries identifier will remain the same. When a related RFC is published, it may be added to an existing subseries identifier.
 
 - **STD**. STDs are stable identifiers for “Internet Standards.” An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
 - **BCP**. BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs related to a specific IETF process or recommended guidelines.
 
-### Stream
+## Stream
 
 An RFC’s stream indicates which publication stream produced the document. There are five possible streams:
 
@@ -39,11 +39,11 @@ An RFC’s stream indicates which publication stream produced the document. Ther
 
 RFCs that were published before any stream existed are given the label “\[Legacy\]” in place of a stream name.
 
-### Source
+## Source
 
 An RFC’s source indicates the IETF working group and area that produced the document. A source is only listed for RFCs produced by the IETF Stream, as the other production streams are single source.
 
-### Changes to RFCs
+## Changes to RFCs
 
 Once an RFC is published, the content of that document doesn’t change. New or updated information is published in new RFCs. When this happens, there will be information in the metadata about where to find these related documents. An RFC’s metadata may contain the following:
 
@@ -52,11 +52,11 @@ Once an RFC is published, the content of that document doesn’t change. New or 
 - **Obsoletes**: RFCs listed here are completely replaced by this document. You do not need to read the RFCs listed here to understand current practices.
 - **Obsoleted By**: RFCs listed here completely replace this document. In other words, you should not read this document, you should read the RFCs listed here that have obsoleted it.
 
-### Errata
+## Errata
 
 Errata are listed in the Errata section of the sidebar for each RFC when they exist. Errata with a Verified status have been reviewed and are considered accurate (see the [Errata](/series/rfc-errata/) page to learn more). Errata are not incorporated into the TXT, PDF, or XML formats of RFCs. Errata only appear in the display version on this site, or the downloadable HTML version that specifically includes errata.
 
-### Keywords for Requirement Levels
+## Keywords for Requirement Levels
 
 When you see one of the following words in all capital letters in an RFC, it has a special meaning as defined in [RFC 2119](/info/rfc2119/) and updated by [RFC 8174](/rfc/rfc8174/). This only applies when the words are in all capitals.
 

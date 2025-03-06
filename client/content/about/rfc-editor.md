@@ -29,16 +29,16 @@ The RFC Production Center (RPC) is a team of professional editors that [prepares
 
 The RFC Editor function is currently defined and governed by the following RFCs:
 
-- [RFC 2026:](/info/rfc2026/) Bradner, S., “The Internet Standards Process — Revision 3”, BCP 9, RFC 2026, October 1996\.
-- [RFC 4846:](/info/rfc4846/) Klensin, J., Ed., and D. Thaler, Ed., “Independent Submissions to the RFC Editor”, RFC 4846, July 2007\.
+- [RFC 2026:](/info/rfc2026/) Bradner, S., “The Internet Standards Process — Revision 3”, BCP 9, RFC 2026, October 1996.
+- [RFC 4846:](/info/rfc4846/) Klensin, J., Ed., and D. Thaler, Ed., “Independent Submissions to the RFC Editor”, RFC 4846, July 2007.
 - [RFC 6410:](/info/rfc6410/) Housley, R., Crocker, D., and E. Burger, “Reducing the Standards Track to Two Maturity Levels”, BCP 9, RFC 6410, October 2011.
-- [RFC 8711:](/info/rfc8711/) Haberman, B., Hall, J., and J. Livingood, “Structure of the IETF Administrative Support Activity, Version 2.0”, BCP 101, RFC 8711, February 2020\.
-- [RFC 8729:](/info/rfc8729/) Housley, R., Ed., and L. Daigle, Ed., “The RFC Series and RFC Editor”, RFC 8729, February 2020\.
-- [RFC 8730:](/info/rfc8730/) Brownlee, N., Ed., and B. Hinden, Ed., “Independent Submission Editor Model”, RFC 8730, February 2020\.
-- [RFC 9280:](/info/rfc9280/) Saint-Andre, P., Ed., “RFC Editor Model (Version 3)” RFC 9280, June 2022\.
-- [RFC 9281:](/info/rfc9281/) Salz, R., “Entities Involved in the IETF Standards Process”, BCP 11, RFC 9281, June 2022\.
-- [RFC 9282:](/info/rfc9282/) Rosen, B., “Responsibility Change for the RFC Series”, RFC 9282, June 2022\.
-- [RFC 9283:](/info/rfc9283/) Carpenter, B., Ed., “IAB Charter Update for RFC Editor Model”, BCP 39, RFC 9283, June 2022\.
+- [RFC 8711:](/info/rfc8711/) Haberman, B., Hall, J., and J. Livingood, “Structure of the IETF Administrative Support Activity, Version 2.0”, BCP 101, RFC 8711, February 2020.
+- [RFC 8729:](/info/rfc8729/) Housley, R., Ed., and L. Daigle, Ed., “The RFC Series and RFC Editor”, RFC 8729, February 2020.
+- [RFC 8730:](/info/rfc8730/) Brownlee, N., Ed., and B. Hinden, Ed., “Independent Submission Editor Model”, RFC 8730, February 2020.
+- [RFC 9280:](/info/rfc9280/) Saint-Andre, P., Ed., “RFC Editor Model (Version 3)” RFC 9280, June 2022.
+- [RFC 9281:](/info/rfc9281/) Salz, R., “Entities Involved in the IETF Standards Process”, BCP 11, RFC 9281, June 2022.
+- [RFC 9282:](/info/rfc9282/) Rosen, B., “Responsibility Change for the RFC Series”, RFC 9282, June 2022.
+- [RFC 9283:](/info/rfc9283/) Carpenter, B., Ed., “IAB Charter Update for RFC Editor Model”, BCP 39, RFC 9283, June 2022.
 
 The following RFCs define particular RFC contents:
 

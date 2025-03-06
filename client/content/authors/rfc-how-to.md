@@ -1,4 +1,4 @@
-# How to Write an RFC (/authors/rfc-how-to/) {#how-to-write-an-rfc-(/authors/rfc-how-to/)}
+# How to Write an RFC
 
 RFCs all begin as [Internet-Drafts](https://authors.ietf.org/#introducing-internet-drafts) (I-Ds) that have been adopted by an [IETF working group](https://www.ietf.org/process/wgs/) or by one of the other streams for document publication.
 

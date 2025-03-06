@@ -3,6 +3,8 @@
 </template>
 
 <script setup lang="ts">
+// TODO: delete this?
+
 import type { NavItem } from '@nuxt/content'
 import type { BreadcrumbItem } from './BreadcrumbsTypes'
 

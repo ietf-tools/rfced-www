@@ -1,5 +1,5 @@
 <template>
-  <Heading :id="props.id" level="5">
+  <Heading :id="props.id" level="5" class="pt-3 pb-1">
     <a v-if="props.id && generate" :href="`#${props.id}`">
       <slot />
     </a>

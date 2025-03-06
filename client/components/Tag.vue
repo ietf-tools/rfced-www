@@ -38,6 +38,8 @@
 </template>
 
 <script setup lang="ts">
+import { getVNodeText } from '~/utilities/vue'
+
 type Props = {
   text: (string | VNode)[]
   class?: string
@@ -45,23 +47,11 @@ type Props = {
 
 const props = defineProps<Props>()
 
-// Is this safe? It seems to work
-function getText(obj: VNode | string): string {
-  if (typeof obj === 'string') {
-    return obj
-  } else if (typeof obj.children === 'string') {
-    return obj.children
-  } else if (Array.isArray(obj.children)) {
-    return obj.children
-      .map((item) => getText(item as ReturnType<typeof h>))
-      .join('')
-  }
-  return ''
-}
-
 const totalTextLength = computed(() => {
   return props.text.reduce((acc, item): number => {
-    return acc + (typeof item === 'string' ? item.length : getText(item).length)
+    return (
+      acc + (typeof item === 'string' ? item.length : getVNodeText(item).length)
+    )
   }, 0)
 })
 </script>

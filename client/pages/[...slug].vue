@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-[100vh]">
     <div class="container mx-auto">
-      <ContentBreadcrumbs />
+      <!-- <ContentBreadcrumbs /> -->
       <ContentDoc />
       <ContentDocLastUpdated />
     </div>
