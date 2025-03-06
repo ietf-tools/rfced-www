@@ -1,12 +1,12 @@
 <template>
   <component
     :is="`h${props.level}`"
+    :id="props.hasInternalLink ? anchorId : undefined"
     :class="[
       headingStyles[`h${props.styleLevel || props.level}`],
       props.class,
       'group'
     ]"
-    :id="anchorId"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
@@ -16,9 +16,8 @@
       :opacity="0.05"
     />
     <slot />
-
     <a
-      v-if="anchorId"
+      v-if="props.hasInternalLink && anchorId"
       :href="`#${anchorId}`"
       class="ml-2 opacity-50 no-underline group-hover:opacity-100"
       title="Internal link to this heading"
@@ -59,16 +58,14 @@ type Props = {
   styleLevel?: Level
   class?: VueStyleClass
   hasIcon?: boolean
+  hasInternalLink?: boolean
 }
 
 const slots = useSlots()
 const defaultSlot = slots.default ? slots.default() : []
-const slotText: string = getVNodeText(defaultSlot).replace(
-  // otherwise they'll interpret it as 'RF Cs'
-  /RFCs/g,
-  'rfcs'
-)
-const anchorId = slotText.trim() ? kebabCase(slotText) : undefined
+const slotText = getVNodeText(defaultSlot)
+const slotTextNormalised = slotText.trim().toLowerCase() // otherwise kebabCase() will split works with casing like 'RFCs' into 'rf-cs'
+const anchorId = slotTextNormalised ? kebabCase(slotTextNormalised) : undefined
 
 type Level = '1' | '2' | '3' | '4' | '5' | '6'
 
