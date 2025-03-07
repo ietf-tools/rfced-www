@@ -39,7 +39,7 @@ Please review the full content of the document, as this cannot change once the R
 
 **Copyright notices and legends**
 
-Please review the copyright notice and legends as defined in RFC 5378 and the Trust Legal Provisions (TLP \u2013 [https://trustee.ietf.org/license-info/](https://trustee.ietf.org/license-info/)).
+Please review the copyright notice and legends as defined in RFC 5378 and the Trust Legal Provisions (TLP [https://trustee.ietf.org/license-info/](https://trustee.ietf.org/license-info/)).
 
 **Semantic markup**
 
@@ -51,7 +51,7 @@ Please review the PDF, HTML, and TXT files to ensure that the formatted output, 
 
 ### Submitting changes
 
-To submit changes, please reply to the email using \u2018REPLY ALL\u2019 as all the parties CCed on the message need to see your changes. The parties include:
+To submit changes, please reply to the email using _REPLY ALL_ as all the parties CCed on the message need to see your changes. The parties include:
 
 - your coauthors
 - [rfc-editor@rfc-editor.org](mailto:rfc-editor@rfc-editor.org) (the RPC team)
@@ -67,17 +67,19 @@ You may submit your changes in one of two ways:
 
 An update to the provided XML file
 
-\u2014 OR \u2014
+**OR**
 
 An explicit list of changes in this format
 
+```
 Section # (or indicate Global)
 
-OLD:  
+OLD:
 old text
 
-NEW:  
+NEW:
 new text
+```
 
 You do not need to reply with both an updated XML file and an explicit list of changes, as either form is sufficient.
 
@@ -85,7 +87,7 @@ We will ask a stream manager to review and approve any changes that seem beyond 
 
 ### Approving for publication
 
-To approve your RFC for publication, please reply to this email stating that you approve this RFC for publication. Please use \u2018REPLY ALL\u2019, as all the parties CC\u2019ed on this message need to see your approval.
+To approve your RFC for publication, please reply to this email stating that you approve this RFC for publication. Please use _REPLY ALL_, as all the parties CC\*ed on this message need to see your approval.
 
 ### Files
 

@@ -4,6 +4,6 @@
   </p>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // Note: No padding below the paragraph, so that this can be close to following lists/tables etc.
 </script>

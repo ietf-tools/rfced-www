@@ -63,6 +63,17 @@ type Props = {
 
 const slots = useSlots()
 const defaultSlot = slots.default ? slots.default() : []
+
+console.log(
+  'slots',
+  Object.keys(slots),
+  Object.keys(slots.default),
+  typeof slots.default,
+  slots.default._n,
+  slots.default._c,
+  slots.default._d
+)
+
 const slotText = getVNodeText(defaultSlot)
 const slotTextNormalised = slotText.trim().toLowerCase() // otherwise kebabCase() will split works with casing like 'RFCs' into 'rf-cs'
 const anchorId = slotTextNormalised ? kebabCase(slotTextNormalised) : undefined

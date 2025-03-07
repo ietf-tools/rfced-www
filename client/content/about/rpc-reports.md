@@ -1,4 +1,4 @@
-# Reports (/about/rpc-reports/)
+# Reports
 
 This page contains useful information regarding the performance of the RFC Production Center (RPC). It includes news items (updated as needed) and stats about production that are updated on a quarterly basis.
 

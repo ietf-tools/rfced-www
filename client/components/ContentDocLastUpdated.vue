@@ -9,12 +9,12 @@
     <PopoverPanel
       class="absolute z-10 border-2 rounded-md py-1 px-2 bg-white dark:bg-black"
     >
-      <p class="font-mono">Last updated {{ localisedDate }}</p>
+      <p class="font-mono">Last updated {{ fullDate }}</p>
     </PopoverPanel>
   </Popover>
 
   <p v-if="thisContentMetadata" class="hidden print:block font-mono">
-    Last updated {{ relativeDate }}, {{ localisedDate }}
+    Last updated {{ relativeDate }}, {{ fullDate }}
   </p>
 </template>
 
@@ -29,12 +29,12 @@ const contentMetadata: ContentMetadata = _contentMetadata
 const route = useRoute()
 const thisContentMetadata = contentMetadata[route.path]
 
-let localisedDate: string | null = null
+let fullDate: string | null = null
 let relativeDate: string | null = null
 
 if (thisContentMetadata) {
   const datetime = DateTime.fromISO(thisContentMetadata.mtime)
   relativeDate = datetime.toRelativeCalendar()
-  localisedDate = datetime.toISO()
+  fullDate = datetime.toISO() // don't use localised date, because this will be cached for all users so there is no local timezone except server timezone which is irrelevant for users
 }
 </script>

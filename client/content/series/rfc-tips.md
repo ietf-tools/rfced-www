@@ -37,7 +37,7 @@ An RFC’s stream indicates which publication stream produced the document. Ther
 - [**Independent Submissions**](/independent/) RFCs are published outside the official processes of the IETF, IAB, and IRTF but are relevant to the Internet community.
 - **Editorial** RFCs are produced by the RFC Series Working Group ([RSWG](https://datatracker.ietf.org/group/rswg/about/)) and document the policies for publishing RFCs.
 
-RFCs that were published before any stream existed are given the label “\[Legacy\]” in place of a stream name.
+RFCs that were published before any stream existed are given the label “[Legacy]” in place of a stream name.
 
 ## Source
 

@@ -47,7 +47,7 @@ Requirement
 The Digital Object Identifier (DOI) is now listed in each reference to an RFC. The first example in [Section 4.8.6.2 of RFC 7322](/rfc/rfc7322/#section-4.8.6.2) is updated as follows.  
 For one author or editor: 
 
-`[RFCXXXX\] Last name, First initial., Ed. (if applicable), “RFC Title”, Sub-series number (if applicable), RFC number, DOI, Date of publication, <https://www.rfc-editor.org/info/rfc#>.`
+`[RFCXXXX] Last name, First initial., Ed. (if applicable), “RFC Title”, Sub-series number (if applicable), RFC number, DOI, Date of publication, <https://www.rfc-editor.org/info/rfc#>.`
 
 **Example:**  
 `[RFC3080] Rose, M., “The Blocks Extensible Exchange Protocol Core”, RFC 3080, DOI 10.17487/RFC3080, March 2001, <[https://www.rfc-editor.org/info/rfc3080/](/info/rfc3080/)\>.`
@@ -58,30 +58,30 @@ This guidance overrides [Section 4.8.6.3 of RFC 7322](/rfc/rfc7322/#section-4.8.
 
 Internet Standards (STDs) and Best Current Practices (BCPs) may consist of a single RFC or multiple RFCs. When an STD or BCP is referenced, the reference entry should include ALL of the RFCs comprising that sub-series. The authors should refer to specific RFC numbers as part of the text (not as citations) and cite the sub-series number. The URI to the STD or BCP info page is to be included. The text should appear as follows:
 
-See RFC 3552 \[BCP72\].
+See RFC 3552 [BCP72].
 
 **An STD reference should be formatted as follows:**  
-`\[STDXXX\] Internet Standard XXX, <https://www.rfc-editor.org/info/std#>.` At the time of writing, this STD comprises the following:
+`[STDXXX] Internet Standard XXX, <https://www.rfc-editor.org/info/std#>.` At the time of writing, this STD comprises the following:
 
 `Last name, First initial., Ed. (if applicable), “RFC Title”, STD XXX, RFC number, DOI number, Date of publication, <https://www.rfc-editor.org/info/rfc#>.`
 
 **Example:**  
-`\[STD80\] Internet Standard 80, <https://www.rfc-editor.org/info/std80>.` At the time of writing, this STD comprises the following:
+`[STD80] Internet Standard 80, <https://www.rfc-editor.org/info/std80>.` At the time of writing, this STD comprises the following:
 
 `Cerf, V., “ASCII format for network interchange”, STD 80, RFC 20, DOI 10.17487/RFC0020, October 1969, <https://www.rfc-editor.org/info/rfc20>:`
 
 **A BCP reference should be formatted as follows:**  
-\[BCPXXX\] Best Current Practice XXX, <http://www.rfc-editor.org/info/bcp#>. At the time of writing, this BCP comprises the following:
+[BCPXXX] Best Current Practice XXX, <http://www.rfc-editor.org/info/bcp#>. At the time of writing, this BCP comprises the following:
 
 `Last name, First initial., Ed. (if applicable) and First initial. Last name, Ed. (if applicable), “RFC Title”, BCP XXX, RFC number, DOI number, Date of publication, <https://www.rfc-editor.org/info/rfc#>.`
 
 [Referencing Errata](/styleguide/part2/#ref_errata)
 
 The format for errata references described in [Section 4.8.6.5 of RFC 7322](/rfc/rfc7322/#section-4.8.6.5) is updated as follows:  
-`\[ErrNumber\] RFC Errata, Erratum ID number, RFC number, <URI>`. 
+`[ErrNumber] RFC Errata, Erratum ID number, RFC number, <URI>`. 
 
 **Example:**  
-`\[Err3607\] RFC Errata, Erratum ID 3607, RFC 4627, [https://www.rfc-editor.org/errata/eid3607](/errata/eid3607/).`
+`[Err3607] RFC Errata, Erratum ID 3607, RFC 4627, [https://www.rfc-editor.org/errata/eid3607](/errata/eid3607/).`
 
 For more details, see the [announcement on the RFC interest list](https://mailarchive.ietf.org/arch/msg/rfc-interest/F4LLPSsmKKTr3McvyGCQEPiZFhE/).
 
@@ -91,13 +91,13 @@ Errata in the [Reported state](/errata-definitions/) should not be referenced; t
 
 Use the following form to reference IANA registries. Note that the top-level URL is used when referring to a group of registries and/or specific registries within the group. 
 
-\[NAME\] IANA, “Registry Group or Registry Name”, <URL>.
+[NAME] IANA, “Registry Group or Registry Name”, <URL>.
 
 **Example for a registry group:**  
-\[IANA-ANCP\] IANA, “Access Node Control Protocol (ANCP)”, <[https://www.iana.org/assignments/ancp](https://www.iana.org/assignments/ancp)\>.
+[IANA-ANCP] IANA, “Access Node Control Protocol (ANCP)”, <[https://www.iana.org/assignments/ancp](https://www.iana.org/assignments/ancp)\>.
 
 **Example for a specific registry within the group:**  
-\[IANA\] IANA, “ANCP Message Types”, <[https://www.iana.org/assignments/ancp](https://www.iana.org/assignments/ancp)\>.
+[IANA] IANA, “ANCP Message Types”, <[https://www.iana.org/assignments/ancp](https://www.iana.org/assignments/ancp)\>.
 
 Note: This guidance was developed in coordination with IANA.
 
@@ -106,7 +106,7 @@ Note: This guidance was developed in coordination with IANA.
 The format for references to Internet-Drafts described in [Section 4.8.6.4 of RFC 7322](/rfc/rfc7322.html#section-4.8.6.4) is updated to include the day of posting (in addition to the month and year), the word “Internet-Draft”, and the URL of the HTML file. 
 
 **Example:**  
-\[RFC7322bis\] Levine, J., Ed., and S. Ginoza, “RFC Style Guide”, Work in Progress, Internet-Draft, draft-flanagan-7322bis-07, 7 April 2021, <[https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07](https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07)\>.
+[RFC7322bis] Levine, J., Ed., and S. Ginoza, “RFC Style Guide”, Work in Progress, Internet-Draft, draft-flanagan-7322bis-07, 7 April 2021, <[https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07](https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07)\>.
 
 [Referencing Web-Based Public Code Repositories (e.g., GitHub)](/part2/#ref_repo)
 
@@ -121,15 +121,15 @@ Format of reference entries:
 - URL — include URL to main page of repository
 
 **Examples:**  
-\[pysaml2\] “Python implementation of SAML2”, commit 7135d53, March 2018, <[https://github.com/IdentityPython/pysaml2](https://github.com/IdentityPython/pysaml2)\>.
+[pysaml2] “Python implementation of SAML2”, commit 7135d53, March 2018, <[https://github.com/IdentityPython/pysaml2](https://github.com/IdentityPython/pysaml2)\>.
 
-\[linuxlite\] “Linux Lite”, March 2018, <[https://sourceforge.net/projects/linuxlite/](https://sourceforge.net/projects/linuxlite/)\>.
+[linuxlite] “Linux Lite”, March 2018, <[https://sourceforge.net/projects/linuxlite/](https://sourceforge.net/projects/linuxlite/)\>.
 
 [Referencing Email on Mailing Lists](/part2/#ref_email_list)
 
 When referencing emails to mailing lists, use the following template: 
 
-\[reftag\] Sender, A., “Subject: Subject line”, message to the  
+[reftag] Sender, A., “Subject: Subject line”, message to the  
 listname mailing list, DD Month YYYY, .
 
 [Index Placement](/part2/#index_placement)
@@ -156,7 +156,7 @@ Double negatives are discouraged.
 
 Avoid forming compounds by hyphenating RFC numbers; this can be accomplished by 
 
-- rewording the sentence (e.g., “\[RFC5011\]-style rollover” –> “rollover as described in RFC 5011 \[RFC5011\]”).
+- rewording the sentence (e.g., “[RFC5011]-style rollover” –> “rollover as described in RFC 5011 [RFC5011]”).
 - adding a note in either the Terminology or Conventions section mentioning the RFC so that other occurrences throughout the text will be understood by the reader to be in the style of said RFC (e.g., “This document uses the term “rollover” as defined in RFC 5011”).
 
 [Abbreviations as Verbs](/part2/#abbrev_as_verb)
@@ -173,11 +173,11 @@ An in-text citation may a) follow the subject for which it is being cited as a s
 
 **For example:**
 
-a) As part of the transition to IPv6, NAT64 \[RFC6146\] and DNS64 \[RFC6147\] technologies will be utilized by some access networks to provide IPv4 connectivity for IPv6-only nodes \[RFC6144\].
+a) As part of the transition to IPv6, NAT64 [RFC6146] and DNS64 [RFC6147] technologies will be utilized by some access networks to provide IPv4 connectivity for IPv6-only nodes [RFC6144].
 
 **or**
 
-b) Note that SAVI raises a number of important privacy considerations that are discussed more fully in \[RFC6959\].
+b) Note that SAVI raises a number of important privacy considerations that are discussed more fully in [RFC6959].
 
 We recommend using a) and strongly recommend consistent use of one style throughout.
 
@@ -258,9 +258,9 @@ Per [RFC 9280](/info/rfc9280/), the RFC Production Center (RPC) is now maintaini
 An RFC title page header can be described as follows:
 
     <document source>                                          <author name>
-    Request for Comments: <RFC number>                \[<author affiliation>\]
-    \[<subseries ID> <subseries number>\]    \[more author info as appropriate\]
-    \[<RFC relation>:<RFC number\[s\]>\]                            <month year>
+    Request for Comments: <RFC number>                [<author affiliation>]
+    [<subseries ID> <subseries number>]    [more author info as appropriate]
+    [<RFC relation>:<RFC number[s]>]                            <month year>
     Category: <category>
 
 For example, a sample earlier RFC header is as follows:
@@ -279,9 +279,9 @@ The following sections describe mandated text for use in specific parts of the S
 
 The following is the approved text for use in the first paragraph of the Status of this Memo portion of an RFC (see [Section 3.3 of RFC 7841](/rfc/rfc7841/#section-3.3)):
 
-**For \u2018Standards Track\u2019 documents:** This is an Internet Standards Track document.
+**For _Standards Track_ documents:** This is an Internet Standards Track document.
 
-**For \u2018Best Current Practices\u2019 documents:** This memo documents an Internet Best Current Practice.
+**For _Best Current Practices_ documents:** This memo documents an Internet Best Current Practice.
 
 **For other categories:** This document is not an Internet Standards Track specification; <it is published for other purposes>.
 
@@ -337,11 +337,11 @@ This RFC represents the individual opinion(s) of one or more members of the <ins
 
 For non-IETF stream documents a reference to [Section 2 of RFC 7841](/rfc/rfc7841/#section-2) is added with the following sentence:
 
-Documents approved for publication by the \[stream approver \u2014 currently, one of: IAB, IRSG, or RFC Editor\] are not candidates for any level of Internet Standard; see Section 2 of RFC 7841.
+Documents approved for publication by the stream approver currently, one of: IAB, IRSG, or RFC Editor are not candidates for any level of Internet Standard; see Section 2 of RFC 7841.
 
 For IETF stream documents a similar reference is added:
 
-Further information on \[BCPs or Internet Standards\] is available in Section 2 of RFC 7841. for BCP and Standard Track documents; Not all documents approved by the IESG are candidates for any level of Internet Standards; see Section 2 of RFC 7841. for all other categories.
+Further information on [BCPs or Internet Standards] is available in Section 2 of RFC 7841. for BCP and Standard Track documents; Not all documents approved by the IESG are candidates for any level of Internet Standards; see Section 2 of RFC 7841. for all other categories.
 
 ### 2.3. Third Paragraph
 

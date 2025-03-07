@@ -25,24 +25,24 @@ if (
   await navigateTo({
     path: normalizedSlug
   })
-}
+} else {
+  const canonicalUrl = `${PUBLIC_SITE}${normalizedSlug}`
 
-const canonicalUrl = `${PUBLIC_SITE}${normalizedSlug}`
+  const { error } = await useAsyncData(
+    normalizedSlug, // canonicalUrl is more normalized than `slug` because of the leading/trailing slash checks when this const is created, so it's better to use for the cache key
+    () => queryContent(slug).findOne()
+  )
 
-const { error } = await useAsyncData(
-  normalizedSlug, // canonicalUrl is more normalized than `slug` because of the leading/trailing slash checks when this const is created, so it's better to use for the cache key
-  () => queryContent(slug).findOne()
-)
+  if (error.value) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Not Found',
+      fatal: true
+    })
+  }
 
-if (error.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Not Found',
-    fatal: true
+  useHead({
+    link: [{ rel: 'canonical', href: canonicalUrl }]
   })
 }
-
-useHead({
-  link: [{ rel: 'canonical', href: canonicalUrl }]
-})
 </script>

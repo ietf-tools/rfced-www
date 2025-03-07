@@ -4,6 +4,6 @@
   </ol>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // Note: lists can (of course) be 2+ digits so we need pl-10
 </script>

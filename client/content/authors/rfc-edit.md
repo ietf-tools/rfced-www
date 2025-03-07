@@ -1,4 +1,4 @@
-# RFC Editorial Process (/authors/rfc-edit/) {#rfc-editorial-process-(/authors/rfc-edit/)}
+# RFC Editorial Process
 
 The [IETF,](https://www.ietf.org/) [IAB](https://www.iab.com/), [IRTF](https://www.irtf.org/), [Independent](https://docs.google.com/document/d/1GIzY1ZT_PJTOxacaFkAauUZ2p3eMPtui_v5RKORjyiw/edit?tab=t.0#heading=h.y5hej3hkyt7v), and [Editorial](https://datatracker.ietf.org/group/rswg/about/) Streams produce Internet-Drafts that are approved for publication by each stream’s own processes (see [How to Write an RFC](https://docs.google.com/document/d/1GIzY1ZT_PJTOxacaFkAauUZ2p3eMPtui_v5RKORjyiw/edit?tab=t.0#heading=h.c0tdtw9dvbjc)). Once the approval steps are completed, the document is submitted to the RFC Production Center (RPC) for editing, formatting, and publication as an RFC.
 
