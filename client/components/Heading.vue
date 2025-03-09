@@ -1,12 +1,8 @@
 <template>
   <component
-    :is="`h${props.level}`"
-    :id="props.hasInternalLink ? anchorId : undefined"
-    :class="[
-      headingStyles[`h${props.styleLevel || props.level}`],
-      props.class,
-      'group'
-    ]"
+    :is="`h${level}`"
+    :id="!disableInternalLink ? anchorId : undefined"
+    :class="[headingStyles[`h${styleLevel || level}`], customClass, 'group']"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
@@ -17,7 +13,7 @@
     />
     <slot />
     <a
-      v-if="props.hasInternalLink && anchorId"
+      v-if="!disableInternalLink && anchorId"
       :href="`#${anchorId}`"
       class="ml-2 opacity-50 no-underline group-hover:opacity-100"
       title="Link to this heading"
@@ -26,11 +22,14 @@
   </component>
 </template>
 
-<script setup lang="ts">
-import { useSlots } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 import { kebabCase } from 'lodash-es'
 import type { VueStyleClass } from './VueUtils'
 import { getVNodeText } from '~/utilities/vue'
+
+type Level = '1' | '2' | '3' | '4' | '5' | '6'
 
 type Props = {
   /**
@@ -58,29 +57,8 @@ type Props = {
   styleLevel?: Level
   class?: VueStyleClass
   hasIcon?: boolean
-  hasInternalLink?: boolean
+  disableInternalLink?: boolean
 }
-
-const slots = useSlots()
-const defaultSlot = slots.default ? slots.default() : []
-
-console.log(
-  'slots',
-  Object.keys(slots),
-  Object.keys(slots.default),
-  typeof slots.default,
-  slots.default._n,
-  slots.default._c,
-  slots.default._d
-)
-
-const slotText = getVNodeText(defaultSlot)
-const slotTextNormalised = slotText.trim().toLowerCase() // otherwise kebabCase() will split works with casing like 'RFCs' into 'rf-cs'
-const anchorId = slotTextNormalised ? kebabCase(slotTextNormalised) : undefined
-
-type Level = '1' | '2' | '3' | '4' | '5' | '6'
-
-const props = defineProps<Props>()
 
 const headingStyles: Record<`h${Props['level']}`, string> = {
   /**
@@ -97,4 +75,33 @@ const headingStyles: Record<`h${Props['level']}`, string> = {
   h5: 'text-base font-bold',
   h6: 'text-base font-bold'
 }
+
+export default defineComponent({
+  props: {
+    level: { type: String as PropType<Level>, required: true },
+    styleLevel: String as PropType<Level>,
+    class: String as PropType<VueStyleClass>,
+    hasIcon: Boolean as PropType<boolean>,
+    disableInternalLink: Boolean as PropType<boolean>
+  },
+  setup(props, { slots }) {
+    const anchorId = computed(() => {
+      const defaultSlot = slots.default ? slots.default() : []
+      const slotText = getVNodeText(defaultSlot)
+      const slotTextNormalised = slotText.trim().toLowerCase() // otherwise kebabCase() will split works with casing like 'RFCs' into 'rf-cs'
+      return slotTextNormalised ? kebabCase(slotTextNormalised) : undefined
+    })
+
+    return {
+      disableInternalLink: props.disableInternalLink,
+      customClass: props.class,
+      hasIcon: props.hasIcon,
+      level: props.level,
+      styleLevel: props.styleLevel,
+
+      anchorId,
+      headingStyles
+    }
+  }
+})
 </script>
