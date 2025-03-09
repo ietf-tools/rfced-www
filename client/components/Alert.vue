@@ -16,6 +16,7 @@
         props.variant === 'warning' && 'text-red-700 dark:text-red-200',
         props.variant === 'info' && 'text-yellow-750 dark:text-yellow-300'
       ]"
+      :disable-internal-link="true"
     >
       {{ props.heading }}
     </Heading>

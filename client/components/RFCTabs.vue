@@ -51,7 +51,13 @@
     <HeadlessTabPanels class="">
       <HeadlessTabPanel>Content 1</HeadlessTabPanel>
       <HeadlessTabPanel>
-        <Heading level="3" style-level="4" class="mt-4">Details</Heading>
+        <Heading
+          level="3"
+          style-level="4"
+          class="mt-4"
+          :disable-internal-link="true"
+          >Details</Heading
+        >
         <dl class="text-sm">
           <dt class="font-bold mt-2">Updates</dt>
           <dd>...</dd>
@@ -126,7 +132,9 @@
           <dd>ISSN number where?</dd>
         </dl>
 
-        <Heading level="3" class="mt-5 mb-2">Cite this RFC</Heading>
+        <Heading level="3" class="mt-5 mb-2" :disable-internal-link="true"
+          >Cite this RFC</Heading
+        >
         <ul class="text-sm flex flex-col gap-2">
           <li
             v-for="(citation, citationIndex) in citations"
@@ -138,7 +146,9 @@
           </li>
         </ul>
 
-        <Heading level="3" class="mt-5 mb-2">Formats</Heading>
+        <Heading level="3" class="mt-5 mb-2" :disable-internal-link="true"
+          >Formats</Heading
+        >
         <ul class="text-sm flex flex-col gap-2">
           <li v-for="(format, formatIndex) in formats" :key="formatIndex">
             <a :href="format.url" class="block px-2 -ml-2">{{

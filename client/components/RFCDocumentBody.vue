@@ -16,7 +16,11 @@
     Info
   </button>
 
-  <Heading level="1" class="mb-2 px-1 xs:px-0 print:px-0">
+  <Heading
+    level="1"
+    class="mb-2 px-1 xs:px-0 print:px-0"
+    :disable-internal-link="true"
+  >
     <component :is="formatTitle(`${rfcId.type}${rfcId.number}`)" />
   </Heading>
 

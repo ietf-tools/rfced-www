@@ -9,7 +9,7 @@
       :is="hasAsideSlot ? 'div' : Fragment"
       :class="props.defaultSlotClass"
     >
-      <Heading :level="props.headingLevel">
+      <Heading :level="props.headingLevel" :disable-internal-link="true">
         <a
           :href="props.href"
           :class="[

@@ -28,7 +28,11 @@
       </div>
       <div class="flex-1 flex flex-col lg:flex-row gap-10 p-3 lg:p-0">
         <div v-for="(menuItem, index) in menuData" :key="index">
-          <Heading level="4" class="text-base text-white">
+          <Heading
+            level="4"
+            class="text-base text-white"
+            :disable-internal-link="true"
+          >
             {{ menuItem.label }}
           </Heading>
           <ul class="mt-3 flex flex-col gap-2">
