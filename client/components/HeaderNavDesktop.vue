@@ -42,7 +42,7 @@
               'no-underline': !active
             }
           ]"
-          href="/"
+          :href="child.href"
         >
           {{ child.label }}
         </a>

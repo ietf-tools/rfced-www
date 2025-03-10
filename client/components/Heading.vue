@@ -66,19 +66,6 @@ type Props = {
    *
    * The DOM Id is derived from the text of the default `<slot />`. This text is reformatted into a
    * DOM Id (eg the text is kebab-cased to remove whitespace but check the code for specifics).
-   *
-   * Nuxt Content markdown uses this Heading via eg ProseH1.vue. the Heading
-   * integration would be more
-   * difficult (authors of this markdown content typically want headings with internal links, but
-   * we can't make it a prop that authors want internal links to),
-   *
-   * /**
-   * This Heading component can generate an HTML internal link target, eg
-   * 1. `id="internal-link"` on the heading element, and;
-   * 2. `<a href="#internal-link">#</a>` internal link in the heading
-   *
-   * The DOM Id is derived from the text of the default <slot />. This text is reformatted into a
-   * DOM Id (eg the text is kebab-cased to remove whitespace but check the code for specifics).
    */
   hasInternalLink?: boolean
 }
@@ -110,10 +97,10 @@ type VueDefaultSlotType =
   Slot<any> | undefined // this type is from Vue itself ie $slots.default in the template, it's not an intentional use of `any`.
 
 /**
- * Derives an DOM Id (ie a string with no whitespace and adhering to other DOM Id rules) from
- * the text of the default slot.
+ * Derives an DOM Id from the text of the default <slot />.
+ * A DOM Id is a string with no whitespace and adhering to other DOM Id rules.
  *
- * This is done in the render rather than as a setup-phase computed() property because accessing
+ * This calculation is done in the render rather than as a Vue `setup`-phase computed() property because accessing
  * the content of the slot outside the render would trigger this Vue warning:
  *
  *   "Slot invoked outside of the render function
