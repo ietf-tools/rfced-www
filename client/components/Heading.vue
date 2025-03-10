@@ -105,6 +105,10 @@ const fallbackId = `id-${useId()}`
 
 const anchorIdCache = new Map()
 
+type VueDefaultSlotType =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Slot<any> | undefined // this type is from Vue itself ie $slots.default in the template, it's not an intentional use of `any`.
+
 /**
  * Derives an DOM Id (ie a string with no whitespace and adhering to other DOM Id rules) from
  * the text of the default slot.
@@ -119,7 +123,7 @@ const anchorIdCache = new Map()
  * An article on the general problem: https://zelig880.com/how-to-fix-slot-invoked-outside-of-the-render-function-in-vue-3
  *
  */
-const getAnchorId = (defaultSlot: Slot<any> | undefined): string => {
+const getAnchorId = (defaultSlot: VueDefaultSlotType): string => {
   const defaultSlotValue = defaultSlot ? defaultSlot() : []
   const cachedAnchorId = anchorIdCache.get(defaultSlotValue)
   if (cachedAnchorId) {

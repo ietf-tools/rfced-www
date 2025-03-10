@@ -69,7 +69,11 @@
         </nav>
       </HeadlessDialogPanel>
     </HeadlessDialog>
-    <button type="button" class="text-white p-3 md:-mx-3" @click="isOpen = true">
+    <button
+      type="button"
+      class="text-white p-3 md:-mx-3"
+      @click="isOpen = true"
+    >
       <GraphicsHamburgerMenu />
     </button>
   </div>

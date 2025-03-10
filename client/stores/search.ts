@@ -115,7 +115,7 @@ export const OrderBy = {
 } as const
 export type OrderByValue = keyof typeof OrderBy
 
-type SearchParams = {
+export type SearchParams = {
   q: string
   from: string
   to: string

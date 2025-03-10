@@ -1,5 +1,12 @@
 import type { Rfc } from '~/generated/red-client'
+import type ContentMetadata from '~/generated/content-metadata.json'
 import { parseRFCId } from '~/utilities/rfc'
+import type { SearchParams } from '~/stores/search'
+
+type MarkdownPaths = keyof typeof ContentMetadata
+
+export const IETF_PRIVACY_STATEMENT_URL =
+  'https://www.ietf.org/privacy-statement/'
 
 // FIXME: get from an environment variable
 export const PRIVATE_API_URL = 'http://localhost:8000/'
@@ -9,6 +16,25 @@ export const PUBLIC_SITE = 'https://www.rfc-editor.org'
 export const SEARCH_PATH = '/search/' as const
 
 export const SEARCH_API_PATH = '/api/search/' as const
+
+type SearchKeys = keyof SearchParams
+
+export const searchPathBuilder = (
+  searchParams: Partial<SearchParams>
+): string => {
+  const hasParams = Object.values(searchParams).join('').trim().length > 0
+  return `${SEARCH_PATH}${hasParams ? '?' : ''}${
+    hasParams ?
+      (Object.keys(searchParams) as SearchKeys[])
+        .map((searchKey) => {
+          const searchValue = searchParams[searchKey]
+          return searchValue ? `${searchKey}=${searchValue}` : ''
+        })
+        .filter(Boolean)
+        .join('&')
+    : ''
+  }`
+}
 
 export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/' as const
 
@@ -35,6 +61,8 @@ export const rfcJSONPathBuilder = (rfcId: string) => {
 
   return `/api/v1/rfc${rfcParts.number}.json`
 }
+
+export const markdownPathBuilder = (markdownPath: MarkdownPaths) => markdownPath
 
 export const rfcPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
