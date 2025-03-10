@@ -1,11 +1,7 @@
 <template>
   <div>
     <SectionHeader>
-      <Heading
-        level="1"
-        class="w-full mt-0 mb-4 pl-5 md:p-0 text-balance"
-        :disable-internal-link="true"
-      >
+      <Heading level="1" class="w-full mt-0 mb-4 pl-5 md:p-0 text-balance">
         RFC Index
       </Heading>
       <p class="leading-6 mb-2 pl-5 md:p-0 md:w-1/2">
@@ -42,9 +38,7 @@
       <p>For example:</p>
       <RFCIndexTable :rfc-rows="exampleRfcInformations" />
 
-      <Heading level="2" class="mt-4 mb-2" :disable-internal-link="true"
-        >Key to Entries</Heading
-      >
+      <Heading level="2" class="mt-4 mb-2">Key to Entries</Heading>
       <ul class="list-disc ml-6">
         <li>#### is the RFC number.</li>
         <li>
@@ -96,13 +90,7 @@
       >
         {{ error }}
       </Alert>
-      <Heading
-        v-if="rfcs"
-        level="2"
-        style-level="1"
-        class="mt-6 mb-3"
-        :disable-internal-link="true"
-      >
+      <Heading v-if="rfcs" level="2" style-level="1" class="mt-6 mb-3">
         RFC Index
       </Heading>
       <RFCIndexTable v-if="rfcs" :rfc-rows="rfcRows" />

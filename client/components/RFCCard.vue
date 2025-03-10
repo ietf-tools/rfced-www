@@ -73,7 +73,6 @@
               level="4"
               style-level="5"
               class="text-blue-900 dark:text-gray-300 pt-3 border-t inline-block"
-              :disable-internal-link="true"
             >
               Abstract
             </Heading>
@@ -100,7 +99,6 @@
           level="4"
           style-level="5"
           class="text-blue-900 dark:text-gray-300 inline-block"
-          :disable-internal-link="true"
         >
           Abstract
         </Heading>

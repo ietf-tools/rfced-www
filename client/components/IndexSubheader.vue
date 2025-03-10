@@ -11,11 +11,7 @@
       />
     </div>
     <div class="lg:flex w-full">
-      <Heading
-        level="1"
-        class="w-full mt-8 mb-3 pl-5 md:p-0 text-balance"
-        :disable-internal-link="true"
-      >
+      <Heading level="1" class="w-full mt-8 mb-3 pl-5 md:p-0 text-balance">
         The official home of RFCs
       </Heading>
       <div class="self-end lg:text-right">

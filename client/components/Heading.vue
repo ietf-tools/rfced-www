@@ -1,8 +1,8 @@
 <template>
   <component
-    :is="`h${level}`"
-    :id="!disableInternalLink ? anchorId : undefined"
-    :class="[headingStyles[`h${styleLevel || level}`], customClass, 'group']"
+    :is="`h${props.level}`"
+    :id="hasInternalLink ? getAnchorId($slots.default) : undefined"
+    :class="[headingStyles[`h${styleLevel || level}`], props.class, 'group']"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
@@ -13,8 +13,8 @@
     />
     <slot />
     <a
-      v-if="!disableInternalLink && anchorId"
-      :href="`#${anchorId}`"
+      v-if="hasInternalLink"
+      :href="hasInternalLink ? `#${getAnchorId($slots.default)}` : undefined"
       class="ml-2 opacity-50 no-underline group-hover:opacity-100"
       title="Link to this heading"
       >#</a
@@ -22,9 +22,8 @@
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import type { Slot } from 'vue'
 import { kebabCase } from 'lodash-es'
 import type { VueStyleClass } from './VueUtils'
 import { getVNodeText } from '~/utilities/vue'
@@ -57,7 +56,31 @@ type Props = {
   styleLevel?: Level
   class?: VueStyleClass
   hasIcon?: boolean
-  disableInternalLink?: boolean
+  /**
+   * This Heading component can generate an HTML internal link id and link, eg
+   *
+   * 1.  `id="internal-link"` on the heading element, and;
+   * 2.  `<a href="#internal-link">#</a>` in the heading.
+   *
+   * You can enable it with this prop.
+   *
+   * The DOM Id is derived from the text of the default `<slot />`. This text is reformatted into a
+   * DOM Id (eg the text is kebab-cased to remove whitespace but check the code for specifics).
+   *
+   * Nuxt Content markdown uses this Heading via eg ProseH1.vue. the Heading
+   * integration would be more
+   * difficult (authors of this markdown content typically want headings with internal links, but
+   * we can't make it a prop that authors want internal links to),
+   *
+   * /**
+   * This Heading component can generate an HTML internal link target, eg
+   * 1. `id="internal-link"` on the heading element, and;
+   * 2. `<a href="#internal-link">#</a>` internal link in the heading
+   *
+   * The DOM Id is derived from the text of the default <slot />. This text is reformatted into a
+   * DOM Id (eg the text is kebab-cased to remove whitespace but check the code for specifics).
+   */
+  hasInternalLink?: boolean
 }
 
 const headingStyles: Record<`h${Props['level']}`, string> = {
@@ -76,32 +99,48 @@ const headingStyles: Record<`h${Props['level']}`, string> = {
   h6: 'text-base font-bold'
 }
 
-export default defineComponent({
-  props: {
-    level: { type: String as PropType<Level>, required: true },
-    styleLevel: String as PropType<Level>,
-    class: String as PropType<VueStyleClass>,
-    hasIcon: Boolean as PropType<boolean>,
-    disableInternalLink: Boolean as PropType<boolean>
-  },
-  setup(props, { slots }) {
-    const anchorId = computed(() => {
-      const defaultSlot = slots.default ? slots.default() : []
-      const slotText = getVNodeText(defaultSlot)
-      const slotTextNormalised = slotText.trim().toLowerCase() // otherwise kebabCase() will split works with casing like 'RFCs' into 'rf-cs'
-      return slotTextNormalised ? kebabCase(slotTextNormalised) : undefined
-    })
+const props = defineProps<Props>()
 
-    return {
-      disableInternalLink: props.disableInternalLink,
-      customClass: props.class,
-      hasIcon: props.hasIcon,
-      level: props.level,
-      styleLevel: props.styleLevel,
+const fallbackId = `id-${useId()}`
 
-      anchorId,
-      headingStyles
+const anchorIdCache = new Map()
+
+/**
+ * Derives an DOM Id (ie a string with no whitespace and adhering to other DOM Id rules) from
+ * the text of the default slot.
+ *
+ * This is done in the render rather than as a setup-phase computed() property because accessing
+ * the content of the slot outside the render would trigger this Vue warning:
+ *
+ *   "Slot invoked outside of the render function
+ *    this will not track dependencies used in the slot.
+ *    Invoke the slot function inside the render function instead."
+ *
+ * An article on the general problem: https://zelig880.com/how-to-fix-slot-invoked-outside-of-the-render-function-in-vue-3
+ *
+ */
+const getAnchorId = (defaultSlot: Slot<any> | undefined): string => {
+  const defaultSlotValue = defaultSlot ? defaultSlot() : []
+  const cachedAnchorId = anchorIdCache.get(defaultSlotValue)
+  if (cachedAnchorId) {
+    const typeOfCachedValue = typeof cachedAnchorId
+    if (typeOfCachedValue === 'string') {
+      return cachedAnchorId
     }
+    anchorIdCache.delete(defaultSlotValue)
   }
-})
+
+  const slotText = getVNodeText(defaultSlotValue)
+  const slotTextNormalised = slotText.trim().toLowerCase() // lowercase before kebabCase() because otherwise kebabCase() will split 'RFCs' into 'rf-cs'
+  if (
+    // if it's an empty string then getVNodeText() probably returned an empty string, so provide a fallback id
+    !slotTextNormalised
+  ) {
+    return fallbackId
+  }
+
+  const kebabbed = kebabCase(slotTextNormalised)
+  anchorIdCache.set(defaultSlotValue, kebabbed)
+  return kebabbed
+}
 </script>

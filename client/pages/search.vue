@@ -3,11 +3,7 @@
     <NuxtLayout name="default">
       <template #subheader>
         <div class="container mx-auto">
-          <Heading
-            level="1"
-            class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance"
-            :disable-internal-link="true"
-          >
+          <Heading level="1" class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance">
             Search RFCs
           </Heading>
           <div class="lg:w-1/2">
@@ -28,7 +24,6 @@
               class="text-left pl-4 md:pl-0"
               aria-atomic="true"
               aria-live="polite"
-              :disable-internal-link="true"
             >
               <template
                 v-if="!searchStore.searchResponse && !searchStore.searchError"

@@ -8,12 +8,7 @@
         <div
           class="flex flex-col-reverse lg:flex-row lg:items-center justify-between"
         >
-          <Heading
-            level="2"
-            has-icon
-            class="text-left mt-10 pl-5 md:pl-0"
-            :disable-internal-link="true"
-          >
+          <Heading level="2" has-icon class="text-left mt-10 pl-5 md:pl-0">
             Latest RFCs
           </Heading>
           <p class="hidden mt-8 lg:block text-base text-grey-800 pl-5">
@@ -42,12 +37,7 @@
           />
         </div>
 
-        <Heading
-          level="2"
-          has-icon
-          class="pl-5 mt-10 mb-5 md:p-0"
-          :disable-internal-link="true"
-        >
+        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
           Learn about RFCs
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -80,12 +70,7 @@
           </Card>
         </div>
 
-        <Heading
-          level="2"
-          has-icon
-          class="pl-5 mt-10 mb-5 md:p-0"
-          :disable-internal-link="true"
-        >
+        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
           Browse RFCs
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -118,12 +103,7 @@
           </Card>
         </div>
 
-        <Heading
-          level="2"
-          has-icon
-          class="pl-5 mt-10 mb-5 md:p-0"
-          :disable-internal-link="true"
-        >
+        <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
           Start Participating
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
