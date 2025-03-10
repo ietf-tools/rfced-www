@@ -20,9 +20,15 @@ function getImage(
   return img
 }
 
-const p = document.createElement('p')
-p.innerText = 'Click on screenshots to see the regressions.'
-document.body.append(p)
+if (ietfImagesDiff.differences.length === 0) {
+  const div = document.createElement('div')
+  div.innerText = 'No differences found.'
+  document.body.appendChild(div)
+} else {
+  const p = document.createElement('p')
+  p.innerText = 'Click on screenshots to see visual differences.'
+  document.body.append(p)
+}
 
 const list = document.createElement('ul')
 document.body.append(list)
