@@ -36,7 +36,7 @@ export const menuData: MenuItem[] = [
         href: markdownPathBuilder('/series/rfc-tips/')
       },
       {
-        label: 'Browse RFCs by Status',
+        label: 'Browse RFCs by Status:',
         children: [
           {
             label: 'Standards',

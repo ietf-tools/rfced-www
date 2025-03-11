@@ -14,7 +14,7 @@
 
 # Design
 
-* The [new www.rfc-editor.org design on Figma](https://www.figma.com/design/bCDqtdSnErGOe6Oc87W8pR/RFC-Editor---Design-2). As development continues this is the graphic design that we will be adhering to where possible.
+- The [new www.rfc-editor.org design on Figma](https://www.figma.com/design/bCDqtdSnErGOe6Oc87W8pR/RFC-Editor---Design-2). As development continues this is the graphic design that we will be adhering to where possible.
 
 # Development
 
@@ -53,3 +53,9 @@ The screenshots are taken using [Lost Pixel OSS](https://www.lost-pixel.com/) in
 ##### Troubleshooting `npm run test:story:approve`
 
 This command should always succeed. If it fails it usually means there's a JavaScript exception being thrown in the app. Read all the console output carefully, and try viewing your component with `npm run story:dev` to see if there's an exception being thrown.
+
+## Troubleshooting
+
+### During local dev website doesn't update with changes
+
+Stop the dev server, run `npm run cleanup`, and restart the dev server.
