@@ -16,7 +16,7 @@ type Props = {
 }
 
 export async function renderRfcIndexDotXml(props: Props) {
-  const { push } = props
+  const { push, close } = props
   push('<?xml version="1.0" encoding="UTF-8"?>\n')
   push(
     '<rfc-index xmlns="https://www.rfc-editor.org/rfc-index" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.rfc-editor.org/rfc-index https://www.rfc-editor.org/rfc-index.xsd">\n'

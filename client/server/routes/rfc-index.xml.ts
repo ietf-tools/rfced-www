@@ -1,5 +1,5 @@
-import { getRedClient } from '~/utilities/redClientWrappers'
 import { renderRfcIndexDotXml } from '~/utilities/rfc-index-xml'
+import { bufferStreamingResponse } from '~/utilities/stream'
 
 const DELAY_BETWEEN_REQUESTS_MS = 50
 
@@ -8,38 +8,19 @@ export default defineEventHandler(async (event) => {
     'Content-Type': 'text/xml; charset=utf-8'
   })
 
-  const abortController = new AbortController()
-
-  const stream = new ReadableStream({
-    start(controller) {
-      const push = (data: string): void => {
-        if (abortController.signal.aborted) {
-          // ignore
-          return
-        }
-        controller.enqueue(data)
-      }
-      const close = () => {
-        controller.close()
-      }
-
-      const redApi = getRedClient()
-
-      // this is a promise but we don't care about waiting for the result
-      void renderRfcIndexDotXml({
+  // This was a streaming response but due to Nuxt bugs <https://github.com/nuxt/nuxt/issues/30987>
+  // we now collate/buffer the stream and just return a string.
+  // If Nuxt fixes the bug we can switch back to streaming by using `getStreamingResponse` instead
+  const txt = await bufferStreamingResponse(
+    ({ push, close, abortController, redApi }) =>
+      renderRfcIndexDotXml({
         push,
         close,
         abortController,
         redApi,
         delayBetweenRequestsMs: DELAY_BETWEEN_REQUESTS_MS
       })
-    },
-    // cleanup when the connection is terminated
-    cancel() {
-      console.log('closing stream...')
-      abortController.abort()
-    }
-  })
+  )
 
-  return sendStream(event, stream)
+  return txt
 })
