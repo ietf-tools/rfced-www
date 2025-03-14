@@ -33,7 +33,8 @@ type Props = {
   id: string
   /**
    * Styles the accordion at a certain nesting depth. ie, an accordion
-   * within another accordion would have styleDepth=2
+   * within another accordion would have styleDepth=2 and be styled
+   * differently (smaller).
    */
   styleDepth?: 1 | 2
 }

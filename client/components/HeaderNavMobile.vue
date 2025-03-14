@@ -21,6 +21,7 @@
               <AccordionItem
                 v-for="(item, index) in menuData"
                 :id="index.toString()"
+                :key="index.toString()"
                 :trigger-text="item.label"
               >
                 <ul class="mx-4">
@@ -38,18 +39,17 @@
 
                     <Accordion v-if="childItem.children">
                       <AccordionItem
-                        :key="index"
                         :id="index.toString()"
+                        :key="index"
                         :trigger-text="childItem.label"
-                        :depth="2"
                         :style-depth="2"
                       >
                         <ul class="mx-4">
                           <li
                             v-for="(
-                              subChildItem, childIndex
+                              subChildItem, subChildIndex
                             ) in childItem.children"
-                            :key="childIndex"
+                            :key="subChildIndex"
                           >
                             <a
                               v-if="subChildItem.href"
@@ -67,8 +67,8 @@
               </AccordionItem>
               <AccordionItem
                 v-for="(item, index) in menuItemsThatAreOnlyOnMobile"
-                :key="menuData.length + index"
                 :id="(menuData.length + index).toString()"
+                :key="menuData.length + index"
                 :trigger-text="item.label"
               >
                 <ul class="mx-4">

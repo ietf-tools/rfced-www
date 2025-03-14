@@ -30,7 +30,6 @@
       class="absolute z-10 w-64 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-[0_0px_10px_10px_#00101c99] dark:shadow-[0_0px_10px_10px_#00101c99]"
     >
       <template
-        v-if="menuItem.children"
         v-for="(child, childIndex) in menuItem.children"
         :key="childIndex"
       >
