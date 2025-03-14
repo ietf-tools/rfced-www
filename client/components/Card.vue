@@ -5,10 +5,7 @@
       props.class
     ]"
   >
-    <component
-      :is="hasAsideSlot ? 'div' : Fragment"
-      :class="props.defaultSlotClass"
-    >
+    <component :is="hasAsideSlot ? 'div' : Fragment">
       <Heading :level="props.headingLevel">
         <a
           :href="props.href"

@@ -17,54 +17,76 @@
             </button>
           </HeadlessDialogTitle>
           <div class="flex flex-col">
-            <Accordion.Root multiple collapsible>
-              <Accordion.Item
-                v-for="(item, index) in mobileMenuItem"
-                :key="index"
-                :value="index.toString()"
-              >
-                <Accordion.ItemTrigger
-                  class="flex flex-row w-full justify-between items-center py-1 border border-gray-500 hover:bg-white/10"
-                >
-                  <span class="p-4">{{ item.label }}</span>
-                  <Accordion.ItemIndicator
-                    class="w-[16px] border-l border-gray-500 py-4 pl-6 pr-8 text-blue-100"
-                  >
-                    <GraphicsChevron class="-rotate-90" data-chevron />
-                  </Accordion.ItemIndicator>
-                </Accordion.ItemTrigger>
-                <Accordion.ItemContent>
-                  <ul class="mx-4">
-                    <li
-                      v-for="(childItem, childIndex) in item.children"
-                      :key="childIndex"
-                    >
-                      <a
-                        v-if="childItem.href"
-                        :href="childItem.href"
-                        class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
-                      >
-                        {{ childItem.label }}
-                      </a>
-                      <button
-                        v-else
-                        type="button"
-                        class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
-                        @click="childItem.click"
-                      >
-                        {{ childItem.label }}
-                      </button>
-                    </li>
-                  </ul>
-                </Accordion.ItemContent>
-              </Accordion.Item>
-              <Accordion.Item
+            <Accordion>
+              <AccordionItem
                 v-for="(item, index) in menuData"
-                :key="index"
-                :value="index.toString()"
+                :id="index.toString()"
+                :trigger-text="item.label"
               >
-              </Accordion.Item>
-            </Accordion.Root>
+                <ul class="mx-4">
+                  <li
+                    v-for="(childItem, childIndex) in item.children"
+                    :key="childIndex"
+                  >
+                    <a
+                      v-if="childItem.href"
+                      :href="childItem.href"
+                      class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                    >
+                      {{ childItem.label }}
+                    </a>
+
+                    <Accordion v-if="childItem.children">
+                      <AccordionItem
+                        :key="index"
+                        :id="index.toString()"
+                        :trigger-text="childItem.label"
+                        :depth="2"
+                        :style-depth="2"
+                      >
+                        <ul class="mx-4">
+                          <li
+                            v-for="(
+                              subChildItem, childIndex
+                            ) in childItem.children"
+                            :key="childIndex"
+                          >
+                            <a
+                              v-if="subChildItem.href"
+                              :href="subChildItem.href"
+                              class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                            >
+                              {{ subChildItem.label }}
+                            </a>
+                          </li>
+                        </ul>
+                      </AccordionItem>
+                    </Accordion>
+                  </li>
+                </ul>
+              </AccordionItem>
+              <AccordionItem
+                v-for="(item, index) in menuItemsThatAreOnlyOnMobile"
+                :key="menuData.length + index"
+                :id="(menuData.length + index).toString()"
+                :trigger-text="item.label"
+              >
+                <ul class="mx-4">
+                  <li
+                    v-for="(childItem, childIndex) in item.children"
+                    :key="childIndex"
+                  >
+                    <button
+                      type="button"
+                      class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                      @click="childItem.click"
+                    >
+                      {{ childItem.label }}
+                    </button>
+                  </li>
+                </ul>
+              </AccordionItem>
+            </Accordion>
           </div>
         </nav>
       </HeadlessDialogPanel>
@@ -80,18 +102,15 @@
 </template>
 
 <script setup lang="ts">
-import { Accordion } from '@ark-ui/vue'
 import { menuData, colorPreferences } from './HeaderNavData'
 
 const colorMode = useColorMode()
 
-const mobileMenuItem = [
-  ...menuData,
+const menuItemsThatAreOnlyOnMobile = [
   {
     label: 'Theme',
     children: colorPreferences.map((colorPreference) => ({
       label: colorPreference.label,
-      href: '',
       click: () => {
         colorMode.preference = colorPreference.value
         isOpen.value = false

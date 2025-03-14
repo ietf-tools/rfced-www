@@ -4,6 +4,7 @@ import {
   searchPathBuilder
 } from '~/utilities/url'
 
+// recursive data structure
 type MenuItemChild = {
   label: string
   click?: () => void
