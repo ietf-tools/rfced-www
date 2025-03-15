@@ -15,18 +15,18 @@ import {
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
 const contentPath = path.resolve(clientPath, 'content')
+const publicPath = path.resolve(clientPath, 'public')
 
-type NodeValidator = (node: unknown, markdownPath: string) => void
-type MicromarkOptions = NonNullable<Parameters<typeof micromark>[1]>
+type NodeValidator = (node: unknown, markdownPath: string) => Promise<void>
 
 test('Markdown links validation', async () => {
-  // Unfortunately Nuxt Content's queryCollection can't run in tests only in server routes
+  // Unfortunately Nuxt Content's queryCollection() utils can't run in tests only in server routes
   // so we have to read the markdown files directly from the filesystem
   const markdownPaths = await globby(['**/*.md'], {
     cwd: contentPath
   })
 
-  // sanity check on whether globby matched any markdowns
+  // quick sanity check on whether globby matched ANY markdowns
   expect(markdownPaths.length).toBeGreaterThan(0)
 
   const markdowns = await Promise.all(
@@ -35,65 +35,37 @@ test('Markdown links validation', async () => {
     )
   )
 
-  const validateMarkdownText = (html: string, markdownPath: string) => {
+  markdowns.forEach((markdown, index) => {
+    const markdownPath = markdownPaths[index]
     const badInternalLink = '](<#' // when converting from Google Doc it often makes broken links with this signature
-
     expect(
-      html,
+      markdown,
       `Markdown file ${markdownPath} included bad data ${badInternalLink}`
     ).not.toMatch(badInternalLink)
-  }
-
-  markdowns.forEach((markdowns, index) => {
-    const markdownPath = markdownPaths[index]
-    validateMarkdownText(markdowns, markdownPath)
   })
 
-  const microMarkOptions: MicromarkOptions = {}
+  const htmls = markdowns.map((markdown) => micromark(markdown))
 
-  const htmls = markdowns.map((markdown) =>
-    micromark(markdown, microMarkOptions)
-  )
-
-  const attemptToGetAttribute = (
-    node: unknown,
-    elementName: string,
-    attributeName: string
-  ): string | undefined => {
-    const NODE_ATTRIBUTES_KEY = ':@'
-    if (
-      !node ||
-      typeof node !== 'object' ||
-      !(elementName in node) ||
-      !(NODE_ATTRIBUTES_KEY in node)
-    ) {
-      return
-    }
-
-    const attributes = node[NODE_ATTRIBUTES_KEY]
-
-    if (!attributes || typeof attributes !== 'object') {
-      return
-    }
-
-    const nodeKey = `@_${attributeName}`
-    const attribute = (attributes as Record<string, unknown>)[nodeKey]
-
-    if (typeof attribute === 'string') {
-      return attribute
-    }
-  }
-
-  const validateImage: NodeValidator = (node, markdownPath) => {
+  const validateImage: NodeValidator = async (node, markdownPath) => {
     const src = attemptToGetAttribute(node, 'img', 'src')
     if (!src) return
 
     const expectedPrefix = `/images/${markdownPath.replace(/\.md$/, '')}-`
     const expectedPrefixRegexp = new RegExp(`^${escapeRegExp(expectedPrefix)}`)
-    expect(src).toMatch(expectedPrefixRegexp)
+    expect(
+      src,
+      `Markdown file ${markdownPath} references image that doesn't match filename naming convention (prefixed with ${expectedPrefix})`
+    ).toMatch(expectedPrefixRegexp)
+
+    const assetFilePath = path.join(publicPath, src)
+    const hasImageFile = await fileExists(assetFilePath)
+    expect(
+      hasImageFile,
+      `Markdown file ${markdownPath} references image ${src} that doesn't exist`
+    ).toBe(true)
   }
 
-  const validateLink: NodeValidator = (node, markdownPath) => {
+  const validateLink: NodeValidator = async (node, markdownPath) => {
     const href = attemptToGetAttribute(node, 'a', 'href')
     if (!href) return
 
@@ -171,41 +143,85 @@ test('Markdown links validation', async () => {
     )
   }
 
-  const walkNodes = (
-    nodeList: unknown[],
-    markdownPath: string,
-    validateNode: NodeValidator
-  ) => {
-    nodeList.forEach((node: unknown) => {
-      validateNode(node, markdownPath)
+  await Promise.all(
+    htmls.map(async (html, index) => {
+      const markdownPath = markdownPaths[index]
+      const doc = parseHtml(html)
+
+      await walkNodes(doc, markdownPath, validateImage)
+      await walkNodes(doc, markdownPath, validateLink)
+    })
+  )
+})
+
+const walkNodes = async (
+  nodeList: unknown[],
+  markdownPath: string,
+  validateNode: NodeValidator
+) => {
+  await Promise.all(
+    nodeList.map(async (node: unknown) => {
+      await validateNode(node, markdownPath)
 
       // walk deeper
       if (node && typeof node === 'object') {
-        Object.keys(node).forEach((key) => {
-          const item = (node as Record<string, unknown>)[key]
+        await Promise.all(
+          Object.keys(node).map(async (key) => {
+            const item = (node as Record<string, unknown>)[key]
 
-          switch (key) {
-            // ignore these
-            case '#text':
-              return
-          }
+            switch (key) {
+              // ignore these
+              case '#text':
+                return
+            }
 
-          if (Array.isArray(item)) {
-            walkNodes(item, markdownPath, validateNode)
-          }
-        })
+            if (Array.isArray(item)) {
+              await walkNodes(item, markdownPath, validateNode)
+            }
+          })
+        )
       } else {
         console.log(node)
         throw Error('Unexpected state')
       }
     })
+  )
+}
+
+const attemptToGetAttribute = (
+  node: unknown,
+  elementName: string,
+  attributeName: string
+): string | undefined => {
+  const NODE_ATTRIBUTES_KEY = ':@'
+  if (
+    !node ||
+    typeof node !== 'object' ||
+    !(elementName in node) ||
+    !(NODE_ATTRIBUTES_KEY in node)
+  ) {
+    return
   }
 
-  htmls.forEach((html, index) => {
-    const markdownPath = markdownPaths[index]
-    const doc = parseHtml(html)
+  const attributes = node[NODE_ATTRIBUTES_KEY]
 
-    walkNodes(doc, markdownPath, validateImage)
-    walkNodes(doc, markdownPath, validateLink)
-  })
-})
+  if (!attributes || typeof attributes !== 'object') {
+    return
+  }
+
+  const nodeKey = `@_${attributeName}`
+  const attribute = (attributes as Record<string, unknown>)[nodeKey]
+
+  if (typeof attribute === 'string') {
+    return attribute
+  }
+}
+
+const fileExists = async (filePath: string): Promise<boolean> => {
+  try {
+    await fsPromises.stat(filePath)
+    return true
+  } catch {
+    return false
+  }
+}
