@@ -2,6 +2,7 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { test, expect } from 'vitest'
+import { escapeRegExp } from 'lodash-es'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
 import { parseHtml } from '~/utilities/html'
@@ -15,18 +16,19 @@ const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
 const contentPath = path.resolve(clientPath, 'content')
 
+type NodeValidator = (node: unknown, markdownPath: string) => void
+type MicromarkOptions = NonNullable<Parameters<typeof micromark>[1]>
+
 test('Markdown links validation', async () => {
   // Unfortunately Nuxt Content's queryCollection can't run in tests only in server routes
   // so we have to read the markdown files directly from the filesystem
-  const markdownPaths = await globby(
-    [
-      '**/*.md',
-      '!_*' // markdown files starting with _ are excluded
-    ],
-    {
-      cwd: contentPath
-    }
-  )
+  const markdownPaths = await globby(['**/*.md'], {
+    cwd: contentPath
+  })
+
+  // sanity check on whether globby matched any markdowns
+  expect(markdownPaths.length).toBeGreaterThan(0)
+
   const markdowns = await Promise.all(
     markdownPaths.map((markdownPath) =>
       fsPromises.readFile(path.join(contentPath, markdownPath), 'utf-8')
@@ -47,9 +49,54 @@ test('Markdown links validation', async () => {
     validateMarkdownText(markdowns, markdownPath)
   })
 
-  const htmls = markdowns.map((markdown) => micromark(markdown))
+  const microMarkOptions: MicromarkOptions = {}
 
-  const validateLink = (href: string, markdownPath: string): void => {
+  const htmls = markdowns.map((markdown) =>
+    micromark(markdown, microMarkOptions)
+  )
+
+  const attemptToGetAttribute = (
+    node: unknown,
+    elementName: string,
+    attributeName: string
+  ): string | undefined => {
+    const NODE_ATTRIBUTES_KEY = ':@'
+    if (
+      !node ||
+      typeof node !== 'object' ||
+      !(elementName in node) ||
+      !(NODE_ATTRIBUTES_KEY in node)
+    ) {
+      return
+    }
+
+    const attributes = node[NODE_ATTRIBUTES_KEY]
+
+    if (!attributes || typeof attributes !== 'object') {
+      return
+    }
+
+    const nodeKey = `@_${attributeName}`
+    const attribute = (attributes as Record<string, unknown>)[nodeKey]
+
+    if (typeof attribute === 'string') {
+      return attribute
+    }
+  }
+
+  const validateImage: NodeValidator = (node, markdownPath) => {
+    const src = attemptToGetAttribute(node, 'img', 'src')
+    if (!src) return
+
+    const expectedPrefix = `/images/${markdownPath.replace(/\.md$/, '')}-`
+    const expectedPrefixRegexp = new RegExp(`^${escapeRegExp(expectedPrefix)}`)
+    expect(src).toMatch(expectedPrefixRegexp)
+  }
+
+  const validateLink: NodeValidator = (node, markdownPath) => {
+    const href = attemptToGetAttribute(node, 'a', 'href')
+    if (!href) return
+
     const expectLink = (
       href: string,
       expectedHref: string,
@@ -61,7 +108,7 @@ test('Markdown links validation', async () => {
       ).toBe(expectedHref)
     }
 
-    const { pathname, hash } = new URL(href, 'http://localhost/') // extract pathname to remove #hash
+    const { pathname, hash } = new URL(href, PUBLIC_SITE)
 
     if (href.includes(PUBLIC_SITE)) {
       return expectLink(href, `${pathname}${hash}`, markdownPath)
@@ -124,38 +171,41 @@ test('Markdown links validation', async () => {
     )
   }
 
-  const validateLinks = (nodeList: unknown[], markdownPath: string): void => {
+  const walkNodes = (
+    nodeList: unknown[],
+    markdownPath: string,
+    validateNode: NodeValidator
+  ) => {
     nodeList.forEach((node: unknown) => {
-      if (node && typeof node === 'object' && 'a' in node && ':@' in node) {
-        // found a link
-        const attributes = node[':@']
-        if (
-          attributes &&
-          typeof attributes === 'object' &&
-          '@_href' in attributes &&
-          typeof attributes['@_href'] === 'string'
-        ) {
-          validateLink(attributes['@_href'], markdownPath)
-        }
-      }
+      validateNode(node, markdownPath)
 
       // walk deeper
       if (node && typeof node === 'object') {
         Object.keys(node).forEach((key) => {
-          if (key.startsWith('@')) return
           const item = (node as Record<string, unknown>)[key]
+
+          switch (key) {
+            // ignore these
+            case '#text':
+              return
+          }
+
           if (Array.isArray(item)) {
-            validateLinks(item, markdownPath)
+            walkNodes(item, markdownPath, validateNode)
           }
         })
+      } else {
+        console.log(node)
+        throw Error('Unexpected state')
       }
     })
   }
 
   htmls.forEach((html, index) => {
     const markdownPath = markdownPaths[index]
-
     const doc = parseHtml(html)
-    validateLinks(doc, markdownPath)
+
+    walkNodes(doc, markdownPath, validateImage)
+    walkNodes(doc, markdownPath, validateLink)
   })
 })
