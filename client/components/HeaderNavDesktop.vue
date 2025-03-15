@@ -27,26 +27,69 @@
       </button>
     </HeadlessMenuButton>
     <HeadlessMenuItems
-      class="absolute z-10 w-40 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-[0_0px_10px_10px_#00101c99] dark:shadow-[0_0px_10px_10px_#00101c99]"
+      class="absolute z-10 w-64 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-[0_0px_10px_10px_#00101c99] dark:shadow-[0_0px_10px_10px_#00101c99]"
     >
-      <HeadlessMenuItem
+      <template
         v-for="(child, childIndex) in menuItem.children"
         :key="childIndex"
-        v-slot="{ active }"
       >
-        <a
-          :class="[
-            'block px-2 py-1 text-black dark:text-white',
-            {
-              'bg-blue-500 dark:bg-blue-600 text-white underline': active,
-              'no-underline': !active
-            }
-          ]"
-          href="/"
+        <HeadlessMenuItem v-slot="{ active }">
+          <a
+            v-if="!!child.href"
+            :class="[
+              'block px-2 pt-1 text-black dark:text-white',
+              {
+                'pb-0': !!child.children,
+                'pb-1': !child.children,
+                'bg-blue-500 dark:bg-blue-600 text-white underline': active,
+                'no-underline': !active
+              }
+            ]"
+            :href="child.href"
+          >
+            {{ child.label }}
+          </a>
+          <b
+            v-else
+            :class="[
+              'block px-2 pt-1 text-black dark:text-white text-sm',
+
+              {
+                'pb-0': !!child.children,
+                'pb-1': !child.children
+              }
+            ]"
+          >
+            {{ child.label }}
+          </b>
+        </HeadlessMenuItem>
+
+        <HeadlessMenuItem
+          v-for="(childChildremItem, childChildremItemIndex) in child.children"
+          :key="`${childIndex}.${childChildremItemIndex}`"
+          v-slot="{ active }"
         >
-          {{ child.label }}
-        </a>
-      </HeadlessMenuItem>
+          <a
+            v-if="childChildremItem.href"
+            :href="childChildremItem.href"
+            :class="[
+              'flex flex-horizontal text-sm px-2 py-0.5 text-black dark:text-white',
+              {
+                'bg-blue-500 dark:bg-blue-600 text-white underline': active,
+                'no-underline': !active
+              }
+            ]"
+          >
+            <span class="pr-2 pt-1.5"><GraphicsBullet /></span>
+            <span>
+              {{ childChildremItem.label }}
+            </span>
+          </a>
+          <b v-else>
+            {{ childChildremItem.label }}
+          </b>
+        </HeadlessMenuItem>
+      </template>
     </HeadlessMenuItems>
   </HeadlessMenu>
   <a

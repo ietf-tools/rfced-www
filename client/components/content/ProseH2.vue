@@ -1,25 +1,10 @@
 <template>
-  <Heading :id="props.id" level="2">
-    <a v-if="generate" :href="`#${props.id}`">
-      <slot />
-    </a>
-    <slot v-else />
+  <Heading level="2" class="pt-4 pb-2" :has-internal-link="true">
+    <slot />
   </Heading>
 </template>
 
 <script setup lang="ts">
 // Note, initially copied from https://github.com/nuxt-modules/mdc/blob/main/src/runtime/components/prose/ProseH2.vue
-
-import { computed, useRuntimeConfig } from '#imports'
-
-const props = defineProps<{ id?: string }>()
-
-const { headings } = useRuntimeConfig().public.mdc
-const generate = computed(
-  () =>
-    props.id &&
-    ((typeof headings?.anchorLinks === 'boolean' &&
-      headings?.anchorLinks === true) ||
-      (typeof headings?.anchorLinks === 'object' && headings?.anchorLinks?.h1))
-)
+// probably worth reviewing the source during an upgrade to see if there are any changes we should adopt
 </script>

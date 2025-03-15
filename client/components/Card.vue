@@ -1,8 +1,11 @@
 <template>
   <div
-    :class="['bg-white dark:bg-black relative dark:border-2 pl-5 pr-7 py-4 rounded print:border-2 print:border-black', props.class]"
+    :class="[
+      'bg-white dark:bg-black relative dark:border-2 pl-5 pr-7 py-4 rounded print:border-2 print:border-black',
+      props.class
+    ]"
   >
-    <component :is="hasAsideSlot ? 'div' : Fragment" :class="props.defaultSlotClass">
+    <component :is="hasAsideSlot ? 'div' : Fragment">
       <Heading :level="props.headingLevel">
         <a
           :href="props.href"
@@ -10,7 +13,7 @@
             'block text-[22px] font-bold text-blue-300 dark:text-blue-100 print:text-black no-underline focus:underline hover:underline group',
             props.hasCoverLink &&
               `before:absolute before:content-[\'\'] before:inset-0 before:transition-all dark:before:shadow-slate-700 hover:before:shadow-xl focus:before:shadow-xl dark:hover:before:shadow-[0_0px_40px_20px_#00101c] ${
-                /* this is only a template string to allow inline doc:
+                /* this is only a template string so I can write an inline comment:
                   must be able to have <slot /> content above the coverLink, so coverlink is z-40 and slot content (eg buttons) could be z-50 */ 'before:z-40'
               }`
           ]"

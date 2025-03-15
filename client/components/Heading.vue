@@ -1,7 +1,8 @@
 <template>
   <component
     :is="`h${props.level}`"
-    :class="[headingStyles[`h${props.styleLevel || props.level}`], props.class]"
+    :id="hasInternalLink ? getAnchorId($slots.default) : undefined"
+    :class="[headingStyles[`h${styleLevel || level}`], props.class, 'group']"
   >
     <GraphicsIETFMotif
       v-if="hasIcon"
@@ -11,46 +12,126 @@
       :opacity="0.05"
     />
     <slot />
+    <a
+      v-if="hasInternalLink"
+      :href="hasInternalLink ? `#${getAnchorId($slots.default)}` : undefined"
+      class="ml-2 opacity-50 no-underline group-hover:opacity-100"
+      title="Link to this heading"
+      >#</a
+    >
   </component>
 </template>
 
 <script setup lang="ts">
+import type { Slot } from 'vue'
+import { kebabCase } from 'lodash-es'
 import type { VueStyleClass } from './VueUtils'
+import { getVNodeText } from '~/utilities/vue'
+
+type Level = '1' | '2' | '3' | '4' | '5' | '6'
 
 type Props = {
+  /**
+   * The heading level eg 1-6.
+   */
   level: Level
   /**
    * By default the 'level' prop is also used for styling, but you can optionally override this
    * to have different styling to the actual HTML heading element.
+   *
    * Eg `<h1>` element but with h3's styling.
    *
    * For accessibility reasons heading levels should be semantic per the page structure / hierarchy,
    * not necessarily based on font size.
    *
    * W3C: WCAG, WAI say:
-   * > "Skipping heading ranks can be confusing and should be avoided where possible: Make sure
-   * > that a `<h2>` is not followed directly by an `<h4>`, for example."
+   *    "Skipping heading ranks can be confusing and should be avoided where possible: Make sure
+   *    that a `<h2>` is not followed directly by an `<h4>`, for example."
    *
    * See also
-   * * https://www.w3.org/TR/2012/NOTE-WCAG20-TECHS-20120103/G141
-   * * https://dequeuniversity.com/rules/axe/3.4/heading-order
-   * * https://dequeuniversity.com/rules/axe/3.0/page-has-heading-one
+   *  * https://www.w3.org/TR/2012/NOTE-WCAG20-TECHS-20120103/G141
+   *  * https://dequeuniversity.com/rules/axe/3.4/heading-order
+   *  * https://dequeuniversity.com/rules/axe/3.0/page-has-heading-one
    */
   styleLevel?: Level
   class?: VueStyleClass
   hasIcon?: boolean
+  /**
+   * This Heading component can generate an HTML internal link id and link, eg
+   *
+   * 1.  `id="internal-link"` on the heading element, and;
+   * 2.  `<a href="#internal-link">#</a>` in the heading.
+   *
+   * You can enable it with this prop.
+   *
+   * The DOM Id is derived from the text of the default `<slot />`. This text is reformatted into a
+   * DOM Id (eg the text is kebab-cased to remove whitespace but check the code for specifics).
+   */
+  hasInternalLink?: boolean
 }
 
-type Level = '1' | '2' | '3' | '4' | '5' | '6'
-
-const props = defineProps<Props>()
-
 const headingStyles: Record<`h${Props['level']}`, string> = {
+  /**
+   * Do not add default margins/padding here. The headings are used in many different situations
+   * that need different margins/padding.
+   *
+   * Instead pass in the `class` prop for margins/padding, or make a wrapper component if you want
+   * more reuse.
+   */
   h1: 'text-3xl lg:text-5xl font-bold',
   h2: 'text-2xl font-bold',
   h3: 'text-xl font-bold',
   h4: 'text-lg font-bold',
   h5: 'text-base font-bold',
   h6: 'text-base font-bold'
+}
+
+const props = defineProps<Props>()
+
+const fallbackId = `id-${useId()}`
+
+const anchorIdCache = new Map()
+
+type VueDefaultSlotType =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Slot<any> | undefined // this type is from Vue itself ie $slots.default in the template, it's not an intentional use of `any`.
+
+/**
+ * Derives an DOM Id from the text of the default <slot />.
+ * A DOM Id is a string with no whitespace and adhering to other DOM Id rules.
+ *
+ * This calculation is done in the render rather than as a Vue `setup`-phase computed() property because accessing
+ * the content of the slot outside the render would trigger this Vue warning:
+ *
+ *   "Slot invoked outside of the render function
+ *    this will not track dependencies used in the slot.
+ *    Invoke the slot function inside the render function instead."
+ *
+ * An article on the general problem: https://zelig880.com/how-to-fix-slot-invoked-outside-of-the-render-function-in-vue-3
+ *
+ */
+const getAnchorId = (defaultSlot: VueDefaultSlotType): string => {
+  const defaultSlotValue = defaultSlot ? defaultSlot() : []
+  const cachedAnchorId = anchorIdCache.get(defaultSlotValue)
+  if (cachedAnchorId) {
+    const typeOfCachedValue = typeof cachedAnchorId
+    if (typeOfCachedValue === 'string') {
+      return cachedAnchorId
+    }
+    anchorIdCache.delete(defaultSlotValue)
+  }
+
+  const slotText = getVNodeText(defaultSlotValue)
+  const slotTextNormalised = slotText.trim().toLowerCase() // lowercase before kebabCase() because otherwise kebabCase() will split 'RFCs' into 'rf-cs'
+  if (
+    // if it's an empty string then getVNodeText() probably returned an empty string, so provide a fallback id
+    !slotTextNormalised
+  ) {
+    return fallbackId
+  }
+
+  const kebabbed = kebabCase(slotTextNormalised)
+  anchorIdCache.set(defaultSlotValue, kebabbed)
+  return kebabbed
 }
 </script>

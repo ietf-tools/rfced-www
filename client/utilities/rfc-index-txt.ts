@@ -20,6 +20,7 @@ type Props = {
   redApi: ApiClient
   delayBetweenRequestsMs: number
   longestRfcNumberStringLength?: number
+  doNotRenderHeader?: boolean
 }
 
 const DEFAULT_MINIMUM_LENGTH = 4 // test suite may have a client that returns fewer, so we want 4 as the minimum
@@ -31,8 +32,15 @@ export async function renderRfcIndexDotTxt({
   abortController,
   redApi,
   delayBetweenRequestsMs,
-  longestRfcNumberStringLength: _longestRfcNumberStringLength
+  longestRfcNumberStringLength: _longestRfcNumberStringLength,
+  doNotRenderHeader
 }: Props) {
+  if (!doNotRenderHeader) {
+    push(
+      getHeader() // This must be the first thing done in this function... see code comment on getHeader()
+    )
+  }
+
   const docListArg: DocListArg = {}
 
   // extract latest RFC to find largest RFC number for layout reasons.
@@ -65,7 +73,7 @@ export async function renderRfcIndexDotTxt({
   ) {
     return
   }
-  push(getHeader(layout))
+  push(getIntro(layout))
 
   const column1Width = longestRfcNumberStringLength + COLUMN_PADDING
   const column2width = 72 - longestRfcNumberStringLength // yes this will cause reflow once RFC 10k, 100k, etc. occur
@@ -206,7 +214,30 @@ const stringifyRFC = (rfcMetadata: RfcMetadata): string => {
   }
 }
 
-const getHeader = (layout: Layout): string => {
+/**
+ * Nuxt can (incorrectly?) return 'HTTP 204 No Content' if there's a delay in sending data
+ * by the `/rfc-index.txt` route. Because renderRfcIndexDotTxt is async with awaited promises
+ * it's easy for there to be a delay if the Red API takes too long to respond. This HTTP 204
+ * issue (bug?) can be triggered when prerendering routes with `npm run build`, probably
+ * because routes are prerendered in parallel which causes A LOT of Red API requests and
+ * some routes just happen to be slower than others. So it's a race condition bug (it's hard
+ * to reproduce; it doesn't occur every time).
+ *
+ * To work around this issue we'll immediately render getHeader() from the route before awaiting
+ * any promise. This function should NEVER be async or have any delay in responding.
+ */
+export const getHeader = (): string => {
+  return `
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                             RFC INDEX
+                           -------------
+
+`
+}
+
+const getIntro = (layout: Layout): string => {
   const date = new Date()
   const createdOn = `${padStart((date.getMonth() + 1).toString(), 2, '0')}/${padStart(date.getDate().toString(), 2, '0')}/${date.getFullYear()}` // note the backwards US month/day/year format
   const hashes = padStart('', layout.longestRfcNumberLength, '#')
@@ -217,14 +248,7 @@ const getHeader = (layout: Layout): string => {
     7: padStart('', 7, ' ')
   }
 
-  return `
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                             RFC INDEX
-                           -------------
-
-(CREATED ON: ${createdOn}.)
+  return `(CREATED ON: ${createdOn}.)
 
 This file contains citations for all RFCs in numeric order.
 

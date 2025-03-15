@@ -33,7 +33,7 @@ const markdownMetadataArray = await Promise.all(
           .then((gitLog) => {
             const relativePath = contentMarkdownPath
               .substring(contentPath.length)
-              .replace(/\.md$/, '')
+              .replace(/\.md$/, '/')
             if (gitLog.latest?.date) {
               resolve({
                 [relativePath]: { mtime: gitLog.latest?.date }

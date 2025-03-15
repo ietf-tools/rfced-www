@@ -1,4 +1,4 @@
-import 'core-js/actual/regexp/escape'
+import { escapeRegExp } from 'lodash-es'
 import redirects from '../redirects.json'
 import { isMiddlewareRedirect } from '~/utilities/redirects'
 
@@ -9,8 +9,7 @@ const middlewareRedirects = redirects.redirects
     // eg ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"]
     // becomes [new RegExp('^/rfc/rfc(.*?)\.json$'), '/api/v1/rfc/rfc$1.json']
 
-    // @ts-expect-error RegExp.escape isn't natively supported by Node 22, hence the core-js polyfill above, so TS complains thinking it doesn't exist
-    const escapedPattern = RegExp.escape(redirect[0])
+    const escapedPattern = escapeRegExp(redirect[0])
 
     // Convert `*` to a regex pattern
     const regexForPath = escapedPattern.replaceAll(

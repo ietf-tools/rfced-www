@@ -5,7 +5,11 @@ import { test, expect } from 'vitest'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
 import { parseHtml } from '~/utilities/html'
-import { infoRfcPathBuilder, rfcPathBuilder } from '~/utilities/url'
+import {
+  infoRfcPathBuilder,
+  PUBLIC_SITE,
+  rfcPathBuilder
+} from '~/utilities/url'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
@@ -14,17 +18,55 @@ const contentPath = path.resolve(clientPath, 'content')
 test('Markdown links validation', async () => {
   // Unfortunately Nuxt Content's queryCollection can't run in tests only in server routes
   // so we have to read the markdown files directly from the filesystem
-  const markdownPaths = await globby('**/*.md', {
-    cwd: contentPath
-  })
+  const markdownPaths = await globby(
+    [
+      '**/*.md',
+      '!_*' // markdown files starting with _ are excluded
+    ],
+    {
+      cwd: contentPath
+    }
+  )
   const markdowns = await Promise.all(
     markdownPaths.map((markdownPath) =>
       fsPromises.readFile(path.join(contentPath, markdownPath), 'utf-8')
     )
   )
+
+  const validateMarkdownText = (html: string, markdownPath: string) => {
+    const badInternalLink = '](<#' // when converting from Google Doc it often makes broken links with this signature
+
+    expect(
+      html,
+      `Markdown file ${markdownPath} included bad data ${badInternalLink}`
+    ).not.toMatch(badInternalLink)
+  }
+
+  markdowns.forEach((markdowns, index) => {
+    const markdownPath = markdownPaths[index]
+    validateMarkdownText(markdowns, markdownPath)
+  })
+
   const htmls = markdowns.map((markdown) => micromark(markdown))
 
   const validateLink = (href: string, markdownPath: string): void => {
+    const expectLink = (
+      href: string,
+      expectedHref: string,
+      markdownPath: string
+    ): void => {
+      expect(
+        href,
+        `Markdown link in ${markdownPath} was "${href}" but should be ${expectedHref}`
+      ).toBe(expectedHref)
+    }
+
+    const { pathname, hash } = new URL(href, 'http://localhost/') // extract pathname to remove #hash
+
+    if (href.includes(PUBLIC_SITE)) {
+      return expectLink(href, `${pathname}${hash}`, markdownPath)
+    }
+
     if (
       href.startsWith('//') ||
       href.startsWith('http://') ||
@@ -35,32 +77,21 @@ test('Markdown links validation', async () => {
       return
     }
 
-    const { pathname } = new URL(href, 'http://localhost/') // extract pathname to remove #hash
-
     if (
       /**
        * Some valid paths
        */
-      pathname.endsWith('/') ||
+      pathname.endsWith('/') || // trailing / is an HTML route
       pathname.endsWith('.pdf') ||
       pathname.endsWith('.txt') ||
       pathname.endsWith('.xml') ||
       pathname.endsWith('.xsd') ||
-      pathname.endsWith('.png')
+      pathname.endsWith('.png') ||
+      pathname.endsWith('.tar.gz') ||
+      pathname.endsWith('.zip')
     ) {
       // these links appear to adhere to the new URL structure
       return
-    }
-
-    const expectLink = (
-      href: string,
-      expectedHref: string,
-      markdownPath: string
-    ): void => {
-      expect(
-        href,
-        `Markdown link in ${markdownPath} was "${href}" but should be ${expectedHref}`
-      ).toBe(expectedHref)
     }
 
     if (pathname.endsWith('.php')) {
@@ -123,6 +154,7 @@ test('Markdown links validation', async () => {
 
   htmls.forEach((html, index) => {
     const markdownPath = markdownPaths[index]
+
     const doc = parseHtml(html)
     validateLinks(doc, markdownPath)
   })

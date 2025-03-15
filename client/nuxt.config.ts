@@ -63,6 +63,10 @@ export default defineNuxtConfig({
       swr: oneDayInSeconds,
       prerender: true
     },
+    '/rfc-index.xml': {
+      swr: oneDayInSeconds,
+      prerender: true
+    },
     '/rfc-index/': {
       swr: oneDayInSeconds,
       prerender: true

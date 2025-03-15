@@ -28,6 +28,12 @@
             </Alert>
           </div>
 
+          <div v-if="searchResults?.length === 0">
+            <Alert variant="warning" heading="Unable to load latest RFCs">
+              Try again later (API error)
+            </Alert>
+          </div>
+
           <RFCCardSearchItem
             v-for="searchResult in searchResults"
             :key="searchResult.number"
@@ -41,99 +47,60 @@
           Learn about RFCs
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>What is an RFC?</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>What are Errata?</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>FAQs</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>About the RFC Editor</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
+          <MarkdownCard id="/authors/rfc-edit/" />
+          <MarkdownCard id="/authors/rfc-edit/auth48/" />
+          <MarkdownCard id="/series/rfc-errata/" />
+          <MarkdownCard id="/series/rfc-faq/" />
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
           Browse RFCs
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card href="/sdf" heading-level="3" has-cover-link>
+          <Card
+            :href="searchPathBuilder({ order: 'stream' })"
+            heading-level="3"
+            has-cover-link
+          >
             <template #headingTitle>By Stream</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Short description of the page here if it seems useful to show
             </p>
           </Card>
 
-          <Card href="/sdf" heading-level="3" has-cover-link>
+          <Card
+            :href="searchPathBuilder({ order: 'status' })"
+            heading-level="3"
+            has-cover-link
+          >
             <template #headingTitle>By Status</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Short description of the page here if it seems useful to show
             </p>
           </Card>
 
-          <Card href="/sdf" heading-level="3" has-cover-link>
+          <Card
+            :href="searchPathBuilder({ order: 'service' })"
+            heading-level="3"
+            has-cover-link
+          >
             <template #headingTitle>By Service</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
               Short description of the page here if it seems useful to show
             </p>
           </Card>
 
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>Download RFCs</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
+          <MarkdownCard id="/series/rfc-download/" />
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
           Start Participating
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>Internet Engineering Task Force</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>Internet Research Task Force</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>Internet Architecture Board</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card href="/sdf" heading-level="3" has-cover-link>
-            <template #headingTitle>Independent Stream</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
+          <MarkdownCard id="/authors/rfc-edit/" />
+          <MarkdownCard id="/authors/rfc-edit/auth48/" />
+          <MarkdownCard id="/series/rfc-errata/" />
+          <MarkdownCard id="/series/rfc-faq/" />
         </div>
       </div>
     </NuxtLayout>
@@ -141,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { SEARCH_API_PATH } from '~/utilities/url'
+import { SEARCH_API_PATH, searchPathBuilder } from '~/utilities/url'
 
 definePageMeta({
   layout: false

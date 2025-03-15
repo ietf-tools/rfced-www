@@ -1,17 +1,20 @@
 <template>
   <Popover v-if="thisContentMetadata" class="relative print:hidden">
     <PopoverButton
-      class="focus:bg-gray-300 dark:focus:bg-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-md px-2 -ml-2"
+      class="rounded-md text-sm px-2 py-4 -ml-2 focus:bg-gray-300 dark:focus:bg-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500"
     >
       Last updated {{ relativeDate }}
     </PopoverButton>
 
-    <PopoverPanel class="absolute z-10 border-2 rounded-md py-1 px-2">
-      <p class="font-mono">Last updated {{ localisedDate }}</p>
+    <PopoverPanel
+      class="absolute z-10 border-2 rounded-md py-1 px-2 bg-white dark:bg-black"
+    >
+      <p class="font-mono">Last updated {{ fullDate }}</p>
     </PopoverPanel>
   </Popover>
+
   <p v-if="thisContentMetadata" class="hidden print:block font-mono">
-    Last updated {{ relativeDate }}, {{ localisedDate }}
+    Last updated {{ relativeDate }}, {{ fullDate }}
   </p>
 </template>
 
@@ -26,12 +29,12 @@ const contentMetadata: ContentMetadata = _contentMetadata
 const route = useRoute()
 const thisContentMetadata = contentMetadata[route.path]
 
-let localisedDate: string | null = null
+let fullDate: string | null = null
 let relativeDate: string | null = null
 
 if (thisContentMetadata) {
   const datetime = DateTime.fromISO(thisContentMetadata.mtime)
   relativeDate = datetime.toRelativeCalendar()
-  localisedDate = datetime.toLocaleString(DateTime.DATETIME_HUGE)
+  fullDate = datetime.toISO() // don't use localised date, because this will be cached for all users so there is no local timezone except server timezone which is irrelevant for users
 }
 </script>
