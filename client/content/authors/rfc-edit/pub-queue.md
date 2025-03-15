@@ -41,3 +41,5 @@ A document can move through various states while having either, both, or none of
 - 3G = The document has a normative reference to a document that normatively references a document that normatively references a NOT-RECEIVED document.
 
 ## Publication Flow Chart
+
+![Publication flow chart](/images/authors/rfc-edit/pub-queue-flow-chart.png)

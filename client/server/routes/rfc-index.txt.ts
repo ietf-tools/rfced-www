@@ -18,8 +18,7 @@ export default defineEventHandler(async (event) => {
         close,
         abortController,
         redApi,
-        delayBetweenRequestsMs: DELAY_BETWEEN_REQUESTS_MS,
-        doNotRenderHeader: true
+        delayBetweenRequestsMs: DELAY_BETWEEN_REQUESTS_MS
       })
   )
 

@@ -1,5 +1,7 @@
 # How to Write an RFC
 
+![Draft & approval via IETF or other streams → Editing by the RFC Production Center (RPC) → Official RFC publication on rfc-editor.org](/images/authors/rfc-how-to-flowchart.png)
+
 RFCs all begin as [Internet-Drafts](https://authors.ietf.org/#introducing-internet-drafts) (I-Ds) that have been adopted by an [IETF working group](https://www.ietf.org/process/wgs/) or by one of the other streams for document publication.
 
 Each publication stream has its own processes for authoring and approving I-Ds. Refer to the [IETF](https://www.ietf.org/process/), [IRTF](https://www.irtf.org/), [IAB](https://www.iab.org/role/evaluating-new-work-proposals/), [Independent](https://docs.google.com/document/d/1GIzY1ZT_PJTOxacaFkAauUZ2p3eMPtui_v5RKORjyiw/edit#heading=h.y5hej3hkyt7v) or [Editorial](https://datatracker.ietf.org/edwg/rswg/about/) Streams for more information on how to start.
