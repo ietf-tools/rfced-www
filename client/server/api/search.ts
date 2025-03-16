@@ -5,6 +5,18 @@ import type {
 } from '../../generated/red-client'
 import { getRedClient } from '~/utilities/redClientWrappers'
 
+// The unusual typing is for Zod's benefit in z.enum() which requires SearchParamsSchema
+const statuses: [SlugEnum, ...SlugEnum[]] = [
+  // note that there's no 'any' as that is implicit by not specifying a status
+  'bcp',
+  'experimental',
+  'historic',
+  'informational',
+  'not-issued',
+  'standard',
+  'unknown'
+]
+
 export const SearchParamsSchema = z.object({
   q: z.string().optional(),
   from: z.string().optional(),

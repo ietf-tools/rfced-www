@@ -1,16 +1,20 @@
 import { debounce } from 'lodash-es'
 import type { SearchSchemaType, ResponseType } from '../server/api/search'
 import { SEARCH_PATH, SEARCH_API_PATH } from '~/utilities/url'
+import type { SlugEnum } from '~/generated/red-client'
 
-export const Statuses = {
-  any: 'Any',
+const STATUS_ANY = 'any'
+
+export const Statuses: Record<SlugEnum | typeof STATUS_ANY, string> = {
+  any: 'Any', // note that 'any' isn't forwarded to the API as 'any' is implicitly no status
   informational: 'Informational',
   standard: 'Standards Track',
   experimental: 'Experimental',
+  'not-issued': 'Not issued',
   bcp: 'Best Current Practice',
   historic: 'Historic',
   unknown: 'Unknown'
-} as const
+}
 
 export type StatusValue = keyof typeof Statuses
 
@@ -202,7 +206,7 @@ export const useSearchStore = defineStore('search', () => {
         q: q.value,
         from: stringifyDate(publicationDateFrom.value),
         to: stringifyDate(publicationDateTo.value),
-        statuses: statuses.value.join(','),
+        statuses: stringifyStatuses(statuses.value),
         stream: stream.value,
         area: area.value,
         workinggroup: workingGroup.value,
@@ -427,6 +431,11 @@ export function stringifyDate(date: Date | undefined): string {
     return ''
   }
   return formatDateString(date.getFullYear(), date.getMonth() + 1)
+}
+
+export function stringifyStatuses(statuses: StatusValue[]): string {
+  if (statuses.includes(STATUS_ANY)) return '' // 'any' is the same as ommiting a status
+  return statuses.join(',')
 }
 
 export function parseDateString(date: string): Date {
