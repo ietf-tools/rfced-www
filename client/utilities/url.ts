@@ -98,3 +98,7 @@ export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
 export const authorPathBuilder = (author: Rfc['authors'][number]): string => {
   return `mailto:${author.email}`
 }
+
+export const isInternalLink = (href: string): boolean => {
+  return href.startsWith('/')
+}

@@ -3,7 +3,7 @@
     <span class="text-base font-bold block mb-1">{{ props.label }}</span>
     <select
       v-model="value"
-      class="clear-both w-full text-base bg-white text-black dark:bg-black dark:text-white dark:border"
+      class="w-full text-base border border-gray-400 dark:border-white dark:text-white py-2 pl-1 pr-6 scheme-light dark:scheme-dark"
     >
       <option
         v-for="([itemValue, itemLabel], itemIndex) in props.options"

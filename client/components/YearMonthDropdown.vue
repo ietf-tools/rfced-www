@@ -3,7 +3,7 @@
     <span class="sr-only">{{ props.label }}</span>
     <select
       v-model="value"
-      class="w-full text-base bg-white text-black border-black border dark:bg-black dark:text-white"
+      class="w-full text-base border border-gray-400 dark:border-white dark:text-white py-2 pl-1 pr-6 scheme-light dark:scheme-dark"
       :title="props.label"
     >
       <option value="" :disabled="isDisabled" class="text-gray-700">

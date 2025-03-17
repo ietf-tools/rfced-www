@@ -151,7 +151,8 @@ const statusMappingFromLegacyToNew: Record<
   informational: 'Informational',
   experimental: 'Experimental',
   historic: 'Historic',
-  unknown: 'Unknown'
+  unknown: 'Unknown',
+  'not-issued': 'Not Issued'
 }
 
 const sortedStatusMappingFromLegacyToNew = Object.entries(
