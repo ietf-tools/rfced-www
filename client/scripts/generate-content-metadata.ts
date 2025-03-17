@@ -2,13 +2,13 @@ import path from 'node:path'
 import fs from 'node:fs'
 
 import { simpleGit } from 'simple-git'
-import { glob } from 'glob'
+import { globby } from 'globby'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
 const contentPath = path.resolve(clientPath, 'content')
 
-const contentMarkdownPaths = await glob(path.join(contentPath, '**/*.md'))
+const contentMarkdownPaths = await globby(path.join(contentPath, '**/*.md'))
 
 const git = simpleGit()
 
