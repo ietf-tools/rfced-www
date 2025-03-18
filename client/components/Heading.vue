@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import type { Slot } from 'vue'
-import { kebabCase } from 'lodash-es'
 import type { VueStyleClass } from './VueUtils'
 import { getVNodeText } from '~/utilities/vue'
+import { textToAnchorId } from '~/utilities/url'
 
 type Level = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -120,18 +120,10 @@ const getAnchorId = (defaultSlot: VueDefaultSlotType): string => {
     }
     anchorIdCache.delete(defaultSlotValue)
   }
-
   const slotText = getVNodeText(defaultSlotValue)
-  const slotTextNormalised = slotText.trim().toLowerCase() // lowercase before kebabCase() because otherwise kebabCase() will split 'RFCs' into 'rf-cs'
-  if (
-    // if it's an empty string then getVNodeText() probably returned an empty string, so provide a fallback id
-    !slotTextNormalised
-  ) {
-    return fallbackId
-  }
-
-  const kebabbed = kebabCase(slotTextNormalised)
-  anchorIdCache.set(defaultSlotValue, kebabbed)
-  return kebabbed
+  const anchorId = textToAnchorId(slotText)
+  if (!anchorId) return fallbackId
+  anchorIdCache.set(defaultSlotValue, anchorId)
+  return anchorId
 }
 </script>

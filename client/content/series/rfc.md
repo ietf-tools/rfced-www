@@ -13,7 +13,7 @@ RFCs are produced via five streams:
 - **The Internet Engineering Task Force** ([IETF](https://www.ietf.org/)) produces protocol standards, best current practices, experimental, and informational documents. This is the only stream that creates Internet Standards.
 - **The Internet Research Task Force** ([IRTF](https://www.irtf.org/)) focuses on longer term research issues related to the Internet.
 - **The Internet Architecture Board** ([IAB](https://www.iab.org/)) provides long-range technical direction for Internet development.
-- [**Independent Submissions**](/independent/) RFCs are published outside the official processes of the IETF, IAB, and IRTF but are relevant to the Internet community.
+- [**Independent Submissions**](/authors/rfc-independent-submissions/) RFCs are published outside the official processes of the IETF, IAB, and IRTF but are relevant to the Internet community.
 - **Editorial** RFCs are produced by the RFC Series Working Group ([RSWG](https://datatracker.ietf.org/group/rswg/about/)) and document the process of publishing RFCs.
 
 For more history of the series, see:

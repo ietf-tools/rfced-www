@@ -2,14 +2,15 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { test, expect } from 'vitest'
-import { escapeRegExp, kebabCase } from 'lodash-es'
+import { escapeRegExp } from 'lodash-es'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
 import { getInnerText, parseHtml, walkNodes } from '~/utilities/html'
 import {
   infoRfcPathBuilder,
   PUBLIC_SITE,
-  rfcPathBuilder
+  rfcPathBuilder,
+  textToAnchorId
 } from '~/utilities/url'
 import contentMetadata from '~/generated/content-metadata.json'
 
@@ -19,9 +20,10 @@ const contentPath = path.resolve(clientPath, 'content')
 const publicPath = path.resolve(clientPath, 'public')
 type Metadata = {
   markdownPath: string
+  publicPath: string
   markdownData: string
   html: string
-  links: string[]
+  validLinks: string[]
 }
 
 const markdownLinks = Object.keys(
@@ -50,7 +52,7 @@ test('Markdown links validation', async () => {
 
   const links = await getAllLinks(
     markdownPaths.map((markdownPath, index) => {
-      const publicPath = `/${markdownPath.replace(/\.md$/, '/')}`
+      const publicPath = markdownPathToPublicPath(markdownPath)
       if (!(publicPath in contentMetadata)) {
         throw Error(
           `Unrecognised path ${publicPath} (for ${markdownPath}) was not found in ${Object.keys(contentMetadata)}`
@@ -73,8 +75,9 @@ test('Markdown links validation', async () => {
       const metadata: Metadata = {
         markdownPath,
         markdownData,
+        publicPath: markdownPathToPublicPath(markdownPath),
         html,
-        links
+        validLinks: links
       }
       await walkNodes(doc, (node) => validateImage(node, metadata))
       await walkNodes(doc, (node) => validateLink(node, metadata))
@@ -125,9 +128,9 @@ const validateLink = async (node: unknown, metadata: Metadata) => {
     ).toBe(expectedHref)
   }
 
-  const { markdownPath } = metadata
+  const { markdownPath, publicPath, validLinks } = metadata
 
-  const { pathname, hash } = new URL(href, PUBLIC_SITE)
+  const { pathname, hash } = new URL(href, `${PUBLIC_SITE}${publicPath}`)
 
   if (href.includes(PUBLIC_SITE)) {
     return expectLink(href, `${pathname}${hash}`, markdownPath)
@@ -173,7 +176,7 @@ const validateLink = async (node: unknown, metadata: Metadata) => {
   }
 
   if (pathname.startsWith('/rfc/')) {
-    const expectedUrl = rfcPathBuilder(pathname.substring('/rfc/'.length))
+    const expectedUrl = `${rfcPathBuilder(pathname.substring('/rfc/'.length))}${hash}`
     return expectLink(href, expectedUrl, markdownPath)
   }
 
@@ -182,23 +185,17 @@ const validateLink = async (node: unknown, metadata: Metadata) => {
     return expectLink(href, expectedUrl, markdownPath)
   }
 
-  if (
-    // a valid markdown path
-    pathname in contentMetadata
-  ) {
+  if (validLinks.includes(`${pathname}${hash}`)) {
     return
   }
 
-  if (href.startsWith('#')) {
-  }
-
   throw Error(
-    `Unhandled Markdown link in ${markdownPath} was "${href}". Please update link validation test.`
+    `Broken link in ${markdownPath} was "${href}" (parsed as "${pathname}" "${hash}") but that's not a known page. Near matches were ${JSON.stringify(validLinks.filter((validLink) => validLink.startsWith(pathname)))}`
   )
 }
 
 /**
- * For the data structure returns by parseHtml
+ * For the data structure returns by `parseHtml()`
  */
 const attemptToGetAttribute = (
   node: unknown,
@@ -238,6 +235,54 @@ const fileExists = async (filePath: string): Promise<boolean> => {
   }
 }
 
+const siteRoutes = [
+  '/current_queue/',
+  '/reports/subpub_stats/',
+  '/IAD-reports/',
+  '/rfcs-per-year/',
+  '/report-summary/ietf/',
+  '/status_changes/',
+  '/contact/at-ietf/', // TODO: revise whether this is needed
+  '/old/Dec2014/',
+  '/pubprocess/', // TODO: revise whether this is needed
+  '/series/rfc-faq/#missingauthor', // TODO: REMOVE THIS
+  '/series/rfc-faq/#auth48', // TODO: REMOVE THIS
+  '/report-summary/2015-2/',
+  '/report-summary/report-summary-2016/',
+  '/report-summary/report-summary-2017/',
+  '/report-summary/report-summary-2018/',
+  '/report-summary/report-summary-2019/',
+  '/report-summary/report-summary-2020/',
+  '/report-summary/report-summary-2021/',
+  '/report-summary/report-summary-2022/',
+  '/report-summary/report-summary-2023/',
+  '/report-summary/report-summary-2024/',
+  '/styleguide/part2/', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_ids', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_rfcs', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_repo', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_subseries', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_errata', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_iana_reg', // TODO: revise whether this is needed
+  '/styleguide/part2/#ref_email_list', // TODO: revise whether this is needed
+  '/styleguide/part2/#index_placement', // TODO: revise whether this is needed
+  '/styleguide/part2/#inclusive_language', // TODO: revise whether this is needed
+  '/styleguide/part2/#double_no', // TODO: revise whether this is needed
+  '/styleguide/part2/#rfc_as_compound', // TODO: revise whether this is needed
+  '/styleguide/part2/#abbrev_as_verb', // TODO: revise whether this is needed
+  '/styleguide/part2/#exp_abbrev', // TODO: revise whether this is needed
+  '/styleguide/part2/#citation_usage', // TODO: revise whether this is needed
+  '/styleguide/part2/#use_https', // TODO: revise whether this is needed
+  '/styleguide/part2/#keywords_in_quote', // TODO: revise whether this is needed
+  '/styleguide/part2/#terms_format', // TODO: revise whether this is needed
+  '/styleguide/part2/#terms_section', // TODO: revise whether this is needed
+  '/styleguide/part2/#didactic_caps', // TODO: revise whether this is needed
+  '/styleguide/part2/#section_length', // TODO: revise whether this is needed
+  '/styleguide/part2/#nonascii', // TODO: revise whether this is needed
+  '/styleguide/part2/#links', // TODO: revise whether this is needed
+  '/errata-definitions/' // TODO: revise whether this is needed
+]
+
 type HtmlPages = {
   markdownPath: string
   publicPath: string
@@ -245,12 +290,12 @@ type HtmlPages = {
   doc: ReturnType<typeof parseHtml>
 }[]
 const getAllLinks = async (htmlPages: HtmlPages): Promise<string[]> => {
-  const getInternalLinks = (htmlPages: HtmlPages) => {
-    const htmlInternalLinks = htmlPages
-      .map((htmlPage) => {
+  const getInternalLinks = async (htmlPages: HtmlPages): Promise<string[]> => {
+    const htmlPagesLinks = await Promise.all(
+      htmlPages.map(async (htmlPage) => {
         const { publicPath, doc } = htmlPage
         const headingText: string[] = []
-        walkNodes(doc, async (node) => {
+        await walkNodes(doc, async (node) => {
           if (
             node &&
             typeof node === 'object' &&
@@ -266,16 +311,22 @@ const getAllLinks = async (htmlPages: HtmlPages): Promise<string[]> => {
         })
 
         return headingText.map(
-          (headingText) =>
-            `${publicPath}#${kebabCase(headingText.toLowerCase())}`
+          (headingText) => `${publicPath}#${textToAnchorId(headingText)}`
         )
       })
-      .reduce((acc, item) => {
-        acc.push(...item)
-        return acc
-      }, [])
+    )
 
-    return htmlInternalLinks
+    return htmlPagesLinks.reduce((acc, item) => {
+      acc.push(...item)
+      return acc
+    }, [])
   }
-  return [...markdownLinks, ...getInternalLinks(htmlPages)]
+  return [
+    ...markdownLinks,
+    ...siteRoutes,
+    ...(await getInternalLinks(htmlPages))
+  ]
 }
+
+const markdownPathToPublicPath = (markdownPath: string): string =>
+  `/${markdownPath.replace(/\.md$/, '/')}`

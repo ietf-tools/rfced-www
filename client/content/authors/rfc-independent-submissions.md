@@ -48,7 +48,7 @@ From time to time, the Independent Submissions Editor may have a conflict of int
 
 When the ISE believes that there may be a conflict of interest, or if authors or others believe that there is a conflict of interest, the matter will be referred to the [Independent Submissions Editorial Board](#independent-submissions-editorial-board). They will advise the ISE as to what should happen at the various stages of the publication process. The ISE will inform the community and authors of such conflicts, and any actions to be taken as a result.
 
-## Independent Submissions Editorial Board {#independent-submissions-editorial-board}
+## Independent Submissions Editorial Board
 
 The Independent Submissions Editorial Board (ISEB) provides reviews of independent submissions and offers advice to the Independent Submissions Editor (ISE). The ISEB can be reached at rfc-ed-board@rfc-editor.org.
 
@@ -77,21 +77,21 @@ The present board includes (in alphabetical order):
 Not all RFCs are published through the [IETF](https://ietf.org/). Some are published as independent submissions. These documents do not require, nor do they carry, community consensus, and they are not standards or best practices.  
 ![A description of the different streams that feed into the RFC series.  Once initially approved for publication, they are processed by the RFC Production Center, and then go on to be published.](/images/authors/rfc-independent-submissions-streams.png)
 
-- [What sort of documents are independent submissions?](#what-sort-of-documents-are-independent-submissions?)
-- [What are some examples of RFCs published through the Independent Stream that hit at least one of those points?](#what-are-some-examples-of-rfcs-published-through-the-independent-stream-that-hit-at-least-one-of-those-points?)
-- [What other criteria are there for Independent Stream RFCs?](#what-other-criteria-are-there-for-independent-stream-rfcs?)
-- [What if a document isn’t appropriate as an independent submission?](#what-if-a-document-isn’t-appropriate-as-an-independent-submission?)
+- [What sort of documents are independent submissions?](#what-sort-of-documents-are-independent-submissions)
+- [What are some examples of RFCs published through the Independent Stream that hit at least one of those points?](#what-are-some-examples-of-rfcs-published-through-the-independent-stream-that-hit-at-least-one-of-those-points)
+- [What other criteria are there for Independent Stream RFCs?](#what-other-criteria-are-there-for-independent-stream-rfcs)
+- [What if a document isn’t appropriate as an independent submission?](#what-if-a-document-isnt-appropriate-as-an-independent-submission)
 - [What about Intellectual Property Rights (IPR)?](#what-about-intellectual-property-rights-ipr)
-- [What’s the process?](#whats-the-process?)
-- [At what stage is a document?](#at-what-stage-is-a-document?)
-- [Who makes decisions about independent submissions?](#who-makes-decisions-about-independent-submissions?)
-- [Who reviews submissions?](#who-reviews-submissions?)
-- [Where can reviews be found?](#where-can-reviews-be-found?)
-- [What is IETF Conflict Review?](#what-is-ietf-conflict-review?)
-- [How is a decision made?](#how-is-a-decision-made?)
-- [What happens if a work is declined?](#what-happens-if-a-work-is-declined?)
-- [Can an Independent Submission be changed once it is published as an RFC?](#can-an-independent-submission-be-changed-once-it-is-published-as-an-rfc?)
-- [More questions?](#more-questions?)
+- [What’s the process?](#whats-the-process)
+- [At what stage is a document?](#at-what-stage-is-a-document)
+- [Who makes decisions about independent submissions?](#who-makes-decisions-about-independent-submissions)
+- [Who reviews submissions?](#who-reviews-submissions)
+- [Where can reviews be found?](#where-can-reviews-be-found)
+- [What is IETF Conflict Review?](#what-is-ietf-conflict-review)
+- [How is a decision made?](#how-is-a-decision-made)
+- [What happens if a work is declined?](#what-happens-if-a-work-is-declined)
+- [Can an Independent Submission be changed once it is published as an RFC?](#can-an-independent-submission-be-changed-once-it-is-published-as-an-rfc)
+- [More questions?](#more-questions)
 
 #### What sort of documents are independent submissions?
 

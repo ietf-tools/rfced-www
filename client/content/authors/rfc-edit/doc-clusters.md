@@ -9,7 +9,7 @@ Clusters may include documents that are not in the queue:
 - **NOT-RECEIVED**. This document is not yet in the RFC Editor publication queue.
 - **PUB**. This document has already been published as an RFC.
 
-Clusters may include documents that are linked by normative references indirectly. See [MISSREF Generation Numbers](#definitions-of-flags) for more information.
+Clusters may include documents that are linked by normative references indirectly. See [MISSREF Generation Numbers](/authors/rfc-edit/pub-queue/#definitions-of-flags) for more information.
 
 Other documents may move through the RFC [publication process](/authors/rfc-edit/) together as a cluster if there was a specific request from the IESG or authors for simultaneous publication.
 
