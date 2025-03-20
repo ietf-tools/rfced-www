@@ -38,8 +38,8 @@
 </template>
 
 <script setup lang="ts">
-import { getVNodeText } from '~/utilities/vue'
 import type { VueStyleClass } from './VueUtils'
+import { getVNodeText } from '~/utilities/vue'
 
 type Props = {
   text: (string | VNode)[]
