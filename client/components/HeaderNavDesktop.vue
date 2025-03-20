@@ -27,7 +27,7 @@
       </button>
     </HeadlessMenuButton>
     <HeadlessMenuItems
-      class="absolute z-10 w-64 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-[0_0px_10px_10px_#00101c99] dark:shadow-[0_0px_10px_10px_#00101c99]"
+      class="absolute z-100 w-64 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-xl"
     >
       <template
         v-for="(child, childIndex) in menuItem.children"
@@ -37,22 +37,25 @@
           <a
             v-if="!!child.href"
             :class="[
-              'block px-2 pt-1 text-black dark:text-white',
+              'block px-2 py-2 no-underline text-blue-800 dark:text-white',
               {
                 'pb-0': !!child.children,
                 'pb-1': !child.children,
-                'bg-blue-500 dark:bg-blue-600 text-white underline': active,
-                'no-underline': !active
+                'bg-blue-500 dark:bg-blue-600 text-white underline': active
               }
             ]"
             :href="child.href"
           >
+            <GraphicsChevron
+              class="absolute right-0 mt-2 mr-4 size-2 -rotate-90"
+            />
+
             {{ child.label }}
           </a>
           <b
             v-else
             :class="[
-              'block px-2 pt-1 text-black dark:text-white text-sm',
+              'block px-2 pt-1 text-blue-600 dark:text-white text-md ',
 
               {
                 'pb-0': !!child.children,
@@ -73,13 +76,17 @@
             v-if="childChildremItem.href"
             :href="childChildremItem.href"
             :class="[
-              'flex flex-horizontal text-sm px-2 py-0.5 text-black dark:text-white',
+              'flex flex-horizontal text-sm px-2 py-2 text-blue-800 dark:text-white',
               {
                 'bg-blue-500 dark:bg-blue-600 text-white underline': active,
                 'no-underline': !active
               }
             ]"
           >
+            <GraphicsChevron
+              class="absolute right-0 mt-2 mr-4 size-2 -rotate-90"
+            />
+
             <span class="pr-2 pt-1.5"><GraphicsBullet /></span>
             <span>
               {{ childChildremItem.label }}

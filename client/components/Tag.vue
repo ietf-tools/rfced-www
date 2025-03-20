@@ -39,10 +39,11 @@
 
 <script setup lang="ts">
 import { getVNodeText } from '~/utilities/vue'
+import type { VueStyleClass } from './VueUtils'
 
 type Props = {
   text: (string | VNode)[]
-  class?: string
+  class?: VueStyleClass
 }
 
 const props = defineProps<Props>()

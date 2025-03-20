@@ -17,6 +17,8 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from './VueUtils'
+
 type Props = {
   label: string
   /**
@@ -30,7 +32,7 @@ type Props = {
    * ```
    */
   options: [string, string][]
-  class?: string
+  class?: VueStyleClass
 }
 
 const props = defineProps<Props>()

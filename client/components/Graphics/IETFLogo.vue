@@ -10,11 +10,12 @@
 
 <script setup lang="ts">
 import ietfLogo from 'assets/ietf-nor-dense-inverted-duotone.svg'
+import type { VueStyleClass } from '../VueUtils'
 
 type Props = {
   width: string
   height: string
-  class?: string
+  class?: VueStyleClass
 }
 
 const props = defineProps<Props>()

@@ -4,7 +4,7 @@ import type ContentMetadata from '~/generated/content-metadata.json'
 import { parseRFCId } from '~/utilities/rfc'
 import type { SearchParams } from '~/stores/search'
 
-type MarkdownPaths = keyof typeof ContentMetadata
+export type MarkdownPaths = keyof typeof ContentMetadata
 
 export const IETF_PRIVACY_STATEMENT_URL =
   'https://www.ietf.org/privacy-statement/'
