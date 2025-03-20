@@ -1,9 +1,7 @@
 <template>
-  <Accordion.Root multiple collapsible>
-    <slot />
-  </Accordion.Root>
+  <slot />
 </template>
 
 <script setup lang="ts">
-import { Accordion } from '@ark-ui/vue'
+// TODO: delete this
 </script>

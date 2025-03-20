@@ -38,11 +38,12 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from './VueUtils'
 import { getVNodeText } from '~/utilities/vue'
 
 type Props = {
   text: (string | VNode)[]
-  class?: string
+  class?: VueStyleClass
 }
 
 const props = defineProps<Props>()

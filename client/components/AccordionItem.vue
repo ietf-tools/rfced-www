@@ -1,29 +1,31 @@
 <template>
-  <Accordion.Item :value="props.id">
-    <Accordion.ItemTrigger
-      class="flex flex-row w-full justify-between items-center py-1 border border-gray-500 hover:bg-white/10"
+  <Disclosure v-slot="{ open }">
+    <DisclosureButton
+      class="flex flex-row w-full justify-between items-center py-1 p border border-gray-500 hover:bg-white/10"
     >
       <span
         :class="{
           'p-4': styleDepth === 1,
           'px-6 py-3': styleDepth === 2
         }"
-        >{{ props.triggerText }}</span
       >
-      <Accordion.ItemIndicator
-        class="w-[16px] border-l border-gray-500 py-4 pl-6 pr-8 text-blue-100"
-      >
-        <GraphicsChevron class="-rotate-90" data-chevron />
-      </Accordion.ItemIndicator>
-    </Accordion.ItemTrigger>
-    <Accordion.ItemContent>
+        {{ props.triggerText }}
+      </span>
+      <GraphicsChevron
+        :class="{
+          'mr-4 size-4': true,
+          '-rotate-180': !open
+        }"
+      />
+    </DisclosureButton>
+    <DisclosurePanel>
       <slot />
-    </Accordion.ItemContent>
-  </Accordion.Item>
+    </DisclosurePanel>
+  </Disclosure>
 </template>
 
 <script setup lang="ts">
-import { Accordion } from '@ark-ui/vue'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
 type Props = {
   /**

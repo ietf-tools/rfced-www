@@ -15,10 +15,12 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from '../VueUtils'
+
 type Props = {
   width?: string
   height?: string
-  class?: string | string[]
+  class?: VueStyleClass
 }
 
 const props = withDefaults(defineProps<Props>(), {
