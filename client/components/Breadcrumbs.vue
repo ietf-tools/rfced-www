@@ -6,7 +6,7 @@
       class="inline-block"
     >
       <a
-        class="inline-block px-2 py-2 rounded hover:bg-gray-200 hover:text-blue-800"
+        class="inline-block px-2 py-2 underline rounded hover:bg-gray-200 hover:text-blue-800"
         :href="path.url"
       >
         {{ path.label }}

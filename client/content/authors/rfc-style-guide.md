@@ -26,7 +26,7 @@ Additional writing resources that may be helpful to authors:
 - [The Elements of Style](https://www.bartleby.com/141/)
 - [Richard Lanham’s Paramedic Method](https://owl.purdue.edu/owl/general_writing/academic_writing/paramedic_method.html) for information on revising verbose text.
 
-## Updates to the RFC Style Guide {#updates-to-the-rfc-style-guide}
+## Updates to the RFC Style Guide
 
 The following style issues have been raised with the RFC Production Center since [RFC 7322, “RFC Style Guide”](/info/rfc7322/) was published. This page reflects current usage. These will be considered for inclusion in a future RFC (current revision draft in [GitHub](https://github.com/rfc-editor/draft-rfc-editor-7322bis)).
 
@@ -101,14 +101,14 @@ Use the following form to reference IANA registries. Note that the top-level URL
 
 Note: This guidance was developed in coordination with IANA.
 
-[Referencing Internet-Drafts](/part2/#ref_ids)
+[Referencing Internet-Drafts](/styleguide/part2/#ref_ids)
 
 The format for references to Internet-Drafts described in [Section 4.8.6.4 of RFC 7322](/rfc/rfc7322.html#section-4.8.6.4) is updated to include the day of posting (in addition to the month and year), the word “Internet-Draft”, and the URL of the HTML file. 
 
 **Example:**  
 [RFC7322bis] Levine, J., Ed., and S. Ginoza, “RFC Style Guide”, Work in Progress, Internet-Draft, draft-flanagan-7322bis-07, 7 April 2021, <[https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07](https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07)\>.
 
-[Referencing Web-Based Public Code Repositories (e.g., GitHub)](/part2/#ref_repo)
+[Referencing Web-Based Public Code Repositories (e.g., GitHub)](/styleguide/part2/#ref_repo)
 
 Used for Informative References only. 
 
@@ -125,14 +125,14 @@ Format of reference entries:
 
 [linuxlite] “Linux Lite”, March 2018, <[https://sourceforge.net/projects/linuxlite/](https://sourceforge.net/projects/linuxlite/)\>.
 
-[Referencing Email on Mailing Lists](/part2/#ref_email_list)
+[Referencing Email on Mailing Lists](/styleguide/part2/#ref_email_list)
 
 When referencing emails to mailing lists, use the following template: 
 
 [reftag] Sender, A., “Subject: Subject line”, message to the  
 listname mailing list, DD Month YYYY, .
 
-[Index Placement](/part2/#index_placement)
+[Index Placement](/styleguide/part2/#index_placement)
 
 If included, an index appears directly before the Authors’ Addresses Section.
 
@@ -144,30 +144,30 @@ Topic
 
 Recommendation
 
-[Inclusive Language](/part2/#inclusive_language)
+[Inclusive Language](/styleguide/part2/#inclusive_language)
 
 Because each stream has chosen to follow the [IESG statement on Inclusive Language](https://www.ietf.org/about/groups/iesg/statements/on-inclusive-language/), the RFC Editor encourages authors to apply the guidance described in [“Guidance for NIST Staff on Using Inclusive Language in Documentary Standards”](https://web.archive.org/web/20250203031433/https://nvlpubs.nist.gov/nistpubs/ir/2021/NIST.IR.8366.pdf). See [Table 1 on the NIST website](https://web.archive.org/web/20250214092458/https://www.nist.gov/nist-research-library/nist-technical-series-publications-author-instructions#table1) for an expanded list of potentially biased language along with possible substitutions.
 
-[Double Negatives](/part2/#double_no)
+[Double Negatives](/styleguide/part2/#double_no)
 
 Double negatives are discouraged.
 
-[RFCs Citations as Compounds](/part2/#rfc_as_compound)
+[RFCs Citations as Compounds](/styleguide/part2/#rfc_as_compound)
 
 Avoid forming compounds by hyphenating RFC numbers; this can be accomplished by 
 
 - rewording the sentence (e.g., “[RFC5011]-style rollover” –> “rollover as described in RFC 5011 [RFC5011]”).
 - adding a note in either the Terminology or Conventions section mentioning the RFC so that other occurrences throughout the text will be understood by the reader to be in the style of said RFC (e.g., “This document uses the term “rollover” as defined in RFC 5011”).
 
-[Abbreviations as Verbs](/part2/#abbrev_as_verb)
+[Abbreviations as Verbs](/styleguide/part2/#abbrev_as_verb)
 
 Avoid using abbreviations as verbs when possible. If unavoidable, suffixes should be affixed without punctuation, for example, “XORed” (not XOR’ed) and “NATed” (not NAT-ed).
 
-[Expanding Abbreviations upon First Use](/part2/#exp_abbrev)
+[Expanding Abbreviations upon First Use](/styleguide/part2/#exp_abbrev)
 
 Once an abbreviation has been introduced, the abbreviated form should be used thereafter.
 
-[In-text Citations (bracketed citation)](/part2/#citation_usage)
+[In-text Citations (bracketed citation)](/styleguide/part2/#citation_usage)
 
 An in-text citation may a) follow the subject for which it is being cited as a silent pointer to the referenced document or b) be read as part of the text. 
 
@@ -181,7 +181,7 @@ b) Note that SAVI raises a number of important privacy considerations that are d
 
 We recommend using a) and strongly recommend consistent use of one style throughout.
 
-[URIs](/part2/#use_https)
+[URIs](/styleguide/part2/#use_https)
 
 HTTPS URIs should be used when possible.
 
@@ -193,26 +193,26 @@ Topic
 
 Description
 
-[RFC 2119 Keywords in Quoted Text](/part2/#keywords_in_quote)
+[RFC 2119 Keywords in Quoted Text](/styleguide/part2/#keywords_in_quote)
 
 A reference is not required if the keywords are only used in quoted text.
 
-[Terms](/part2/#terms_format)
+[Terms](/styleguide/part2/#terms_format)
 
 You may format terms as you see fit by using capitalization, quotation marks, emphasis, etc. However, consistency within the document and within the Series is strongly recommended.  
 Please provide any style guidance to the RFC Production Center when your document enters the queue.
 
-[Terminology Sections](/part2/#terms_section)
+[Terminology Sections](/styleguide/part2/#terms_section)
 
 Terminology sections are recommended for docs that are terminology/abbreviation heavy, but documents should point to existing definitions when possible.
 
-[Didactic Capitalization](/part2/#didactic_caps)
+[Didactic Capitalization](/styleguide/part2/#didactic_caps)
 
 Use of didactic capitalization is not needed.  
 **Example:** Extensible Markup Language (XML)  
 (not EXtensible Markup Language (XML) or eXtensible Markup Language (XML))
 
-[Length of Sections](/part2/#section_length)
+[Length of Sections](/styleguide/part2/#section_length)
 
 We suggest that the length of a section or subsection be limited to allow for easily referenced objects.
 
@@ -224,7 +224,7 @@ Topic
 
 Guidance
 
-[Use of non-ASCII characters](/part2/#nonascii)
+[Use of non-ASCII characters](/styleguide/part2/#nonascii)
 
 Per RFC 7997, non-ASCII characters may appear within the body of the document. The <u> element is required for cases where the non-ASCII characters are needed for correct protocol operation. 
 
@@ -236,7 +236,7 @@ the non-ASCII character is not required.”
 
 Note that ASCII equivalents are to be used for punctuation (e.g., smart quotes and em dashes).
 
-[Document links](/part2/#links)
+[Document links](/styleguide/part2/#links)
 
 There is no hard limit on the number and frequency of links in documents. However, links introduce noise for people who use screen readers, and this reduces accessibility.
 
@@ -249,7 +249,7 @@ How frequently terms should be linked is circumstantial depending on context and
 
 Last updated 20 February 2024
 
-## RFC Headers and Boilerplate {#rfc-headers-and-boilerplate}
+## RFC Headers and Boilerplate
 
 Per [RFC 9280](/info/rfc9280/), the RFC Production Center (RPC) is now maintaining the RFC boilerplates as part of the RFC Style Guide. Therefore, this page provides instructions for constructing header and boilerplate text for RFCs, as specified by [RFC 7841](/info/rfc7841/). The boilerplate may be updated per the process described in [RFC 9280](/info/rfc9280/).
 

@@ -13,7 +13,7 @@ import {
   type DocListResponse
 } from './rfc.test'
 import { parseRFCId } from './rfc'
-import { parseHtml } from './html'
+import { filterByElementName, parseHtml } from './html'
 import type {
   ApiClient,
   PaginatedRfcMetadataList
@@ -92,25 +92,64 @@ const extractRfcSummaries = (document: unknown) => {
     throw Error('Bad param document')
   }
   const root = document[0]['html']
-  const body = root[1]['body']
-  const tables = body.filter((row: { table?: unknown }) => Boolean(row.table))
+  const bodies = filterByElementName(root, 'body')
+  if (bodies.length !== 1) {
+    throw Error(`Expected to find bodies.length === 1 but was ${bodies.length}`)
+  }
+  const bodies0 = bodies[0]
+  if (!bodies0 || typeof bodies0 !== 'object' || !('body' in bodies0)) {
+    throw Error('Unable to find body')
+  }
+  const body = bodies0.body
+
+  if (!Array.isArray(body)) {
+    console.log(JSON.stringify(body).substring(0, 100))
+    throw Error(
+      `Expected body to be array but was ${typeof body} (Array.isArray(body)===${Array.isArray(body)})`
+    )
+  }
+  const tables = filterByElementName(body, 'table')
   const rfcsTable = tables[2]
-  const rows = rfcsTable.table
+  if (
+    !rfcsTable ||
+    typeof rfcsTable !== 'object' ||
+    !('table' in rfcsTable) ||
+    !Array.isArray(rfcsTable.table)
+  ) {
+    throw Error('Unable to find rfcsTable')
+  }
+
+  const rows = filterByElementName(rfcsTable.table, 'tr')
   if (!Array.isArray(rows)) {
     console.log('Bad param rows', rows)
     throw Error('Bad param rows')
   }
   const builder = new XMLBuilder(xmlBuilderOptions)
-  const htmlRows = rows.map((row: { tr: { td: unknown }[] }) => {
+  const htmlRows = rows.map((row) => {
+    if (
+      !row ||
+      typeof row !== 'object' ||
+      !('tr' in row) ||
+      !Array.isArray(row.tr)
+    ) {
+      throw Error('invalid row')
+    }
+
+    const cells = filterByElementName(row.tr, 'td')
+
+    const cell0 = cells[0]
+
+    if (!cell0 || typeof cell0 !== 'object' || !('td' in cell0)) {
+      throw Error('Expected cell0.td')
+    }
+
+    const numWithScripts: string = builder.build(cell0.td)
+
     /** Everyone knows you shouldn't use regex for HTML
      *
      *  ...unless it's a very specific structure which this is
      *  (ie, we're not dealing with arbitrary HTML so this is safe)
      */
-
-    const numCell = row.tr[0]
-    const numWithScripts: string = builder.build(numCell.td)
-
     const num = numWithScripts
       .replace(
         /<script[\s\S]*?<\/script>/gi,
@@ -133,7 +172,14 @@ const extractRfcSummaries = (document: unknown) => {
       .replace(/[\s]+/g, ' ') // normalise the whitespace
       .trim()
 
-    const informationCell = row.tr[1]
+    const informationCell = cells[1]
+    if (
+      !informationCell ||
+      typeof informationCell !== 'object' ||
+      !('td' in informationCell)
+    ) {
+      throw Error('Expected .td')
+    }
     const informationWithScripts: string = builder.build(informationCell.td)
     const information = informationWithScripts
       .replace(

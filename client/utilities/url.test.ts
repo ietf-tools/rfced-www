@@ -1,6 +1,6 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { rfcCitePathBuilder, rfcFormatPathBuilder } from './url'
+import { rfcCitePathBuilder, rfcFormatPathBuilder, textToAnchorId } from './url'
 
 test('rfcCitePathBuilder: txt', () => {
   expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual(
@@ -36,4 +36,14 @@ test('rfcFormatPathBuilder: html', () => {
   expect(rfcFormatPathBuilder('RFC9000', 'html')).toEqual(
     'https://www.rfc-editor.org/rfc/rfc9000.html'
   )
+})
+
+test('textToAnchorId', () => {
+  expect(
+    textToAnchorId('What Sort Of Documents Are Independent Submissions?')
+  ).toEqual('what-sort-of-documents-are-independent-submissions')
+
+  expect(
+    textToAnchorId('Some RFCs') // testing whether it will split 'RFCs' into 'rf-cs'
+  ).toEqual('some-rfcs')
 })

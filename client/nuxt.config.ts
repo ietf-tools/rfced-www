@@ -1,5 +1,5 @@
 /// <reference types="histoire" />
-
+import tailwindcss from '@tailwindcss/vite'
 import redirects from './redirects.json'
 import { isMiddlewareRedirect } from './utilities/redirects'
 
@@ -18,7 +18,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/test-utils/module',
     '@nuxt/eslint',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     'nuxt-headlessui',
@@ -33,6 +32,10 @@ export default defineNuxtConfig({
     config: {
       stylistic: true
     }
+  },
+  css: ['~/assets/css/tailwind.css'],
+  vite: {
+    plugins: [tailwindcss()]
   },
   nitro: {
     // Production

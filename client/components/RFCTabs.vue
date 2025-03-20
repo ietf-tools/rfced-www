@@ -69,7 +69,7 @@
               >
                 <a
                   :href="authorPathBuilder(author)"
-                  class="whitespace-nowrap inline-block py-0.5 pr-1 mb-0.5"
+                  class="whitespace-nowrap underline inline-block py-0.5 pr-1 mb-0.5"
                 >
                   {{ author.name }}
                 </a>
@@ -132,7 +132,7 @@
             v-for="(citation, citationIndex) in citations"
             :key="citationIndex"
           >
-            <a :href="citation.url" class="block px-2 -ml-2">
+            <a :href="citation.url" class="underline block px-2 -ml-2">
               {{ citation.title }}
             </a>
           </li>
@@ -141,7 +141,7 @@
         <Heading level="3" class="mt-5 mb-2">Formats</Heading>
         <ul class="text-sm flex flex-col gap-2">
           <li v-for="(format, formatIndex) in formats" :key="formatIndex">
-            <a :href="format.url" class="block px-2 -ml-2">{{
+            <a :href="format.url" class="underline block px-2 -ml-2">{{
               format.title
             }}</a>
           </li>

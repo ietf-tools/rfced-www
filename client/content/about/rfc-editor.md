@@ -25,7 +25,7 @@ The RFC Series Consulting Editor (RSCE) is a senior technical publishing profess
 
 The RFC Production Center (RPC) is a team of professional editors that [prepares and publishes RFCs](/authors/rfc-edit/). Once Internet-Drafts are approved by the various streams, the editors format and edit the documents, and then they work with the authors to produce publication-ready RFCs per defined policies and guidelines.
 
-## Governing RFCs {#governing-rfcs}
+## Governing RFCs
 
 The RFC Editor function is currently defined and governed by the following RFCs:
 

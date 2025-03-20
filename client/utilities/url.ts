@@ -1,3 +1,4 @@
+import { kebabCase } from 'lodash-es'
 import type { Rfc } from '~/generated/red-client'
 import type ContentMetadata from '~/generated/content-metadata.json'
 import { parseRFCId } from '~/utilities/rfc'
@@ -97,4 +98,23 @@ export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
 
 export const authorPathBuilder = (author: Rfc['authors'][number]): string => {
   return `mailto:${author.email}`
+}
+
+export const isInternalLink = (href: string): boolean => {
+  return href.startsWith('/')
+}
+
+export const textToAnchorId = (text: string) => {
+  const normalized = text
+    .trim()
+    .toLowerCase() // lowercase before kebabCase() because otherwise kebabCase() will split 'RFCs' into 'rf-cs'
+    .replace(/[^0-9a-zA-Z\s]/g, '') // removes eg question marks
+  if (
+    // if it's an empty string then getVNodeText() probably returned an empty string, so just return `undefined`
+    !normalized
+  ) {
+    return
+  }
+
+  return kebabCase(normalized)
 }

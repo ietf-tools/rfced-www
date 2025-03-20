@@ -4,14 +4,14 @@ AUTH48 is the last chance to make changes to an RFC-to-be. Once the document is 
 
 Additional resources:
 
-- [AUTH48 FAQ](/faq/#auth48)
+- [AUTH48 FAQ](/series/rfc-faq/#auth48)
 - [The Publication Process](/pubprocess/)
 
 ---
 
 ### Template of Instructions for Completing AUTH48
 
-Your document has now entered AUTH48. Once it has been reviewed and approved by you and all coauthors, it will be published as an RFC. If an author is no longer available, there are several remedies available as listed in the [FAQ](/faq/#missingauthor).
+Your document has now entered AUTH48. Once it has been reviewed and approved by you and all coauthors, it will be published as an RFC. If an author is no longer available, there are several remedies available as listed in the [FAQ](/series/rfc-faq/#missingauthor).
 
 You and you coauthors are responsible for engaging other parties (e.g., Contributors or Working Group) as necessary before providing your approval.
 

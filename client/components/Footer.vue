@@ -6,13 +6,13 @@
           rfc-editor.org is maintained by the
           <a
             href="https://www.ietf.org/"
-            class="text-blue-100 font-semibold md:text-nowrap"
+            class="underline text-blue-100 font-semibold md:text-nowrap"
             >Internet Engineering Task Force</a
           >
           and funded by the
           <a
             href="https://www.internetsociety.org/"
-            class="text-blue-100 font-semibold md:text-nowrap"
+            class="underline text-blue-100 font-semibold md:text-nowrap"
           >
             Internet Society
           </a>
@@ -39,9 +39,11 @@
             >
               <a
                 :href="child.href"
-                :target="!child.href.startsWith('/') ? '_blank' : undefined"
-                >{{ child.label }}</a
+                :target="!isInternalLink(child.href) ? '_blank' : undefined"
+                class="underline text-white md:text-nowrap"
               >
+                {{ child.label }}
+              </a>
             </li>
           </ul>
         </div>
@@ -51,5 +53,6 @@
 </template>
 
 <script setup lang="ts">
+import { isInternalLink } from '../utilities/url'
 import { menuData } from './FooterNavData'
 </script>
