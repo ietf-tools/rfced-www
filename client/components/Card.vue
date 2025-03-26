@@ -44,8 +44,8 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from '../utilities/vue'
 import Fragment from './Fragment.vue'
-import type { VueStyleClass } from './VueUtils'
 
 type Props = {
   class?: VueStyleClass

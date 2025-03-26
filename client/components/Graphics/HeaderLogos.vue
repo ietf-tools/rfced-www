@@ -1,5 +1,5 @@
 <template>
-  <a href="/" class="pl-5 md:pl-0">
+  <a href="/" :class="[props.class, 'pl-5 md:pl-0']">
     <img
       :src="LogoMobile"
       class="lg:hidden"
@@ -20,4 +20,11 @@
 <script setup lang="ts">
 import LogoDesktop from 'assets/logo-desktop.svg'
 import LogoMobile from 'assets/logo-mobile.svg'
+import type { VueStyleClass } from '~/utilities/vue'
+
+type Props = {
+  class?: VueStyleClass
+}
+
+const props = defineProps<Props>()
 </script>

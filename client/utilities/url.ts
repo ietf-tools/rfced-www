@@ -63,6 +63,9 @@ export const rfcJSONPathBuilder = (rfcId: string) => {
   return `/api/v1/rfc${rfcParts.number}.json`
 }
 
+/**
+ * This is only used for TS to check valid markdown paths. It's just an identity function.
+ */
 export const markdownPathBuilder = (markdownPath: MarkdownPaths) => markdownPath
 
 export const rfcPathBuilder = (rfcId: string) => {

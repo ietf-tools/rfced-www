@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import type { Slot } from 'vue'
-import type { VueStyleClass } from './VueUtils'
+import type { VueStyleClass } from '~/utilities/vue'
 import { getVNodeText } from '~/utilities/vue'
 import { textToAnchorId } from '~/utilities/url'
 

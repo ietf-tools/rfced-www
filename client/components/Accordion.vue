@@ -1,7 +1,9 @@
 <template>
-  <slot />
+  <AccordionRoot type="single">
+    <slot />
+  </AccordionRoot>
 </template>
 
 <script setup lang="ts">
-// TODO: delete this
+import { AccordionRoot } from 'reka-ui'
 </script>

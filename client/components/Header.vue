@@ -1,14 +1,16 @@
 <template>
-  <header class="bg-blue-900 text-white dark:bg-blue-950 relative print:hidden">
+  <header
+    class="flex-1 bg-blue-900 text-white dark:bg-blue-950 relative print:hidden"
+  >
     <HeaderSkipToContent />
     <nav class="container mx-auto flex justify-between py-4 px-0 w-full">
       <GraphicsHeaderLogos />
-      <div class="flex md:gap-8">
+      <div class="flex flex-1 flex-row md:gap-8 align-end">
         <HeaderNavMobile />
         <HeaderNavDesktop />
       </div>
     </nav>
-    <!-- slot used to extend the header eg for the homepage -->
+
     <slot />
   </header>
 </template>

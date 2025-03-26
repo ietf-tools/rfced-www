@@ -1,117 +1,134 @@
 <template>
-  <HeadlessMenu
-    v-for="(menuItem, index) in menuData"
-    :key="index"
-    as="div"
-    class="relative hidden lg:block"
+  <NavigationMenuRoot
+    v-model="currentNav"
+    class="relative w-full z-90 justify-end content-end"
+    disable-hover-trigger
   >
-    <HeadlessMenuButton
-      v-slot="{ open }"
-      as="template"
-      class="flex items-center gap-2 rounded hover:bg-gray-900 p-3"
+    <NavigationMenuList
+      class="m-0 flex w-full justify-end list-none rounded-[6px]"
     >
-      <button
-        :class="[
-          {
-            'bg-blue-950 dark:bg-black border-2 border-yellow-700 dark:border-blue-900':
-              open,
-            'border-2 border-transparent': !open
-          }
-        ]"
-      >
-        {{ menuItem.label }}
-
-        <span class="text-blue-100">
-          <GraphicsChevron :class="open ? 'rotate-180' : undefined" />
-        </span>
-      </button>
-    </HeadlessMenuButton>
-    <HeadlessMenuItems
-      class="absolute z-100 w-64 py-2 rounded-md bg-white dark:bg-black dark:border-2 dark:border-red shadow-xl"
-    >
-      <template
-        v-for="(child, childIndex) in menuItem.children"
-        :key="childIndex"
-      >
-        <HeadlessMenuItem v-slot="{ active }">
-          <a
-            v-if="!!child.href"
-            :class="[
-              'block px-2 py-2 no-underline text-blue-800 dark:text-white',
-              {
-                'pb-0': !!child.children,
-                'pb-1': !child.children,
-                'bg-blue-500 dark:bg-blue-600 text-white underline': active
-              }
-            ]"
-            :href="child.href"
-          >
-            <GraphicsChevron
-              class="absolute right-0 mt-2 mr-4 size-2 -rotate-90"
-            />
-
-            {{ child.label }}
-          </a>
-          <b
-            v-else
-            :class="[
-              'block px-2 pt-1 text-blue-600 dark:text-white text-md ',
-
-              {
-                'pb-0': !!child.children,
-                'pb-1': !child.children
-              }
-            ]"
-          >
-            {{ child.label }}
-          </b>
-        </HeadlessMenuItem>
-
-        <HeadlessMenuItem
-          v-for="(childChildremItem, childChildremItemIndex) in child.children"
-          :key="`${childIndex}.${childChildremItemIndex}`"
-          v-slot="{ active }"
+      <NavigationMenuItem v-for="(menuItem, index) in menuData" :key="index">
+        <NavigationMenuLink
+          v-if="menuItem.href && !menuItem.children"
+          :href="menuItem.href"
+          :aria-label="menuItem.label"
+          class="hover:bg-blue-500 group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-3 py-2 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
+          @click="
+            menuItem.click
+            // Intentionally <a> rather than a <button> to encourage progressive enhancement at top level
+          "
         >
-          <a
-            v-if="childChildremItem.href"
-            :href="childChildremItem.href"
-            :class="[
-              'flex flex-horizontal text-sm px-2 py-2 text-blue-800 dark:text-white',
-              {
-                'bg-blue-500 dark:bg-blue-600 text-white underline': active,
-                'no-underline': !active
-              }
-            ]"
-          >
-            <GraphicsChevron
-              class="absolute right-0 mt-2 mr-4 size-2 -rotate-90"
-            />
+          <Icon v-if="menuItem.icon" :name="menuItem.icon" />
+        </NavigationMenuLink>
 
-            <span class="pr-2 pt-1.5"><GraphicsBullet /></span>
-            <span>
-              {{ childChildremItem.label }}
-            </span>
-          </a>
-          <b v-else>
-            {{ childChildremItem.label }}
-          </b>
-        </HeadlessMenuItem>
-      </template>
-    </HeadlessMenuItems>
-  </HeadlessMenu>
-  <a
-    :href="searchHref"
-    class="hidden lg:flex items-center hover:bg-gray-900 p-3"
-  >
-    <Icon name="fluent:search-12-filled" />
-  </a>
-  <HeaderNavThemeDesktop />
+        <NavigationMenuTrigger
+          v-if="!menuItem.href && menuItem.children"
+          class="hover:bg-blue-500 group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-3 py-2 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
+        >
+          <Icon v-if="menuItem.icon" :name="menuItem.icon" />
+          {{ menuItem.label }}
+          <GraphicsChevron
+            class="ml-1 top-[1px] transition-transform duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
+          />
+        </NavigationMenuTrigger>
+        <NavigationMenuContent
+          v-if="menuItem.children"
+          class="data-[motion=from-start]:animate-enterFromLeft data-[motion=from-end]:animate-enterFromRight data-[motion=to-start]:animate-exitToLeft data-[motion=to-end]:animate-exitToRight absolute top-0 left-0 w-full min-w-3xs sm:w-auto py-1"
+        >
+          <ul class="list-none">
+            <li
+              v-for="(level0, level0Index) in menuItem.children"
+              :key="`${index}.${level0Index}`"
+            >
+              <NavigationMenuSub
+                v-if="level0.children"
+                :default-value="level0.label"
+                class="z-100"
+              >
+                <NavigationMenuList class="w-full">
+                  <NavigationMenuItem :value="`${index}.${level0Index}`">
+                    <NavigationMenuTrigger :class="MENU_ITEM_CLASS">
+                      <span>
+                        <Icon v-if="level0.icon" :name="level0.icon" />
+                        {{ level0.label }}
+                      </span>
+                      <GraphicsChevron
+                        class="transition-transform translate-y-[0.2em] duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
+                      />
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent class="bg-gray-100 inset-shadow-sm">
+                      <ul class="list-none">
+                        <li
+                          v-for="(level1, level1Index) in level0.children"
+                          :key="`${index}.${level0Index}.${level1Index}`"
+                        >
+                          <NavigationMenuLink
+                            v-if="level1.href"
+                            :href="level1.href"
+                            :class="[MENU_ITEM_CLASS, 'pl-8']"
+                            @click="level1.click"
+                          >
+                            <Icon v-if="level1.icon" :name="level1.icon" />
+                            {{ level1.label }}
+                          </NavigationMenuLink>
+                        </li>
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenuSub>
+              <NavigationMenuLink v-else as-child>
+                <a
+                  v-if="level0.href"
+                  :href="level0.href"
+                  :class="MENU_ITEM_CLASS"
+                  @click="level0.click"
+                >
+                  <Icon v-if="level0.icon" :name="level0.icon" />
+                  {{ level0.label }}
+                </a>
+                <button
+                  v-else
+                  type="button"
+                  :class="MENU_ITEM_CLASS"
+                  @click="level0.click"
+                >
+                  <Icon v-if="level0.icon" :name="level0.icon" />
+                  {{ level0.label }}
+                </button>
+              </NavigationMenuLink>
+            </li>
+          </ul>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    </NavigationMenuList>
+    <div class="perspective-[2000px] absolute top-full left-0 flex w-full">
+      <NavigationMenuViewport
+        class="data-[state=open]:animate-scaleIn data-[state=closed]:animate-scaleOut relative h-(--reka-navigation-menu-viewport-height) w-full origin-[top_center] overflow-hidden rounded-xl bg-white transition-[width,_height] duration-300 translate-x-(--reka-navigation-menu-viewport-left) sm:w-(--reka-navigation-menu-viewport-width) border shadow-2xl"
+      />
+    </div>
+  </NavigationMenuRoot>
 </template>
 
 <script setup lang="ts">
+import {
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuRoot,
+  NavigationMenuSub,
+  NavigationMenuTrigger,
+  NavigationMenuViewport
+} from 'reka-ui'
 import { onMounted } from 'vue'
-import { menuData } from './HeaderNavData'
+import { useMenuData } from './HeaderNavData'
 import { SEARCH_PATH } from '~/utilities/url'
+
+const MENU_ITEM_CLASS =
+  'group w-full select-none flex justify-between rounded-md px-3 py-2 text-sm font-medium leading-none no-underline outline-none text-black dark:text-white hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white'
+
+const menuData = useMenuData()
 
 const searchHref = ref<string>(SEARCH_PATH)
 
@@ -129,4 +146,6 @@ function updateSearchLink() {
 
 onMounted(updateSearchLink)
 watch(() => route.path, updateSearchLink)
+
+const currentNav = ref('')
 </script>

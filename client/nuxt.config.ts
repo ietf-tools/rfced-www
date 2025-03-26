@@ -16,11 +16,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
+    'reka-ui/nuxt',
     '@nuxt/test-utils/module',
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
-    'nuxt-headlessui',
     '@nuxt/icon',
     '@nuxt/fonts',
     '@nuxt/content'

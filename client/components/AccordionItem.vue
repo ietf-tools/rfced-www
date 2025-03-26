@@ -1,31 +1,38 @@
 <template>
-  <Disclosure v-slot="{ open }">
-    <DisclosureButton
-      class="flex flex-row w-full justify-between items-center py-1 p border border-gray-500 hover:bg-white/10"
-    >
-      <span
-        :class="{
-          'p-4': styleDepth === 1,
-          'px-6 py-3': styleDepth === 2
-        }"
+  <AccordionItem v-slot="{ open }" :value="props.id">
+    <AccordionHeader>
+      <AccordionTrigger
+        class="flex flex-row w-full justify-between items-center py-1 p border border-gray-500 hover:bg-white/10"
       >
-        {{ props.triggerText }}
-      </span>
-      <GraphicsChevron
-        :class="{
-          'mr-4 size-4': true,
-          '-rotate-180': !open
-        }"
-      />
-    </DisclosureButton>
-    <DisclosurePanel>
+        <span
+          :class="{
+            'p-4': props.styleDepth === 1,
+            'px-6 py-3': props.styleDepth === 2
+          }"
+        >
+          {{ props.triggerText }}
+        </span>
+        <GraphicsChevron
+          :class="{
+            'mr-4 size-4': true,
+            '-rotate-180': !open
+          }"
+        />
+      </AccordionTrigger>
+    </AccordionHeader>
+    <AccordionContent>
       <slot />
-    </DisclosurePanel>
-  </Disclosure>
+    </AccordionContent>
+  </AccordionItem>
 </template>
 
 <script setup lang="ts">
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import {
+  AccordionContent,
+  AccordionHeader,
+  AccordionItem,
+  AccordionTrigger
+} from 'reka-ui'
 
 type Props = {
   /**

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import type { VueStyleClass } from '~/components/VueUtils'
+import type { VueStyleClass } from '~/utilities/vue'
 
 type Props = {
   mainClass?: VueStyleClass
