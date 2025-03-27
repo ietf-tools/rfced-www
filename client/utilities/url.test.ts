@@ -1,6 +1,13 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { rfcCitePathBuilder, rfcFormatPathBuilder, textToAnchorId } from './url'
+import {
+  IETF_PRIVACY_STATEMENT_URL,
+  rfcCitePathBuilder,
+  rfcFormatPathBuilder,
+  textToAnchorId,
+  isExternalLink,
+  isInternalLink
+} from './url'
 
 test('rfcCitePathBuilder: txt', () => {
   expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual(
@@ -46,4 +53,22 @@ test('textToAnchorId', () => {
   expect(
     textToAnchorId('Some RFCs') // testing whether it will split 'RFCs' into 'rf-cs'
   ).toEqual('some-rfcs')
+})
+
+test('isExternalLink', () => {
+  expect(isExternalLink(undefined)).toEqual(true)
+  expect(isExternalLink('/something')).toEqual(false)
+  expect(isExternalLink('#something')).toEqual(false)
+  expect(isExternalLink('http://')).toEqual(true)
+  expect(isExternalLink('https://')).toEqual(true)
+  expect(isExternalLink(IETF_PRIVACY_STATEMENT_URL)).toEqual(true)
+})
+
+test('isInternalLink', () => {
+  expect(isExternalLink(undefined)).toEqual(true)
+  expect(isInternalLink('/something')).toEqual(true)
+  expect(isInternalLink('#something')).toEqual(true)
+  expect(isInternalLink('http://')).toEqual(false)
+  expect(isInternalLink('https://')).toEqual(false)
+  expect(isInternalLink(IETF_PRIVACY_STATEMENT_URL)).toEqual(false)
 })

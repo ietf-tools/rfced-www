@@ -14,6 +14,8 @@ export type MenuItem = {
   label: string
   href?: string
   click?: VueClick
+  isActiveFn?: () => boolean
+  activeLabelFn?: () => string
   children?: MenuItem[]
 }
 
@@ -33,7 +35,7 @@ export const useMenuData = () => {
         { label: 'What is an RFC?', href: markdownPathBuilder('/series/rfc/') },
         {
           label: 'How can I use RFCs?',
-          href: markdownPathBuilder('/series/rfc/')
+          href: markdownPathBuilder('/series/rfc-use/')
         },
         {
           label: 'Tips for reading RFCs',
@@ -146,7 +148,12 @@ export const useMenuData = () => {
     {
       label: 'Theme',
       children: colorPreferences.map((colorPreference) => ({
-        label: colorPreference.label,
+        label: `${colorPreference.label}`,
+        activeLabelFn: () =>
+          colorMode.preference === colorPreference.value ?
+            `Selected ${colorPreference.label}`
+          : `Not selected ${colorPreference.label}`,
+        isActiveFn: () => colorMode.preference === colorPreference.value,
         click: () => {
           colorMode.preference = colorPreference.value
         }

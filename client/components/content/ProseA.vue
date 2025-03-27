@@ -1,19 +1,11 @@
 <template>
-  <NuxtLink :href="props.href" :target="props.target">
+  <A v-bind="props">
     <slot />
-  </NuxtLink>
+  </A>
 </template>
 
 <script setup lang="ts">
-// Note, initially copied from https://github.com/nuxt-modules/mdc/blob/main/src/runtime/components/prose/ProseA.vue
+import type { AnchorProps } from '~/utilities/html'
 
-type Props = {
-  href: string
-  target?: '_blank' | '_parent' | '_self' | '_top'
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  href: '',
-  target: undefined
-})
+const props = defineProps<AnchorProps>()
 </script>

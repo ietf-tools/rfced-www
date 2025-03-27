@@ -1,9 +1,15 @@
 <template>
   <div class="block lg:hidden">
     <DialogRoot>
+      <DialogTrigger
+        aria-label="Menu"
+        class="absolute top-0 right-0 block border p-4"
+      >
+        <GraphicsHamburgerMenu />
+      </DialogTrigger>
       <DialogPortal>
         <DialogOverlay
-          class="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-30"
+          class="bg-black data-[state=open]:animate-overlayShow fixed inset-0 z-50"
         />
         <DialogContent>
           <nav class="container mx-auto flex flex-col">
@@ -11,10 +17,11 @@
               <button
                 type="button"
                 class="flex justify-between w-full py-5 px-4 items-center"
-                @click="isOpen = false"
               >
                 <GraphicsHeaderLogoMobileMenu />
-                <GraphicsClose />
+                <DialogClose>
+                  <GraphicsClose class="text-white" />
+                </DialogClose>
               </button>
             </DialogTitle>
             <div class="flex flex-col">
@@ -80,15 +87,6 @@
           </nav>
         </DialogContent>
       </DialogPortal>
-      <DialogTrigger as-child>
-        <button
-          type="button"
-          class="text-white p-3 md:-mx-3"
-          @click="isOpen = true"
-        >
-          <GraphicsHamburgerMenu />
-        </button>
-      </DialogTrigger>
     </DialogRoot>
   </div>
 </template>
@@ -100,11 +98,10 @@ import {
   DialogPortal,
   DialogRoot,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  DialogClose
 } from 'reka-ui'
 import { useMenuData } from './HeaderNavData'
 
 const menuData = useMenuData()
-
-const isOpen = ref(false)
 </script>
