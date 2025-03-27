@@ -1,7 +1,9 @@
 <template>
   <component
     :is="`h${props.level}`"
-    :id="hasInternalLink ? getAnchorId($slots.default) : undefined"
+    :id="
+      getAnchorId($slots.default) // we always make an id regardless of hasInternalLink
+    "
     :class="[headingStyles[`h${styleLevel || level}`], props.class, 'group']"
   >
     <GraphicsIETFMotif

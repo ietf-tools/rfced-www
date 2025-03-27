@@ -62,6 +62,14 @@ export default {
         fadeOut: {
           from: { opacity: 1 },
           to: { opacity: 0 }
+        },
+        overlayShow: {
+          from: { opacity: 0 },
+          to: { opacity: 1 }
+        },
+        contentShow: {
+          from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
+          to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' }
         }
       },
       animation: {
@@ -72,7 +80,9 @@ export default {
         enterFromLeft: 'enterFromLeft 250ms ease',
         enterFromRight: 'enterFromRight 250ms ease',
         exitToLeft: 'exitToLeft 250ms ease',
-        exitToRight: 'exitToRight 250ms ease'
+        exitToRight: 'exitToRight 250ms ease',
+        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)'
       }
     },
     plugins: [

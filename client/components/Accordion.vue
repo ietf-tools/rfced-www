@@ -1,5 +1,5 @@
 <template>
-  <AccordionRoot type="single">
+  <AccordionRoot type="single" :collapsible="true">
     <slot />
   </AccordionRoot>
 </template>

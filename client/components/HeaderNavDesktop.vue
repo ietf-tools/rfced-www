@@ -12,7 +12,7 @@
           v-if="menuItem.href && !menuItem.children"
           :href="menuItem.href"
           :aria-label="menuItem.label"
-          class="hover:bg-blue-500 group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-4 py-3 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
+          class="hover:bg-blue-400 group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-4 py-3 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
           @click="menuItem.click"
         >
           <Icon v-if="menuItem.icon" :name="menuItem.icon" />
@@ -83,12 +83,14 @@
                   :class="MENU_ITEM_CLASS"
                   @click="level0.click"
                 >
-                  <Icon v-if="level0.icon" :name="level0.icon" />
-                  {{ level0.label }}
-                  <Icon
-                    v-if="!isInternalLink(level0.href)"
-                    name="fluent:arrow-flow-diagonal-up-right-12-filled"
-                  />
+                  <span>
+                    <Icon v-if="level0.icon" :name="level0.icon" />
+                    {{ level0.label }}
+                    <Icon
+                      v-if="!isInternalLink(level0.href)"
+                      name="fluent:arrow-flow-diagonal-up-right-12-filled"
+                    />
+                  </span>
                   <GraphicsChevron class="ml-1 translate-y-1 -rotate-90" />
                 </A>
                 <button
@@ -108,7 +110,7 @@
                       v-if="
                         level0.isActiveFn && !level0.isActiveFn() // render blank space
                       "
-                      class="inline-block w-[12px] h-[12px]"
+                      class="inline-block w-[14px] h-[14px]"
                     />
                     {{ level0.label }}
                   </span>
