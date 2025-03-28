@@ -1,11 +1,14 @@
 <template>
   <TooltipProvider v-if="thisContentMetadata">
-    <TooltipRoot>
-      <TooltipTrigger> Last updated {{ relativeDate }} </TooltipTrigger>
+    <TooltipRoot :delay-duration="0">
+      <TooltipTrigger type="button">
+        Last updated {{ relativeDate }}
+      </TooltipTrigger>
       <TooltipPortal>
-        <TooltipContent>
+        <TooltipContent
+          class="data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade text-grass11 select-none rounded-md bg-white text-black dark:bg-black dark:text-white px-[15px] py-[10px] text-sm leading-none shadow-sm border will-change-[transform,opacity]"
+        >
           <p class="font-mono">Last updated {{ fullDate }}</p>
-          <TooltipArrow />
         </TooltipContent>
       </TooltipPortal>
     </TooltipRoot>

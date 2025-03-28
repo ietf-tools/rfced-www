@@ -91,7 +91,9 @@
                       name="fluent:arrow-flow-diagonal-up-right-12-filled"
                     />
                   </span>
-                  <GraphicsChevron class="ml-1 translate-y-1 -rotate-90" />
+                  <GraphicsChevron
+                    class="text-blue-100 ml-1 translate-y-1 -rotate-90"
+                  />
                 </A>
                 <button
                   v-else

@@ -1,25 +1,23 @@
 <template>
-  <AccordionItem v-slot="{ open }" :value="props.id">
-    <AccordionHeader>
-      <AccordionTrigger
-        class="flex flex-row w-full justify-between items-center py-1 p border border-gray-500 hover:bg-white/10"
+  <AccordionItem v-slot="{ open }" :value="props.id" class="p-0">
+    <AccordionTrigger
+      class="flex flex-row w-full justify-between items-center border border-gray-500 hover:bg-blue-400 focus:bg-blue-400"
+    >
+      <span
+        :class="{
+          'p-4': props.styleDepth === 1,
+          'px-6 py-3': props.styleDepth === 2
+        }"
       >
-        <span
-          :class="{
-            'p-4': props.styleDepth === 1,
-            'px-6 py-3': props.styleDepth === 2
-          }"
-        >
-          {{ props.triggerText }}
-        </span>
-        <GraphicsChevron
-          :class="{
-            'mr-4 size-4': true,
-            '-rotate-180': !open
-          }"
-        />
-      </AccordionTrigger>
-    </AccordionHeader>
+        {{ props.triggerText }}
+      </span>
+      <GraphicsChevron
+        :class="{
+          'mr-4 size-4 text-blue-100': true,
+          'rotate-180': open
+        }"
+      />
+    </AccordionTrigger>
     <AccordionContent>
       <slot />
     </AccordionContent>

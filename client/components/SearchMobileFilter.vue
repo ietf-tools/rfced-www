@@ -1,5 +1,5 @@
 <template>
-  <DialogRoot>
+  <DialogRoot v-model:open="isOpen">
     <DialogTrigger>
       <button
         type="button"
@@ -17,7 +17,12 @@
         :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
         'absolute inset-0 z-50 bg-white text-black dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'"
       >
-        <DialogTitle />
+        <DialogTitle class="flex justify-between text-xl pl-3 font-bold">
+          <span class="block p-2"> Filter RFCs </span>
+          <DialogClose class="px-3 py-2">
+            <GraphicsClose class="text-white" />
+          </DialogClose>
+        </DialogTitle>
         <DialogDescription>
           <div class="flex flex-col">
             <SearchFilter />
