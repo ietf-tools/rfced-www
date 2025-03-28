@@ -25,12 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  AccordionContent,
-  AccordionHeader,
-  AccordionItem,
-  AccordionTrigger
-} from 'reka-ui'
+import { AccordionContent, AccordionItem, AccordionTrigger } from 'reka-ui'
 
 type Props = {
   /**

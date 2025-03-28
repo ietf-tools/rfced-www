@@ -21,7 +21,6 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import {
-  TooltipArrow,
   TooltipContent,
   TooltipPortal,
   TooltipProvider,
