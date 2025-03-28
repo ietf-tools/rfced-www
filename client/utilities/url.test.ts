@@ -6,7 +6,8 @@ import {
   rfcFormatPathBuilder,
   textToAnchorId,
   isExternalLink,
-  isInternalLink
+  isInternalLink,
+  isMailToLink
 } from './url'
 
 test('rfcCitePathBuilder: txt', () => {
@@ -65,10 +66,27 @@ test('isExternalLink', () => {
 })
 
 test('isInternalLink', () => {
-  expect(isExternalLink(undefined)).toEqual(true)
+  expect(isInternalLink(undefined)).toEqual(false)
   expect(isInternalLink('/something')).toEqual(true)
   expect(isInternalLink('#something')).toEqual(true)
   expect(isInternalLink('http://')).toEqual(false)
   expect(isInternalLink('https://')).toEqual(false)
   expect(isInternalLink(IETF_PRIVACY_STATEMENT_URL)).toEqual(false)
+})
+
+test('isMailToLink', () => {
+  expect(isMailToLink(undefined)).toEqual(false)
+  expect(isMailToLink('/something')).toEqual(false)
+  expect(isMailToLink('#something')).toEqual(false)
+  expect(isMailToLink('http://')).toEqual(false)
+  expect(isMailToLink('https://')).toEqual(false)
+  expect(isMailToLink(IETF_PRIVACY_STATEMENT_URL)).toEqual(false)
+  expect(
+    isMailToLink(
+      // with a leading space, should not match
+      ' mailto:user@example.com'
+    )
+  ).toEqual(false)
+
+  expect(isMailToLink('mailto:user@example.com')).toEqual(true)
 })

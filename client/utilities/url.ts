@@ -103,7 +103,7 @@ export const authorPathBuilder = (author: Rfc['authors'][number]): string => {
   return `mailto:${author.email}`
 }
 
-const mailtoRegex = /^mailto:\/\//
+const mailtoRegex = /^mailto:/
 export const isMailToLink = (href?: string): boolean => {
   return mailtoRegex.test(href ?? '')
 }
