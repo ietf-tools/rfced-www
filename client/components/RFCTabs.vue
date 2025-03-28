@@ -1,20 +1,16 @@
 <template>
-  <TabsRoot
-    v-slot="{ modelValue }"
-    :selected-index="selectedTab"
-    @change="changeTab"
-  >
-    <TabsList>
+  <TabsRoot v-model="selectedTab" @change="changeTab">
+    <TabsList class="flex flex-row gap-7 border-b mr-6">
       <TabsIndicator />
       <TabsTrigger
         :class="[
           DEFAULT_CLASS,
           {
-            [SELECTED_CLASS]: modelValue === 0,
-            [UNSELECTED_CLASS]: modelValue !== 0
+            [SELECTED_CLASS]: selectedTab === 0,
+            [UNSELECTED_CLASS]: selectedTab !== 0
           }
         ]"
-        value="0"
+        :value="0"
       >
         Contents
       </TabsTrigger>
@@ -22,11 +18,11 @@
         :class="[
           DEFAULT_CLASS,
           {
-            [SELECTED_CLASS]: modelValue === 1,
-            [UNSELECTED_CLASS]: modelValue !== 1
+            [SELECTED_CLASS]: selectedTab === 1,
+            [UNSELECTED_CLASS]: selectedTab !== 1
           }
         ]"
-        value="1"
+        :value="1"
       >
         About this RFC
       </TabsTrigger>
@@ -34,17 +30,17 @@
         :class="[
           DEFAULT_CLASS,
           {
-            [SELECTED_CLASS]: modelValue === 2,
-            [UNSELECTED_CLASS]: modelValue !== 2
+            [SELECTED_CLASS]: selectedTab === 2,
+            [UNSELECTED_CLASS]: selectedTab !== 2
           }
         ]"
-        value="2"
+        :value="2"
       >
         Erratum
       </TabsTrigger>
     </TabsList>
-    <TabsContent value="0"></TabsContent>
-    <TabsContent value="1">
+    <TabsContent :value="0"></TabsContent>
+    <TabsContent :value="1">
       <Heading level="3" style-level="4" class="mt-4">Details</Heading>
       <dl class="text-sm">
         <dt class="font-bold mt-2">Updates</dt>
@@ -138,7 +134,7 @@
         </li>
       </ul>
     </TabsContent>
-    <TabsContent value="2">
+    <TabsContent :value="2">
       <ul class="text-sm">
         <li
           v-for="(errataItem, errataIndex) in props.rfc.obsoleted_by"
@@ -175,7 +171,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const selectedTab = defineModel<number>('selectedTab')
+const selectedTab = defineModel<number>({ default: 0 })
 
 function changeTab(index: number) {
   selectedTab.value = index

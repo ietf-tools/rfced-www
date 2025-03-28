@@ -1,10 +1,13 @@
 <template>
-  <div class="w-full">
-    <DialogRoot :open="isModalOpen" @close="isModalOpen = false">
+  <div class="h-full print:block">
+    <DialogRoot v-model:open="isModalOpen" @close="isModalOpen = false">
       <DialogTrigger />
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent>
+        <DialogContent
+          :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
+          'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'"
+        >
           <DialogTitle />
           <DialogDescription>
             <RFCMobileBanner :rfc="props.rfc" :is-fixed="false">
@@ -28,7 +31,7 @@
         </DialogContent>
       </DialogPortal>
     </DialogRoot>
-    <div class="hidden lg:block print:block">
+    <div class="sticky top-0 h-[100vh] overflow-y-scroll">
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab"
