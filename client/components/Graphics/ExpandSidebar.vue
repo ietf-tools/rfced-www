@@ -17,8 +17,10 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from '~/utilities/vue'
+
 type Props = {
-  class?: string
+  class?: VueStyleClass
 }
 
 const props = defineProps<Props>()

@@ -10,7 +10,8 @@ import {
   infoRfcPathBuilder,
   PUBLIC_SITE,
   rfcPathBuilder,
-  textToAnchorId
+  textToAnchorId,
+  type MarkdownPaths
 } from '~/utilities/url'
 import contentMetadata from '~/generated/content-metadata.json'
 
@@ -26,9 +27,7 @@ type Metadata = {
   validLinks: string[]
 }
 
-const markdownLinks = Object.keys(
-  contentMetadata
-) as (keyof typeof contentMetadata)[]
+const markdownLinks = Object.keys(contentMetadata) as MarkdownPaths[]
 
 test('Markdown links validation', async () => {
   // Unfortunately Nuxt Content's queryCollection() utils can't run in tests only in server routes

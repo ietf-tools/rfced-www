@@ -38,31 +38,29 @@
           : [rfcId.type, rfcId.number]
         "
       />
-      <HeadlessPopover class="inline align-middle">
-        <HeadlessPopoverButton
-          aria-label="Details of category"
-          class="inline-block text-blue-300 dark:text-blue-100 p-2 ml-1 print:text-black"
-        >
-          <GraphicsQuestionMarkCircle />
-        </HeadlessPopoverButton>
 
-        <HeadlessPopoverPanel
-          class="absolute z-10 shadow-md lg:w-auto bg-white border rounded dark:bg-black dark:border-white p-2"
-        >
-          <p class="leading-6">
-            For the definition of <b>Status</b>, see
-            <a :href="infoRfcPathBuilder('rfc2026')">
-              <component :is="formatTitle('rfc2026')" />
-            </a>
-          </p>
-          <p class="leading-6">
-            For the definition of <b>Stream</b>, see
-            <a :href="infoRfcPathBuilder('rfc8729')">
-              <component :is="formatTitle('rfc8729')" /> </a
-            >.
-          </p>
-        </HeadlessPopoverPanel>
-      </HeadlessPopover>
+      <PopoverRoot>
+        <PopoverTrigger> <GraphicsQuestionMarkCircle /></PopoverTrigger>
+        <PopoverAnchor />
+        <PopoverPortal>
+          <PopoverContent>
+            <PopoverClose />
+            <PopoverArrow />
+            <p class="leading-6">
+              For the definition of <b>Status</b>, see
+              <a :href="infoRfcPathBuilder('rfc2026')">
+                <component :is="formatTitle('rfc2026')" />
+              </a>
+            </p>
+            <p class="leading-6">
+              For the definition of <b>Stream</b>, see
+              <a :href="infoRfcPathBuilder('rfc8729')">
+                <component :is="formatTitle('rfc8729')" /> </a
+              >.
+            </p>
+          </PopoverContent>
+        </PopoverPortal>
+      </PopoverRoot>
     </div>
 
     <!-- <div v-if="props.rfc">
@@ -109,6 +107,15 @@
 </template>
 
 <script setup lang="ts">
+import {
+  PopoverAnchor,
+  PopoverArrow,
+  PopoverClose,
+  PopoverContent,
+  PopoverPortal,
+  PopoverRoot,
+  PopoverTrigger
+} from 'reka-ui'
 import type { Rfc } from '../generated/red-client'
 import { formatTitle, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
