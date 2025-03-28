@@ -10,6 +10,7 @@
         <HeaderNavDesktop />
       </div>
     </nav>
+    <!-- slot used to extend the header eg for the homepage -->
     <slot />
   </header>
 </template>

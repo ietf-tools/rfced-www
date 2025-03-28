@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { RouterLink } from '#vue-router'
+import { RouterLink } from 'vue-router'
 import { EXTERNAL_LINK_REL, TARGET_NEW_WINDOW } from '~/utilities/html'
 import type { AnchorProps } from '~/utilities/html'
 import { isInternalLink, isMailToLink } from '~/utilities/url'
