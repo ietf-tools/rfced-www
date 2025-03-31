@@ -47,10 +47,10 @@ Requirement
 The Digital Object Identifier (DOI) is now listed in each reference to an RFC. The first example in [Section 4.8.6.2 of RFC 7322](/rfc/rfc7322/#section-4.8.6.2) is updated as follows.  
 For one author or editor: 
 
-`[RFCXXXX] Last name, First initial., Ed. (if applicable), “RFC Title”, Sub-series number (if applicable), RFC number, DOI, Date of publication, <https://www.rfc-editor.org/info/rfc#>.`
+`[RFCXXXX] Last name, First initial., Ed. (if applicable), “RFC Title”, Sub-series number (if applicable), RFC number, DOI, Date of publication, <https://www.rfc-editor.org/info/rfc#/>.`
 
 **Example:**  
-`[RFC3080] Rose, M., “The Blocks Extensible Exchange Protocol Core”, RFC 3080, DOI 10.17487/RFC3080, March 2001, <[https://www.rfc-editor.org/info/rfc3080/](/info/rfc3080/)\>.`
+`[RFC3080] Rose, M., “The Blocks Extensible Exchange Protocol Core”, RFC 3080, DOI 10.17487/RFC3080, March 2001, <https://www.rfc-editor.org/info/rfc3080/>.`
 
 [Referencing STDs and BCPs](/styleguide/part2/#ref_subseries)
 
@@ -156,7 +156,7 @@ Double negatives are discouraged.
 
 Avoid forming compounds by hyphenating RFC numbers; this can be accomplished by 
 
-- rewording the sentence (e.g., “[RFC5011]-style rollover” –> “rollover as described in RFC 5011 [RFC5011]”).
+- rewording the sentence (e.g., “`[RFC5011]-style rollover`” –> “`rollover as described in RFC 5011 [RFC5011]`”).
 - adding a note in either the Terminology or Conventions section mentioning the RFC so that other occurrences throughout the text will be understood by the reader to be in the style of said RFC (e.g., “This document uses the term “rollover” as defined in RFC 5011”).
 
 [Abbreviations as Verbs](/styleguide/part2/#abbrev_as_verb)
@@ -226,7 +226,7 @@ Guidance
 
 [Use of non-ASCII characters](/styleguide/part2/#nonascii)
 
-Per RFC 7997, non-ASCII characters may appear within the body of the document. The <u> element is required for cases where the non-ASCII characters are needed for correct protocol operation. 
+Per RFC 7997, non-ASCII characters may appear within the body of the document. The `<u>` element is required for cases where the non-ASCII characters are needed for correct protocol operation. 
 
 This is in keeping with the following statement (where “escaping” refers to using U+ notation or otherwise defining each character) in [Section 3.1 of RFC 7997](/rfc/rfc7997.html#section-3.1):
 
@@ -283,9 +283,9 @@ The following is the approved text for use in the first paragraph of the Status 
 
 **For _Best Current Practices_ documents:** This memo documents an Internet Best Current Practice.
 
-**For other categories:** This document is not an Internet Standards Track specification; <it is published for other purposes>.
+**For other categories:** This document is not an Internet Standards Track specification; `<it is published for other purposes>`.
 
-For Informational, Experimental, Historic and future categories of RFCs, the RFC editor will maintain an appropriate text for <it is published for other purposes>. Initial values are:
+For Informational, Experimental, Historic and future categories of RFCs, the RFC editor will maintain an appropriate text for `<it is published for other purposes>`. Initial values are:
 
 **Informational:** it is published for informational purposes.
 
@@ -325,11 +325,11 @@ It represents the consensus of the Internet Architecture Board (IAB).
 
 In addition, a sentence indicating the consensus base within the IRTF may be added:
 
-This RFC represents the consensus of the <insert_name> Research Group of the Internet Research Task Force (IRTF).
+This RFC represents the consensus of the `<insert_name>` Research Group of the Internet Research Task Force (IRTF).
 
 or alternatively:
 
-This RFC represents the individual opinion(s) of one or more members of the <insert_name> Research Group of the Internet Research Task Force (IRTF).
+This RFC represents the individual opinion(s) of one or more members of the `<insert_name>` Research Group of the Internet Research Task Force (IRTF).
 
 **Independent Submission Stream:** This is a contribution to the RFC Series, independently of any other RFC stream. The RFC Editor has chosen to publish this document at its discretion and makes no statement about its value for implementation or deployment.
 

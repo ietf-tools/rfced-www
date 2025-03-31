@@ -60,7 +60,7 @@ export const infoRfcPathBuilder = (rfcId: string) => {
 export const rfcJSONPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/api/v1/rfc${rfcParts.number}.json`
+  return `/api/v1/rfc/rfc${rfcParts.number}.json`
 }
 
 /**
@@ -121,11 +121,18 @@ export const isExternalLink = (href?: string): boolean => {
 
 export const isInternalLink = (href?: string): boolean => !isExternalLink(href)
 
-export const textToAnchorId = (text: string) => {
+/**
+ * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)
+ *
+ * WARNING: this does not ensure unique DOM ids. It's not a uuid/useId hook. It just derives
+ * an id from the input string.
+ */
+export const textToAnchorId = (text: string): string | undefined => {
   const normalized = text
     .trim()
     .toLowerCase() // lowercase before kebabCase() because otherwise kebabCase() will split 'RFCs' into 'rf-cs'
-    .replace(/[^0-9a-zA-Z\s]/g, '') // removes non-alphanumeric eg question marks
+    .replace(/\./g, '-') // replace periods because otherwise "section 2.2" becomes "section22" rather than "section2-2" which is more readable in the url
+    .replace(/[^0-9\-a-zA-Z\s]/g, '') // removes non-alphanumeric eg question marks
   if (
     // if it's an empty string then getVNodeText() probably returned an empty string, so just return `undefined`
     !normalized
@@ -134,4 +141,13 @@ export const textToAnchorId = (text: string) => {
   }
 
   return kebabCase(normalized)
+}
+
+export const parseMaybeRfcLink = (
+  href?: string
+): undefined | ReturnType<typeof parseRFCId> => {
+  if (!href) return undefined
+  const rfcMatch = href.match(/(rfc[0-9]+)/i)
+  if (!rfcMatch) return undefined
+  return parseRFCId(rfcMatch[0])
 }

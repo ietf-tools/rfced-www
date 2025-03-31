@@ -1,6 +1,6 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { parseHtml, getInnerText } from './html'
+import { parseHtml, getInnerText } from './html-test-utils'
 
 test('getInnerText(): simple', async () => {
   const doc = parseHtml('<h1>some text</h1>')

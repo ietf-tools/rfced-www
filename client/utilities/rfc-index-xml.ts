@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import { XMLBuilder } from 'fast-xml-parser'
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { formatAuthor, formatFormat } from './rfc'
+import { getXMLBuilder } from './html-test-utils'
 import { setTimeoutPromise } from './promises'
 import type { ApiClient } from '~/generated/red-client'
 
@@ -30,18 +30,6 @@ export async function renderRfcIndexDotXml(props: Props) {
   close()
 }
 
-type XMLBuilderOptions = NonNullable<
-  ConstructorParameters<typeof XMLBuilder>[0]
->
-
-const xmlBuilderOptions: XMLBuilderOptions = {
-  ignoreAttributes: true,
-  attributeNamePrefix: '',
-  format: true,
-  suppressBooleanAttributes: true,
-  indentBy: '  '
-}
-
 // const renderBCPs = async (props: Props): Promise<void> => {
 //   console.log(props.delayBetweenRequestsMs) // FIXME: remove this
 //   // FIXME: render BCPs
@@ -64,7 +52,13 @@ const renderRFCs = async ({
   const response = await redApi.red.docList(docListArg)
   const largestRfcNumber = response.results[0].number
 
-  const builder = new XMLBuilder(xmlBuilderOptions)
+  const builder = getXMLBuilder({
+    ignoreAttributes: true, // FIXME: don't ignore attributes, and fix the tests that depend on this
+    attributeNamePrefix: '',
+    format: true,
+    suppressBooleanAttributes: true,
+    indentBy: '  '
+  })
 
   docListArg.sort = ['number'] // sort by first RFC
   let offset = 0

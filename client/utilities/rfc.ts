@@ -240,7 +240,7 @@ export const refsRefRfcIdTxt = (rfc: Rfc): string => {
   return `${rfcWithMissingData.authors.map((author) => formatAuthor(author, 'brief'))}, "${rfcWithMissingData.title}", RFC ${rfcWithMissingData.number}, ${formatIdentifiers(rfcWithMissingData.identifiers, ' ').join('')}, ${DateTime.fromISO(rfcWithMissingData.published).toFormat('LLLL yyyy')}, <${PUBLIC_SITE}${infoRfcPathBuilder(`rfc${rfcWithMissingData.number}`)}>.\n`
 }
 
-type RFCJSON = {
+export type RFCJSON = {
   draft: string
   doc_id: string
   title: string

@@ -5,7 +5,7 @@ import { test, expect } from 'vitest'
 import { escapeRegExp } from 'lodash-es'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
-import { getInnerText, parseHtml, walkNodes } from '~/utilities/html'
+import { getInnerText, parseHtml, walkNodes } from '~/utilities/html-test-utils'
 import {
   infoRfcPathBuilder,
   PUBLIC_SITE,
