@@ -1,62 +1,104 @@
 <template>
-  <div class="block lg:hidden">
-    <HeadlessDialog as="div" :open="isOpen" @close="isOpen = false">
-      <HeadlessDialogPanel
+  <DialogRoot v-model:open="isOpen">
+    <DialogTrigger
+      aria-label="Menu"
+      class="absolute top-0 right-0 block p-4 block lg:hidden"
+    >
+      <GraphicsHamburgerMenu />
+    </DialogTrigger>
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogContent
         :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
-        'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 overflow-y-scroll h-full'"
+        'absolute inset-0 z-50 bg-blue-900 text-white dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'"
       >
-        <nav class="container mx-auto flex flex-col">
-          <HeadlessDialogTitle>
-            <button
-              type="button"
-              class="flex justify-between w-full py-5 px-4 items-center"
-              @click="isOpen = false"
-            >
-              <GraphicsHeaderLogoMobileMenu />
-              <GraphicsClose />
-            </button>
-          </HeadlessDialogTitle>
-          <div class="flex flex-col">
-            <Accordion>
+        <DialogTitle>
+          <button
+            type="button"
+            class="flex justify-between w-full py-5 px-4 items-center"
+          >
+            <GraphicsHeaderLogoMobileMenu />
+            <DialogClose>
+              <GraphicsClose class="text-white" />
+            </DialogClose>
+          </button>
+        </DialogTitle>
+        <div class="flex flex-col">
+          <Accordion>
+            <template v-for="(item, index) in menuData" :key="index.toString()">
+              <A v-if="item.href" :href="item.href" :class="MENU_ITEM_CLASS">
+                <GraphicsChevron
+                  class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
+                />
+                {{ item.label }}
+              </A>
               <AccordionItem
-                v-for="(item, index) in menuData"
+                v-else
                 :id="index.toString()"
-                :key="index.toString()"
                 :trigger-text="item.label"
               >
-                <ul class="mx-4">
+                <ul class="ml-4">
                   <li
-                    v-for="(childItem, childIndex) in item.children"
+                    v-for="(level0, childIndex) in item.children"
                     :key="childIndex"
                   >
-                    <a
-                      v-if="childItem.href"
-                      :href="childItem.href"
-                      class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                    <A
+                      v-if="level0.href"
+                      :href="level0.href"
+                      :class="MENU_ITEM_CLASS"
                     >
-                      {{ childItem.label }}
-                    </a>
+                      <GraphicsChevron
+                        class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
+                      />
 
-                    <Accordion v-if="childItem.children">
+                      {{ level0.label }}
+                    </A>
+                    <button
+                      v-else-if="level0.click"
+                      type="button"
+                      :aria-label="level0.activeLabelFn?.()"
+                      :class="MENU_ITEM_CLASS"
+                      @click="
+                        (e: MouseEvent) => {
+                          level0.click?.(e)
+                          isOpen = false
+                        }
+                      "
+                    >
+                      <Icon v-if="level0.icon" :name="level0.icon" />
+                      <Icon
+                        v-if="level0.isActiveFn?.()"
+                        name="fluent:checkmark-12-filled"
+                      />
+                      <span
+                        v-if="
+                          level0.isActiveFn && !level0.isActiveFn() // render blank space
+                        "
+                        class="inline-block w-[14px] h-[14px]"
+                      />
+                      {{ level0.label }}
+                    </button>
+                    <Accordion v-else>
                       <AccordionItem
                         :id="index.toString()"
                         :key="index"
-                        :trigger-text="childItem.label"
+                        :trigger-text="level0.label"
                         :style-depth="2"
                       >
-                        <ul class="mx-4">
+                        <ul class="ml-4">
                           <li
-                            v-for="(
-                              subChildItem, subChildIndex
-                            ) in childItem.children"
-                            :key="subChildIndex"
+                            v-for="(level1, level1Index) in level0.children"
+                            :key="level1Index"
                           >
                             <a
-                              v-if="subChildItem.href"
-                              :href="subChildItem.href"
-                              class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
+                              v-if="level1.href"
+                              :href="level1.href"
+                              :class="MENU_ITEM_CLASS"
                             >
-                              {{ subChildItem.label }}
+                              <GraphicsChevron
+                                class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
+                              />
+                              {{ level1.label }}
                             </a>
                           </li>
                         </ul>
@@ -65,70 +107,30 @@
                   </li>
                 </ul>
               </AccordionItem>
-              <AccordionItem
-                v-for="(item, index) in menuItemsThatAreOnlyOnMobile"
-                :id="(menuData.length + index).toString()"
-                :key="menuData.length + index"
-                :trigger-text="item.label"
-              >
-                <ul class="mx-4">
-                  <li
-                    v-for="(childItem, childIndex) in item.children"
-                    :key="childIndex"
-                  >
-                    <button
-                      type="button"
-                      class="block border border-gray-500 px-6 py-3 w-full text-left hover:bg-white/10"
-                      @click="childItem.click"
-                    >
-                      {{ childItem.label }}
-                    </button>
-                  </li>
-                </ul>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </nav>
-      </HeadlessDialogPanel>
-    </HeadlessDialog>
-    <button
-      type="button"
-      class="text-white p-3 md:-mx-3"
-      @click="isOpen = true"
-    >
-      <GraphicsHamburgerMenu />
-    </button>
-  </div>
+            </template>
+          </Accordion>
+        </div>
+      </DialogContent>
+    </DialogPortal>
+  </DialogRoot>
 </template>
 
 <script setup lang="ts">
-import { menuData, colorPreferences } from './HeaderNavData'
+import {
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose
+} from 'reka-ui'
+import { useMenuData } from './HeaderNavData'
 
-const colorMode = useColorMode()
+const menuData = useMenuData()
 
-const menuItemsThatAreOnlyOnMobile = [
-  {
-    label: 'Theme',
-    children: colorPreferences.map((colorPreference) => ({
-      label: colorPreference.label,
-      click: () => {
-        colorMode.preference = colorPreference.value
-        isOpen.value = false
-      }
-    }))
-  }
-]
+const MENU_ITEM_CLASS =
+  'flex w-full text-left border no-underline border-gray-500 px-6 py-3 hover:bg-blue-400 focus:bg-blue-400'
 
 const isOpen = ref(false)
 </script>
-
-<style>
-/**
-   Ark Accordion doesn't expose template slots for open/closed state, it just
-   sets data-* attributes, so we use those to animate chevron rotation instead
-   of the conventional Vue approach
-**/
-[data-state='open'] [data-chevron] {
-  transform: rotate(0deg);
-}
-</style>

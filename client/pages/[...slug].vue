@@ -28,9 +28,8 @@ if (
 } else {
   const canonicalUrl = `${PUBLIC_SITE}${normalizedSlug}`
 
-  const { error } = await useAsyncData(
-    normalizedSlug, // canonicalUrl is more normalized than `slug` because of the leading/trailing slash checks when this const is created, so it's better to use for the cache key
-    () => queryContent(slug).findOne()
+  const { error } = await useAsyncData(normalizedSlug, () =>
+    queryContent(slug).findOne()
   )
 
   if (error.value) {

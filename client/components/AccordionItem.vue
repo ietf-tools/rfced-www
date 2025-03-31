@@ -1,29 +1,31 @@
 <template>
-  <Accordion.Item :value="props.id">
-    <Accordion.ItemTrigger
-      class="flex flex-row w-full justify-between items-center py-1 border border-gray-500 hover:bg-white/10"
+  <AccordionItem v-slot="{ open }" :value="props.id" class="p-0">
+    <AccordionTrigger
+      class="flex flex-row w-full justify-between items-center border border-gray-500 hover:bg-blue-400 focus:bg-blue-400"
     >
       <span
         :class="{
-          'p-4': styleDepth === 1,
-          'px-6 py-3': styleDepth === 2
+          'p-4': props.styleDepth === 1,
+          'px-6 py-3': props.styleDepth === 2
         }"
-        >{{ props.triggerText }}</span
       >
-      <Accordion.ItemIndicator
-        class="w-[16px] border-l border-gray-500 py-4 pl-6 pr-8 text-blue-100"
-      >
-        <GraphicsChevron class="-rotate-90" data-chevron />
-      </Accordion.ItemIndicator>
-    </Accordion.ItemTrigger>
-    <Accordion.ItemContent>
+        {{ props.triggerText }}
+      </span>
+      <GraphicsChevron
+        :class="{
+          'mr-4 size-4 text-blue-100': true,
+          'rotate-180': open
+        }"
+      />
+    </AccordionTrigger>
+    <AccordionContent>
       <slot />
-    </Accordion.ItemContent>
-  </Accordion.Item>
+    </AccordionContent>
+  </AccordionItem>
 </template>
 
 <script setup lang="ts">
-import { Accordion } from '@ark-ui/vue'
+import { AccordionContent, AccordionItem, AccordionTrigger } from 'reka-ui'
 
 type Props = {
   /**

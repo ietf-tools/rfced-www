@@ -44,13 +44,14 @@
 </template>
 
 <script setup lang="ts">
+import type { VueStyleClass } from '../utilities/vue'
 import Fragment from './Fragment.vue'
 
 type Props = {
-  class?: string
-  defaultSlotClass?: string
-  asideSlotClass?: string
-  containerClass?: string
+  class?: VueStyleClass
+  defaultSlotClass?: VueStyleClass
+  asideSlotClass?: VueStyleClass
+  containerClass?: VueStyleClass
   headingLevel: '1' | '2' | '3' | '4' | '5' | '6'
   hasCoverLink?: boolean
   href?: string

@@ -1,9 +1,9 @@
 <template>
-  <Accordion.Root multiple collapsible>
+  <AccordionRoot type="single" :collapsible="true">
     <slot />
-  </Accordion.Root>
+  </AccordionRoot>
 </template>
 
 <script setup lang="ts">
-import { Accordion } from '@ark-ui/vue'
+import { AccordionRoot } from 'reka-ui'
 </script>
