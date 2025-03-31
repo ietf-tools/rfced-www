@@ -1,7 +1,7 @@
 <template>
-  <A v-bind="props">
+  <AMaybeRfcLink v-bind="props">
     <slot />
-  </A>
+  </AMaybeRfcLink>
 </template>
 
 <script setup lang="ts">

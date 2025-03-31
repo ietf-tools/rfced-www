@@ -263,9 +263,7 @@ export type RFCJSON = {
 }
 
 /**
- * Renders RFC JSON. Eg.
- *
- * As used on https://www.rfc-editor.org/rfc/rfc1.json
+ * Converts between types of RFC data
  */
 export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
   const date = DateTime.fromISO(rfc.published)
@@ -303,5 +301,35 @@ export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
       rfc.identifiers?.find((identifier) => identifier.type === 'doi')?.value ??
       null,
     errata_url: rfc.errata?.[0] ?? null
+  }
+}
+
+/**
+ * Converts between types of RFC data
+ */
+export const rfcJSONToRfc = (rfcJson: RFCJSON): Rfc => {
+  return {
+    number: parseInt(parseRFCId(rfcJson.doc_id).number, 10),
+    title: undefined,
+    published: undefined,
+    status: undefined,
+    pages: undefined,
+    authors: undefined,
+    group: undefined,
+    area: undefined,
+    stream: undefined,
+    identifiers: undefined,
+    obsoletes: undefined,
+    obsoleted_by: undefined,
+    updates: undefined,
+    updated_by: undefined,
+    is_also: undefined,
+    see_also: undefined,
+    draft: undefined,
+    abstract: undefined,
+    formats: undefined,
+    keywords: undefined,
+    errata: undefined,
+    text: undefined
   }
 }

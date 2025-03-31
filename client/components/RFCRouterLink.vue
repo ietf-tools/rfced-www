@@ -1,11 +1,11 @@
 <template>
   <RouterLink
-    v-if="!maybeRfcJson"
+    v-if="!maybeRfc"
     v-bind="propsWithHrefAsTo"
     @focus="loadRfc"
-    @blur="doNotAutoDisplay"
+    @blur="defaultOpen = false"
     @mouseover="loadRfc"
-    @mouseout="doNotAutoDisplay"
+    @mouseout="defaultOpen = false"
   >
     <slot />
   </RouterLink>
@@ -20,8 +20,7 @@
         <TooltipContent
           class="p-2 max-w-[300px] border rounded-md bg-white dark:bg-black border-black dark:border-white text-black dark:text-white"
         >
-          <b class="m-0 p-0">{{ maybeRfcJson.title }}</b>
-          <p class="m-0 p-0 leading-none">{{ maybeRfcJson.abstract }}</p>
+          <RFCCardBody :rfc="maybeRfc" />
           <TooltipArrow />
         </TooltipContent>
       </TooltipPortal>
@@ -36,14 +35,14 @@ import type { AnchorProps } from '~/utilities/html'
 import { RFC_TYPE_RFC } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
+import RFCCardBody from './RFCCardBody.vue'
+import type { Rfc } from '~/generated/red-client'
 
 const props = defineProps<AnchorProps & { to: string }>()
 
-const maybeRfcJson = ref<RFCJSON | undefined>()
+const maybeRfc = ref<Rfc | undefined>()
 
 const defaultOpen = ref<boolean>(false)
-
-const doNotAutoDisplay = () => (defaultOpen.value = false)
 
 const isLoading = ref<boolean>(false)
 
@@ -69,7 +68,7 @@ const loadRfc = async (): Promise<void> => {
     console.log('Giving up after multiple failed requests')
     return
   }
-  if (maybeRfcJson.value) {
+  if (maybeRfc.value) {
     console.log('Data already loaded')
     return
   }
@@ -114,6 +113,6 @@ const loadRfc = async (): Promise<void> => {
   }
 
   isLoading.value = false
-  maybeRfcJson.value = data
+  maybeRfc.value = rfcJSONToRfc(data)
 }
 </script>
