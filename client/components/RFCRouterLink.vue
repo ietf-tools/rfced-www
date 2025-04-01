@@ -31,11 +31,11 @@
 <script setup lang="ts">
 import { computed, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import RFCCardBody from './RFCCardBody.vue'
 import type { AnchorProps } from '~/utilities/html'
 import { RFC_TYPE_RFC, rfcJSONToRfc } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
-import RFCCardBody from './RFCCardBody.vue'
 import type { Rfc } from '~/generated/red-client'
 
 const props = defineProps<AnchorProps & { to: string }>()

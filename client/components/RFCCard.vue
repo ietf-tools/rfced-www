@@ -27,8 +27,8 @@
       <RFCCardBody
         mode="normal"
         :rfc="props.rfc"
-        :showAbstract="props.showAbstract"
-        :showTagDate="props.showTagDate"
+        :show-abstract="props.showAbstract"
+        :show-tag-date="props.showTagDate"
       />
     </template>
     <template v-if="props.showAbstract && !!props.rfc.abstract" #aside>

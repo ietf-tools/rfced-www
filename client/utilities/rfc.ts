@@ -238,16 +238,30 @@ export const formatIdentifiers = (
   )
 }
 
-export const parseRfcJsonDateToISO = (
-  date_pub: RFCJSON['pub_date']
+export const parseRfcJsonPubDateToISO = (
+  pub_date: RFCJSON['pub_date']
 ): string => {
-  const parts = date_pub.split(/\s/g)
-  const month = parseMonthName(parts[0])
-  const year = parseInt(parts[1], 10)
-  const date = DateTime.fromObject({ year, month })
-  const dateISO = date.toISO()
+  const parts = pub_date.split(/\s/g)
+  let day: number = 0
+  let month: number = 0
+  let year: number = 0
+  let dateISO: ReturnType<ReturnType<typeof DateTime.fromObject>['toISO']> =
+    null
+
+  if (parts.length === 3) {
+    // April first
+    day = parseInt(parts[0], 10)
+    month = parseMonthName(parts[1])
+    year = parseInt(parts[2], 10)
+    dateISO = DateTime.fromObject({ day, year, month }).toISO()
+  } else if (parts.length === 2) {
+    month = parseMonthName(parts[0])
+    year = parseInt(parts[1], 10)
+    dateISO = DateTime.fromObject({ year, month }).toISO()
+  }
+
   if (!dateISO) {
-    throw Error(`Unable to parse date "${date_pub}"`)
+    throw Error(`Unable to parse date "${pub_date}"`)
   }
   return dateISO
 }
@@ -280,7 +294,7 @@ export const formatDatePublished = (
 ): string => {
   if (isAprilFirstMode && dt.month === 4 && dt.day === 1) {
     // handle April 1st
-    return dt.toLocaleString(DateTime.DATE_FULL)
+    return dt.toFormat('d LLLL yyyy')
   }
   return dt.toFormat('LLLL yyyy')
 }
@@ -368,7 +382,7 @@ export const rfcJSONToRfc = (rfcJson: RFCJSON): Rfc => {
   return {
     number: parseInt(parseRFCId(rfcJson.doc_id).number, 10),
     title: rfcJson.title,
-    published: parseRfcJsonDateToISO(rfcJson.pub_date),
+    published: parseRfcJsonPubDateToISO(rfcJson.pub_date),
     status: {
       slug: 'standard', // FIXME: can we derive into "bcp" | "experimental" | "historic" | "informational" | "not-issued" | "standard" | "unknown"
       name: rfcJson.status
