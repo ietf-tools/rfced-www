@@ -25,6 +25,7 @@
     </template>
     <template #default>
       <RFCCardBody
+        mode="normal"
         :rfc="props.rfc"
         :showAbstract="props.showAbstract"
         :showTagDate="props.showTagDate"

@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { range } from 'lodash-es'
 import type { RfcMetadata, Rfc } from '../generated/red-client'
 import { NONBREAKING_SPACE } from './strings'
 import { infoRfcPathBuilder, PUBLIC_SITE } from './url'
@@ -100,6 +101,26 @@ export const parseRFCId = (title: string): RFCId => {
     type: 'unknown',
     number: title
   }
+}
+
+const parseRfcFormat = (format: string): Rfc['formats'][number] => {
+  switch (format.toLowerCase()) {
+    case 'xml':
+      return 'xml'
+    case 'ascii':
+      return 'txt'
+    case 'txt':
+      return 'txt'
+    case 'html':
+      return 'html'
+    case 'htmlized':
+      return 'htmlized'
+    case 'pdf':
+      return 'pdf'
+    case 'ps':
+      return 'ps'
+  }
+  throw Error(`Unable to parse RFC format "${format}"`)
 }
 
 /**
@@ -217,6 +238,42 @@ export const formatIdentifiers = (
   )
 }
 
+export const parseRfcJsonDateToISO = (
+  date_pub: RFCJSON['pub_date']
+): string => {
+  const parts = date_pub.split(/\s/g)
+  const month = parseMonthName(parts[0])
+  const year = parseInt(parts[1], 10)
+  const date = DateTime.fromObject({ year, month })
+  const dateISO = date.toISO()
+  if (!dateISO) {
+    throw Error(`Unable to parse date "${date_pub}"`)
+  }
+  return dateISO
+}
+
+/**
+ * Returns 1-based index from month name
+ */
+const parseMonthName = (monthName: string) => {
+  const monthsNames = range(1, 12).map((monthNumber) =>
+    DateTime.fromObject({
+      year: 2025,
+      month: monthNumber
+    }).toFormat('LLL')
+  )
+  for (let i = 0; i < monthsNames.length; i++) {
+    const monthsNameItem = monthsNames[i]
+    if (
+      monthName.substring(0, monthsNameItem.length).toLowerCase() ===
+      monthsNameItem.toLowerCase()
+    ) {
+      return i + 1 // 1-based index
+    }
+  }
+  throw Error(`Unexpected monthName "${monthName}"`)
+}
+
 export const formatDatePublished = (
   dt: DateTime,
   isAprilFirstMode: boolean
@@ -310,26 +367,86 @@ export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
 export const rfcJSONToRfc = (rfcJson: RFCJSON): Rfc => {
   return {
     number: parseInt(parseRFCId(rfcJson.doc_id).number, 10),
-    title: undefined,
-    published: undefined,
-    status: undefined,
-    pages: undefined,
-    authors: undefined,
-    group: undefined,
+    title: rfcJson.title,
+    published: parseRfcJsonDateToISO(rfcJson.pub_date),
+    status: {
+      slug: 'standard', // FIXME: can we derive into "bcp" | "experimental" | "historic" | "informational" | "not-issued" | "standard" | "unknown"
+      name: rfcJson.status
+    },
+    pages: parseInt(rfcJson.page_count, 10),
+    authors: rfcJson.authors.map((authorName) => ({
+      person: 0,
+      name: authorName
+    })),
+    group: {
+      acronym: rfcJson.source,
+      name: rfcJson.source
+    },
     area: undefined,
-    stream: undefined,
-    identifiers: undefined,
-    obsoletes: undefined,
-    obsoleted_by: undefined,
-    updates: undefined,
-    updated_by: undefined,
+    stream: {
+      slug: rfcJson.source,
+      name: rfcJson.source
+    },
+    identifiers:
+      rfcJson.doi ?
+        [
+          {
+            type: 'doi',
+            value: rfcJson.doi
+          }
+        ]
+      : [],
+    obsoletes: rfcJson.obsoletes.map(
+      (obsolete): NonNullable<Rfc['obsoletes']>[number] => {
+        const rfcId = parseRFCId(obsolete)
+        return {
+          id: 0,
+          number: parseInt(rfcId.number, 10),
+          title: obsolete
+        }
+      }
+    ),
+    obsoleted_by: rfcJson.obsoleted_by.map(
+      (obsoleted_by_item): NonNullable<Rfc['obsoleted_by']>[number] => {
+        const rfcId = parseRFCId(obsoleted_by_item)
+        return {
+          id: 0,
+          number: parseInt(rfcId.number, 10),
+          title: obsoleted_by_item
+        }
+      }
+    ),
+    updates: rfcJson.updates.map(
+      (update): NonNullable<Rfc['updates']>[number] => {
+        const rfcId = parseRFCId(update)
+        return {
+          id: 0,
+          number: parseInt(rfcId.number, 10),
+          title: update
+        }
+      }
+    ),
+    updated_by: rfcJson.updated_by.map(
+      (updated_by_item): NonNullable<Rfc['updated_by']>[number] => {
+        const rfcId = parseRFCId(updated_by_item)
+        return {
+          id: 0,
+          number: parseInt(rfcId.number, 10),
+          title: updated_by_item
+        }
+      }
+    ),
     is_also: undefined,
-    see_also: undefined,
-    draft: undefined,
-    abstract: undefined,
-    formats: undefined,
-    keywords: undefined,
-    errata: undefined,
-    text: undefined
+    see_also: rfcJson.see_also,
+    draft: {
+      id: 0,
+      name: rfcJson.draft,
+      title: rfcJson.draft
+    },
+    abstract: rfcJson.abstract,
+    formats: rfcJson.format.map(parseRfcFormat),
+    keywords: rfcJson.keywords,
+    errata: [],
+    text: ''
   }
 }

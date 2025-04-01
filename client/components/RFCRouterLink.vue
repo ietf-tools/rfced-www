@@ -20,7 +20,7 @@
         <TooltipContent
           class="p-2 max-w-[300px] border rounded-md bg-white dark:bg-black border-black dark:border-white text-black dark:text-white"
         >
-          <RFCCardBody :rfc="maybeRfc" />
+          <RFCCardBody mode="tooltip" :rfc="maybeRfc" />
           <TooltipArrow />
         </TooltipContent>
       </TooltipPortal>
@@ -32,7 +32,7 @@
 import { computed, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { AnchorProps } from '~/utilities/html'
-import { RFC_TYPE_RFC } from '~/utilities/rfc'
+import { RFC_TYPE_RFC, rfcJSONToRfc } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
 import RFCCardBody from './RFCCardBody.vue'
@@ -57,8 +57,7 @@ onUnmounted(() => {
 
 const propsWithHrefAsTo = computed(() => ({
   ...props,
-  // Although copying `href` to `to` is already done in A.vue, any direct usage of RFCRouterLink would need this
-  to: props.to ?? props.href // copy `href` to `to` for vue-router RouterLink usage
+  to: props.to || props.href // copy `href` to `to` for vue-router RouterLink usage
 }))
 
 const loadRfc = async (): Promise<void> => {
