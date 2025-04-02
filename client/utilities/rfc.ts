@@ -270,7 +270,7 @@ export const parseRfcJsonPubDateToISO = (
  * Returns 1-based index from month name
  */
 const parseMonthName = (monthName: string) => {
-  const monthsNames = range(1, 12).map((monthNumber) =>
+  const monthsNames = range(1, 13).map((monthNumber) =>
     DateTime.fromObject({
       year: 2025,
       month: monthNumber

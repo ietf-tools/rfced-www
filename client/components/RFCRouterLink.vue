@@ -1,78 +1,86 @@
 <template>
-  <RouterLink
-    v-if="!maybeRfc"
-    v-bind="propsWithHrefAsTo"
-    @focus="loadRfc"
-    @blur="defaultOpen = false"
-    @mouseover="loadRfc"
-    @mouseout="defaultOpen = false"
-  >
-    <slot />
-  </RouterLink>
-  <TooltipProvider v-else>
-    <TooltipRoot :delay-duration="0" :default-open="defaultOpen">
-      <TooltipTrigger>
-        <RouterLink v-bind="propsWithHrefAsTo">
-          <slot />
-        </RouterLink>
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent
-          class="p-2 max-w-[300px] border rounded-md bg-white dark:bg-black border-black dark:border-white text-black dark:text-white"
+  <HoverCardRoot v-model:open="isOpen">
+    <HoverCardTrigger>
+      <RouterLink
+        v-bind="propsWithHrefAsTo"
+        @focus="loadRfc"
+        @mouseover="loadRfc"
+        @blur="isOpen = false"
+      >
+        <slot />
+      </RouterLink>
+    </HoverCardTrigger>
+    <HoverCardPortal>
+      <HoverCardContent
+        class="border-2 shadow-xl rounded-md max-w-xs bg-white dark:bg-black border-black dark:border-gray-100"
+      >
+        <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
+        <p
+          v-else
+          class="p-3 w-full text-center"
+          aria-live="polite"
+          aria-atomic="true"
         >
-          <RFCCardBody mode="tooltip" :rfc="maybeRfc" />
-          <TooltipArrow />
-        </TooltipContent>
-      </TooltipPortal>
-    </TooltipRoot>
-  </TooltipProvider>
+          Loading...
+        </p>
+        <HoverCardArrow />
+      </HoverCardContent>
+    </HoverCardPortal>
+  </HoverCardRoot>
 </template>
 
 <script setup lang="ts">
 import { computed, onUnmounted } from 'vue'
+import {
+  HoverCardArrow,
+  HoverCardContent,
+  HoverCardPortal,
+  HoverCardRoot,
+  HoverCardTrigger
+} from 'reka-ui'
 import { RouterLink } from 'vue-router'
-import RFCCardBody from './RFCCardBody.vue'
 import type { AnchorProps } from '~/utilities/html'
-import { RFC_TYPE_RFC, rfcJSONToRfc } from '~/utilities/rfc'
+import { RFC_TYPE_RFC } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
-import type { Rfc } from '~/generated/red-client'
+import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 
-const props = defineProps<AnchorProps & { to: string }>()
+const props = defineProps<AnchorProps>()
 
-const maybeRfc = ref<Rfc | undefined>()
-
-const defaultOpen = ref<boolean>(false)
-
+const rfcJSON = ref<RFCJSON | undefined>()
 const isLoading = ref<boolean>(false)
+const isOpen = ref<boolean>(false) // manually controlling open so that we can have keyboard access for sighted users
 
-let timer: ReturnType<typeof setTimeout> | undefined = undefined
-let attemptsRemaining = 5
+let attemptsRemaining = 2
+let hasUnmountedAbortController = new AbortController()
 
 onUnmounted(() => {
-  if (timer) {
-    clearTimeout(timer)
-  }
+  hasUnmountedAbortController?.abort()
 })
 
 const propsWithHrefAsTo = computed(() => ({
   ...props,
-  to: props.to || props.href // copy `href` to `to` for vue-router RouterLink usage
+  to: props.href // copy `href` to `to` for vue-router RouterLink usage
 }))
 
+/**
+ * Loads RFC JSON for the link preview
+ */
 const loadRfc = async (): Promise<void> => {
-  defaultOpen.value = true
-
-  if (attemptsRemaining <= 0) {
-    console.log('Giving up after multiple failed requests')
+  // This is intentionally client-side only. There should be no SSR calling this function.
+  // TODO: deduplicate requests for same RFC across components? Not sure if the added
+  // complexity is worth it. Currently we're relying on browser network cache which seems fine.
+  if (hasUnmountedAbortController.signal.aborted) {
+    // The component has unmounted so we can ignore requests to load this RFC
     return
   }
-  if (maybeRfc.value) {
-    console.log('Data already loaded')
+  if (rfcJSON.value) {
+    // Data already loaded so we can ignore requests to load it again
     return
   }
-  if (isLoading.value) {
-    console.log('Ignoring multiple requests for JSON')
+  if (isLoading.value === true) {
+    // A request is currently inflight so we don't need to try again. This is expected behaviour because the
+    // mouseover and focus events could be fired multiple times before a request completes
     return
   }
 
@@ -86,32 +94,55 @@ const loadRfc = async (): Promise<void> => {
 
   const rfcJSONPath = rfcJSONPathBuilder(`rfc${rfcId.number}`)
 
+  if (attemptsRemaining <= 0) {
+    console.log('Giving up after multiple failed requests for ', rfcJSONPath)
+    return
+  }
+
+  attemptsRemaining--
+  isLoading.value = true // no async behaviour (awaits) should occur before this is set to true
+  console.log(`Loading ${rfcJSONPath}`)
   let data: RFCJSON | undefined = undefined
   try {
-    // This is intentionally client-side only. There should be no SSR calling this function.
-    // TODO: deduplicate requests for same RFC across components? Not sure if the added
-    // complexity is worth it. Currently we're relying on browser network cache which seems fine.
-    const response = $fetch<RFCJSON | undefined>(rfcJSONPath, {
+    const response = await fetch(rfcJSONPath, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    isLoading.value = true
-    attemptsRemaining--
-    data = await response
+    if (hasUnmountedAbortController.signal.aborted) {
+      return
+    }
+    if (!response.ok) {
+      console.error(
+        `Bad response was HTTP ${response.status} ${response.statusText}`,
+        response,
+        `Going to retry ${attemptsRemaining} time(s)`
+      )
+      setTimeout(loadRfc, 0)
+      return
+    }
+
+    data = await response.json()
     if (!data) {
-      throw Error('No data returned')
+      console.error(
+        `Bad JSON from response HTTP ${response.status} ${response.statusText}`,
+        response,
+        `Going to retry ${attemptsRemaining} time(s)`
+      )
+      setTimeout(loadRfc, 0)
+      return
     }
   } catch (e) {
     console.error(e)
     // Could be a transient network failure, try again soon
     isLoading.value = false
-    timer = setTimeout(loadRfc, 0)
+    setTimeout(loadRfc, 0)
     return
   }
 
   isLoading.value = false
-  maybeRfc.value = rfcJSONToRfc(data)
+  rfcJSON.value = data
+  isOpen.value = true
 }
 </script>

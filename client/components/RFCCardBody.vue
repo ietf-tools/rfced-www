@@ -1,24 +1,10 @@
 <template>
-  <p
-    :class="{
-      'text-base text-blue-900 dark:text-white': true,
-      'mt-2': props.mode === 'normal',
-      'font-bold leading-none': props.mode === 'tooltip'
-    }"
-  >
+  <p class="text-base text-blue-900 dark:text-white mt-2">
     {{ props.rfc.title }}
   </p>
-  <p v-if="props.mode === 'tooltip'" class="leading-none text-sm">
-    {{ props.rfc.abstract }}
-  </p>
-  <div
-    :class="{
-      'print:m-0': true,
-      'my-4': props.mode === 'normal',
-      'my-2': props.mode === 'tooltip'
-    }"
-  >
-    <Tag :text="tagText" />
+
+  <div class="print:m-0 my-4">
+    <Tag size="normal" :text="tagText" />
   </div>
   <ul
     v-if="list1"
@@ -90,13 +76,12 @@ import { infoRfcPathBuilder } from '../utilities/url'
 import { formatTitlePlaintext } from '~/utilities/rfc'
 
 type Props = {
-  mode: 'normal' | 'tooltip'
   rfc: Rfc
   showAbstract?: boolean
   showTagDate?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), { mode: 'normal' })
+const props = defineProps<Props>()
 
 const isMobileAbstractOpen = ref<boolean>(false)
 
