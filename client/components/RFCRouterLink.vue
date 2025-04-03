@@ -1,43 +1,78 @@
 <template>
-  <HoverCardRoot v-model:open="isOpen">
+  <HoverCardRoot v-model:open="isHoverCardOpen">
     <HoverCardTrigger>
       <RouterLink
         v-bind="propsWithHrefAsTo"
         @focus="loadRfc"
         @mouseover="loadRfc"
-        @blur="isOpen = false"
+        @blur="isHoverCardOpen = false"
       >
         <slot />
       </RouterLink>
     </HoverCardTrigger>
     <HoverCardPortal>
       <HoverCardContent
-        class="border-2 shadow-xl rounded-md max-w-xs bg-white dark:bg-black border-black dark:border-gray-100"
+        class="w-[300px] h-[225px] border-2 shadow-xl rounded-md max-w-xs bg-white dark:bg-black border-black dark:border-white"
       >
-        <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
-        <p
-          v-else
-          class="p-3 w-full text-center"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          Loading...
-        </p>
+        <ScrollAreaRoot class="relative overflow-hidden p-0 m-0">
+          <ScrollAreaViewport class="w-full h-full rounded p-3 m-0">
+            <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
+            <p
+              v-else
+              class="p-3 w-full text-center"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              Loading...
+            </p>
+          </ScrollAreaViewport>
+          <ScrollAreaScrollbar orientation="horizontal">
+            <ScrollAreaThumb />
+          </ScrollAreaScrollbar>
+          <ScrollAreaScrollbar orientation="vertical">
+            <ScrollAreaThumb />
+          </ScrollAreaScrollbar>
+          <ScrollAreaCorner />
+        </ScrollAreaRoot>
         <HoverCardArrow />
       </HoverCardContent>
     </HoverCardPortal>
   </HoverCardRoot>
+  <div class="inline-block md:hidden">
+    <DialogRoot v-model:open="isDialogOpen">
+      <DialogTrigger
+        class="ml-1 px-1 align-baseline"
+        @focus="loadRfc"
+        @mouseover="loadRfc"
+      >
+        <Icon name="fluent:preview-link-16-regular" aria-label="Link Preview" />
+      </DialogTrigger>
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent
+          class="fixed w-full h-[50vh] bottom-0 left-0 text-black border-t-1 bg-white dark:bg-black dark:text-white dark:border-white shadow-xl overflow-y-scroll p-2"
+        >
+          <DialogTitle />
+          <DialogDescription>
+            <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
+            <p
+              v-else
+              class="p-3 w-full text-center"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              Loading...
+            </p>
+          </DialogDescription>
+          <DialogClose />
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted } from 'vue'
-import {
-  HoverCardArrow,
-  HoverCardContent,
-  HoverCardPortal,
-  HoverCardRoot,
-  HoverCardTrigger
-} from 'reka-ui'
+import { computed, onUnmounted, customRef } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { AnchorProps } from '~/utilities/html'
 import { RFC_TYPE_RFC } from '~/utilities/rfc'
@@ -49,7 +84,21 @@ const props = defineProps<AnchorProps>()
 
 const rfcJSON = ref<RFCJSON | undefined>()
 const isLoading = ref<boolean>(false)
-const isOpen = ref<boolean>(false) // manually controlling open so that we can have keyboard access for sighted users
+const isDialogOpen = ref<boolean>(false)
+const isHoverCardOpen = (() => {
+  let value: boolean = false
+  return customRef((track, trigger) => ({
+    get() {
+      track()
+      // we never want to open the hovercard while the dialog is open
+      return isDialogOpen.value ? false : value
+    },
+    set(newValue) {
+      value = newValue
+      trigger()
+    }
+  }))
+})()
 
 let attemptsRemaining = 2
 let hasUnmountedAbortController = new AbortController()
@@ -71,7 +120,7 @@ const loadRfc = async (): Promise<void> => {
   // TODO: deduplicate requests for same RFC across components? Not sure if the added
   // complexity is worth it. Currently we're relying on browser network cache which seems fine.
   if (hasUnmountedAbortController.signal.aborted) {
-    // The component has unmounted so we can ignore requests to load this RFC
+    // The component has already unmounted so we can ignore requests to load this RFC
     return
   }
   if (rfcJSON.value) {
@@ -140,9 +189,9 @@ const loadRfc = async (): Promise<void> => {
     setTimeout(loadRfc, 0)
     return
   }
+  console.log(`Loaded ${rfcJSONPath}`)
 
   isLoading.value = false
   rfcJSON.value = data
-  isOpen.value = true
 }
 </script>

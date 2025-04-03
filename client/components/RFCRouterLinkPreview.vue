@@ -1,57 +1,46 @@
 <template>
-  <ScrollAreaRoot class="w-[300px] h-[225px] relative overflow-hidden p-0 m-0">
-    <ScrollAreaViewport class="w-full h-full rounded p-3 m-0">
-      <b class="clear-right">
-        <component :is="formatTitle(props.rfcJson.doc_id)" />
-        <GraphicsDiamond />
-        <GraphicsIETFMotif
-          class="absolute text-black w-[110px] h-[100px] right-0 top-0 print:hidden"
-          :opacity="0.04"
-        />
-      </b>
-      <p class="text-base text-blue-900 dark:text-white font-bold leading-5">
-        {{ props.rfcJson.title }}
-      </p>
-      <div class="pt-1">
-        <Tag size="small" :text="tagText" />
-      </div>
-      <p class="leading-5 pt-2 text-xs">
-        {{ props.rfcJson.abstract }}
-      </p>
-      <ul
-        v-if="list1"
-        class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
-      >
-        <li v-for="(part, index) in list1" :key="index" class="inline">
-          <GraphicsDiamond v-if="index > 0" />{{ part }}
-        </li>
-      </ul>
-      <ul
-        v-if="list2"
-        class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
-      >
-        <li v-for="(part, index) in list2" :key="index" class="inline">
-          <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
-        </li>
-      </ul>
-      <p
-        v-if="obsoletedBy"
-        :class="[
-          'text-red-700 dark:text-red-300 text-base print:text-black',
-          { 'mt-2': isMobileAbstractOpen }
-        ]"
-      >
-        <Renderable :val="obsoletedBy" />
-      </p>
-    </ScrollAreaViewport>
-    <ScrollAreaScrollbar orientation="horizontal">
-      <ScrollAreaThumb />
-    </ScrollAreaScrollbar>
-    <ScrollAreaScrollbar orientation="vertical">
-      <ScrollAreaThumb />
-    </ScrollAreaScrollbar>
-    <ScrollAreaCorner />
-  </ScrollAreaRoot>
+  <b class="clear-right">
+    <component :is="formatTitle(props.rfcJson.doc_id)" />
+    <GraphicsDiamond />
+    <GraphicsIETFMotif
+      class="absolute text-black w-[110px] h-[100px] right-0 top-0 print:hidden"
+      :opacity="0.04"
+    />
+  </b>
+  <p class="text-base text-blue-900 dark:text-white font-bold leading-5">
+    {{ props.rfcJson.title }}
+  </p>
+  <div class="pt-1">
+    <Tag size="small" :text="tagText" />
+  </div>
+  <p class="leading-5 pt-2 text-xs">
+    {{ props.rfcJson.abstract }}
+  </p>
+  <ul
+    v-if="list1"
+    class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
+  >
+    <li v-for="(part, index) in list1" :key="index" class="inline">
+      <GraphicsDiamond v-if="index > 0" />{{ part }}
+    </li>
+  </ul>
+  <ul
+    v-if="list2"
+    class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
+  >
+    <li v-for="(part, index) in list2" :key="index" class="inline">
+      <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
+    </li>
+  </ul>
+  <p
+    v-if="obsoletedBy"
+    :class="[
+      'text-red-700 dark:text-red-300 text-base print:text-black',
+      { 'mt-2': isMobileAbstractOpen }
+    ]"
+  >
+    <Renderable :val="obsoletedBy" />
+  </p>
 </template>
 
 <script setup lang="ts">
