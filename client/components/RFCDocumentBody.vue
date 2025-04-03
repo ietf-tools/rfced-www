@@ -37,6 +37,7 @@
             ['Internet Standard', `${props.rfc.number}`]
           : [rfcId.type, rfcId.number]
         "
+        size="normal"
       />
 
       <PopoverRoot>

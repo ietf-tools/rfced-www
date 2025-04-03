@@ -46,13 +46,13 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import { infoRfcPathBuilder } from '../utilities/url'
+import Anchor from './A.vue'
 import {
   formatTitle,
   formatTitlePlaintext,
   parseRfcJsonPubDateToISO,
   type RFCJSON
 } from '~/utilities/rfc'
-import Anchor from './A.vue'
 
 type Props = {
   rfcJson: RFCJSON

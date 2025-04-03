@@ -74,11 +74,11 @@
 <script setup lang="ts">
 import { computed, onUnmounted, customRef } from 'vue'
 import { RouterLink } from 'vue-router'
+import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import type { AnchorProps } from '~/utilities/html'
 import { RFC_TYPE_RFC } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
-import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 
 const props = defineProps<AnchorProps>()
 
@@ -101,7 +101,7 @@ const isHoverCardOpen = (() => {
 })()
 
 let attemptsRemaining = 2
-let hasUnmountedAbortController = new AbortController()
+const hasUnmountedAbortController = new AbortController()
 
 onUnmounted(() => {
   hasUnmountedAbortController?.abort()
