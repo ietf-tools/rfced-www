@@ -2,7 +2,7 @@
   <component
     :is="`h${props.level}`"
     :id="
-      getAnchorId($slots.default) // we always make an id regardless of hasInternalLink
+      getAnchorId($slots.default) // we always make an id. hasInternalLink only affects whether to show a '#' link
     "
     :class="[headingStyles[`h${styleLevel || level}`], props.class, 'group']"
   >

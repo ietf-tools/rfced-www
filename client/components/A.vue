@@ -1,5 +1,5 @@
 <template>
-  <component :is="isInternal ? RouterLink : 'a'" v-bind="sanitisedAnchorProps">
+  <component :is="isInternal ? NuxtLink : 'a'" v-bind="sanitisedAnchorProps">
     <slot />
   </component>
 </template>
@@ -11,7 +11,7 @@
  * If you want to ALSO detect RFC links and display a preview use AMaybeRFCLink.vue
  */
 import { computed } from 'vue'
-import { RouterLink } from 'vue-router'
+import { NuxtLink } from '#components'
 import { EXTERNAL_LINK_REL, TARGET_NEW_WINDOW } from '~/utilities/html'
 import type { AnchorProps } from '~/utilities/html'
 import { isInternalLink, isMailToLink } from '~/utilities/url'
@@ -23,7 +23,7 @@ const isMailTo = computed(() => isMailToLink(props.href))
 
 const sanitisedAnchorProps = computed(() => ({
   ...props,
-  to: isInternal.value ? props.href : undefined, // copy `href` to `to` for vue-router RouterLink usage
+  to: isInternal.value ? props.href : undefined, // copy `href` to `to` for NuxtLink
   rel:
     props.rel ??
     (!isInternal.value && !isMailTo.value ? EXTERNAL_LINK_REL : undefined),
