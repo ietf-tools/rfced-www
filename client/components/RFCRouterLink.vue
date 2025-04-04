@@ -12,29 +12,28 @@
     </HoverCardTrigger>
     <HoverCardPortal>
       <HoverCardContent
-        class="w-[300px] h-[225px] border-2 shadow-xl rounded-md max-w-xs bg-white dark:bg-black border-black dark:border-white"
+        class="w-[300px] h-[225px] border shadow-2xl overflow-x-hidden rounded-md max-w-xs bg-white dark:bg-black border-gray-400 dark:border-white px-2 data-[side=bottom]:animate-slideUpAndFade data-[side=right]:animate-slideLeftAndFade data-[side=left]:animate-slideRightAndFade data-[side=top]:animate-slideDownAndFade data-[state=open]:transition-all"
       >
-        <ScrollAreaRoot class="relative overflow-hidden p-0 m-0">
-          <ScrollAreaViewport class="w-full h-full rounded p-3 m-0">
-            <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
-            <p
-              v-else
-              class="p-3 w-full text-center"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              Loading...
-            </p>
-          </ScrollAreaViewport>
-          <ScrollAreaScrollbar orientation="horizontal">
-            <ScrollAreaThumb />
-          </ScrollAreaScrollbar>
-          <ScrollAreaScrollbar orientation="vertical">
-            <ScrollAreaThumb />
-          </ScrollAreaScrollbar>
-          <ScrollAreaCorner />
-        </ScrollAreaRoot>
-        <HoverCardArrow />
+        <div v-if="rfcJSON">
+          <div
+            v-if="rfcId"
+            class="mx-auto sticky top-0 z-2 block w-50 px-4 pt-1 pb-2 mb-4 text-center bg-gray-200 dark:bg-gray-700 rounded-b-xl"
+          >
+            <component :is="formatTitle(`rfc${rfcId.number}`)" />
+            Preview
+          </div>
+          <RFCRouterLinkPreview :rfc-json="rfcJSON" />
+        </div>
+        <p
+          v-else
+          class="p-3 w-full text-center"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          Loading...
+        </p>
+
+        <HoverCardArrow class="fill-gray-200 stroke-gray-500 -mt-[1px]" />
       </HoverCardContent>
     </HoverCardPortal>
   </HoverCardRoot>
@@ -50,10 +49,20 @@
       <DialogPortal>
         <DialogOverlay />
         <DialogContent
-          class="fixed w-full h-[50vh] bottom-0 left-0 text-black border-t-1 bg-white dark:bg-black dark:text-white dark:border-white shadow-xl overflow-y-scroll p-2"
+          class="data-[state=open]:animate-enterFromBottom rounded-t-xl data-[state=closed]:animate-exitToBottom fixed w-full h-[50vh] bottom-0 left-0 shadow-[0_-5px_25px_rgba(0,0,0,0.25)] dark:shadow-[0_-5px_25px_rgba(11,140,197,0.25)] text-black bg-white dark:bg-black dark:text-white border-t-1 border-gray-400 dark:border-gray-600 overflow-y-scroll"
         >
-          <DialogTitle />
-          <DialogDescription>
+          <DialogClose :class="`fixed right-0 py-[10px] px-3 pb-3`">
+            <GraphicsClose />
+          </DialogClose>
+          <DialogTitle
+            class="mx-auto sticky top-0 z-2 block w-50 px-4 pt-1 pb-2 mb-6 text-center bg-gray-200 dark:bg-gray-700 rounded-b-xl"
+          >
+            <span v-if="rfcId">
+              <component :is="formatTitle(`rfc${rfcId.number}`)" />
+              Preview
+            </span>
+          </DialogTitle>
+          <DialogDescription class="max-w-md mx-auto px-4">
             <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
             <p
               v-else
@@ -64,7 +73,6 @@
               Loading...
             </p>
           </DialogDescription>
-          <DialogClose />
         </DialogContent>
       </DialogPortal>
     </DialogRoot>
@@ -76,7 +84,7 @@ import { computed, onUnmounted, customRef } from 'vue'
 import { RouterLink } from 'vue-router'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import type { AnchorProps } from '~/utilities/html'
-import { RFC_TYPE_RFC } from '~/utilities/rfc'
+import { formatTitle, RFC_TYPE_RFC } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
 
@@ -99,6 +107,8 @@ const isHoverCardOpen = (() => {
     }
   }))
 })()
+
+const rfcId = parseMaybeRfcLink(props.href)
 
 let attemptsRemaining = 2
 const hasUnmountedAbortController = new AbortController()
@@ -133,7 +143,6 @@ const loadRfc = async (): Promise<void> => {
     return
   }
 
-  const rfcId = parseMaybeRfcLink(props.href)
   if (rfcId === undefined || rfcId.type !== RFC_TYPE_RFC) {
     console.warn(
       `Received "${props.href}" which wasn't parsed as having an rfc id. Ignoring.`

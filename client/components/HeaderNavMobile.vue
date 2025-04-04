@@ -57,7 +57,7 @@
                       v-else-if="level0.click"
                       type="button"
                       :aria-label="level0.activeLabelFn?.()"
-                      :class="MENU_ITEM_CLASS"
+                      :class="[MENU_ITEM_CLASS, 'flex items-center']"
                       @click="
                         (e: MouseEvent) => {
                           level0.click?.(e)
@@ -69,12 +69,13 @@
                       <Icon
                         v-if="level0.isActiveFn?.()"
                         name="fluent:checkmark-12-filled"
+                        class="inline-block w-[14px] h-[14px] mr-1"
                       />
                       <span
                         v-if="
-                          level0.isActiveFn && !level0.isActiveFn() // render blank space
+                          level0.isActiveFn && !level0.isActiveFn() // render blank space if isActiveFn()===false
                         "
-                        class="inline-block w-[14px] h-[14px]"
+                        class="inline-block w-[14px] h-[14px] mr-1"
                       />
                       {{ level0.label }}
                     </button>

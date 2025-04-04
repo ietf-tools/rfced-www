@@ -1,12 +1,8 @@
 <template>
-  <b class="clear-right">
-    <component :is="formatTitle(props.rfcJson.doc_id)" />
-    <GraphicsDiamond />
-    <GraphicsIETFMotif
-      class="absolute text-black w-[110px] h-[100px] right-0 top-0 print:hidden"
-      :opacity="0.04"
-    />
-  </b>
+  <GraphicsIETFMotif
+    class="absolute text-black w-[110px] h-[100px] right-0 top-0 print:hidden"
+    :opacity="0.04"
+  />
   <p class="text-base text-blue-900 dark:text-white font-bold leading-5">
     {{ props.rfcJson.title }}
   </p>
@@ -16,18 +12,12 @@
   <p class="leading-5 pt-2 text-xs">
     {{ props.rfcJson.abstract }}
   </p>
-  <ul
-    v-if="list1"
-    class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
-  >
+  <ul v-if="list1" class="text-base text-blue-900 dark:text-white">
     <li v-for="(part, index) in list1" :key="index" class="inline">
       <GraphicsDiamond v-if="index > 0" />{{ part }}
     </li>
   </ul>
-  <ul
-    v-if="list2"
-    class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
-  >
+  <ul v-if="list2" class="text-base text-gray-800 mt-1 dark:text-white">
     <li v-for="(part, index) in list2" :key="index" class="inline">
       <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
     </li>
@@ -41,11 +31,20 @@
   >
     <Renderable :val="obsoletedBy" />
   </p>
+  <p class="clear-both text-right mt-6 mb-10">
+    <A
+      :href="rfcPathBuilder(props.rfcJson.doc_id)"
+      class="flex-inline rounded no-underline justify-center items-center bg-gray-100 dark:bg-gray-700 text-blue-400 dark:text-white px-4 pt-3 pb-4 mr-6"
+    >
+      <component :is="formatTitle(props.rfcJson.doc_id)" />
+      <GraphicsChevron class="ml-2 inline -rotate-90" />
+    </A>
+  </p>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import { infoRfcPathBuilder } from '../utilities/url'
+import { infoRfcPathBuilder, rfcPathBuilder } from '../utilities/url'
 import Anchor from './A.vue'
 import {
   formatTitle,

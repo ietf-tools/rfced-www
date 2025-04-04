@@ -49,7 +49,6 @@
       </span>
     </template>
     <template v-else>
-      <!-- you'll have to add support for this yourself -->
       {{ props.text }}
     </template>
   </div>
