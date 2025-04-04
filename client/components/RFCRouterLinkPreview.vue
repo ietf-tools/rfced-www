@@ -40,7 +40,6 @@
       <GraphicsChevron class="ml-2 inline -rotate-90" />
     </A>
   </p>
-  print:block
 </template>
 
 <script setup lang="ts">
