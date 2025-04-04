@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { z } from 'zod'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
-import { XMLParser } from 'fast-xml-parser'
+import { getXMLParser } from './html-test-utils'
 import { renderRfcIndexDotXml } from './rfc-index-xml'
 import { parseRFCId } from './rfc'
 import { blankRfcResponse, getTestApiResponses } from './rfc.test'
@@ -17,8 +17,8 @@ const originalXMLString = fs
   .readFileSync(path.join(import.meta.dirname, 'rfc-index.xml'), 'utf-8')
   .toString()
 
-const parser = new XMLParser({
-  preserveOrder: true
+const parser = getXMLParser({
+  trimValues: true // FIXME: preserve whitespace and fix the tests that don't expect it
 })
 const originalXML = parser.parse(originalXMLString)
 
@@ -144,11 +144,13 @@ describe('renderRfcIndexDotXml', () => {
     const originalXMLEntries = originalXML[1]['rfc-index']
     expect(originalXMLEntries.length).toBeGreaterThan(10)
     const originalParsedXML = EntriesSchema.safeParse(originalXMLEntries)
-    const originalParsedEntries = originalParsedXML.data
-    if (!originalParsedEntries) {
-      console.log(originalParsedXML.error)
-      throw Error('Expected some results')
+    if (originalParsedXML.error) {
+      console.error(originalParsedXML.error.message)
+      throw Error('Parsing failure. originalParsedXML did not match schema')
     }
+
+    const originalParsedEntries = originalParsedXML.data
+
     expect(originalParsedXML.success).toBeTruthy()
     const originalRFCs: RFCEntry[] =
       originalParsedEntries.filter(filterByRFCEntry)
@@ -156,8 +158,8 @@ describe('renderRfcIndexDotXml', () => {
 
     const result = await testHelper(getTestApiResponses(13))
 
-    const resultParser = new XMLParser({
-      preserveOrder: true
+    const resultParser = getXMLParser({
+      trimValues: true // FIXME: preserve whitespace and fix the tests that don't expect it
     })
     const resultXML = resultParser.parse(result)
     expect(resultXML[0]).toHaveProperty('?xml')
@@ -167,16 +169,16 @@ describe('renderRfcIndexDotXml', () => {
     const resultParsedXML = EntriesSchema.safeParse(resultXMLEntries)
     const resultParsedEntries = resultParsedXML.data
     if (!resultParsedEntries) {
-      console.log(resultParsedXML.error)
-      throw Error('Expected some results')
+      console.error(resultParsedXML.error.message)
+      throw Error('Parsing failure. resultParsedXML did not match schema')
     }
     expect(resultParsedXML.success).toBeTruthy()
 
     const resultRFCs: RFCEntry[] = resultParsedEntries.filter(filterByRFCEntry)
     expect(resultRFCs.length).toBeGreaterThan(10)
 
-    // Intentionally not using test.each() because that would continue running tests after one fails
-    // whereas this will fail early and compete the tests much quicker
+    // Intentionally not using test.each() because that would continue running tests in parallel after
+    // one fails whereas this will fail fast
     resultRFCs.forEach((resultRFC, i) => {
       const originalRFC = originalRFCs[i]
       const originalRFCNumber = getRFCNumber(originalRFC)

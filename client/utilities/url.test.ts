@@ -7,7 +7,8 @@ import {
   textToAnchorId,
   isExternalLink,
   isInternalLink,
-  isMailToLink
+  isMailToLink,
+  parseMaybeRfcLink
 } from './url'
 
 test('rfcCitePathBuilder: txt', () => {
@@ -52,8 +53,12 @@ test('textToAnchorId', () => {
   ).toEqual('what-sort-of-documents-are-independent-submissions')
 
   expect(
-    textToAnchorId('Some RFCs') // testing whether it will split 'RFCs' into 'rf-cs'
+    textToAnchorId('Some RFCs') // testing to ensure it doesn't turn 'RFCs' into 'rf-cs' which can happen with incorrect usage of kebabCase
   ).toEqual('some-rfcs')
+
+  expect(
+    textToAnchorId('Section 2.2') // testing to ensure it doesn't turn "2.2" into "22" which wouldn't be easy to read as an anchor id.
+  ).toEqual('section-2-2')
 })
 
 test('isExternalLink', () => {
@@ -89,4 +94,16 @@ test('isMailToLink', () => {
   ).toEqual(false)
 
   expect(isMailToLink('mailto:user@example.com')).toEqual(true)
+})
+
+test('parseMaybeRfcLink', () => {
+  expect(parseMaybeRfcLink('something/rfc1/something-else')).toEqual({
+    type: 'RFC',
+    number: '1'
+  })
+
+  expect(parseMaybeRfcLink('/rfc/rfc10101')).toEqual({
+    type: 'RFC',
+    number: '10101'
+  })
 })

@@ -7,8 +7,8 @@
   >
     <component :is="hasAsideSlot ? 'div' : Fragment">
       <Heading :level="props.headingLevel">
-        <a
-          :href="props.href"
+        <NuxtLink
+          :to="props.href"
           :class="[
             'block text-[22px] font-bold text-blue-300 dark:text-blue-100 print:text-black no-underline focus:underline hover:underline group',
             props.hasCoverLink &&
@@ -33,7 +33,7 @@
               props.chevronPosition === 'center' ? 'bottom-[50%]' : 'bottom-4'
             ]"
           />
-        </a>
+        </NuxtLink>
       </Heading>
       <slot />
     </component>
@@ -54,7 +54,7 @@ type Props = {
   containerClass?: VueStyleClass
   headingLevel: '1' | '2' | '3' | '4' | '5' | '6'
   hasCoverLink?: boolean
-  href?: string
+  href: string
   chevronPosition?: 'center' | 'end'
 }
 

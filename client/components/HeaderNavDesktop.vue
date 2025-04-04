@@ -25,7 +25,7 @@
           <Icon v-if="menuItem.icon" :name="menuItem.icon" />
           {{ menuItem.label }}
           <GraphicsChevron
-            class="ml-1 top-[1px] text-blue-100 transition-transform duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
+            class="ml-1 top-[1px] text-blue-100 group-hover:text-white transition-transform duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
           />
         </NavigationMenuTrigger>
         <NavigationMenuContent
@@ -50,7 +50,7 @@
                         {{ level0.label }}
                       </span>
                       <GraphicsChevron
-                        class="transition-transform translate-y-[0.2em] duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
+                        class="transition-transform text-blue-100 group-hover:text-white translate-y-[0.2em] duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
                       />
                     </NavigationMenuTrigger>
                     <NavigationMenuContent
@@ -92,7 +92,7 @@
                     />
                   </span>
                   <GraphicsChevron
-                    class="text-blue-100 ml-1 translate-y-1 -rotate-90"
+                    class="text-blue-100 group-hover:text-white ml-1 translate-y-1 -rotate-90"
                   />
                 </A>
                 <button
@@ -102,17 +102,18 @@
                   :aria-label="level0.activeLabelFn?.()"
                   @click="level0.click"
                 >
-                  <span>
+                  <span class="flex items-center">
                     <Icon v-if="level0.icon" :name="level0.icon" />
                     <Icon
                       v-if="level0.isActiveFn?.()"
                       name="fluent:checkmark-12-filled"
+                      class="inline-block w-[14px] h-[14px] mr-2"
                     />
                     <span
                       v-if="
                         level0.isActiveFn && !level0.isActiveFn() // render blank space
                       "
-                      class="inline-block w-[14px] h-[14px]"
+                      class="inline-block w-[14px] h-[14px] mr-2"
                     />
                     {{ level0.label }}
                   </span>

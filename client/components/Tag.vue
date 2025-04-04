@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'pointer-events-none inline-flex items-center bg-blue-400 dark:bg-blue-800 print:bg-white text-white print:text-black text-base print:text-sm uppercase font-semibold',
+      'inline-flex items-center bg-blue-400 dark:bg-blue-800 print:bg-white text-white print:text-black print:text-sm uppercase',
       props.class,
       {
         'screen:[clip-path:polygon(0%_50%,_6%_0%,_96%_0%,100%_50%,96%_100%,6%_100%)]':
@@ -11,27 +11,44 @@
         'screen:[clip-path:polygon(0%_50%,_5%_0%,_95%_0%,100%_50%,95%_100%,5%_100%)]':
           totalTextLength > 10 && totalTextLength <= 15,
         'screen:[clip-path:polygon(0%_50%,_4%_0%,_96%_0%,100%_50%,96%_100%,4%_100%)]':
-          totalTextLength > 15
+          totalTextLength > 15,
+        'text-base font-semibold': props.size === 'normal',
+        'text-xs font-semibold': props.size === 'small'
       }
     ]"
   >
     <template v-if="props.text.length === 1">
-      <span class="px-3 py-1 print:px-0 whitespace-nowrap inline-block px-2">
+      <span
+        :class="{
+          'whitespace-nowrap inline-block': true,
+          'px-3 py-1 print:px-0': props.size === 'normal',
+          'px-2 py-0.5 print:px-0': props.size === 'small'
+        }"
+      >
         <Renderable :val="props.text[0]" />
       </span>
     </template>
     <template v-else-if="props.text.length === 2">
-      <span class="pl-5 pr-2 py-2 print:p-0 whitespace-nowrap">
+      <span
+        :class="{
+          'print:p-0 whitespace-nowrap': true,
+          'pl-5 pr-2 py-2': props.size === 'normal',
+          'pl-3 pr-1 py-0.5': props.size === 'small'
+        }"
+      >
         <Renderable :val="props.text[0]" />
       </span>
       <span
-        class="bg-yellow-200 dark:bg-yellow-700 dark:text-white text-black print:text-black pl-2 pr-5 py-2 print:py-0"
+        :class="{
+          'whitespace-nowrap print:py-0 bg-yellow-200 dark:bg-yellow-700 dark:text-white text-black print:text-black ': true,
+          'pl-2 pr-5 py-2': props.size === 'normal',
+          'pl-1 pr-3 py-0.5': props.size === 'small'
+        }"
       >
         <Renderable :val="props.text[1]" />
       </span>
     </template>
     <template v-else>
-      <!-- you'll have to add support for this yourself -->
       {{ props.text }}
     </template>
   </div>
@@ -44,9 +61,12 @@ import { getVNodeText } from '~/utilities/vue'
 type Props = {
   text: (string | VNode)[]
   class?: VueStyleClass
+  size: 'normal' | 'small'
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  size: 'normal'
+})
 
 const totalTextLength = computed(() => {
   return props.text.reduce((acc, item): number => {

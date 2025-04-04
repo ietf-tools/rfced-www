@@ -1,7 +1,7 @@
 <template>
   <TooltipProvider v-if="thisContentMetadata">
     <TooltipRoot :delay-duration="0">
-      <TooltipTrigger type="button">
+      <TooltipTrigger type="button" class="mt-6">
         Last updated {{ relativeDate }}
       </TooltipTrigger>
       <TooltipPortal>

@@ -2,7 +2,6 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { renderToString } from 'vue/server-renderer'
 import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
-import { XMLBuilder } from 'fast-xml-parser'
 import { isVNode } from 'vue'
 import { rfcToRfcIndexRow, rfcCommaList } from './rfc-index-html'
 import { getRedClient, getRFCs } from './redClientWrappers'
@@ -13,7 +12,11 @@ import {
   type DocListResponse
 } from './rfc.test'
 import { parseRFCId } from './rfc'
-import { filterByElementName, parseHtml } from './html'
+import {
+  filterByElementName,
+  parseHtml,
+  getXMLBuilder
+} from './html-test-utils'
 import type {
   ApiClient,
   PaginatedRfcMetadataList
@@ -73,19 +76,6 @@ const originalRfcIndexHtml = fs
 
 const originalRfcIndex = parseHtml(originalRfcIndexHtml)
 
-type XMLBuilderOptions = NonNullable<
-  ConstructorParameters<typeof XMLBuilder>[0]
->
-
-const xmlBuilderOptions: XMLBuilderOptions = {
-  preserveOrder: true,
-  ignoreAttributes: true,
-  attributeNamePrefix: '',
-  format: true,
-  suppressBooleanAttributes: true,
-  indentBy: '  '
-}
-
 const extractRfcSummaries = (document: unknown) => {
   if (!Array.isArray(document)) {
     console.log('Bad param document', document)
@@ -124,7 +114,14 @@ const extractRfcSummaries = (document: unknown) => {
     console.log('Bad param rows', rows)
     throw Error('Bad param rows')
   }
-  const builder = new XMLBuilder(xmlBuilderOptions)
+  const builder = getXMLBuilder({
+    preserveOrder: true,
+    ignoreAttributes: true, // FIXME preserve attributes and fix the tests that don't expect it
+    attributeNamePrefix: '',
+    format: true,
+    suppressBooleanAttributes: true, // TODO: should I have this config?
+    indentBy: '  '
+  })
   const htmlRows = rows.map((row) => {
     if (
       !row ||

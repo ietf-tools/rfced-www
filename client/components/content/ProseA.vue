@@ -1,10 +1,11 @@
 <template>
-  <A v-bind="props">
+  <AMaybeRfcLink v-bind="props">
     <slot />
-  </A>
+  </AMaybeRfcLink>
 </template>
 
 <script setup lang="ts">
+import AMaybeRfcLink from '../AMaybeRFCLink.vue'
 import type { AnchorProps } from '~/utilities/html'
 
 const props = defineProps<AnchorProps>()

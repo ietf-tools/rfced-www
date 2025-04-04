@@ -8,7 +8,7 @@
     "cleanup": "nuxt cleanup",
     "preview": "npm run build && nuxt preview",
     "postinstall": "nuxt prepare",
-    "test": "npm run test:unittests && npm run test:types && npm run test:lint",
+    "test": "TZ=UTC npm run test:unittests && npm run test:types && npm run test:lint",
     "test:lint": "eslint .",
     "test:lint:fix": "eslint . --fix",
     "test:types": "npx nuxi typecheck",
