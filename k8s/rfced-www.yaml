@@ -25,6 +25,9 @@ spec:
             - containerPort: 3000
               name: http
               protocol: TCP
+          envFrom:
+            - secretRef:
+                name: red-secrets-env
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
