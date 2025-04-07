@@ -11,7 +11,6 @@ export const getRedClient = () => {
   if (config.cfServiceTokenSecret) {
     headers['CF-Access-Client-Secret'] = config.cfServiceTokenSecret
   }
-  console.log(config.public.datatrackerBase)
   return new ApiClient({
     baseUrl: config.public.datatrackerBase,
     headers,
