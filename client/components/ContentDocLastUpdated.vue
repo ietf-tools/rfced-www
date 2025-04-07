@@ -38,10 +38,9 @@ let fullDate: string | null = null
 let relativeDate: string | null = null
 
 if (thisContentMetadata) {
-  // Note that we shouldn't have the server generate localised data
-  // because this will be cached for all users so there is no loca
+  // server rendered content should be generic (not have localised date formatting based on server timezone)
   const datetime = DateTime.fromISO(thisContentMetadata.mtime)
   relativeDate = datetime.toRelativeCalendar() // eg. X years ago
-  fullDate = thisContentMetadata.mtime.replace(/T/g, ' ')
+  fullDate = thisContentMetadata.mtime.replace(/T/g, ' ') // Replace 'T' to allow line wrapping where necessary
 }
 </script>
