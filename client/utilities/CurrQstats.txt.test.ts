@@ -2,9 +2,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { vi, test, expect } from 'vitest'
-import { PRIVATE_API_URL } from './url'
 import { renderCurrQstatsDotTxt } from './CurrQstats-txt'
-import { ApiClient } from '~/generated/red-client'
+import { getRedClient } from '~/utilities/redClientWrappers'
 
 const currQStatsTxt = fs
   .readFileSync(path.join(import.meta.dirname, 'CurrQstats.txt'), 'utf-8')
@@ -28,7 +27,7 @@ export type TestHelperResponses = {
 }
 
 const testHelper = async (): Promise<string> => {
-  const redApiMock = new ApiClient({ baseUrl: PRIVATE_API_URL })
+  const redApiMock = getRedClient()
 
   /*
     FIXME: update when API is available
