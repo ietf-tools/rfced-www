@@ -24,6 +24,7 @@ const isMailTo = computed(() => isMailToLink(props.href))
 const sanitisedAnchorProps = computed(() => ({
   ...props,
   to: isInternal.value ? props.href : undefined, // copy `href` to `to` for NuxtLink
+  href: isInternal.value ? undefined : props.href, // clobber 'href' with `undefined` when it's a NuxtLink
   rel:
     props.rel ??
     (!isInternal.value && !isMailTo.value ? EXTERNAL_LINK_REL : undefined),

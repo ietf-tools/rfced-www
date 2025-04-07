@@ -1,18 +1,24 @@
 <template>
-  <TooltipProvider v-if="thisContentMetadata">
-    <TooltipRoot :delay-duration="0">
-      <TooltipTrigger type="button" class="mt-6">
+  <HoverCardRoot v-model:open="isHoverCardOpen">
+    <HoverCardTrigger as-child>
+      <button
+        class="mt-10 px-4 -ml-2 py-2 border border-transparent focus:border focus:border-gray-400 rounded-md"
+        @focus="isHoverCardOpen = true"
+        @mouseover="isHoverCardOpen = true"
+        @blur="isHoverCardOpen = false"
+      >
         Last updated {{ relativeDate }}
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent
-          class="data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade text-grass11 select-none rounded-md bg-white text-black dark:bg-black dark:text-white px-[15px] py-[10px] text-sm leading-none shadow-sm border will-change-[transform,opacity]"
-        >
-          <p class="font-mono">Last updated {{ fullDate }}</p>
-        </TooltipContent>
-      </TooltipPortal>
-    </TooltipRoot>
-  </TooltipProvider>
+      </button>
+    </HoverCardTrigger>
+    <HoverCardPortal>
+      <HoverCardContent
+        class="border shadow-2xl overflow-x-hidden rounded-md bg-white dark:bg-black border-gray-400 dark:border-white px-2 data-[side=bottom]:animate-slideUpAndFade data-[side=right]:animate-slideLeftAndFade data-[side=left]:animate-slideRightAndFade data-[side=top]:animate-slideDownAndFade data-[state=open]:transition-all"
+      >
+        <p class="font-mono">Last updated {{ fullDate }}</p>
+        <HoverCardArrow class="fill-gray-200 stroke-gray-500 -mt-[1px]" />
+      </HoverCardContent>
+    </HoverCardPortal>
+  </HoverCardRoot>
   <p v-if="thisContentMetadata" class="hidden print:block font-mono">
     Last updated {{ relativeDate }}, {{ fullDate }}
   </p>
@@ -20,27 +26,22 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import {
-  TooltipContent,
-  TooltipPortal,
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger
-} from 'reka-ui'
-
 import _contentMetadata from '../generated/content-metadata.json'
 import type { ContentMetadata } from '~/scripts/generate-content-metadata'
 
 const contentMetadata: ContentMetadata = _contentMetadata
 const route = useRoute()
 const thisContentMetadata = contentMetadata[route.path]
+const isHoverCardOpen = ref(false)
 
 let fullDate: string | null = null
 let relativeDate: string | null = null
 
 if (thisContentMetadata) {
+  // Note that we shouldn't have the server generate localised data
+  // because this will be cached for all users so there is no loca
   const datetime = DateTime.fromISO(thisContentMetadata.mtime)
-  relativeDate = datetime.toRelativeCalendar()
-  fullDate = datetime.toISO() // don't use localised date, because this will be cached for all users so there is no local timezone except server timezone which is irrelevant for users
+  relativeDate = datetime.toRelativeCalendar() // eg. X years ago
+  fullDate = thisContentMetadata.mtime.replace(/T/g, ' ')
 }
 </script>

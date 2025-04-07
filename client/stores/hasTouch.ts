@@ -8,19 +8,12 @@
  * side detection of capabilities
  */
 
-import { onLoad } from '~/utilities/html'
-
-export type HasTouchValue = null | boolean
+export type HasTouchValue = undefined | boolean
 
 export const isTouchDevice = (): boolean => {
-  console.log(
-    'isTouchDevice()',
-    !!window.matchMedia('(pointer: coarse)').matches
-  )
-
   if (typeof window === 'undefined') {
     throw Error(
-      `This code should not be used serverside. We want cachable server responses that don't vary by device.`
+      `isTouchDevice() should not be used serverside. We want cachable server responses that don't vary by device.`
     )
   }
 
@@ -28,17 +21,12 @@ export const isTouchDevice = (): boolean => {
   return !!window.matchMedia('(pointer: coarse)').matches
 }
 
-export const useHasTouch = defineStore('hasTouch', () => {
-  const hasTouch = ref<HasTouchValue>(null)
+export const useHasTouchStore = defineStore('hasTouch', () => {
+  const hasTouch = ref<HasTouchValue>(undefined)
 
-  onLoad(() => {
-    console.log('in onLoad')
+  onMounted(() => {
     hasTouch.value = isTouchDevice()
   })
 
-  return { hasTouch: hasTouch.value }
+  return { hasTouch }
 })
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useHasTouch, import.meta.hot))
-}

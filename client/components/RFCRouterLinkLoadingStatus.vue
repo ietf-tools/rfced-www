@@ -9,7 +9,8 @@
       Loading...
     </template>
     <template v-if="props.loadingStatus.type === 'error'">
-      Error: {{ props.loadingStatus.message }}
+      RFC Link Preview loading error. Please try again later. See web console
+      for error details.
     </template>
   </p>
 </template>
