@@ -53,6 +53,15 @@ export default defineNuxtConfig({
       }
     }
   },
+  // https://nuxt.com/docs/guide/going-further/runtime-config
+  runtimeConfig: {
+    cfServiceTokenId: '', // NUXT_CF_SERVICE_TOKEN_ID env var
+    cfServiceTokenSecret: '', // NUXT_CF_SERVICE_TOKEN_SECRET env var
+    public: {
+      // These settings are available client-side (others are server-side only)
+      datatrackerBase: 'http://localhost:8000/', // NUXT_PUBLIC_DATATRACKER_BASE env var
+    }
+  },
   // https://nitro.build/config#routerules
   // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
   routeRules: {
