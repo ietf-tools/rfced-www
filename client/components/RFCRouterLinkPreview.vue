@@ -31,6 +31,16 @@
   >
     <Renderable :val="obsoletedBy" />
   </p>
+
+  <div
+    class="inline-block border-black dark:border-gray-700 border-t-1 w-1/2 min-w-3xs mt-3 mb-3"
+  ></div>
+
+  <p class="text-xs mt-2 text-black dark:text-gray-300">
+    That was a preview of <component :is="formatTitle(props.rfcJson.doc_id)" />.
+    To read the complete document click the following link:
+  </p>
+
   <p class="clear-both text-right mt-6 mb-10">
     <A
       :href="rfcPathBuilder(props.rfcJson.doc_id)"
@@ -43,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: Track preview analytics
 import { DateTime } from 'luxon'
 import { infoRfcPathBuilder, rfcPathBuilder } from '../utilities/url'
 import Anchor from './A.vue'

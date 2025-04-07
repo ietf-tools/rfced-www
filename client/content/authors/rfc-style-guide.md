@@ -91,7 +91,7 @@ Errata in the [Reported state](/errata-definitions/) should not be referenced; t
 
 Use the following form to reference IANA registries. Note that the top-level URL is used when referring to a group of registries and/or specific registries within the group. 
 
-[NAME] IANA, “Registry Group or Registry Name”, <URL>.
+[NAME] IANA, “Registry Group or Registry Name”, `<URL>`.
 
 **Example for a registry group:**  
 [IANA-ANCP] IANA, “Access Node Control Protocol (ANCP)”, <[https://www.iana.org/assignments/ancp](https://www.iana.org/assignments/ancp)\>.

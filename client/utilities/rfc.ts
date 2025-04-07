@@ -377,6 +377,7 @@ export const rfcToRfcJSON = (rfc: Rfc): RFCJSON => {
 
 /**
  * Converts between types of RFC data
+ * FIXME: this is losing details
  */
 export const rfcJSONToRfc = (rfcJson: RFCJSON): Rfc => {
   return {

@@ -17,10 +17,12 @@
     <a
       v-if="hasInternalLink"
       :href="hasInternalLink ? `#${getAnchorId($slots.default)}` : undefined"
-      class="ml-2 opacity-50 no-underline group-hover:opacity-100"
+      class="ml-2 opacity-50 no-underline group-hover:opacity-100 font-normal"
       title="Link to this heading"
-      >#</a
+      @click="hashClickHandler(`#${getAnchorId($slots.default)}`)"
     >
+      #
+    </a>
   </component>
 </template>
 
@@ -29,6 +31,7 @@ import type { Slot } from 'vue'
 import type { VueStyleClass } from '~/utilities/vue'
 import { getVNodeText } from '~/utilities/vue'
 import { textToAnchorId } from '~/utilities/url'
+import { copyToClipboard } from '~/utilities/clipboard'
 
 type Level = '1' | '2' | '3' | '4' | '5' | '6'
 
@@ -74,7 +77,7 @@ type Props = {
 
 const headingStyles: Record<`h${Props['level']}`, string> = {
   /**
-   * Do not add default margins/padding here. The headings are used in many different situations
+   * Do not add margins/padding here. The headings are used in many different situations
    * that need different margins/padding.
    *
    * Instead pass in the `class` prop for margins/padding, or make a wrapper component if you want
@@ -92,7 +95,7 @@ const props = defineProps<Props>()
 
 const fallbackId = `id-${useId()}`
 
-const anchorIdCache = new Map()
+const anchorIdCache = new Map() // not a global cache
 
 type VueDefaultSlotType =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -127,5 +130,10 @@ const getAnchorId = (defaultSlot: VueDefaultSlotType): string => {
   if (!anchorId) return fallbackId
   anchorIdCache.set(defaultSlotValue, anchorId)
   return anchorId
+}
+
+const hashClickHandler = async (hash: string) => {
+  const target = new URL(hash, location.toString())
+  void (await copyToClipboard(target.toString()))
 }
 </script>

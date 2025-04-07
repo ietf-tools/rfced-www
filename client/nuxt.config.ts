@@ -16,6 +16,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
+    // Note: regarding 'Nuxt Device' see note in deviceMode.ts
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
     '@nuxt/eslint',

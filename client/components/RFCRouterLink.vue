@@ -1,14 +1,14 @@
 <template>
   <HoverCardRoot v-model:open="isHoverCardOpen">
-    <HoverCardTrigger>
-      <RouterLink
+    <HoverCardTrigger as-child>
+      <NuxtLink
         v-bind="propsWithHrefAsTo"
         @focus="loadRfc"
         @mouseover="loadRfc"
         @blur="isHoverCardOpen = false"
       >
         <slot />
-      </RouterLink>
+      </NuxtLink>
     </HoverCardTrigger>
     <HoverCardPortal>
       <HoverCardContent
@@ -24,20 +24,13 @@
           </div>
           <RFCRouterLinkPreview :rfc-json="rfcJSON" />
         </div>
-        <p
-          v-else
-          class="p-3 w-full text-center"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          Loading...
-        </p>
-
+        <RFCRouterLinkLoadingStatus v-else :loading-status="loadingStatus" />
         <HoverCardArrow class="fill-gray-200 stroke-gray-500 -mt-[1px]" />
       </HoverCardContent>
     </HoverCardPortal>
   </HoverCardRoot>
-  <div class="inline-block md:hidden">
+
+  <div v-show="hasTouchStore.hasTouch === true" class="inline">
     <DialogRoot v-model:open="isDialogOpen">
       <DialogTrigger
         class="ml-1 px-1 align-baseline"
@@ -47,11 +40,13 @@
         <Icon name="fluent:preview-link-16-regular" aria-label="Link Preview" />
       </DialogTrigger>
       <DialogPortal>
-        <DialogOverlay />
+        <DialogOverlay
+          class="bg-black/10 data-[state=open]:animate-overlayShow fixed inset-0 z-30"
+        />
         <DialogContent
-          class="data-[state=open]:animate-enterFromBottom rounded-t-xl data-[state=closed]:animate-exitToBottom fixed w-full h-[50vh] bottom-0 left-0 shadow-[0_-5px_25px_rgba(0,0,0,0.25)] dark:shadow-[0_-5px_25px_rgba(11,140,197,0.25)] text-black bg-white dark:bg-black dark:text-white border-t-1 border-gray-400 dark:border-gray-600 overflow-y-scroll"
+          class="data-[state=open]:animate-enterFromBottom rounded-t-xl data-[state=closed]:animate-exitToBottom fixed w-full max-w-md m-x-auto h-[50vh] bottom-0 right-0 shadow-[0_-5px_25px_rgba(0,0,0,0.25)] dark:shadow-[-5px_-5px_25px_rgba(11,140,197,0.25)] text-black bg-white dark:bg-black dark:text-white border-t-1 border-gray-400 dark:border-gray-600 overflow-y-scroll z-100"
         >
-          <DialogClose :class="`fixed right-0 py-[10px] px-3 pb-3`">
+          <DialogClose class="fixed right-0 py-[10px] px-3 pb-3">
             <GraphicsClose />
           </DialogClose>
           <DialogTitle
@@ -62,16 +57,12 @@
               Preview
             </span>
           </DialogTitle>
-          <DialogDescription class="max-w-md mx-auto px-4">
+          <DialogDescription class="mx-auto px-4">
             <RFCRouterLinkPreview v-if="rfcJSON" :rfc-json="rfcJSON" />
-            <p
+            <RFCRouterLinkLoadingStatus
               v-else
-              class="p-3 w-full text-center"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              Loading...
-            </p>
+              :loading-status="loadingStatus"
+            />
           </DialogDescription>
         </DialogContent>
       </DialogPortal>
@@ -81,17 +72,17 @@
 
 <script setup lang="ts">
 import { computed, onUnmounted, customRef } from 'vue'
-import { RouterLink } from 'vue-router'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
+import { NuxtLink } from '#components'
 import type { AnchorProps } from '~/utilities/html'
 import { formatTitle, RFC_TYPE_RFC } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
+import type { LoadingStatus } from '~/utilities/loading-status'
 
 const props = defineProps<AnchorProps>()
-
+const hasTouchStore = useHasTouchStore()
 const rfcJSON = ref<RFCJSON | undefined>()
-const isLoading = ref<boolean>(false)
 const isDialogOpen = ref<boolean>(false)
 const isHoverCardOpen = (() => {
   let value: boolean = false
@@ -108,10 +99,14 @@ const isHoverCardOpen = (() => {
   }))
 })()
 
+const RETRY_TIMEOUT_MS = 5000 // Provide enough time for screen reader to speak errors
+
 const rfcId = parseMaybeRfcLink(props.href)
 
 let attemptsRemaining = 2
 const hasUnmountedAbortController = new AbortController()
+
+const loadingStatus = ref<LoadingStatus>({ type: 'idle' })
 
 onUnmounted(() => {
   hasUnmountedAbortController?.abort()
@@ -119,7 +114,8 @@ onUnmounted(() => {
 
 const propsWithHrefAsTo = computed(() => ({
   ...props,
-  to: props.href // copy `href` to `to` for vue-router RouterLink usage
+  to: props.href, // copy `href` to `to` for usage
+  href: undefined // clobber 'href' with undefined because we're using
 }))
 
 /**
@@ -137,7 +133,7 @@ const loadRfc = async (): Promise<void> => {
     // Data already loaded so we can ignore requests to load it again
     return
   }
-  if (isLoading.value === true) {
+  if (loadingStatus.value.type === 'loading') {
     // A request is currently inflight so we don't need to try again. This is expected behaviour because the
     // mouseover and focus events could be fired multiple times before a request completes
     return
@@ -158,7 +154,9 @@ const loadRfc = async (): Promise<void> => {
   }
 
   attemptsRemaining--
-  isLoading.value = true // no async behaviour (awaits) should occur before this is set to true
+  loadingStatus.value = {
+    type: 'loading'
+  }
   console.log(`Loading ${rfcJSONPath}`)
   let data: RFCJSON | undefined = undefined
   try {
@@ -194,13 +192,18 @@ const loadRfc = async (): Promise<void> => {
   } catch (e) {
     console.error(e)
     // Could be a transient network failure, try again soon
-    isLoading.value = false
-    setTimeout(loadRfc, 0)
+    loadingStatus.value = {
+      type: 'error',
+      message: (e || '').toString()
+    }
+    setTimeout(loadRfc, RETRY_TIMEOUT_MS)
     return
   }
   console.log(`Loaded ${rfcJSONPath}`)
 
-  isLoading.value = false
+  loadingStatus.value = {
+    type: 'success'
+  }
   rfcJSON.value = data
 }
 </script>
