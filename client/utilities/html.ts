@@ -24,3 +24,15 @@ export type AnchorProps = {
     | 'href' // related to vue-ignore, we'll omit href
   >
 >
+
+export const onLoad = (fn: () => void): void => {
+  if (typeof window === 'undefined') return
+
+  if (document.readyState === 'loading') {
+    // Loading hasn't finished yet.. fire after
+    document.addEventListener('DOMContentLoaded', fn)
+  } else {
+    // `DOMContentLoaded` has already fired so execute fn immediately
+    fn()
+  }
+}

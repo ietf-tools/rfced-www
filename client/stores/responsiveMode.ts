@@ -1,4 +1,4 @@
-export type ResponsiveMode = 'Desktop' | 'Mobile'
+export type ResponsiveMode = null | 'Desktop' | 'Mobile'
 
 const getResponsiveMode = (): ResponsiveMode => {
   if (typeof window === 'undefined') {
@@ -10,7 +10,7 @@ const getResponsiveMode = (): ResponsiveMode => {
 }
 
 export const useResponsiveModeStore = defineStore('responsiveMode', () => {
-  const responsiveMode = ref<ResponsiveMode>(getResponsiveMode())
+  const responsiveMode = ref<ResponsiveMode>(null)
 
   if (typeof window !== 'undefined') {
     addEventListener('resize', () => {

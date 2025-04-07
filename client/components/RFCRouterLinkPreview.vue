@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: Track preview analytics
 import { DateTime } from 'luxon'
 import { infoRfcPathBuilder, rfcPathBuilder } from '../utilities/url'
 import Anchor from './A.vue'
