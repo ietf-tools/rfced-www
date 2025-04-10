@@ -1,5 +1,5 @@
 <template>
-  <a href="/" :class="[props.class, 'pl-5 md:pl-0']">
+  <A href="/" :class="[props.class, 'pl-5 md:pl-0']">
     <img
       :src="LogoMobile"
       class="lg:hidden"
@@ -14,7 +14,7 @@
       width="183"
       height="37"
     />
-  </a>
+  </A>
 </template>
 
 <script setup lang="ts">

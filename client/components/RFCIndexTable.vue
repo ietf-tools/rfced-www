@@ -27,12 +27,12 @@
         :key="rfcRow.number.toString()"
       >
         <td class="text-right align-top p-1">
-          <a
+          <A
             :href="infoRfcPathBuilder(`rfc${rfcRow.number}`)"
             class="font-mono"
           >
             {{ rfcRow.number }}
-          </a>
+          </A>
         </td>
         <td class="p-1 align-top">
           <p>

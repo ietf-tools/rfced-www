@@ -15,30 +15,30 @@
         The official home of RFCs
       </Heading>
       <div class="self-end lg:text-right">
-        <a
-          href="/what"
+        <A
+          href="/series/rfc/"
           class="rounded text-blue-100 lg:text-white inline-block px-5 py-3 font-bold text-nowrap hover:bg-black"
         >
           What is an RFC?
           <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />
-        </a>
+        </A>
       </div>
     </div>
 
     <div class="lg:w-2/3 xl:w-1/2 mb-4">
-      <p class="hidden leading-6 lg:block pl-5 md:p-0">
+      <p class="hidden leading-6 lg:block pl-5 md:p-0 text-pretty">
         RFCs outline computer networking and Internet foundations, including
-        <a href="/internet-standards">Internet Standards</a> and historical or
+        <A href="/internet-standards">Internet Standards</A> and historical or
         informative content. They are published by the RFC Editor for the
-        <a href="/ietf">
-          <abbr title="Internet Engineering Task Force">IETF</abbr> </a
+        <A href="/ietf">
+          <abbr title="Internet Engineering Task Force">IETF</abbr> </A
         >,
-        <a href="/irtf"
-          ><abbr title="Internet Reserach Task Force">IRTF</abbr></a
+        <A href="/irtf"
+          ><abbr title="Internet Reserach Task Force">IRTF</abbr></A
         >,
-        <a href="/iab"><abbr title="Internet Architecture Board">IAB</abbr></a
+        <A href="/iab"><abbr title="Internet Architecture Board">IAB</abbr></A
         >, and
-        <a href="/ise"><abbr title="Independent Submission Editor">ISE</abbr></a
+        <A href="/ise"><abbr title="Independent Submission Editor">ISE</abbr></A
         >, which collectively form the authoritative source for RFCs
       </p>
       <SearchBox />

@@ -22,10 +22,10 @@
               .obsoleted_by"
             :key="obsoletedByItemIndex"
           >
-            <a :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
+            <A :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
               <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
               {{ obsoletedByItem.title }}
-            </a>
+            </A>
           </li>
         </ul>
       </div>

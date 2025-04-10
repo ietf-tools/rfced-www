@@ -1,9 +1,9 @@
 <template>
-  <p class="pt-2">
+  <p class="pt-2 text-pretty">
     <slot />
   </p>
 </template>
 
 <script setup lang="ts">
-// Note: No padding below the paragraph, so that this can be close to following lists/tables etc.
+// Note: No padding below the paragraph, so that paragraphs can be close to following sibling lists/tables etc.
 </script>

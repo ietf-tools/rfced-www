@@ -9,7 +9,7 @@
   <div class="pt-1">
     <Tag size="small" :text="tagText" />
   </div>
-  <p class="leading-5 pt-2 text-xs">
+  <p class="leading-5 pt-2 text-xs text-pretty">
     {{ props.rfcJson.abstract }}
   </p>
   <ul v-if="list1" class="text-base text-blue-900 dark:text-white">

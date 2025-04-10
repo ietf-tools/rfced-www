@@ -24,7 +24,7 @@
 
   <p
     v-if="props.rfc.abstract"
-    class="px-1 xs:px-0 mb-2 text-base lg:text-xl print:px-0"
+    class="px-1 xs:px-0 mb-2 text-base lg:text-xl print:px-0 text-pretty"
   >
     {{ props.rfc.abstract }}
   </p>
@@ -49,14 +49,14 @@
             <PopoverArrow />
             <p class="leading-6">
               For the definition of <b>Status</b>, see
-              <a :href="infoRfcPathBuilder('rfc2026')">
+              <A :href="infoRfcPathBuilder('rfc2026')">
                 <component :is="formatTitle('rfc2026')" />
-              </a>
+              </A>
             </p>
             <p class="leading-6">
               For the definition of <b>Stream</b>, see
-              <a :href="infoRfcPathBuilder('rfc8729')">
-                <component :is="formatTitle('rfc8729')" /> </a
+              <A :href="infoRfcPathBuilder('rfc8729')">
+                <component :is="formatTitle('rfc8729')" /> </A
               >.
             </p>
           </PopoverContent>
@@ -91,10 +91,10 @@
             .obsoleted_by"
           :key="obsoletedByItemIndex"
         >
-          <a :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
+          <A :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
             <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
             {{ obsoletedByItem.title }}
-          </a>
+          </A>
         </li>
       </ul>
     </div>

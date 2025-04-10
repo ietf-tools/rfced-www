@@ -5,12 +5,12 @@
       :key="index"
       class="inline-block"
     >
-      <a
+      <A
         class="inline-block px-2 py-2 underline rounded hover:bg-gray-200 hover:text-blue-800"
         :href="path.url"
       >
         {{ path.label }}
-      </a>
+      </A>
       <template v-if="index >= 0 && index < props.breadcrumbItems.length - 1">
         <GraphicsChevron
           class="inline-block -rotate-90 text-gray-300"
