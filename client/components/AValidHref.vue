@@ -11,7 +11,7 @@ import type { ValidHrefs } from '~/utilities/url'
 type AnchorPropsWithValidHref = Omit<AnchorProps, 'href'> & { href: ValidHrefs }
 
 /**
- * TypeScript wrapper for A.vue that attempts to detect valid hrefs
+ * TypeScript wrapper for links that attempts to detect invalid/valid hrefs as TypeScript failures
  */
 const props = defineProps<AnchorPropsWithValidHref>()
 </script>
