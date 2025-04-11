@@ -4,26 +4,26 @@
       <div class="flex-1 flex flex-col gap-5 pr-4">
         <p class="text-base">
           rfc-editor.org is maintained by the
-          <a
+          <A
             href="https://www.ietf.org/"
             class="underline text-blue-100 font-semibold md:text-nowrap"
-            >Internet Engineering Task Force</a
+            >Internet Engineering Task Force</A
           >
           and funded by the
-          <a
+          <A
             href="https://www.internetsociety.org/"
             class="underline text-blue-100 font-semibold md:text-nowrap"
           >
             Internet Society
-          </a>
+          </A>
         </p>
         <div class="flex gap-7 items-center mt-2 lg:mt-5">
-          <a href="https://www.ietf.org/" target="_blank">
+          <A href="https://www.ietf.org/">
             <GraphicsIETFLogo width="105" height="60" />
-          </a>
-          <a href="https://www.internetsociety.org/" target="_blank">
+          </A>
+          <A href="https://www.internetsociety.org/">
             <GraphicsInternetSocietyLogo width="112" height="36" />
-          </a>
+          </A>
         </div>
       </div>
       <div class="flex-1 flex flex-col lg:flex-row gap-10 p-3 lg:p-0">
@@ -37,13 +37,13 @@
               :key="childIndex"
               class="text-base"
             >
-              <a
+              <A
                 :href="child.href"
                 :target="!isInternalLink(child.href) ? '_blank' : undefined"
                 class="underline text-white md:text-nowrap"
               >
                 {{ child.label }}
-              </a>
+              </A>
             </li>
           </ul>
         </div>

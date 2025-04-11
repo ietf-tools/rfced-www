@@ -41,7 +41,9 @@
         >
           Abstract
         </Heading>
-        <p class="leading-snug text-gray-800 dark:text-gray-300 pb-2">
+        <p
+          class="leading-snug text-gray-800 dark:text-gray-300 pb-2 text-pretty"
+        >
           {{ props.rfc.abstract }}
         </p>
       </div>

@@ -57,12 +57,12 @@
               :key="authorIndex"
               class="inline"
             >
-              <a
+              <A
                 :href="authorPathBuilder(author)"
                 class="whitespace-nowrap underline inline-block py-0.5 pr-1 mb-0.5"
               >
                 {{ author.name }}
-              </a>
+              </A>
               <template v-if="authorIndex < props.rfc.authors.length - 1">
                 {{ COMMA }}
                 {{ SPACE }}
@@ -119,18 +119,18 @@
       <Heading level="3" class="mt-5 mb-2">Cite this RFC</Heading>
       <ul class="text-sm flex flex-col gap-2">
         <li v-for="(citation, citationIndex) in citations" :key="citationIndex">
-          <a :href="citation.url" class="underline block px-2 -ml-2">
+          <A :href="citation.url" class="underline block px-2 -ml-2">
             {{ citation.title }}
-          </a>
+          </A>
         </li>
       </ul>
 
       <Heading level="3" class="mt-5 mb-2">Formats</Heading>
       <ul class="text-sm flex flex-col gap-2">
         <li v-for="(format, formatIndex) in formats" :key="formatIndex">
-          <a :href="format.url" class="underline block px-2 -ml-2">{{
+          <A :href="format.url" class="underline block px-2 -ml-2">{{
             format.title
-          }}</a>
+          }}</A>
         </li>
       </ul>
     </TabsContent>

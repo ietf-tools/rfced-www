@@ -13,12 +13,12 @@
         <template v-if="props.rfcNumberLimit !== undefined">
           <template v-if="props.sort === 'ascending'">
             This page shows the first {{ props.rfcNumberLimit }} RFCs published.
-            Click <a :href="RFC_INDEX_ALL_ASCENDING">Show All</a> to get the
+            Click <A :href="RFC_INDEX_ALL_ASCENDING">Show All</A> to get the
             full list (ascending). RFCs are listed in this format:
           </template>
           <template v-else-if="props.sort === 'descending'">
             This page shows the last {{ props.rfcNumberLimit }} RFCs published.
-            Click <a :href="RFC_INDEX_ALL_DESCENDING">Show All</a> to get the
+            Click <A :href="RFC_INDEX_ALL_DESCENDING">Show All</A> to get the
             full list (descending). RFCs are listed in this format:
           </template>
         </template>
@@ -68,18 +68,18 @@
         </li>
         <li>
           The Status field gives the document's current status (see
-          <a :href="infoRfcPathBuilder('RFC2026')">RFC 2026</a> and
-          <a :href="infoRfcPathBuilder('RFC6410')">RFC 6410</a>).
+          <A :href="infoRfcPathBuilder('RFC2026')">RFC 2026</A> and
+          <A :href="infoRfcPathBuilder('RFC6410')">RFC 6410</A>).
         </li>
         <li>
           The Stream field gives the document's stream (see
-          <a :href="infoRfcPathBuilder('RFC4844')">RFC 4844</a>), followed by
+          <A :href="infoRfcPathBuilder('RFC4844')">RFC 4844</A>), followed by
           Area and WG when relevant.
         </li>
         <li>The DOI field gives the Digital Object Identifier.</li>
       </ul>
       <p>
-        See the <a :href="PUBLIC_SITE">RFC Editor Web page</a> for more
+        See the <A :href="PUBLIC_SITE">RFC Editor Web page</A> for more
         information.
       </p>
       <Alert
@@ -98,10 +98,10 @@
       <template v-if="props.rfcNumberLimit !== undefined">
         <p class="pt-4">
           <template v-if="props.sort === 'ascending'">
-            <a :href="RFC_INDEX_ALL_ASCENDING">Show All</a>
+            <A :href="RFC_INDEX_ALL_ASCENDING">Show All</A>
           </template>
           <template v-else-if="props.sort === 'descending'">
-            <a :href="RFC_INDEX_ALL_DESCENDING">Show All</a>
+            <A :href="RFC_INDEX_ALL_DESCENDING">Show All</A>
           </template>
         </p>
       </template>

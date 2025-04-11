@@ -91,7 +91,7 @@
                             v-for="(level1, level1Index) in level0.children"
                             :key="level1Index"
                           >
-                            <a
+                            <A
                               v-if="level1.href"
                               :href="level1.href"
                               :class="MENU_ITEM_CLASS"
@@ -100,7 +100,7 @@
                                 class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
                               />
                               {{ level1.label }}
-                            </a>
+                            </A>
                           </li>
                         </ul>
                       </AccordionItem>
