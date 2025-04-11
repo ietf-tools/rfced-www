@@ -7,8 +7,8 @@
           <A
             :href="IETF_URL"
             class="underline text-blue-100 font-semibold md:text-nowrap"
-            >Internet Engineering Task Force
-          </A>
+            >Internet Engineering Task Force</A
+          >
           and funded by the
           <A
             :href="INTERNET_SOCIETY_URL"
