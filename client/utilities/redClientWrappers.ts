@@ -1,9 +1,21 @@
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { setTimeoutPromise } from './promises'
-import { PRIVATE_API_URL } from './url'
 import { ApiClient } from '~/generated/red-client'
 
-export const getRedClient = () => new ApiClient({ baseUrl: PRIVATE_API_URL })
+export const getRedClient = () => {
+  const config = useRuntimeConfig()
+  const headers: ApiClient['Config']['headers'] = {}
+  if (config.cfServiceTokenId) {
+    headers['CF-Access-Client-Id'] = config.cfServiceTokenId
+  }
+  if (config.cfServiceTokenSecret) {
+    headers['CF-Access-Client-Secret'] = config.cfServiceTokenSecret
+  }
+  return new ApiClient({
+    baseUrl: config.public.datatrackerBase,
+    headers,
+  })
+}
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]
 
