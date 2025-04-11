@@ -6,20 +6,59 @@ import type { SearchParams } from '~/stores/search'
 
 export type MarkdownPaths = keyof typeof ContentMetadata
 
+export type ValidHrefs =
+  | `https://${string}`
+  | `mailto:${string}`
+  | typeof HOME_PATH
+  | typeof RFC_INDEX_ALL_ASCENDING
+  | typeof RFC_INDEX_100_ASCENDING
+  | typeof RFC_INDEX_ALL_DESCENDING
+  | typeof RFC_INDEX_100_DESCENDING
+  | typeof STANDARDS_PATH
+  | ReturnType<typeof markdownPathBuilder>
+  | ReturnType<typeof searchPathBuilder>
+  | ReturnType<typeof refsRefTxtPathBuilder>
+  | ReturnType<typeof infoRfcPathBuilder>
+  | ReturnType<typeof rfcJSONPathBuilder>
+  | ReturnType<typeof rfcPathBuilder>
+  | ReturnType<typeof rfcFormatPathBuilder>
+
+export const HOME_PATH = '/'
+
 export const IETF_PRIVACY_STATEMENT_URL =
   'https://www.ietf.org/privacy-statement/'
 
 export const PUBLIC_SITE = 'https://www.rfc-editor.org'
 
+export const DATATRACKER_URL = 'https://datatracker.ietf.org/'
+
+export const IETF_URL = 'https://www.ietf.org/'
+
+export const IRTF_URL = 'https://www.irtf.org/'
+
+export const IAB_URL = 'https://www.iab.org/'
+
+export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org/'
+
 export const SEARCH_PATH = '/search/' as const
 
 export const SEARCH_API_PATH = '/api/search/' as const
+
+export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/' as const
+
+export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/' as const
+
+export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/' as const
+
+export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/' as const
+
+export const STANDARDS_PATH = '/standards/' as const
 
 type SearchKeys = keyof SearchParams
 
 export const searchPathBuilder = (
   searchParams: Partial<SearchParams>
-): string => {
+): `${typeof SEARCH_PATH}${string}` => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
   return `${SEARCH_PATH}${hasParams ? '?' : ''}${
     hasParams ?
@@ -34,38 +73,37 @@ export const searchPathBuilder = (
   }`
 }
 
-export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/' as const
-
-export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/' as const
-
-export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/' as const
-
-export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/' as const
-
-export const refsRefTxtPathBuilder = (rfcId: string) => {
+export const refsRefTxtPathBuilder = (
+  rfcId: string
+): `/refs/ref${string}.txt` => {
   const rfcParts = parseRFCId(rfcId)
 
   return `/refs/ref${rfcParts.number}.txt`
 }
 
-export const infoRfcPathBuilder = (rfcId: string) => {
+export const infoRfcPathBuilder = (
+  rfcId: string
+): `/info/${string}${string}/` => {
   const rfcParts = parseRFCId(rfcId)
 
   return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
 }
 
-export const rfcJSONPathBuilder = (rfcId: string) => {
+export const rfcJSONPathBuilder = (
+  rfcId: string
+): `/api/v1/rfc/rfc${string}.json` => {
   const rfcParts = parseRFCId(rfcId)
 
   return `/api/v1/rfc/rfc${rfcParts.number}.json`
 }
 
 /**
- * This is only used for TS to check valid markdown paths. It's just an identity function.
+ * This is only used for TS to check valid markdown paths.
+ * It's just an identity function.
  */
 export const markdownPathBuilder = (markdownPath: MarkdownPaths) => markdownPath
 
-export const rfcPathBuilder = (rfcId: string) => {
+export const rfcPathBuilder = (rfcId: string): `/rfc/${string}${string}/` => {
   const rfcParts = parseRFCId(rfcId)
 
   return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
@@ -74,12 +112,12 @@ export const rfcPathBuilder = (rfcId: string) => {
 export const rfcCitePathBuilder = (
   rfcId: string,
   format: 'txt' | 'bibTeX' | 'xml'
-): string => {
+): `https://${string}` | `/refs/${string}.txt` => {
   const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'txt':
-      return `${PUBLIC_SITE}/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt`
+      return `/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt`
     case 'xml':
       return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml`
     case 'bibTeX':
@@ -87,12 +125,15 @@ export const rfcCitePathBuilder = (
   }
 }
 
-export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
+export const rfcFormatPathBuilder = (
+  rfcId: string,
+  format: 'html'
+): `/rfc/${string}${string}.html` => {
   const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'html':
-      return `${PUBLIC_SITE}/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
+      return `/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
   }
 }
 
@@ -118,6 +159,8 @@ export const isExternalLink = (href?: string): boolean => {
 
 export const isInternalLink = (href?: string): boolean => !isExternalLink(href)
 
+export const isHashLink = (href?: string): boolean => !!href?.startsWith('#')
+
 /**
  * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)
  *
@@ -139,6 +182,12 @@ export const textToAnchorId = (text: string): string | undefined => {
 
   return kebabCase(normalized)
 }
+
+/**
+ * Based on the URL of the API detect whether it's prod
+ */
+export const isProdApi = (apiBaseUrl: string): boolean =>
+  !apiBaseUrl.includes('localhost')
 
 export const parseMaybeRfcLink = (
   href?: string

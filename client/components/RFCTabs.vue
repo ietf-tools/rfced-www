@@ -128,9 +128,9 @@
       <Heading level="3" class="mt-5 mb-2">Formats</Heading>
       <ul class="text-sm flex flex-col gap-2">
         <li v-for="(format, formatIndex) in formats" :key="formatIndex">
-          <A :href="format.url" class="underline block px-2 -ml-2">{{
-            format.title
-          }}</A>
+          <A :href="format.url" class="underline block px-2 -ml-2">
+            {{ format.title }}
+          </A>
         </li>
       </ul>
     </TabsContent>

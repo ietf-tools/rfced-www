@@ -8,16 +8,17 @@ import {
   isExternalLink,
   isInternalLink,
   isMailToLink,
-  parseMaybeRfcLink
+  parseMaybeRfcLink,
+  isHashLink
 } from './url'
+import type { ValidHrefs } from './url'
+
+// @ts-expect-error If this doesn't fail it implies that ValidHrefs has become overly broad ie a `string` type which is a mistake
+const _HrefThatShouldFail = '/href-that-should-fail/' satisfies ValidHrefs
 
 test('rfcCitePathBuilder: txt', () => {
-  expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual(
-    'https://www.rfc-editor.org/refs/rfc9000.txt'
-  )
-  expect(rfcCitePathBuilder('RFC9000', 'txt')).toEqual(
-    'https://www.rfc-editor.org/refs/rfc9000.txt'
-  )
+  expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual('/refs/rfc9000.txt')
+  expect(rfcCitePathBuilder('RFC9000', 'txt')).toEqual('/refs/rfc9000.txt')
 })
 
 test('rfcCitePathBuilder: xml', () => {
@@ -39,12 +40,8 @@ test('rfcCitePathBuilder: bibTeX', () => {
 })
 
 test('rfcFormatPathBuilder: html', () => {
-  expect(rfcFormatPathBuilder('rfc9000', 'html')).toEqual(
-    'https://www.rfc-editor.org/rfc/rfc9000.html'
-  )
-  expect(rfcFormatPathBuilder('RFC9000', 'html')).toEqual(
-    'https://www.rfc-editor.org/rfc/rfc9000.html'
-  )
+  expect(rfcFormatPathBuilder('rfc9000', 'html')).toEqual('/rfc/rfc9000.html')
+  expect(rfcFormatPathBuilder('RFC9000', 'html')).toEqual('/rfc/rfc9000.html')
 })
 
 test('textToAnchorId', () => {
@@ -94,6 +91,24 @@ test('isMailToLink', () => {
   ).toEqual(false)
 
   expect(isMailToLink('mailto:user@example.com')).toEqual(true)
+})
+
+test('isHashLink', () => {
+  expect(isHashLink('#something')).toEqual(true)
+
+  expect(
+    isHashLink(
+      // leading space, should not match
+      ' #something'
+    )
+  ).toEqual(false)
+
+  expect(isHashLink(undefined)).toEqual(false)
+  expect(isHashLink('/something')).toEqual(false)
+  expect(isHashLink('http://')).toEqual(false)
+  expect(isHashLink('https://')).toEqual(false)
+  expect(isHashLink(IETF_PRIVACY_STATEMENT_URL)).toEqual(false)
+  expect(isHashLink('mailto:user@example.com')).toEqual(false)
 })
 
 test('parseMaybeRfcLink', () => {
