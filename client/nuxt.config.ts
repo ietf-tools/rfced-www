@@ -16,6 +16,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
+    // './modules/generate-content-metadata',
+    './modules/generate-markdown-links',
     // Note: regarding 'Nuxt Device' see note in deviceMode.ts
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
@@ -60,7 +62,7 @@ export default defineNuxtConfig({
     cfServiceTokenSecret: '', // NUXT_CF_SERVICE_TOKEN_SECRET env var
     public: {
       // These settings are available client-side (others are server-side only)
-      datatrackerBase: 'http://localhost:8000/', // NUXT_PUBLIC_DATATRACKER_BASE env var
+      datatrackerBase: 'http://localhost:8000/' // NUXT_PUBLIC_DATATRACKER_BASE env var
     }
   },
   // https://nitro.build/config#routerules

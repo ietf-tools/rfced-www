@@ -104,3 +104,43 @@ export const filterByElementName = (
     return node && typeof node === 'object' && elementName in node
   })
 }
+
+/**
+ * For a node in a document returned by `parseHtml()`
+ *
+ * expects a data structure that looks like
+ * ```json
+ * {
+ *   "A": { "#text": "zombo" },
+ *   ":@href": "http://zombo.com/"
+ * }
+ * ```
+ */
+export const attemptToGetAttribute = (
+  node: unknown,
+  elementName: string,
+  attributeName: string
+): string | undefined => {
+  const NODE_ATTRIBUTES_KEY = ':@'
+  if (
+    !node ||
+    typeof node !== 'object' ||
+    !(elementName in node) ||
+    !(NODE_ATTRIBUTES_KEY in node)
+  ) {
+    return
+  }
+
+  const attributes = node[NODE_ATTRIBUTES_KEY]
+
+  if (!attributes || typeof attributes !== 'object') {
+    return
+  }
+
+  const nodeKey = `@_${attributeName}`
+  const attribute = (attributes as Record<string, unknown>)[nodeKey]
+
+  if (typeof attribute === 'string') {
+    return attribute
+  }
+}

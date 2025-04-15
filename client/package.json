@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "npm run generate && nuxt build",
-    "dev": "npm run generate && nuxt dev",
+    "dev": "npm run generate && npm run dev:nuxt",
+    "dev:nuxt": "nuxt dev",
     "cleanup": "nuxt cleanup",
     "preview": "npm run build && nuxt preview",
     "postinstall": "nuxt prepare",
@@ -20,8 +21,7 @@
     "story:dev": "histoire dev",
     "story:build": "histoire build",
     "story:preview": "histoire preview --port 4567",
-    "generate": "npm run generate:content-metadata && npm run generate:api-red",
-    "generate:content-metadata": "node --experimental-strip-types ./scripts/generate-content-metadata.ts",
+    "generate": "npm run generate:api-red",
     "generate:api-red": "npx --no apigen-ts http://localhost:8000/api/schema/ --inline-enums --parse-dates ./generated/red-client.ts"
   },
   "//": "If updating lost-pixel sync the version to the vis-reg-test.yml and post-create.sh or rendering / filenames generated etc may be different",

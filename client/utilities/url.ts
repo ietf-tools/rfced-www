@@ -1,14 +1,11 @@
 import { kebabCase } from 'lodash-es'
-import type { Rfc } from '~/generated/red-client'
-import type ContentMetadata from '~/generated/content-metadata.json'
-import { parseRFCId } from '~/utilities/rfc'
+import type { Rfc } from '../generated/red-client'
+import { parseRFCId } from '../utilities/rfc'
 import type { SearchParams } from '~/stores/search'
 
-export type MarkdownPaths = keyof typeof ContentMetadata
-
 export type ValidHrefs =
-  | `https://${string}`
-  | `mailto:${string}`
+  | MarkdownValidHrefs // generated global type from types/markdown-valid-hrefs.d.ts
+  | `https://${string}` // any external link is considered a valid type (even if it might 404 we don't verify further)
   | typeof HOME_PATH
   | typeof RFC_INDEX_ALL_ASCENDING
   | typeof RFC_INDEX_100_ASCENDING
@@ -17,6 +14,7 @@ export type ValidHrefs =
   | typeof STANDARDS_PATH
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
+  | ReturnType<typeof authorPathBuilder>
   | ReturnType<typeof refsRefTxtPathBuilder>
   | ReturnType<typeof infoRfcPathBuilder>
   | ReturnType<typeof rfcJSONPathBuilder>
@@ -40,19 +38,19 @@ export const IAB_URL = 'https://www.iab.org/'
 
 export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org/'
 
-export const SEARCH_PATH = '/search/' as const
+export const SEARCH_PATH = '/search/'
 
-export const SEARCH_API_PATH = '/api/search/' as const
+export const SEARCH_API_PATH = '/api/search/'
 
-export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/' as const
+export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/'
 
-export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/' as const
+export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/'
 
-export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/' as const
+export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/'
 
-export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/' as const
+export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/'
 
-export const STANDARDS_PATH = '/standards/' as const
+export const STANDARDS_PATH = '/standards/'
 
 type SearchKeys = keyof SearchParams
 
@@ -101,44 +99,42 @@ export const rfcJSONPathBuilder = (
  * This is only used for TS to check valid markdown paths.
  * It's just an identity function.
  */
-export const markdownPathBuilder = (markdownPath: MarkdownPaths) => markdownPath
+export const markdownPathBuilder = (markdownPath: MarkdownValidHrefs) =>
+  markdownPath
 
-export const rfcPathBuilder = (rfcId: string): `/rfc/${string}${string}/` => {
+export const rfcPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
+  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/` as const
 }
 
 export const rfcCitePathBuilder = (
   rfcId: string,
   format: 'txt' | 'bibTeX' | 'xml'
-): `https://${string}` | `/refs/${string}.txt` => {
+) => {
   const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'txt':
-      return `/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt`
+      return `/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt` as const
     case 'xml':
-      return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml`
+      return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml` as const
     case 'bibTeX':
-      return `https://datatracker.ietf.org/doc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/bibtex/`
+      return `https://datatracker.ietf.org/doc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/bibtex/` as const
   }
 }
 
-export const rfcFormatPathBuilder = (
-  rfcId: string,
-  format: 'html'
-): `/rfc/${string}${string}.html` => {
+export const rfcFormatPathBuilder = (rfcId: string, format: 'html') => {
   const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'html':
-      return `/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
+      return `/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html` as const
   }
 }
 
-export const authorPathBuilder = (author: Rfc['authors'][number]): string => {
-  return `mailto:${author.email}`
+export const authorPathBuilder = (author: Rfc['authors'][number]) => {
+  return `mailto:${author.email}` as const
 }
 
 const mailtoRegex = /^mailto:/

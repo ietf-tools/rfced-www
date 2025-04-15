@@ -16,7 +16,7 @@ import {
   filterByElementName,
   parseHtml,
   getXMLBuilder
-} from './html-test-utils'
+} from './test-utils/html-test-utils'
 import type {
   ApiClient,
   PaginatedRfcMetadataList
