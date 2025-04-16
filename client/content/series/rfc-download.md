@@ -6,7 +6,7 @@ To be notified of newly published RFCs, use the [RSS feed](/rfcrss.xml) or [Atom
 
 ## Download RFCs Using rsync
 
-To download RFCs and keep them up to date locally, use [rsync](http://rsync.samba.org).
+To download RFCs and keep them up to date locally, use [rsync](https://rsync.samba.org).
 
 ### To get the list of modules available type `rsync rsync.rfc-editor.org::` This will return the following results:
 

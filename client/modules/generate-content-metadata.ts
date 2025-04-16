@@ -1,13 +1,17 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import { watch } from 'chokidar'
 import { simpleGit } from 'simple-git'
 import { globby } from 'globby'
-import { defineNuxtModule } from 'nuxt/kit'
+import { defineNuxtModule, useLogger } from 'nuxt/kit'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
 const contentPath = path.resolve(clientPath, 'content')
+const contentMetadataPath = path.join(
+  clientPath,
+  'generated',
+  'content-metadata.json'
+)
 
 export type ContentMetadata = Record<
   string, // path within content directory
@@ -17,7 +21,9 @@ export type ContentMetadata = Record<
   | undefined
 >
 
-const regenerateContentMetadata = async () => {
+type Logger = ReturnType<typeof useLogger>
+
+const regenerateContentMetadata = async (logger: Logger) => {
   const contentMarkdownPaths = await globby(path.join(contentPath, '**/*.md'))
 
   const git = simpleGit()
@@ -56,30 +62,31 @@ const regenerateContentMetadata = async () => {
     ...markdownMetadataArray
   )
 
-  const contentMetadataPath = path.join(
-    clientPath,
-    'generated',
-    'content-metadata.json'
-  )
-
   fs.writeFileSync(
     contentMetadataPath,
     JSON.stringify(contentMetadata, null, 2)
   )
 
-  console.log(
-    'Success: metadata (timestamps) extracted from git and written to',
-    contentMetadataPath
-  )
+  logger.info(` - regenerated ${path.basename(contentMetadataPath)}`)
 }
 
 export default defineNuxtModule({
-  setup() {
-    const markdownFilesPattern = path.join(contentPath, '**', '*.md')
-    const watcher = watch(markdownFilesPattern)
+  setup(options, nuxt) {
+    const logger = useLogger('generate-content-metadata', {
+      level: options.quiet ? 0 : 3
+    })
 
-    watcher.on('change', async (event, path) => {
-      await regenerateContentMetadata()
+    nuxt.hook('builder:watch', async (_event, watcherPath) => {
+      if (
+        watcherPath.includes('generated/') ||
+        watcherPath.includes('types/')
+      ) {
+        return
+      }
+      logger.info(
+        `Regenerating content metadata because ${watcherPath} changed`
+      )
+      await regenerateContentMetadata(logger)
     })
   }
 })

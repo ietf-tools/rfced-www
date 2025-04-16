@@ -11,6 +11,7 @@ export type ValidHrefs =
   | typeof RFC_INDEX_100_ASCENDING
   | typeof RFC_INDEX_ALL_DESCENDING
   | typeof RFC_INDEX_100_DESCENDING
+  | typeof RSS_PATH
   | typeof STANDARDS_PATH
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
@@ -51,6 +52,8 @@ export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/'
 export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/'
 
 export const STANDARDS_PATH = '/standards/'
+
+export const RSS_PATH = '/rfcrss.xml'
 
 type SearchKeys = keyof SearchParams
 

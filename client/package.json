@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run generate && nuxt build",
-    "dev": "npm run generate && npm run dev:nuxt",
+    "dev": "npm run generate && npm run devv:nuxt",
     "dev:nuxt": "nuxt dev",
     "cleanup": "nuxt cleanup",
     "preview": "npm run build && nuxt preview",

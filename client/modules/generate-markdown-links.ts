@@ -1,7 +1,6 @@
 /**
  * This file is responsible for extracting/generating all links from markdown.
  */
-import { watch } from 'chokidar'
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { micromark } from 'micromark'
@@ -16,11 +15,10 @@ import {
 import { textToAnchorId } from '~/utilities/url'
 import { defineNuxtModule, useLogger } from 'nuxt/kit'
 
-// node --experimental-strip-types ./scripts/generate-content-metadata.ts
-
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
 const contentPath = path.resolve(clientPath, 'content')
+
 const generatedMarkdownValidHrefs = path.resolve(
   clientPath,
   'types',
@@ -31,6 +29,7 @@ const generatedMarkdownAllHrefs = path.resolve(
   'generated',
   'report-of-all-markdown-hrefs.ts'
 )
+
 const generatedFileWarningHeader = `// Generated file by ${path.basename(import.meta.filename)} DO NOT EDIT\n`
 
 const getMarkdownInit = async () => {
@@ -55,15 +54,30 @@ const getMarkdownInit = async () => {
   return { markdownPaths, markdownFilesData, htmls, docs }
 }
 
+const markdownFileInternalLinksTypeBuilder = (markdownPath: string) =>
+  `MarkdownFileValidInternalLinks_${camelCase(markdownPath)}`
+
+type MarkdownsValidHrefs = {
+  markdownPath: string
+  validHrefs: string[]
+  validInternalLinks: string[]
+}[]
+
 type Logger = ReturnType<typeof useLogger>
 
-const regenerateValidMarkdownLinks = async (logger: Logger) => {
+type RegenerateValidMarkdownLinksProps = {
+  logger: Logger
+}
+
+const regenerateValidMarkdownLinks = async ({
+  logger
+}: RegenerateValidMarkdownLinksProps) => {
   const { markdownPaths, docs } = await getMarkdownInit()
 
   const markdownPathToPublicPath = (markdownPath: string) =>
     `/${markdownPath.replace(/\.md$/, '/')}`
 
-  const markdownsValidHrefs = await Promise.all(
+  const markdownsValidHrefs: MarkdownsValidHrefs = await Promise.all(
     docs.map(async (doc, index) => {
       const validHrefs = []
       const markdownPath = markdownPaths[index]
@@ -91,7 +105,11 @@ const regenerateValidMarkdownLinks = async (logger: Logger) => {
         )
       )
 
-      return { markdownPath, validHrefs }
+      const validInternalLinks = headingsText.map(
+        (headingText) => `#${textToAnchorId(headingText)}`
+      )
+
+      return { markdownPath, validHrefs, validInternalLinks }
     })
   )
 
@@ -99,20 +117,36 @@ const regenerateValidMarkdownLinks = async (logger: Logger) => {
   await fsPromises.writeFile(
     generatedMarkdownValidHrefs,
     `${generatedFileWarningHeader}declare type MarkdownValidHrefs =\n  | ${markdownsValidHrefs
-      .flatMap((markdownsValidHref) => {
-        return markdownsValidHref.validHrefs.map((validHref) =>
+      .flatMap((markdownValidHrefs) => {
+        return markdownValidHrefs.validHrefs.map((validHref) =>
           // ensures TS-compatible string escaping when necessary
           // even though it's probably not necessary
           JSON.stringify(validHref)
         )
       })
-      .join('\n  | ')};\n\n`
+      .join('\n  | ')}\n\n${markdownsValidHrefs
+      .map((markdownValidHrefs) => {
+        return `declare type ${markdownFileInternalLinksTypeBuilder(markdownValidHrefs.markdownPath)} =\n  | ${markdownValidHrefs.validInternalLinks
+          .map((validInternalLink) => JSON.stringify(validInternalLink))
+          .join('\n  | ')}`
+      })
+      .join('\n\n')}`
   )
 
-  logger.info(`Regenerated ${path.basename(generatedMarkdownValidHrefs)}`)
+  logger.info(` - regenerated ${path.basename(generatedMarkdownValidHrefs)}`)
+
+  return markdownsValidHrefs
 }
 
-const regenerateReportForAllMarkdownLinks = async (logger: Logger) => {
+type RegenerateReportForAllMarkdownLinksProps = {
+  logger: Logger
+  markdownsValidHrefs: MarkdownsValidHrefs
+}
+
+const regenerateReportForAllMarkdownLinks = async ({
+  logger,
+  markdownsValidHrefs
+}: RegenerateReportForAllMarkdownLinksProps) => {
   const { markdownPaths, docs } = await getMarkdownInit()
   const markdownsAllHrefs = await Promise.all(
     docs.map(async (doc, index) => {
@@ -130,34 +164,59 @@ const regenerateReportForAllMarkdownLinks = async (logger: Logger) => {
     })
   )
 
+  const validHrefs = markdownsValidHrefs.flatMap(
+    (markdownValidHrefs) => markdownValidHrefs.validHrefs
+  )
+
   await fsPromises.writeFile(
     generatedMarkdownAllHrefs,
     `${generatedFileWarningHeader}// Compares markdown hrefs against type ValidHrefs\nimport type { ValidHrefs } from '../utilities/url'\n\n${markdownsAllHrefs
       .map((markdownHrefs) =>
         markdownHrefs.hrefs
+          .filter((href) => {
+            // Filter by links that would fail TS
+            if (!validHrefs.includes(href)) {
+              return true
+            }
+
+            const thisMarkdownValidHrefs = markdownsValidHrefs.find(
+              (markdownValidHrefs) =>
+                markdownValidHrefs.markdownPath === markdownHrefs.markdownPath
+            )
+            if (!thisMarkdownValidHrefs) {
+              return true
+            }
+            return !thisMarkdownValidHrefs.validInternalLinks.includes(href)
+          })
           .map(
             (href, index) =>
-              `const _${camelCase(markdownHrefs.markdownPath)}${index + 1}: ValidHrefs = ${JSON.stringify(href)} // if there is a TS error fix the Markdown link in ${markdownHrefs.markdownPath}`
+              `const _${camelCase(markdownHrefs.markdownPath)}${index + 1}: ValidHrefs | ${markdownFileInternalLinksTypeBuilder(markdownHrefs.markdownPath)} = ${JSON.stringify(href)} // if there is a TS error fix the Markdown link in ${markdownHrefs.markdownPath}`
           )
           .join('\n')
       )
       .join('\n\n')}`
   )
 
-  logger.info(`Regenerated ${path.basename(generatedMarkdownAllHrefs)}`)
+  logger.info(` - regenerated ${path.basename(generatedMarkdownAllHrefs)}`)
 }
 
 export default defineNuxtModule({
   setup(options, nuxt) {
-    const markdownFilesPattern = path.join(contentPath, '**', '*.md')
-    const watcher = watch(markdownFilesPattern)
     const logger = useLogger('generate-markdown-links', {
       level: options.quiet ? 0 : 3
     })
 
-    watcher.on('change', async (event, path) => {
-      await regenerateValidMarkdownLinks(logger)
-      await regenerateReportForAllMarkdownLinks(logger)
+    nuxt.hook('builder:watch', async (_event, watcherPath) => {
+      if (
+        watcherPath.includes('generated/') ||
+        watcherPath.includes('types/')
+      ) {
+        // otherwise recursion
+        return
+      }
+      logger.info(`Regenerating markdown links because ${watcherPath} changed`)
+      const markdownsValidHrefs = await regenerateValidMarkdownLinks({ logger })
+      await regenerateReportForAllMarkdownLinks({ markdownsValidHrefs, logger })
     })
   }
 })

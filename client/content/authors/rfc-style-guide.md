@@ -87,7 +87,7 @@ For more details, see the [announcement on the RFC interest list](https://mailar
 
 Errata in the [Reported state](/errata-definitions/) should not be referenced; they are not considered stable.
 
-[Referencing IANA Registries](/styleguide/part2/#ref_iana_reg)
+[Referencing IANA Registries](#ref_iana_reg)
 
 Use the following form to reference IANA registries. Note that the top-level URL is used when referring to a group of registries and/or specific registries within the group. 
 
@@ -101,14 +101,14 @@ Use the following form to reference IANA registries. Note that the top-level URL
 
 Note: This guidance was developed in coordination with IANA.
 
-[Referencing Internet-Drafts](/styleguide/part2/#ref_ids)
+[Referencing Internet-Drafts](#ref_ids)
 
 The format for references to Internet-Drafts described in [Section 4.8.6.4 of RFC 7322](/rfc/rfc7322.html#section-4.8.6.4) is updated to include the day of posting (in addition to the month and year), the word “Internet-Draft”, and the URL of the HTML file. 
 
 **Example:**  
 [RFC7322bis] Levine, J., Ed., and S. Ginoza, “RFC Style Guide”, Work in Progress, Internet-Draft, draft-flanagan-7322bis-07, 7 April 2021, <[https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07](https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07)\>.
 
-[Referencing Web-Based Public Code Repositories (e.g., GitHub)](/styleguide/part2/#ref_repo)
+[Referencing Web-Based Public Code Repositories (e.g., GitHub)](#ref_repo)
 
 Used for Informative References only. 
 
@@ -125,14 +125,14 @@ Format of reference entries:
 
 [linuxlite] “Linux Lite”, March 2018, <[https://sourceforge.net/projects/linuxlite/](https://sourceforge.net/projects/linuxlite/)\>.
 
-[Referencing Email on Mailing Lists](/styleguide/part2/#ref_email_list)
+[Referencing Email on Mailing Lists](#ref_email_list)
 
 When referencing emails to mailing lists, use the following template: 
 
 [reftag] Sender, A., “Subject: Subject line”, message to the  
 listname mailing list, DD Month YYYY, .
 
-[Index Placement](/styleguide/part2/#index_placement)
+[Index Placement](#index_placement)
 
 If included, an index appears directly before the Authors’ Addresses Section.
 
@@ -144,30 +144,30 @@ Topic
 
 Recommendation
 
-[Inclusive Language](/styleguide/part2/#inclusive_language)
+[Inclusive Language](#inclusive_language)
 
 Because each stream has chosen to follow the [IESG statement on Inclusive Language](https://www.ietf.org/about/groups/iesg/statements/on-inclusive-language/), the RFC Editor encourages authors to apply the guidance described in [“Guidance for NIST Staff on Using Inclusive Language in Documentary Standards”](https://web.archive.org/web/20250203031433/https://nvlpubs.nist.gov/nistpubs/ir/2021/NIST.IR.8366.pdf). See [Table 1 on the NIST website](https://web.archive.org/web/20250214092458/https://www.nist.gov/nist-research-library/nist-technical-series-publications-author-instructions#table1) for an expanded list of potentially biased language along with possible substitutions.
 
-[Double Negatives](/styleguide/part2/#double_no)
+[Double Negatives](#double_no)
 
 Double negatives are discouraged.
 
-[RFCs Citations as Compounds](/styleguide/part2/#rfc_as_compound)
+[RFCs Citations as Compounds](#rfc_as_compound)
 
 Avoid forming compounds by hyphenating RFC numbers; this can be accomplished by 
 
 - rewording the sentence (e.g., “`[RFC5011]-style rollover`” –> “`rollover as described in RFC 5011 [RFC5011]`”).
 - adding a note in either the Terminology or Conventions section mentioning the RFC so that other occurrences throughout the text will be understood by the reader to be in the style of said RFC (e.g., “This document uses the term “rollover” as defined in RFC 5011”).
 
-[Abbreviations as Verbs](/styleguide/part2/#abbrev_as_verb)
+[Abbreviations as Verbs](#abbrev_as_verb)
 
 Avoid using abbreviations as verbs when possible. If unavoidable, suffixes should be affixed without punctuation, for example, “XORed” (not XOR’ed) and “NATed” (not NAT-ed).
 
-[Expanding Abbreviations upon First Use](/styleguide/part2/#exp_abbrev)
+[Expanding Abbreviations upon First Use](#exp_abbrev)
 
 Once an abbreviation has been introduced, the abbreviated form should be used thereafter.
 
-[In-text Citations (bracketed citation)](/styleguide/part2/#citation_usage)
+[In-text Citations (bracketed citation)](#citation_usage)
 
 An in-text citation may a) follow the subject for which it is being cited as a silent pointer to the referenced document or b) be read as part of the text. 
 
