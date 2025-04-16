@@ -5,55 +5,62 @@ import type { SearchParams } from '~/stores/search'
 
 export type ValidHrefs =
   | MarkdownValidHrefs // generated global type from types/markdown-valid-hrefs.d.ts
-  | `https://${string}` // any external link is considered a valid type (even if it might 404 we don't verify further)
+  | `https://${string}` // any external link is treated as valid (even if it might 404 we don't verify further)
   | typeof HOME_PATH
   | typeof RFC_INDEX_ALL_ASCENDING
   | typeof RFC_INDEX_100_ASCENDING
   | typeof RFC_INDEX_ALL_DESCENDING
   | typeof RFC_INDEX_100_DESCENDING
   | typeof RSS_PATH
+  | typeof ATOM_PATH
   | typeof STANDARDS_PATH
+  | typeof IN_NOTES_BCP_REF_TXT
+  | typeof IN_NOTES_RFC_REF_TXT
+  | typeof IN_NOTES_STD_REF_TXT
+  | typeof QUEUE_XML_PATH
+  | typeof QUEUE_2_XML_PATH
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
-  | ReturnType<typeof authorPathBuilder>
+  | ReturnType<typeof authorMailtoBuilder>
   | ReturnType<typeof refsRefTxtPathBuilder>
   | ReturnType<typeof infoRfcPathBuilder>
   | ReturnType<typeof rfcJSONPathBuilder>
   | ReturnType<typeof rfcPathBuilder>
+  | ReturnType<typeof materialsTxtBuilder>
   | ReturnType<typeof rfcFormatPathBuilder>
+  | ReturnType<typeof rfcCitePathBuilder>
+  | ReturnType<typeof wikiDokuBuilder>
 
 export const HOME_PATH = '/'
 
 export const IETF_PRIVACY_STATEMENT_URL =
   'https://www.ietf.org/privacy-statement/'
-
 export const PUBLIC_SITE = 'https://www.rfc-editor.org'
-
 export const DATATRACKER_URL = 'https://datatracker.ietf.org/'
-
 export const IETF_URL = 'https://www.ietf.org/'
-
 export const IRTF_URL = 'https://www.irtf.org/'
-
 export const IAB_URL = 'https://www.iab.org/'
-
 export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org/'
 
 export const SEARCH_PATH = '/search/'
-
 export const SEARCH_API_PATH = '/api/search/'
 
 export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/'
-
 export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/'
-
 export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/'
-
 export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/'
 
 export const STANDARDS_PATH = '/standards/'
 
 export const RSS_PATH = '/rfcrss.xml'
+export const ATOM_PATH = '/rfcatom.xml'
+
+export const IN_NOTES_BCP_REF_TXT = '/in-notes/bcp-ref.txt'
+export const IN_NOTES_RFC_REF_TXT = '/in-notes/rfc-ref.txt'
+export const IN_NOTES_STD_REF_TXT = '/in-notes/std-ref.txt'
+
+export const QUEUE_XML_PATH = '/queue.xml'
+export const QUEUE_2_XML_PATH = '/queue2.xml'
 
 type SearchKeys = keyof SearchParams
 
@@ -79,7 +86,7 @@ export const refsRefTxtPathBuilder = (
 ): `/refs/ref${string}.txt` => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/refs/ref${rfcParts.number}.txt`
+  return `/refs/ref${rfcParts.number}.txt` as const
 }
 
 export const infoRfcPathBuilder = (
@@ -87,7 +94,7 @@ export const infoRfcPathBuilder = (
 ): `/info/${string}${string}/` => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
+  return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/` as const
 }
 
 export const rfcJSONPathBuilder = (
@@ -95,7 +102,7 @@ export const rfcJSONPathBuilder = (
 ): `/api/v1/rfc/rfc${string}.json` => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/api/v1/rfc/rfc${rfcParts.number}.json`
+  return `/api/v1/rfc/rfc${rfcParts.number}.json` as const
 }
 
 /**
@@ -105,10 +112,17 @@ export const rfcJSONPathBuilder = (
 export const markdownPathBuilder = (markdownPath: MarkdownValidHrefs) =>
   markdownPath
 
-export const rfcPathBuilder = (rfcId: string) => {
+export const rfcPathBuilder = (
+  rfcId: string,
+  sectionHash?: `section-${string}`
+) => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/` as const
+  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/${sectionHash ? (`#${sectionHash}` as const) : ''}` as const
+}
+
+export const materialsTxtBuilder = (txtFile: `${string}.txt`) => {
+  return `/materials/${txtFile}` as const
 }
 
 export const rfcCitePathBuilder = (
@@ -136,8 +150,12 @@ export const rfcFormatPathBuilder = (rfcId: string, format: 'html') => {
   }
 }
 
-export const authorPathBuilder = (author: Rfc['authors'][number]) => {
+export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
   return `mailto:${author.email}` as const
+}
+
+export const wikiDokuBuilder = (wikiPath: string) => {
+  return `/rpc/wiki/doku.php?id=${wikiPath}` as const
 }
 
 const mailtoRegex = /^mailto:/

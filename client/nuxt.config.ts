@@ -16,9 +16,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
-    // './modules/generate-content-metadata',
-    './modules/generate-markdown-links',
-    // Note: regarding 'Nuxt Device' see note in deviceMode.ts
+    // Note: if considering adding 'Nuxt Device' see note in deviceMode.ts
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
     '@nuxt/eslint',

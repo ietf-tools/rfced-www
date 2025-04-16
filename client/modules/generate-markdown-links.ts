@@ -65,13 +65,7 @@ type MarkdownsValidHrefs = {
 
 type Logger = ReturnType<typeof useLogger>
 
-type RegenerateValidMarkdownLinksProps = {
-  logger: Logger
-}
-
-const regenerateValidMarkdownLinks = async ({
-  logger
-}: RegenerateValidMarkdownLinksProps) => {
+const regenerateValidMarkdownLinks = async (logger: Logger) => {
   const { markdownPaths, docs } = await getMarkdownInit()
 
   const markdownPathToPublicPath = (markdownPath: string) =>
@@ -138,15 +132,7 @@ const regenerateValidMarkdownLinks = async ({
   return markdownsValidHrefs
 }
 
-type RegenerateReportForAllMarkdownLinksProps = {
-  logger: Logger
-  markdownsValidHrefs: MarkdownsValidHrefs
-}
-
-const regenerateReportForAllMarkdownLinks = async ({
-  logger,
-  markdownsValidHrefs
-}: RegenerateReportForAllMarkdownLinksProps) => {
+const regenerateReportForAllMarkdownLinks = async (logger: Logger) => {
   const { markdownPaths, docs } = await getMarkdownInit()
   const markdownsAllHrefs = await Promise.all(
     docs.map(async (doc, index) => {
@@ -164,30 +150,11 @@ const regenerateReportForAllMarkdownLinks = async ({
     })
   )
 
-  const validHrefs = markdownsValidHrefs.flatMap(
-    (markdownValidHrefs) => markdownValidHrefs.validHrefs
-  )
-
   await fsPromises.writeFile(
     generatedMarkdownAllHrefs,
     `${generatedFileWarningHeader}// Compares markdown hrefs against type ValidHrefs\nimport type { ValidHrefs } from '../utilities/url'\n\n${markdownsAllHrefs
       .map((markdownHrefs) =>
         markdownHrefs.hrefs
-          .filter((href) => {
-            // Filter by links that would fail TS
-            if (!validHrefs.includes(href)) {
-              return true
-            }
-
-            const thisMarkdownValidHrefs = markdownsValidHrefs.find(
-              (markdownValidHrefs) =>
-                markdownValidHrefs.markdownPath === markdownHrefs.markdownPath
-            )
-            if (!thisMarkdownValidHrefs) {
-              return true
-            }
-            return !thisMarkdownValidHrefs.validInternalLinks.includes(href)
-          })
           .map(
             (href, index) =>
               `const _${camelCase(markdownHrefs.markdownPath)}${index + 1}: ValidHrefs | ${markdownFileInternalLinksTypeBuilder(markdownHrefs.markdownPath)} = ${JSON.stringify(href)} // if there is a TS error fix the Markdown link in ${markdownHrefs.markdownPath}`
@@ -214,9 +181,12 @@ export default defineNuxtModule({
         // otherwise recursion
         return
       }
-      logger.info(`Regenerating markdown links because ${watcherPath} changed`)
-      const markdownsValidHrefs = await regenerateValidMarkdownLinks({ logger })
-      await regenerateReportForAllMarkdownLinks({ markdownsValidHrefs, logger })
+
+      logger.info(
+        `Regenerating markdown links because "${watcherPath}" changed`
+      )
+      await regenerateValidMarkdownLinks(logger)
+      await regenerateReportForAllMarkdownLinks(logger)
     })
   }
 })

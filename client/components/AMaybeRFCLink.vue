@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 /**
- * Detects links to RFCs (eg `/rfc/rfc9001.html`) and uses RFCRouterLink instead
+ * Detects links to RFCs (eg `/rfc/rfc9001.pdf`) and uses RFCRouterLink instead
  *
  * with a fallback to Anchor
  */

@@ -43,7 +43,7 @@ Please review the copyright notice and legends as defined in RFC 5378 and the Tr
 
 **Semantic markup**
 
-Please review the markup in the XML file to ensure that elements of content are correctly tagged. For example, ensure that <sourcecode> and <artwork> are set correctly. See the [RFCXML vocabulary reference](https://authors.ietf.org/rfcxml-vocabulary) for details about [<sourcecode>](https://authors.ietf.org/rfcxml-vocabulary#sourcecode) and [<artwork>](https://authors.ietf.org/rfcxml-vocabulary#artwork).
+Please review the markup in the XML file to ensure that elements of content are correctly tagged. For example, ensure that `<sourcecode>` and `<artwork>` are set correctly. See the [RFCXML vocabulary reference](https://authors.ietf.org/rfcxml-vocabulary) for details about [`<sourcecode>`](https://authors.ietf.org/rfcxml-vocabulary#sourcecode) and [`<artwork>`](https://authors.ietf.org/rfcxml-vocabulary#artwork).
 
 **Formatted output**
 

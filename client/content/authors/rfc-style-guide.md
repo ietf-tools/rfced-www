@@ -22,7 +22,7 @@ Additional writing resources that may be helpful to authors:
 - [Britannica Dictionary](https://www.learnersdictionary.com/): This dictionary gives more extensive use examples and explanations than typical dictionaries. This can be handy for phrasal verbs, count and noncount nouns, and participles. The site also includes a grammar Q\&A log under the “Ask the Editor” tab.
 - [Merriam Webster’s Dictionary](https://www.merriam-webster.com/)
 - [The Online Writing Lab (OWL) at Purdue University](https://owl.english.purdue.edu/owl/resource/678/01/): This page contains grammar and mechanics information.
-- The [Chicago Manual of Style](http://www.chicagomanualofstyle.com/)
+- The [Chicago Manual of Style](https://www.chicagomanualofstyle.com/)
 - [The Elements of Style](https://www.bartleby.com/141/)
 - [Richard Lanham’s Paramedic Method](https://owl.purdue.edu/owl/general_writing/academic_writing/paramedic_method.html) for information on revising verbose text.
 
@@ -103,7 +103,7 @@ Note: This guidance was developed in coordination with IANA.
 
 [Referencing Internet-Drafts](#ref_ids)
 
-The format for references to Internet-Drafts described in [Section 4.8.6.4 of RFC 7322](/rfc/rfc7322.html#section-4.8.6.4) is updated to include the day of posting (in addition to the month and year), the word “Internet-Draft”, and the URL of the HTML file. 
+The format for references to Internet-Drafts described in [Section 4.8.6.4 of RFC 7322](/rfc/rfc7322/#section-4.8.6.4) is updated to include the day of posting (in addition to the month and year), the word “Internet-Draft”, and the URL of the HTML file. 
 
 **Example:**  
 [RFC7322bis] Levine, J., Ed., and S. Ginoza, “RFC Style Guide”, Work in Progress, Internet-Draft, draft-flanagan-7322bis-07, 7 April 2021, <[https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07](https://datatracker.ietf.org/doc/html/draft-flanagan-7322bis-07)\>.
@@ -228,7 +228,7 @@ Guidance
 
 Per RFC 7997, non-ASCII characters may appear within the body of the document. The `<u>` element is required for cases where the non-ASCII characters are needed for correct protocol operation. 
 
-This is in keeping with the following statement (where “escaping” refers to using U+ notation or otherwise defining each character) in [Section 3.1 of RFC 7997](/rfc/rfc7997.html#section-3.1):
+This is in keeping with the following statement (where “escaping” refers to using U+ notation or otherwise defining each character) in [Section 3.1 of RFC 7997](/rfc/rfc7997/#section-3.1):
 
 “Where the use of non-ASCII characters is purely part of an example  
 and not otherwise required for correct protocol operation, escaping  

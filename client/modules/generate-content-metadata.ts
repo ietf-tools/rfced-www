@@ -84,7 +84,7 @@ export default defineNuxtModule({
         return
       }
       logger.info(
-        `Regenerating content metadata because ${watcherPath} changed`
+        `Regenerating content metadata because "${watcherPath}" changed`
       )
       await regenerateContentMetadata(logger)
     })
