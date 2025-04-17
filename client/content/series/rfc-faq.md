@@ -183,7 +183,7 @@ Please use the edited XML file, which is available here (as noted in the AUTH48 
 
 https://www.rfc-editor.org/authors/rfcXXXXX.xml where XXXXX is the number of the RFC.
 
-Note: If there are questions included within the XML file, you do not need to reply in both the XML file and the email. Replying in either form is sufficient. Please see [the AUTH48 notice](/pubprocess/auth48) for more information.
+Note: If there are questions included within the XML file, you do not need to reply in both the XML file and the email. Replying in either form is sufficient. Please see [the AUTH48 notice](/authors/rfc-edit/auth48/) for more information.
 
 ## When can I send my changes? {#changes}
 

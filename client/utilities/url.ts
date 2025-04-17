@@ -7,10 +7,10 @@ export type ValidHrefs =
   | MarkdownValidHrefs // generated global type from types/markdown-valid-hrefs.d.ts
   | `https://${string}` // any external link is treated as valid (even if it might 404 we don't verify further)
   | typeof HOME_PATH
-  | typeof RFC_INDEX_ALL_ASCENDING
-  | typeof RFC_INDEX_100_ASCENDING
-  | typeof RFC_INDEX_ALL_DESCENDING
-  | typeof RFC_INDEX_100_DESCENDING
+  | typeof RFC_INDEX_ALL_ASCENDING_PATH
+  | typeof RFC_INDEX_100_ASCENDING_PATH
+  | typeof RFC_INDEX_ALL_DESCENDING_PATH
+  | typeof RFC_INDEX_100_DESCENDING_PATH
   | typeof RSS_PATH
   | typeof ATOM_PATH
   | typeof STANDARDS_PATH
@@ -19,6 +19,7 @@ export type ValidHrefs =
   | typeof IN_NOTES_STD_REF_TXT
   | typeof QUEUE_XML_PATH
   | typeof QUEUE_2_XML_PATH
+  | typeof REPORTS_CURRENT_QUEUE_STATS_TXT_PATH
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
   | ReturnType<typeof authorMailtoBuilder>
@@ -45,10 +46,11 @@ export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org/'
 export const SEARCH_PATH = '/search/'
 export const SEARCH_API_PATH = '/api/search/'
 
-export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/'
-export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/'
-export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/'
-export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/'
+export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'
+export const RFC_INDEX_100_ASCENDING_PATH = '/rfc-index-100a/'
+export const RFC_INDEX_ALL_DESCENDING_PATH = '/rfc-index2/'
+export const RFC_INDEX_100_DESCENDING_PATH = '/rfc-index-100d/'
+export const REPORTS_CURRENT_QUEUE_STATS_TXT_PATH = '/reports/CurrQstats.txt'
 
 export const STANDARDS_PATH = '/standards/'
 
