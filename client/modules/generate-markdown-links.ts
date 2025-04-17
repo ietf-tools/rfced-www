@@ -3,17 +3,30 @@
  */
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import { micromark } from 'micromark'
+import RemarkHeadingId from 'remark-heading-id'
+import { parseMarkdown } from '@nuxtjs/mdc/runtime'
+import type {} from '@nuxtjs/mdc/runtime'
+// import { micromark } from 'micromark'
+
+// import rehypeStringify from 'rehype-stringify'
+// import remarkParse from 'remark-parse'
+// import remarkRehype from 'remark-rehype'
+// import { unified } from 'unified'
+
 import { globby } from 'globby'
 import { camelCase } from 'lodash-es'
 import {
   attemptToGetAttribute,
+  generateHeadingId,
   getInnerText,
   parseHtml,
   walkNodes
 } from '~/utilities/test-utils/html-test-utils'
 import { textToAnchorId } from '~/utilities/url'
+
 import { defineNuxtModule, useLogger } from 'nuxt/kit'
+import { ContentRendererMarkdown, ContentRenderer } from '#build/components'
+import type Config from '../nuxt.config'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
@@ -29,6 +42,78 @@ const generatedMarkdownAllHrefs = path.resolve(
   'generated',
   'report-of-all-markdown-hrefs.ts'
 )
+// // Unified Remark
+// const getRemarkProcessor = () =>
+//   unified().use(remarkParse).use(remarkRehype).use(rehypeStringify)
+
+// let remarkSingleton: ReturnType<typeof getRemarkProcessor> | undefined =
+//   undefined
+
+// const processMarkdown = async (markdown: string): Promise<string> => {
+//   if (!remarkSingleton) {
+//     remarkSingleton = getRemarkProcessor()
+//   }
+//   return String(await remarkSingleton.process(markdown))
+// }
+
+type MdcParserResult = Awaited<ReturnType<typeof parseMarkdown>>
+type MdcRoot = MdcParserResult['body']
+type MdcNode = MdcRoot['children'][number]
+
+/**
+ * A TRUSTING markdown to HTML converter using Nuxt libs
+ * If you do not trust your
+ */
+const mdcParserResultToHtml = (mdcParserResult: MdcParserResult): string => {
+  const walk = (node: MdcNode | MdcRoot): string => {
+    switch (node.type) {
+      case 'root':
+        return node.children.map(walk).join('')
+      case 'text':
+        return node.value
+      case 'element':
+        if (
+          // self-closing element in HTML
+          ['img', 'br', 'hr', 'link'].includes(node.tag)
+        ) {
+          return `<${node.tag}>`
+        }
+        return `<${node.tag}${
+          node.props ?
+            Object.entries(node.props)
+              .map(([key, value]) => ` ${key}="${value}"`)
+              .join('')
+          : ''
+        }>${node.children.map(walk).join('')}</${node.tag}>`
+      case 'comment':
+        return ''
+    }
+  }
+  return walk(mdcParserResult.body)
+}
+
+/**
+ * A TRUSTING markdown to HTML converter using Nuxt libs
+ * If you do not trust your markdown don't use this
+ */
+const processMarkdown = async (markdown: string): Promise<string> => {
+  const mdcParserResult = await parseMarkdown(markdown, {
+    remark: {
+      plugins: {
+        // TODO somehow derive this from nuxt.config.ts's remark plugins
+        'remark-heading-id': {
+          instance: await import(/* @vite-ignore */ 'remark-heading-id').then(
+            (m) => m.default || m
+          )
+        }
+      }
+    }
+  })
+
+  const html = mdcParserResultToHtml(mdcParserResult)
+
+  return html
+}
 
 const generatedFileWarningHeader = `// Generated file by ${path.basename(import.meta.filename)} DO NOT EDIT\n`
 
@@ -45,8 +130,10 @@ const getMarkdownInit = async () => {
     )
   )
 
-  const htmls = markdownFilesData.map((markdownFileData) =>
-    micromark(markdownFileData)
+  const htmls = await Promise.all(
+    markdownFilesData.map((markdownFileData) =>
+      processMarkdown(markdownFileData)
+    )
   )
 
   const docs = htmls.map((html) => parseHtml(html))
@@ -76,7 +163,7 @@ const regenerateValidMarkdownLinks = async (logger: Logger) => {
       const validHrefs = []
       const markdownPath = markdownPaths[index]
       const publicPath = markdownPathToPublicPath(markdownPath)
-      const headingsText: string[] = []
+      const anchorIds: string[] = []
       await walkNodes(doc, async (node) => {
         if (
           node &&
@@ -88,19 +175,29 @@ const regenerateValidMarkdownLinks = async (logger: Logger) => {
             'h5' in node ||
             'h6' in node)
         ) {
-          headingsText.push(await getInnerText([node]))
+          const customAnchorId = await attemptToGetAttribute(
+            node,
+            undefined,
+            'id'
+          )
+          if (customAnchorId) {
+            anchorIds.push(customAnchorId)
+          } else {
+            const computedHeadingId = await generateHeadingId(node)
+            if (computedHeadingId) {
+              anchorIds.push(computedHeadingId)
+            }
+          }
         }
       })
 
       validHrefs.push(
         publicPath,
-        ...headingsText.map(
-          (headingText) => `${publicPath}#${textToAnchorId(headingText)}`
-        )
+        ...anchorIds.map((anchorId) => `${publicPath}#${anchorId}`)
       )
 
-      const validInternalLinks = headingsText.map(
-        (headingText) => `#${textToAnchorId(headingText)}`
+      const validInternalLinks = anchorIds.map(
+        (headingText) => `#${headingText}`
       )
 
       return { markdownPath, validHrefs, validInternalLinks }

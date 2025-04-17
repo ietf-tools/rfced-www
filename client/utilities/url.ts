@@ -71,6 +71,7 @@ export const searchPathBuilder = (
   return `${SEARCH_PATH}${hasParams ? '?' : ''}${
     hasParams ?
       (Object.keys(searchParams) as SearchKeys[])
+        .sort() // normalize order
         .map((searchKey) => {
           const searchValue = searchParams[searchKey]
           return searchValue ? `${searchKey}=${searchValue}` : ''

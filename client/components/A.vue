@@ -30,8 +30,10 @@ const isMailTo = computed(() => isMailToLink(props.href))
 const isHash = computed(() => isHashLink(props.href))
 
 const sanitisedAnchorProps = computed(() => {
-  const isNuxtLink = isInternal.value && !isMailTo.value && !isHash.value
-  const isExternalLink = !isInternal.value && !isMailTo.value && !isHash.value
+  const isNuxtLink =
+    props.href && isInternal.value && !isMailTo.value && !isHash.value
+  const isExternalLink =
+    props.href && !isInternal.value && !isMailTo.value && !isHash.value
 
   return {
     ...props,

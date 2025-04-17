@@ -26,6 +26,15 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/content'
   ],
+  content: {
+    markdown: {
+      remarkPlugins: {
+        'remark-heading-id': {
+          // Options
+        }
+      }
+    }
+  },
   colorMode: {
     classSuffix: ''
   },
