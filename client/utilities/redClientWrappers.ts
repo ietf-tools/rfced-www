@@ -1,19 +1,44 @@
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
 import { setTimeoutPromise } from './promises'
+import { isProdApi } from './url'
 import { ApiClient } from '~/generated/red-client'
 
 export const getRedClient = () => {
   const config = useRuntimeConfig()
   const headers: ApiClient['Config']['headers'] = {}
-  if (config.cfServiceTokenId) {
-    headers['CF-Access-Client-Id'] = config.cfServiceTokenId
+  const {
+    cfServiceTokenId,
+    cfServiceTokenSecret,
+    public: { datatrackerBase }
+  } = config
+
+  if (cfServiceTokenId && typeof cfServiceTokenId === 'string') {
+    headers['CF-Access-Client-Id'] = cfServiceTokenId
   }
-  if (config.cfServiceTokenSecret) {
-    headers['CF-Access-Client-Secret'] = config.cfServiceTokenSecret
+  if (cfServiceTokenSecret && typeof cfServiceTokenSecret === 'string') {
+    headers['CF-Access-Client-Secret'] = cfServiceTokenSecret
   }
+  if (typeof datatrackerBase !== 'string') {
+    throw Error(
+      'Required nuxt.config.ts runtimeConfig.public.datatrackerBase not found (or not a string)'
+    )
+  }
+
+  if (
+    isProdApi(datatrackerBase) &&
+    (!cfServiceTokenId ||
+      typeof cfServiceTokenId !== 'string' ||
+      !cfServiceTokenSecret ||
+      typeof cfServiceTokenSecret !== 'string')
+  ) {
+    throw Error(
+      `Detected ${datatrackerBase} as prod API but problems with required headers cfServiceTokenId=${typeof cfServiceTokenId} or cfServiceTokenSecret=${typeof cfServiceTokenSecret} `
+    )
+  }
+
   return new ApiClient({
-    baseUrl: config.public.datatrackerBase,
-    headers,
+    baseUrl: datatrackerBase,
+    headers
   })
 }
 

@@ -5,23 +5,23 @@
         <p class="text-base">
           rfc-editor.org is maintained by the
           <A
-            href="https://www.ietf.org/"
+            :href="IETF_URL"
             class="underline text-blue-100 font-semibold md:text-nowrap"
             >Internet Engineering Task Force</A
           >
           and funded by the
           <A
-            href="https://www.internetsociety.org/"
+            :href="INTERNET_SOCIETY_URL"
             class="underline text-blue-100 font-semibold md:text-nowrap"
           >
             Internet Society
           </A>
         </p>
         <div class="flex gap-7 items-center mt-2 lg:mt-5">
-          <A href="https://www.ietf.org/">
+          <A :href="IETF_URL">
             <GraphicsIETFLogo width="105" height="60" />
           </A>
-          <A href="https://www.internetsociety.org/">
+          <A :href="INTERNET_SOCIETY_URL">
             <GraphicsInternetSocietyLogo width="112" height="36" />
           </A>
         </div>
@@ -37,11 +37,7 @@
               :key="childIndex"
               class="text-base"
             >
-              <A
-                :href="child.href"
-                :target="!isInternalLink(child.href) ? '_blank' : undefined"
-                class="underline text-white md:text-nowrap"
-              >
+              <A :href="child.href" class="underline text-white md:text-nowrap">
                 {{ child.label }}
               </A>
             </li>
@@ -53,6 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import { isInternalLink } from '../utilities/url'
+import { IETF_URL, INTERNET_SOCIETY_URL } from '../utilities/url'
 import { menuData } from './FooterNavData'
 </script>

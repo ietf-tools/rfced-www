@@ -8,16 +8,32 @@ import {
   isExternalLink,
   isInternalLink,
   isMailToLink,
-  parseMaybeRfcLink
+  parseMaybeRfcLink,
+  isHashLink
 } from './url'
+import type { ValidHrefs } from './url'
+
+/**
+ * Should error if ValidHrefs type becomes overly broad (ie `string` or
+ * `any`) so it matches a non-existent href, hence the variable name.
+ * To fix this bug look at ValidHrefs itself, find the new type that is
+ * overly broad and fix it. If you made a pathBuilder function ensure
+ * the return value(s) have `as const` like the other path builder functions.
+ *
+ */
+// @ts-expect-error See preceding comment
+const _HrefThatShouldFail: ValidHrefs = '/href-that-should-fail/'
+
+/**
+ * Although this should succeed with current markdown files it's possible
+ * that future markdown changes removes this specific href target, and if so
+ * choose a different href from ValidHrefs
+ */
+const _HrefThatShouldSucceed: ValidHrefs = '/series/rfc/#what-is-an-rfc'
 
 test('rfcCitePathBuilder: txt', () => {
-  expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual(
-    'https://www.rfc-editor.org/refs/rfc9000.txt'
-  )
-  expect(rfcCitePathBuilder('RFC9000', 'txt')).toEqual(
-    'https://www.rfc-editor.org/refs/rfc9000.txt'
-  )
+  expect(rfcCitePathBuilder('rfc9000', 'txt')).toEqual('/refs/rfc9000.txt')
+  expect(rfcCitePathBuilder('RFC9000', 'txt')).toEqual('/refs/rfc9000.txt')
 })
 
 test('rfcCitePathBuilder: xml', () => {
@@ -39,12 +55,8 @@ test('rfcCitePathBuilder: bibTeX', () => {
 })
 
 test('rfcFormatPathBuilder: html', () => {
-  expect(rfcFormatPathBuilder('rfc9000', 'html')).toEqual(
-    'https://www.rfc-editor.org/rfc/rfc9000.html'
-  )
-  expect(rfcFormatPathBuilder('RFC9000', 'html')).toEqual(
-    'https://www.rfc-editor.org/rfc/rfc9000.html'
-  )
+  expect(rfcFormatPathBuilder('rfc9000', 'html')).toEqual('/rfc/rfc9000.html')
+  expect(rfcFormatPathBuilder('RFC9000', 'html')).toEqual('/rfc/rfc9000.html')
 })
 
 test('textToAnchorId', () => {
@@ -94,6 +106,24 @@ test('isMailToLink', () => {
   ).toEqual(false)
 
   expect(isMailToLink('mailto:user@example.com')).toEqual(true)
+})
+
+test('isHashLink', () => {
+  expect(isHashLink('#something')).toEqual(true)
+
+  expect(
+    isHashLink(
+      // leading space, should not match
+      ' #something'
+    )
+  ).toEqual(false)
+
+  expect(isHashLink(undefined)).toEqual(false)
+  expect(isHashLink('/something')).toEqual(false)
+  expect(isHashLink('http://')).toEqual(false)
+  expect(isHashLink('https://')).toEqual(false)
+  expect(isHashLink(IETF_PRIVACY_STATEMENT_URL)).toEqual(false)
+  expect(isHashLink('mailto:user@example.com')).toEqual(false)
 })
 
 test('parseMaybeRfcLink', () => {

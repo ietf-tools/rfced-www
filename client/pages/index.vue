@@ -13,12 +13,9 @@
           </Heading>
           <p class="hidden mt-8 lg:block text-base text-grey-800 pl-5">
             Looking for works in progress? Go to
-            <a
-              href="https://datatracker.ietf.org/"
-              class="text-blue-300 dark:text-blue-100"
-            >
+            <A :href="DATATRACKER_URL" class="text-blue-300 dark:text-blue-100">
               datatracker.ietf.org
-            </a>
+            </A>
           </p>
         </div>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -108,7 +105,11 @@
 </template>
 
 <script setup lang="ts">
-import { SEARCH_API_PATH, searchPathBuilder } from '~/utilities/url'
+import {
+  DATATRACKER_URL,
+  SEARCH_API_PATH,
+  searchPathBuilder
+} from '~/utilities/url'
 
 definePageMeta({
   layout: false

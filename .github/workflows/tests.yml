@@ -6,9 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
-        run:
-          working-directory: './client'
-  
+      run:
+        working-directory: "./client"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -16,19 +16,18 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-            node-version: 22.x
-            cache: 'npm'
-            cache-dependency-path: '**/package-lock.json'
-  
+          node-version: 22.x
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
       - name: Install dependencies
         run: npm ci
         working-directory: ./client
 
-      - name: Generate content-metadata
-        run: npm run generate:content-metadata
+      - name: Build Nuxt (dev mode, no prerender)
+        run: npm run build:dev
         working-directory: ./client
 
       - name: Run all other tests
         run: npm run test
         working-directory: ./client
-

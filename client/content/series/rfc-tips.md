@@ -14,10 +14,10 @@ Standards Track RFCs use the following Statuses:
 
 Other RFC Statuses are:
 
-- **Informational.** An "Informational" specification is published for the general information of the Internet community, and does not represent an Internet community consensus or recommendation. [RFC 2026, Section 4.2.2](/rfc/rfc2026.html#section-4.2.2)
-- **Experimental.** The "Experimental" designation typically denotes a specification that is part of some research or development effort. Such a specification is published for the general information of the Internet technical community and as an archival record of the work. [RFC 2026, Section 4.2.1](/rfc/rfc2026.html#section-4.2.1)
+- **Informational.** An "Informational" specification is published for the general information of the Internet community, and does not represent an Internet community consensus or recommendation. [RFC 2026, Section 4.2.2](/rfc/rfc2026/#section-4.2.2)
+- **Experimental.** The "Experimental" designation typically denotes a specification that is part of some research or development effort. Such a specification is published for the general information of the Internet technical community and as an archival record of the work. [RFC 2026, Section 4.2.1](/rfc/rfc2026/#section-4.2.1)
 - **Historic**.A specification describing a technology that is no longer in use or no longer recommended for use is assigned the "Historic" Status.
-- **Best Current Practice** (BCP). BCPs have a dual role: one is to document IETF processes as agreed by the IETF community, and the other is explained in [RFC 2026, Section 5](/rfc/rfc2026.html#section-5) as: “since the Internet itself is composed of networks operated by a great variety of organizations, with diverse goals and rules, good user service requires that the operators and administrators of the Internet follow some common guidelines for policies and operations.”
+- **Best Current Practice** (BCP). BCPs have a dual role: one is to document IETF processes as agreed by the IETF community, and the other is explained in [RFC 2026, Section 5](/rfc/rfc2026/#section-5) as: “since the Internet itself is composed of networks operated by a great variety of organizations, with diverse goals and rules, good user service requires that the operators and administrators of the Internet follow some common guidelines for policies and operations.”
 - **Unknown**. RFCs that were published before Statuses were introduced (before RFC 1128\) are mostly considered to have an Unknown Status, with a handful having had Statuses retroactively applied.
 
 ## Subseries
