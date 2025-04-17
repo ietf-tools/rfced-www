@@ -1,5 +1,5 @@
 <template>
-  <Heading level="2" class="pt-4 pb-2" :has-internal-link="true" :id="props.id">
+  <Heading level="2" class="pt-4 pb-2" :id="props.id" :has-internal-link="true">
     <slot />
   </Heading>
 </template>

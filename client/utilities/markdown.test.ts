@@ -5,12 +5,12 @@ import { test, expect } from 'vitest'
 import { escapeRegExp } from 'lodash-es'
 import { micromark } from 'micromark'
 import { globby } from 'globby'
+import { fileExists } from './test-utils/fs-test-util'
 import {
   attemptToGetAttribute,
   parseHtml,
   walkNodes
 } from '~/utilities/test-utils/html-test-utils'
-import { fileExists } from './test-utils/fs-test-util'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')

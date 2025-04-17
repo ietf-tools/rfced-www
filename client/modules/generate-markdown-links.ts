@@ -4,17 +4,15 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { parseMarkdown } from '@nuxtjs/mdc/runtime'
-import type {} from '@nuxtjs/mdc/runtime'
-
 import { globby } from 'globby'
 import { camelCase } from 'lodash-es'
+import { defineNuxtModule, useLogger } from 'nuxt/kit'
 import {
   attemptToGetAttribute,
   generateHeadingId,
   parseHtml,
   walkNodes
 } from '~/utilities/test-utils/html-test-utils'
-import { defineNuxtModule, useLogger } from 'nuxt/kit'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
@@ -193,7 +191,7 @@ const regenerateValidMarkdownLinks = async (logger?: Logger) => {
           .map((validInternalLink) => JSON.stringify(validInternalLink))
           .join('\n  | ')}`
       })
-      .join('\n\n')}`
+      .join('\n\n')}\n`
   )
 
   logger?.info(` - regenerated ${path.basename(generatedMarkdownValidHrefs)}`)
@@ -260,5 +258,5 @@ export default defineNuxtModule({
   }
 })
 
-// Create the file initially on Nuxt load
+// Create the file initially on Nuxt load so there aren't import errors on CI
 regenerateValidMarkdownLinks()

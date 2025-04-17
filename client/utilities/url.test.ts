@@ -21,7 +21,7 @@ import type { ValidHrefs } from './url'
  * the return value(s) have `as const` like the other path builder functions.
  *
  */
-// @ts-expect-error
+// @ts-expect-error See preceding comment
 const _HrefThatShouldFail: ValidHrefs = '/href-that-should-fail/'
 
 /**
