@@ -258,5 +258,6 @@ export default defineNuxtModule({
   }
 })
 
-// Create the file initially on Nuxt load so there aren't import errors on CI
-regenerateValidMarkdownLinks()
+// Create the file(s) initially on Nuxt load so there aren't import errors on CI
+await regenerateValidMarkdownLinks()
+await regenerateReportForAllMarkdownLinks()
