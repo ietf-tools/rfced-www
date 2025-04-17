@@ -3,30 +3,18 @@
  */
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import RemarkHeadingId from 'remark-heading-id'
 import { parseMarkdown } from '@nuxtjs/mdc/runtime'
 import type {} from '@nuxtjs/mdc/runtime'
-// import { micromark } from 'micromark'
-
-// import rehypeStringify from 'rehype-stringify'
-// import remarkParse from 'remark-parse'
-// import remarkRehype from 'remark-rehype'
-// import { unified } from 'unified'
 
 import { globby } from 'globby'
 import { camelCase } from 'lodash-es'
 import {
   attemptToGetAttribute,
   generateHeadingId,
-  getInnerText,
   parseHtml,
   walkNodes
 } from '~/utilities/test-utils/html-test-utils'
-import { textToAnchorId } from '~/utilities/url'
-
 import { defineNuxtModule, useLogger } from 'nuxt/kit'
-import { ContentRendererMarkdown, ContentRenderer } from '#build/components'
-import type Config from '../nuxt.config'
 
 const __dirname = import.meta.dirname
 const clientPath = path.resolve(__dirname, '..')
@@ -42,28 +30,10 @@ const generatedMarkdownAllHrefs = path.resolve(
   'generated',
   'report-of-all-markdown-hrefs.ts'
 )
-// // Unified Remark
-// const getRemarkProcessor = () =>
-//   unified().use(remarkParse).use(remarkRehype).use(rehypeStringify)
-
-// let remarkSingleton: ReturnType<typeof getRemarkProcessor> | undefined =
-//   undefined
-
-// const processMarkdown = async (markdown: string): Promise<string> => {
-//   if (!remarkSingleton) {
-//     remarkSingleton = getRemarkProcessor()
-//   }
-//   return String(await remarkSingleton.process(markdown))
-// }
 
 type MdcParserResult = Awaited<ReturnType<typeof parseMarkdown>>
 type MdcRoot = MdcParserResult['body']
 type MdcNode = MdcRoot['children'][number]
-
-/**
- * A TRUSTING markdown to HTML converter using Nuxt libs
- * If you do not trust your
- */
 const mdcParserResultToHtml = (mdcParserResult: MdcParserResult): string => {
   const walk = (node: MdcNode | MdcRoot): string => {
     switch (node.type) {
@@ -97,6 +67,8 @@ const mdcParserResultToHtml = (mdcParserResult: MdcParserResult): string => {
  * If you do not trust your markdown don't use this
  */
 const processMarkdown = async (markdown: string): Promise<string> => {
+  // const appConfig = useAppConfig()
+
   const mdcParserResult = await parseMarkdown(markdown, {
     remark: {
       plugins: {
