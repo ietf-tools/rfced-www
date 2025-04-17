@@ -23,7 +23,7 @@ export type ContentMetadata = Record<
 
 type Logger = ReturnType<typeof useLogger>
 
-const regenerateContentMetadata = async (logger: Logger) => {
+const regenerateContentMetadata = async (logger?: Logger) => {
   const contentMarkdownPaths = await globby(path.join(contentPath, '**/*.md'))
 
   const git = simpleGit()
@@ -67,7 +67,7 @@ const regenerateContentMetadata = async (logger: Logger) => {
     JSON.stringify(contentMetadata, null, 2)
   )
 
-  logger.info(` - regenerated ${path.basename(contentMetadataPath)}`)
+  logger?.info(` - regenerated ${path.basename(contentMetadataPath)}`)
 }
 
 export default defineNuxtModule({
@@ -90,3 +90,5 @@ export default defineNuxtModule({
     })
   }
 })
+
+regenerateContentMetadata()
