@@ -124,7 +124,7 @@ type MarkdownsValidHrefs = {
 
 type Logger = ReturnType<typeof useLogger>
 
-const regenerateValidMarkdownLinks = async (logger: Logger) => {
+const regenerateValidMarkdownLinks = async (logger?: Logger) => {
   const { markdownPaths, docs } = await getMarkdownInit()
 
   const markdownPathToPublicPath = (markdownPath: string) =>
@@ -196,12 +196,12 @@ const regenerateValidMarkdownLinks = async (logger: Logger) => {
       .join('\n\n')}`
   )
 
-  logger.info(` - regenerated ${path.basename(generatedMarkdownValidHrefs)}`)
+  logger?.info(` - regenerated ${path.basename(generatedMarkdownValidHrefs)}`)
 
   return markdownsValidHrefs
 }
 
-const regenerateReportForAllMarkdownLinks = async (logger: Logger) => {
+const regenerateReportForAllMarkdownLinks = async (logger?: Logger) => {
   const { markdownPaths, docs } = await getMarkdownInit()
   const markdownsAllHrefs = await Promise.all(
     docs.map(async (doc, index) => {
@@ -233,7 +233,7 @@ const regenerateReportForAllMarkdownLinks = async (logger: Logger) => {
       .join('\n\n')}`
   )
 
-  logger.info(` - regenerated ${path.basename(generatedMarkdownAllHrefs)}`)
+  logger?.info(` - regenerated ${path.basename(generatedMarkdownAllHrefs)}`)
 }
 
 export default defineNuxtModule({
@@ -259,3 +259,6 @@ export default defineNuxtModule({
     })
   }
 })
+
+// Create the file initially on Nuxt load
+regenerateValidMarkdownLinks()

@@ -91,4 +91,5 @@ export default defineNuxtModule({
   }
 })
 
+// Create the file initially on Nuxt load so there aren't import errors on CI
 regenerateContentMetadata()
