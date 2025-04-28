@@ -226,7 +226,7 @@ Once we have approvals from each of the authors, we will begin the publication p
 "Which" clauses are nonrestrictive (nonessential to the sentence) and add something about an item already identified, while "that" clauses are restrictive (essential to the sentence) and narrow a category or identify a particular item being talked about. For example:
 
 - (non-restrictive "which": all RST attacks rely on brute-force): It should be noted that RST attacks, which rely on brute-force, are relatively easy to detect at the TCP layer.
-- (restrictive "that": only \*some\* RST attacks rely on brute-force): It should be noted that RST attacks that rely on brute-force are relatively easy to detect at the TCP layer.
+- (restrictive "that": only _some_ RST attacks rely on brute-force): It should be noted that RST attacks that rely on brute-force are relatively easy to detect at the TCP layer.
 
 ## I used British English. Why did you change it to American English? {#british}
 
