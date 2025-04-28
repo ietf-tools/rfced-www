@@ -7,6 +7,7 @@ export type ValidHrefs =
   | MarkdownValidHrefs // generated global type from types/markdown-valid-hrefs.d.ts
   | `https://${string}` // any external link is treated as valid (even if it might 404 we don't verify further)
   | typeof HOME_PATH
+  | typeof RFC_INDEX_XML_PATH
   | typeof RFC_INDEX_ALL_ASCENDING_PATH
   | typeof RFC_INDEX_100_ASCENDING_PATH
   | typeof RFC_INDEX_ALL_DESCENDING_PATH
@@ -20,6 +21,10 @@ export type ValidHrefs =
   | typeof QUEUE_XML_PATH
   | typeof QUEUE_2_XML_PATH
   | typeof REPORTS_CURRENT_QUEUE_STATS_TXT_PATH
+  | typeof NEVER_ISSUED_PATH
+  | typeof ALL_CLUSTERS_PATH
+  | typeof STATUS_CHANGES_PATH
+  | (typeof _FIXME_URLS)[number]
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
   | ReturnType<typeof authorMailtoBuilder>
@@ -30,22 +35,28 @@ export type ValidHrefs =
   | ReturnType<typeof materialsTxtBuilder>
   | ReturnType<typeof rfcFormatPathBuilder>
   | ReturnType<typeof rfcCitePathBuilder>
-  | ReturnType<typeof wikiDokuBuilder>
+  | ReturnType<typeof wikiDokuPathBuilder>
+  | ReturnType<typeof materialsPathBuilder>
+  | ReturnType<typeof dashboardPathBuilder>
 
 export const HOME_PATH = '/'
 
 export const IETF_PRIVACY_STATEMENT_URL =
   'https://www.ietf.org/privacy-statement/'
 export const PUBLIC_SITE = 'https://www.rfc-editor.org'
-export const DATATRACKER_URL = 'https://datatracker.ietf.org/'
-export const IETF_URL = 'https://www.ietf.org/'
-export const IRTF_URL = 'https://www.irtf.org/'
-export const IAB_URL = 'https://www.iab.org/'
-export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org/'
+export const DATATRACKER_URL = 'https://datatracker.ietf.org'
+export const IETF_URL = 'https://www.ietf.org'
+export const IRTF_URL = 'https://www.irtf.org'
+export const IAB_URL = 'https://www.iab.org'
+export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org'
+export const MATERIALS_URL = 'https://materials.rfc-editor.org'
+export const IAD_URL = 'https://iad.rfc-editor.org'
+export const DASHBOARD_URL = 'https://dashboard.rfc-editor.org'
 
 export const SEARCH_PATH = '/search/'
 export const SEARCH_API_PATH = '/api/search/'
 
+export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
 export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'
 export const RFC_INDEX_100_ASCENDING_PATH = '/rfc-index-100a/'
 export const RFC_INDEX_ALL_DESCENDING_PATH = '/rfc-index2/'
@@ -63,6 +74,46 @@ export const IN_NOTES_STD_REF_TXT = '/in-notes/std-ref.txt'
 
 export const QUEUE_XML_PATH = '/queue.xml'
 export const QUEUE_2_XML_PATH = '/queue2.xml'
+
+export const NEVER_ISSUED_PATH = '/never-issued/'
+export const ALL_CLUSTERS_PATH = '/all_clusters/'
+export const STATUS_CHANGES_PATH = '/status-changes/'
+
+export const FIXME_IEN_INDEX_PATH = '/ien/ien-index/'
+export const FIXME_CONTACT_AT_IETF_PATH = '/contact/at-ietf/'
+export const FIXME_REPORTS_SUBPUB_STATS_PATH = '/reports/subpub_stats/'
+export const FIXME_RFCS_PER_YEAR_PATH = '/rfcs-per-year/'
+export const FIXME_ERRATA_DEFINITIONS_PATH = '/errata-definitions/'
+export const FIXME_INNOTES_PRERELEASE_PATH = '/in-notes/prerelease/'
+
+export const API_ROUTES_TO_PRERENDER = [
+  REPORTS_CURRENT_QUEUE_STATS_TXT_PATH,
+  RFC_INDEX_ALL_ASCENDING_PATH,
+  RFC_INDEX_100_ASCENDING_PATH,
+  RFC_INDEX_ALL_DESCENDING_PATH,
+  RFC_INDEX_100_DESCENDING_PATH,
+  QUEUE_XML_PATH,
+  QUEUE_2_XML_PATH,
+  IN_NOTES_BCP_REF_TXT,
+  IN_NOTES_RFC_REF_TXT,
+  IN_NOTES_STD_REF_TXT,
+  RSS_PATH,
+  ATOM_PATH,
+  NEVER_ISSUED_PATH // not an API route but has rarely changing API-driven content
+] as const
+
+/**
+ * URLs to decide upon.
+ * Eventually these might be wrong but we'll temporarily add them to VALID_HREFS
+ */
+const _FIXME_URLS = [
+  FIXME_IEN_INDEX_PATH,
+  FIXME_CONTACT_AT_IETF_PATH,
+  FIXME_REPORTS_SUBPUB_STATS_PATH,
+  FIXME_RFCS_PER_YEAR_PATH,
+  FIXME_ERRATA_DEFINITIONS_PATH,
+  FIXME_INNOTES_PRERELEASE_PATH
+] as const
 
 type SearchKeys = keyof SearchParams
 
@@ -153,12 +204,24 @@ export const rfcFormatPathBuilder = (rfcId: string, format: 'html') => {
   }
 }
 
-export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
-  return `mailto:${author.email}` as const
+export const wikiDokuPathBuilder = (wikiPath: string) => {
+  return `/rpc/wiki/doku.php?id=${wikiPath}` as const
 }
 
-export const wikiDokuBuilder = (wikiPath: string) => {
-  return `/rpc/wiki/doku.php?id=${wikiPath}` as const
+export const materialsPathBuilder = (materialsPath: string) => {
+  return `${MATERIALS_URL}${materialsPath}` as const
+}
+
+export const iadReportsPathBuilder = (IADPath: string) => {
+  return `${IAD_URL}${IADPath}` as const
+}
+
+export const dashboardPathBuilder = (dashboardPath: string) => {
+  return `${DASHBOARD_URL}${dashboardPath}` as const
+}
+
+export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
+  return `mailto:${author.email}` as const
 }
 
 const mailtoRegex = /^mailto:/

@@ -18,11 +18,11 @@ Consult the online document ["Internet Official Protocol Standards"](/standards/
 
 ## Can the status of an RFC change after publication? {#statuschanges}
 
-Yes, the status of an RFC can change; this information is available in several locations including the RFC info page and RFC search results. For example, an RFC can be moved from Proposed Standard to Internet Standard (as described in [RFC 6410](/info/rfc6410/)) or from Informational to Historic. For a list of all RFCs that have changed status, please see the [list of status changes](/status_changes/).
+Yes, the status of an RFC can change; this information is available in several locations including the RFC info page and RFC search results. For example, an RFC can be moved from Proposed Standard to Internet Standard (as described in [RFC 6410](/info/rfc6410/)) or from Informational to Historic. For a list of all RFCs that have changed status, please see the [list of status changes](/status-changes/).
 
 ## How can I correct an error in a published RFC? {#errata}
 
-You **cannot!** Once an RFC is published, it cannot be changed. The RFCs form an archival series. If the bug represents a change of content, a revised RFC can be written that obsoletes the one in error. For both technical and editorial errors, the RFC Editor provides a list of errata for published RFCs. Use the [RFC Errata page](/errata/) to look up errata by RFC number or view the complete list. Also, search results from the [RFC search page](/search/) include hyperlinks to any corresponding errata entries. To report an error in an RFC, please use the form available from the RFC Errata page (see [How to Report Errata](/how-to-report) for details).
+You **cannot!** Once an RFC is published, it cannot be changed. The RFCs form an archival series. If the bug represents a change of content, a revised RFC can be written that obsoletes the one in error. For both technical and editorial errors, the RFC Editor provides a list of errata for published RFCs. Use the [RFC Errata page](/series/rfc-errata/) to look up errata by RFC number or view the complete list. Also, search results from the [RFC search page](/search/) include hyperlinks to any corresponding errata entries. To report an error in an RFC, please use the form available from the RFC Errata page (see [How to Report Errata](/series/rfc-errata/#how-to-report-an-erratum) for details).
 
 For RFCs that have verified technical errata, there are files available with the errata shown inline (when possible). They are listed as "HTML with inline errata" in the RFC search results and info pages. For example:  
 [RFC 5234](/rfc/inline-errata/rfc5234/).
@@ -61,13 +61,13 @@ Yes. An announcement of each new RFC is sent to all members of the rfc-dist mail
 
 ## I cannot retrieve the text of an RFC. Why not? {#retrieve}
 
-There is a [list](/never-issued) of RFC numbers that were issued to documents that were never actually published. This explains the occasional gap between numbers. The current procedures are set up to try very hard to avoid this situation in the future. In particular, RFC numbers are never reserved; rather, they are assigned at the last moment in the editorial process.
+There is a [list](/never-issued/) of RFC numbers that were issued to documents that were never actually published. This explains the occasional gap between numbers. The current procedures are set up to try very hard to avoid this situation in the future. In particular, RFC numbers are never reserved; rather, they are assigned at the last moment in the editorial process.
 
-In addition, some RFCs prior to 800 existed only on paper. The RFC Editor has an ["RFC Online"](/old/rfc-online-2008.html) project to make the entire RFC series available online. However, this process has necessarily had lower priority than editing new RFCs. We are grateful for the help of volunteers in the Internet community who entered and nroffed text of the missing online RFCs.
+In addition, some RFCs prior to 800 existed only on paper. The RFC Editor has an ["RFC Online"](https://dashboard.rfc-editor.org/old/rfc-online-2008.html) project to make the entire RFC series available online. However, this process has necessarily had lower priority than editing new RFCs. We are grateful for the help of volunteers in the Internet community who entered and nroffed text of the missing online RFCs.
 
 ## When I retrieve an RFC, every line ends in "^M". What gives? {#controlM}
 
-See ["The End-of-Line Story"](/old/EOLstory.txt) for a historical account of the problem and possible solutions.
+See ["The End-of-Line Story"](https://dashboard.rfc-editor.org/old/EOLstory.txt) for a historical account of the problem and possible solutions.
 
 ## Can I get a hard copy of the RFCs? {#hardcopy}
 
@@ -75,11 +75,11 @@ The RFC Editor does not publish the repository in hard copy. There are several r
 
 ## How do I get an RFC published? {#how}
 
-See [the RFC publication process](/pubprocess/).
+See [the RFC publication process](/authors/rfc-edit/).
 
 ## Once my document has been sent to the IESG for review, or approved by the IESG for publication, how do I know the RFC Editor has it in their queue? {#in-queue}
 
-Please look at the [RFC Editor Queue](/current_queue/).
+Please look at the [RFC Editor Queue](/authors/rfc-edit/pub-queue/).
 
 ## How long does it take for a document to become an RFC? {#howlong}
 
@@ -95,15 +95,15 @@ If expedited publication is needed (including release of an RFC number only) to 
 
 ## I just realized my document has typos, or my address or affiliation has changed. What do I do? {#typos}
 
-If your document is in the [RFC Editor Queue](/current_queue/), please go ahead and send the changes to the [RFC Editor](mailto:rfc-editor@rfc-editor.org) at any time.
+If your document is in the [RFC Editor Queue](/authors/rfc-edit/pub-queue/), please go ahead and send the changes to the [RFC Editor](mailto:rfc-editor@rfc-editor.org) at any time.
 
 ## What style guide does the RFC Editor use? {#style}
 
-See the [RFC Style Guide](/styleguide). Also, we generally refer to ["The Chicago Manual"](https://www.chicagomanualofstyle.org/home.html).
+See the [RFC Style Guide](/authors/rfc-style-guide/). Also, we generally refer to ["The Chicago Manual"](https://www.chicagomanualofstyle.org/home.html).
 
 ## How should RFCs be listed in the references section? {#refs}
 
-References to RFCs should appear as described in the [Online Portion of the RFC Editor Style Guide](/styleguide/part2/); see "Referencing RFCs".
+References to RFCs should appear as described in the [Online Portion of the RFC Editor Style Guide](/authors/rfc-style-guide/); see "Referencing RFCs".
 
 We recommend using these files for referencing RFCs:  
 XML: via [BibXML Service](https://bib.ietf.org) (e.g., [https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml](https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml))  
@@ -123,7 +123,7 @@ xml2rfc will reference the most current version of the I-D when this format is u
 
 ## Will I have a chance to look over my document before it becomes an RFC? {#lastlook}
 
-Yes, during AUTH48 state. See [Publication Process](/pubprocess/) and [Authors' Final Review (AUTH48)](/pubprocess/auth48/).
+Yes, during AUTH48 state. See [Publication Process](/authors/rfc-edit/) and [Authors' Final Review (AUTH48)](/authors/rfc-edit/auth48/).
 
 ## One of the authors is no longer available; how do we proceed? {#missingauthor}
 
@@ -141,11 +141,11 @@ The WG chairs and Area Directors are CC'ed on every message sent from the RFC Ed
 
 The Document Shepherd (when not one of the WG chairs) is also CC'ed on each message from the RFC Editor during the publication process.
 
-After the RFC is published, the authors as well as the WG chairs and Area Directors receive the notification message if [errata](/errata/) are reported for that RFC.
+After the RFC is published, the authors as well as the WG chairs and Area Directors receive the notification message if [errata](https://errata.rfc-editor.org) are reported for that RFC.
 
 ## What if I want to include diagrams in an RFC that cannot be rendered in ASCII? {#enhanced}
 
-You can use SVG; please see [How do I include SVG in my document?](/materials/FAQ-xml2rfcv3.html#name-how-do-i-include-svg-in-my-).
+You can use SVG; please see [How do I include SVG in my document?](https://materials.rfc-editor.org/FAQ-xml2rfcv3.html#name-how-do-i-include-svg-in-my-).
 
 For background, before the transition to v3 XML, there was an option to post a PDF with enhanced images after the ASCII text was published. It would contain the exact text of the RFC with diagrams added. This file was produced by the authors. Since 16 September 2020, authors may no longer submit enhanced PDF files, as they can use SVG to create their figures in the RFC.
 
@@ -167,7 +167,7 @@ April 1st submissions are the only RFCs-to-be that do not need to be posted as I
 
 ## How does AUTH48 work? {#process}
 
-See the instructions for completing AUTH48 [here](/pubprocess/auth48/).
+See the instructions for completing AUTH48 [here](/authors/rfc-edit/auth48/).
 
 ## You sent me the URL for my XML file, but I can't view the XML file in my browser. How do I retrieve it? {#xmlfile}
 

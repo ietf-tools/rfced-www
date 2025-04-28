@@ -7,7 +7,7 @@
     "build:nuxt": "npm run build",
     "build:dev": "npm run build:nuxt:dev",
     "build:nuxt:dev": "npx nuxt build --envName development",
-    "dev": "npm run generate && npm run devv:nuxt",
+    "dev": "npm run generate && npm run dev:nuxt",
     "dev:nuxt": "nuxt dev",
     "cleanup": "nuxt cleanup",
     "preview": " npm run build:nuxt && nuxt preview",

@@ -15,7 +15,7 @@
 
 ## Report a Copyright Infringement
 
-In accordance with the Digital Millennium Copyright Act (“DMCA”), Pub. L. 105-304, the RFC Editor has designated an agent to receive notification of alleged copyright infringement occurring in the rfc-editor.org domain.
+In accordance with the Digital Millennium Copyright Act ("DMCA"), Pub. L. 105-304, the RFC Editor has designated an agent to receive notification of alleged copyright infringement occurring in the rfc-editor.org domain.
 
 If you believe that your copyrighted work is being infringed by content available via the rfc-editor.org domain, please notify our designated agent specified below. Please note, this agent is for reporting of copyright infringement and for requests for copyright permission.
 

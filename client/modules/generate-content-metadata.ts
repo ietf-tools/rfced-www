@@ -78,6 +78,9 @@ export default defineNuxtModule({
 
     nuxt.hook('builder:watch', async (_event, watcherPath) => {
       if (
+        // If watcherPath is about a file just updated by one of our modules
+        // then we don't want to do anything
+        // otherwise we could be stuck in a loop
         watcherPath.includes('generated/') ||
         watcherPath.includes('types/')
       ) {

@@ -17,14 +17,14 @@ Other RFC Statuses are:
 - **Informational.** An "Informational" specification is published for the general information of the Internet community, and does not represent an Internet community consensus or recommendation. [RFC 2026, Section 4.2.2](/rfc/rfc2026/#section-4.2.2)
 - **Experimental.** The "Experimental" designation typically denotes a specification that is part of some research or development effort. Such a specification is published for the general information of the Internet technical community and as an archival record of the work. [RFC 2026, Section 4.2.1](/rfc/rfc2026/#section-4.2.1)
 - **Historic**.A specification describing a technology that is no longer in use or no longer recommended for use is assigned the "Historic" Status.
-- **Best Current Practice** (BCP). BCPs have a dual role: one is to document IETF processes as agreed by the IETF community, and the other is explained in [RFC 2026, Section 5](/rfc/rfc2026/#section-5) as: “since the Internet itself is composed of networks operated by a great variety of organizations, with diverse goals and rules, good user service requires that the operators and administrators of the Internet follow some common guidelines for policies and operations.”
+- **Best Current Practice** (BCP). BCPs have a dual role: one is to document IETF processes as agreed by the IETF community, and the other is explained in [RFC 2026, Section 5](/rfc/rfc2026/#section-5) as: "since the Internet itself is composed of networks operated by a great variety of organizations, with diverse goals and rules, good user service requires that the operators and administrators of the Internet follow some common guidelines for policies and operations."
 - **Unknown**. RFCs that were published before Statuses were introduced (before RFC 1128\) are mostly considered to have an Unknown Status, with a handful having had Statuses retroactively applied.
 
 ## Subseries
 
 There are two subseries within the RFC corpus. Not all RFCs are part of a subseries. Subseries identifiers are intended to be stable identifiers for an RFC or a group of related RFCs. When an RFC is obsoleted, the RFC is dropped from the subseries, but the subseries identifier will remain the same. When a related RFC is published, it may be added to an existing subseries identifier.
 
-- **STD**. STDs are stable identifiers for “Internet Standards.” An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
+- **STD**. STDs are stable identifiers for "Internet Standards." An STD may consist of a single RFC or a group of RFCs related to a specific protocol.
 - **BCP**. BCPs are stable identifiers for Best Current Practices. A BCP may consist of a single RFC or a group of RFCs related to a specific IETF process or recommended guidelines.
 
 ## Stream
@@ -37,7 +37,7 @@ An RFC’s stream indicates which publication stream produced the document. Ther
 - [**Independent Submissions**](/authors/rfc-independent-submissions/) RFCs are published outside the official processes of the IETF, IAB, and IRTF but are relevant to the Internet community.
 - **Editorial** RFCs are produced by the RFC Series Working Group ([RSWG](https://datatracker.ietf.org/group/rswg/about/)) and document the policies for publishing RFCs.
 
-RFCs that were published before any stream existed are given the label “[Legacy]” in place of a stream name.
+RFCs that were published before any stream existed are given the label "[Legacy]" in place of a stream name.
 
 ## Source
 

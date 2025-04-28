@@ -5,14 +5,16 @@
     ["/rfc-index2.html", "/rfc-index2/"],
     ["/rfc-index-100a.html", "/rfc-index-100a/"],
     ["/rfc-index-100d.html", "/rfc-index-100d/"],
-    ["/status_changes.php", "/status_changes/"],
+    ["/status_changes.php", "/status-changes/"],
     ["/all_clusters.php", "/all_clusters/"],
     ["/standards", "/standards/"],
-    ["/errata.php", "/errata/"],
-    ["/source-definitions", "/source-definitions/"],
-    ["/how-to-verify", "/how-to-verify/"],
+    ["/errata.php", "https://errata.rfc-editor.org"],
+    ["/source-definitions", "/series/rfc-tips/"],
+    ["/how-to-verify", "/series/rfc-errata/"],
     ["/ien/ien-index.html", "/ien/ien-index/"],
-    ["/current_queue.php", "/current_queue/"],
-    ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"]
+    ["/current_queue.php", "/authors/rfc-edit/pub-queue/"],
+    ["/rfc/rfc*.json", "/api/v1/rfc/rfc$1.json"],
+    ["/materials/*", "https://materials.rfc-editor.org/$1"],
+    ["/in-notes/*", "https://in-notes.rfc-editor.org/$1"]
   ]
 }

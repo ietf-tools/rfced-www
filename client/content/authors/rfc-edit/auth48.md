@@ -4,8 +4,8 @@ AUTH48 is the last chance to make changes to an RFC-to-be. Once the document is 
 
 Additional resources:
 
-- [AUTH48 FAQ](/series/rfc-faq/#auth48)
-- [The Publication Process](/pubprocess/)
+- [AUTH48 FAQ](/series/rfc-faq/#process)
+- [The Publication Process](/authors/rfc-edit/)
 
 ---
 
