@@ -2,7 +2,7 @@
   <component
     :is="`h${props.level}`"
     :id="
-      getAnchorId($slots.default) // we always make an id. hasInternalLink only affects whether to show a '#' link
+      props.id ?? getAnchorId($slots.default) // we always make an id. hasInternalLink only affects whether to show a '#' link
     "
     :class="[headingStyles[`h${styleLevel || level}`], props.class, 'group']"
   >
@@ -16,7 +16,11 @@
     <slot />
     <a
       v-if="hasInternalLink"
-      :href="hasInternalLink ? `#${getAnchorId($slots.default)}` : undefined"
+      :href="
+        hasInternalLink ?
+          `#${props.id ?? getAnchorId($slots.default)}`
+        : undefined
+      "
       class="ml-2 opacity-50 no-underline group-hover:opacity-100 font-normal"
       title="Link to this heading"
       @click="hashClickHandler(`#${getAnchorId($slots.default)}`)"
@@ -73,6 +77,8 @@ type Props = {
    * DOM Id (eg the text is kebab-cased to remove whitespace but check the code for specifics).
    */
   hasInternalLink?: boolean
+  /** provide a custom id rather than deriving one from the innerText */
+  id?: string
 }
 
 const headingStyles: Record<`h${Props['level']}`, string> = {

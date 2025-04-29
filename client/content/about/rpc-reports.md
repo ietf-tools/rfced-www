@@ -14,7 +14,7 @@ The Service Level Agreement indicates the following:
 
 The figures below indicate whether we are meeting this goal.
 
-“Tier 2\*” indicates when Tier 2 is being applied in the “subsequent quarter” as mentioned above.
+"Tier 2\*" indicates when Tier 2 is being applied in the "subsequent quarter" as mentioned above.
 
 Figure 1. SLA Summary
 
@@ -36,7 +36,7 @@ Report
 
 Description
 
-[Current Queue (sortable)](/current_queue/)
+[Current Queue (sortable)](/authors/rfc-edit/pub-queue/)
 
 A list of all of the documents in the RFC Editor queue, ordered by state. (Updated dynamically)
 
@@ -48,7 +48,7 @@ RFC Editor queue summary (Updated weekly)
 
 Detailed submission and publication data
 
-[Reports Archive](/IAD-reports/)
+[Reports Archive](https://iad.rfc-editor.org/reports/)
 
 Pre-2014 reports (Was updated monthly)
 
@@ -56,28 +56,28 @@ Pre-2014 reports (Was updated monthly)
 
 Bar graph showing the number of RFCs published per year since 1969. (Updated annually).
 
-[RFC Editor Reports at IETF](/report-summary/ietf/)
+[RFC Editor Reports at IETF](https://dashboard.rfc-editor.org/report-summary/ietf/)
 
 Summary of the RFC publication process, including the state of the queue and a breakdown of the reasons for any long delays in the publication process. The report also may include recent changes in policy and improvements in tools or procedures. (Updated quarterly)
 
-[RFC Errata Reports](/IAD-reports/)
+[RFC Errata Reports](https://iad.rfc-editor.org/reports/)
 
 Archived errata reports (2008-2014) with stats by status, stream, and type.
 
-[RFC Status Changes (post-publication)](/status_changes/)
+[RFC Status Changes (post-publication)](/status-changes/)
 
 List of the RFCs whose statuses have changed since publication. (Updated as needed)
 
 This page is archived annually; see
 
-- [2014](/old/Dec2014/)
-- [2015](/report-summary/2015-2/)
-- [2016](/report-summary/report-summary-2016/)
-- [2017](/report-summary/report-summary-2017/)
-- [2018](/report-summary/report-summary-2018/)
-- [2019](/report-summary/report-summary-2019/)
-- [2020](/report-summary/report-summary-2020/)
-- [2021](/report-summary/report-summary-2021/)
-- [2022](/report-summary/report-summary-2022/)
-- [2023](/report-summary/report-summary-2023/)
-- [2024](/report-summary/report-summary-2024/)
+- [2014](https://dashboard.rfc-editor.org/old/Dec2014/)
+- [2015](https://dashboard.rfc-editor.org/report-summary/2015-2/)
+- [2016](https://dashboard.rfc-editor.org/report-summary/report-summary-2016/)
+- [2017](https://dashboard.rfc-editor.org/report-summary/report-summary-2017/)
+- [2018](https://dashboard.rfc-editor.org/report-summary/report-summary-2018/)
+- [2019](https://dashboard.rfc-editor.org/report-summary/report-summary-2019/)
+- [2020](https://dashboard.rfc-editor.org/report-summary/report-summary-2020/)
+- [2021](https://dashboard.rfc-editor.org/report-summary/report-summary-2021/)
+- [2022](https://dashboard.rfc-editor.org/report-summary/report-summary-2022/)
+- [2023](https://dashboard.rfc-editor.org/report-summary/report-summary-2023/)
+- [2024](https://dashboard.rfc-editor.org/report-summary/report-summary-2024/)

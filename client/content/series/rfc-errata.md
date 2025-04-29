@@ -21,7 +21,7 @@ Errata are listed in the Errata section of the sidebar for each RFC when they ex
 If you find an error, you can report an erratum for the RFC.
 
 1. Check if an erratum for the topic already exists. Remember to check rejected errata and errata that have been held for document updates, not just the verified errata.
-2. If no related erratum exists, click the “Report a new erratum” button in the sidebar of the RFC.
+2. If no related erratum exists, click the "Report a new erratum" button in the sidebar of the RFC.
 3. Fill out the form provided with the appropriate information. You will receive email notifications about your errata as it is processed.
 
 Further information on how errata reports are handled exists in:

@@ -58,7 +58,7 @@
               class="inline"
             >
               <A
-                :href="authorPathBuilder(author)"
+                :href="authorMailtoBuilder(author)"
                 class="whitespace-nowrap underline inline-block py-0.5 pr-1 mb-0.5"
               >
                 {{ author.name }}
@@ -128,9 +128,9 @@
       <Heading level="3" class="mt-5 mb-2">Formats</Heading>
       <ul class="text-sm flex flex-col gap-2">
         <li v-for="(format, formatIndex) in formats" :key="formatIndex">
-          <A :href="format.url" class="underline block px-2 -ml-2">{{
-            format.title
-          }}</A>
+          <A :href="format.url" class="underline block px-2 -ml-2">
+            {{ format.title }}
+          </A>
         </li>
       </ul>
     </TabsContent>
@@ -160,7 +160,7 @@ import type { Rfc } from '~/generated/red-client'
 import { formatDatePublished } from '~/utilities/rfc'
 import { COMMA, SPACE } from '~/utilities/strings'
 import {
-  authorPathBuilder,
+  authorMailtoBuilder,
   rfcCitePathBuilder,
   rfcFormatPathBuilder
 } from '~/utilities/url'

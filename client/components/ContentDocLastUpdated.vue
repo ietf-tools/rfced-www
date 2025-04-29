@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { DateTime } from 'luxon'
 import _contentMetadata from '../generated/content-metadata.json'
-import type { ContentMetadata } from '~/scripts/generate-content-metadata'
+import type { ContentMetadata } from '~/modules/generate-content-metadata'
 
 const contentMetadata: ContentMetadata = _contentMetadata
 const route = useRoute()

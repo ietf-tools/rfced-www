@@ -12,4 +12,4 @@ When an I-D is approved for publication, it is sent to the RFC Production Center
 
 The official RFC is then published on rfc-editor.org. Once published, the content of an RFC does not change. However, an RFC may be obsoleted or updated (check the metadata), and [errata](/series/rfc-errata/) may be filed against them.
 
-You can learn more about the conventions used in RFCs on the “[Tips for Reading RFCs](/series/rfc-tips/)” page.
+You can learn more about the conventions used in RFCs on the "[Tips for Reading RFCs](/series/rfc-tips/)" page.

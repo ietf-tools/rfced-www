@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { IAB_URL, IETF_URL, IRTF_URL } from '~/utilities/url'
+</script>
+
 <template>
   <div class="container mx-auto">
     <div class="absolute pointer-events-none inset-0 overflow-hidden">
@@ -15,31 +19,38 @@
         The official home of RFCs
       </Heading>
       <div class="self-end lg:text-right">
-        <A
+        <AValidHref
           href="/series/rfc/"
           class="rounded text-blue-100 lg:text-white inline-block px-5 py-3 font-bold text-nowrap hover:bg-black"
         >
           What is an RFC?
           <GraphicsChevron class="-rotate-90 w-[16px] inline-block" />
-        </A>
+        </AValidHref>
       </div>
     </div>
 
     <div class="lg:w-2/3 xl:w-1/2 mb-4">
       <p class="hidden leading-6 lg:block pl-5 md:p-0 text-pretty">
         RFCs outline computer networking and Internet foundations, including
-        <A href="/internet-standards">Internet Standards</A> and historical or
-        informative content. They are published by the RFC Editor for the
-        <A href="/ietf">
-          <abbr title="Internet Engineering Task Force">IETF</abbr> </A
-        >,
-        <A href="/irtf"
-          ><abbr title="Internet Reserach Task Force">IRTF</abbr></A
-        >,
-        <A href="/iab"><abbr title="Internet Architecture Board">IAB</abbr></A
-        >, and
-        <A href="/ise"><abbr title="Independent Submission Editor">ISE</abbr></A
-        >, which collectively form the authoritative source for RFCs
+        <AValidHref href="/standards/">Internet Standards</AValidHref>
+        and historical or informative content. They are published by the RFC
+        Editor for the
+        <AValidHref :href="IETF_URL">
+          <abbr title="Internet Engineering Task Force">IETF</abbr>
+        </AValidHref>
+        ,
+        <AValidHref :href="IRTF_URL">
+          <abbr title="Internet Research Task Force">IRTF</abbr>
+        </AValidHref>
+        ,
+        <AValidHref :href="IAB_URL">
+          <abbr title="Internet Architecture Board">IAB</abbr>
+        </AValidHref>
+        , and
+        <AValidHref href="/authors/rfc-independent-submissions/">
+          <abbr title="Independent Submission Editor">ISE</abbr>
+        </AValidHref>
+        , which collectively form the authoritative source for RFCs
       </p>
       <SearchBox />
     </div>

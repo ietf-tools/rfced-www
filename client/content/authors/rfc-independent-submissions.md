@@ -1,6 +1,6 @@
 # Independent Submissions
 
-The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. [RFC 8730, “Independent Submission Editor Model”](/info/rfc8730/), as updated by [RFC 9280](/info/rfc9280/), describes the roles of
+The Independent Submission Stream allows RFC publication for some documents that are outside the official processes of the [IETF](https://www.ietf.org/), [IAB](https://www.iab.com/), and [IRTF](https://www.irtf.org/) but are relevant to the Internet community and achieve reasonable levels of technical and editorial quality. [RFC 8730, "Independent Submission Editor Model"](/info/rfc8730/), as updated by [RFC 9280](/info/rfc9280/), describes the roles of
 
 - the Independent Submissions Editor (ISE) and
 - the [Independent Submissions Editorial Board](#independent-submissions-editorial-board), which provides review for the ISE.
@@ -149,7 +149,7 @@ It’s important to note that many drafts do not make it past Step 4, and that e
 
 Information about the current state of an independent submission can be found on the [Datatracker](https://datatracker.ietf.org/) page for that draft.  
 ![Snapshot of a Datatracker entry for an Internet-Draft that shows the document’s state.](/images/authors/rfc-independent-submissions-snapshot.png)
-Note that a document can sometimes appear to go “backwards” in the process. This is not unusual, indicating that either additional reviews require more work on someone’s part.
+Note that a document can sometimes appear to go "backwards" in the process. This is not unusual, indicating that either additional reviews require more work on someone’s part.
 
 #### Who makes decisions about independent submissions?
 

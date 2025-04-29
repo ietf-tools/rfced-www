@@ -13,13 +13,13 @@
         <template v-if="props.rfcNumberLimit !== undefined">
           <template v-if="props.sort === 'ascending'">
             This page shows the first {{ props.rfcNumberLimit }} RFCs published.
-            Click <A :href="RFC_INDEX_ALL_ASCENDING">Show All</A> to get the
-            full list (ascending). RFCs are listed in this format:
+            Click <A :href="RFC_INDEX_ALL_ASCENDING_PATH">Show All</A> to get
+            the full list (ascending). RFCs are listed in this format:
           </template>
           <template v-else-if="props.sort === 'descending'">
             This page shows the last {{ props.rfcNumberLimit }} RFCs published.
-            Click <A :href="RFC_INDEX_ALL_DESCENDING">Show All</A> to get the
-            full list (descending). RFCs are listed in this format:
+            Click <A :href="RFC_INDEX_ALL_DESCENDING_PATH">Show All</A> to get
+            the full list (descending). RFCs are listed in this format:
           </template>
         </template>
         <template v-else>
@@ -98,10 +98,10 @@
       <template v-if="props.rfcNumberLimit !== undefined">
         <p class="pt-4">
           <template v-if="props.sort === 'ascending'">
-            <A :href="RFC_INDEX_ALL_ASCENDING">Show All</A>
+            <A :href="RFC_INDEX_ALL_ASCENDING_PATH">Show All</A>
           </template>
           <template v-else-if="props.sort === 'descending'">
-            <A :href="RFC_INDEX_ALL_DESCENDING">Show All</A>
+            <A :href="RFC_INDEX_ALL_DESCENDING_PATH">Show All</A>
           </template>
         </p>
       </template>
@@ -115,8 +115,8 @@ import { getRedClient, getRFCs } from '~/utilities/redClientWrappers'
 import { rfcToRfcIndexRow } from '~/utilities/rfc-index-html'
 import {
   PUBLIC_SITE,
-  RFC_INDEX_ALL_ASCENDING,
-  RFC_INDEX_ALL_DESCENDING,
+  RFC_INDEX_ALL_ASCENDING_PATH,
+  RFC_INDEX_ALL_DESCENDING_PATH,
   infoRfcPathBuilder
 } from '~/utilities/url'
 

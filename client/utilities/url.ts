@@ -1,29 +1,130 @@
 import { kebabCase } from 'lodash-es'
-import type { Rfc } from '~/generated/red-client'
-import type ContentMetadata from '~/generated/content-metadata.json'
-import { parseRFCId } from '~/utilities/rfc'
+import type { Rfc } from '../generated/red-client'
+import { parseRFCId } from '../utilities/rfc'
 import type { SearchParams } from '~/stores/search'
 
-export type MarkdownPaths = keyof typeof ContentMetadata
+export type ValidHrefs =
+  | MarkdownValidHrefs // generated global type from types/markdown-valid-hrefs.d.ts
+  | `https://${string}` // any external link is treated as valid (even if it might 404 we don't verify further)
+  | typeof HOME_PATH
+  | typeof RFC_INDEX_XML_PATH
+  | typeof RFC_INDEX_ALL_ASCENDING_PATH
+  | typeof RFC_INDEX_100_ASCENDING_PATH
+  | typeof RFC_INDEX_ALL_DESCENDING_PATH
+  | typeof RFC_INDEX_100_DESCENDING_PATH
+  | typeof RSS_PATH
+  | typeof ATOM_PATH
+  | typeof STANDARDS_PATH
+  | typeof IN_NOTES_BCP_REF_TXT
+  | typeof IN_NOTES_RFC_REF_TXT
+  | typeof IN_NOTES_STD_REF_TXT
+  | typeof QUEUE_XML_PATH
+  | typeof QUEUE_2_XML_PATH
+  | typeof REPORTS_CURRENT_QUEUE_STATS_TXT_PATH
+  | typeof NEVER_ISSUED_PATH
+  | typeof ALL_CLUSTERS_PATH
+  | typeof STATUS_CHANGES_PATH
+  | (typeof _FIXME_URLS)[number]
+  | ReturnType<typeof markdownPathBuilder>
+  | ReturnType<typeof searchPathBuilder>
+  | ReturnType<typeof authorMailtoBuilder>
+  | ReturnType<typeof refsRefTxtPathBuilder>
+  | ReturnType<typeof infoRfcPathBuilder>
+  | ReturnType<typeof rfcJSONPathBuilder>
+  | ReturnType<typeof rfcPathBuilder>
+  | ReturnType<typeof materialsTxtBuilder>
+  | ReturnType<typeof rfcFormatPathBuilder>
+  | ReturnType<typeof rfcCitePathBuilder>
+  | ReturnType<typeof wikiDokuPathBuilder>
+  | ReturnType<typeof materialsPathBuilder>
+  | ReturnType<typeof dashboardPathBuilder>
+
+export const HOME_PATH = '/'
 
 export const IETF_PRIVACY_STATEMENT_URL =
   'https://www.ietf.org/privacy-statement/'
-
 export const PUBLIC_SITE = 'https://www.rfc-editor.org'
+export const DATATRACKER_URL = 'https://datatracker.ietf.org'
+export const IETF_URL = 'https://www.ietf.org'
+export const IRTF_URL = 'https://www.irtf.org'
+export const IAB_URL = 'https://www.iab.org'
+export const INTERNET_SOCIETY_URL = 'https://www.internetsociety.org'
+export const MATERIALS_URL = 'https://materials.rfc-editor.org'
+export const IAD_URL = 'https://iad.rfc-editor.org'
+export const DASHBOARD_URL = 'https://dashboard.rfc-editor.org'
 
-export const SEARCH_PATH = '/search/' as const
+export const SEARCH_PATH = '/search/'
+export const SEARCH_API_PATH = '/api/search/'
 
-export const SEARCH_API_PATH = '/api/search/' as const
+export const RFC_INDEX_XML_PATH = '/rfc-index.xml'
+export const RFC_INDEX_ALL_ASCENDING_PATH = '/rfc-index/'
+export const RFC_INDEX_100_ASCENDING_PATH = '/rfc-index-100a/'
+export const RFC_INDEX_ALL_DESCENDING_PATH = '/rfc-index2/'
+export const RFC_INDEX_100_DESCENDING_PATH = '/rfc-index-100d/'
+export const REPORTS_CURRENT_QUEUE_STATS_TXT_PATH = '/reports/CurrQstats.txt'
+
+export const STANDARDS_PATH = '/standards/'
+
+export const RSS_PATH = '/rfcrss.xml'
+export const ATOM_PATH = '/rfcatom.xml'
+
+export const IN_NOTES_BCP_REF_TXT = '/in-notes/bcp-ref.txt'
+export const IN_NOTES_RFC_REF_TXT = '/in-notes/rfc-ref.txt'
+export const IN_NOTES_STD_REF_TXT = '/in-notes/std-ref.txt'
+
+export const QUEUE_XML_PATH = '/queue.xml'
+export const QUEUE_2_XML_PATH = '/queue2.xml'
+
+export const NEVER_ISSUED_PATH = '/never-issued/'
+export const ALL_CLUSTERS_PATH = '/all_clusters/'
+export const STATUS_CHANGES_PATH = '/status-changes/'
+
+export const FIXME_IEN_INDEX_PATH = '/ien/ien-index/'
+export const FIXME_CONTACT_AT_IETF_PATH = '/contact/at-ietf/'
+export const FIXME_REPORTS_SUBPUB_STATS_PATH = '/reports/subpub_stats/'
+export const FIXME_RFCS_PER_YEAR_PATH = '/rfcs-per-year/'
+export const FIXME_ERRATA_DEFINITIONS_PATH = '/errata-definitions/'
+export const FIXME_INNOTES_PRERELEASE_PATH = '/in-notes/prerelease/'
+
+export const API_ROUTES_TO_PRERENDER = [
+  REPORTS_CURRENT_QUEUE_STATS_TXT_PATH,
+  RFC_INDEX_ALL_ASCENDING_PATH,
+  RFC_INDEX_100_ASCENDING_PATH,
+  RFC_INDEX_ALL_DESCENDING_PATH,
+  RFC_INDEX_100_DESCENDING_PATH,
+  QUEUE_XML_PATH,
+  QUEUE_2_XML_PATH,
+  IN_NOTES_BCP_REF_TXT,
+  IN_NOTES_RFC_REF_TXT,
+  IN_NOTES_STD_REF_TXT,
+  RSS_PATH,
+  ATOM_PATH,
+  NEVER_ISSUED_PATH // not an API route but has rarely changing API-driven content
+] as const
+
+/**
+ * URLs to decide upon.
+ * Eventually these might be wrong but we'll temporarily add them to VALID_HREFS
+ */
+const _FIXME_URLS = [
+  FIXME_IEN_INDEX_PATH,
+  FIXME_CONTACT_AT_IETF_PATH,
+  FIXME_REPORTS_SUBPUB_STATS_PATH,
+  FIXME_RFCS_PER_YEAR_PATH,
+  FIXME_ERRATA_DEFINITIONS_PATH,
+  FIXME_INNOTES_PRERELEASE_PATH
+] as const
 
 type SearchKeys = keyof SearchParams
 
 export const searchPathBuilder = (
   searchParams: Partial<SearchParams>
-): string => {
+): `${typeof SEARCH_PATH}${string}` => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
   return `${SEARCH_PATH}${hasParams ? '?' : ''}${
     hasParams ?
       (Object.keys(searchParams) as SearchKeys[])
+        .sort() // normalize order
         .map((searchKey) => {
           const searchValue = searchParams[searchKey]
           return searchValue ? `${searchKey}=${searchValue}` : ''
@@ -34,70 +135,93 @@ export const searchPathBuilder = (
   }`
 }
 
-export const RFC_INDEX_ALL_ASCENDING = '/rfc-index/' as const
-
-export const RFC_INDEX_100_ASCENDING = '/rfc-index-100a/' as const
-
-export const RFC_INDEX_ALL_DESCENDING = '/rfc-index2/' as const
-
-export const RFC_INDEX_100_DESCENDING = '/rfc-index-100d/' as const
-
-export const refsRefTxtPathBuilder = (rfcId: string) => {
+export const refsRefTxtPathBuilder = (
+  rfcId: string
+): `/refs/ref${string}.txt` => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/refs/ref${rfcParts.number}.txt`
+  return `/refs/ref${rfcParts.number}.txt` as const
 }
 
-export const infoRfcPathBuilder = (rfcId: string) => {
+export const infoRfcPathBuilder = (
+  rfcId: string
+): `/info/${string}${string}/` => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
+  return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/` as const
 }
 
-export const rfcJSONPathBuilder = (rfcId: string) => {
+export const rfcJSONPathBuilder = (
+  rfcId: string
+): `/api/v1/rfc/rfc${string}.json` => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/api/v1/rfc/rfc${rfcParts.number}.json`
+  return `/api/v1/rfc/rfc${rfcParts.number}.json` as const
 }
 
 /**
- * This is only used for TS to check valid markdown paths. It's just an identity function.
+ * This is only used for TS to check valid markdown paths.
+ * It's just an identity function.
  */
-export const markdownPathBuilder = (markdownPath: MarkdownPaths) => markdownPath
+export const markdownPathBuilder = (markdownPath: MarkdownValidHrefs) =>
+  markdownPath
 
-export const rfcPathBuilder = (rfcId: string) => {
+export const rfcPathBuilder = (
+  rfcId: string,
+  sectionHash?: `section-${string}`
+) => {
   const rfcParts = parseRFCId(rfcId)
 
-  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/`
+  return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/${sectionHash ? (`#${sectionHash}` as const) : ''}` as const
+}
+
+export const materialsTxtBuilder = (txtFile: `${string}.txt`) => {
+  return `/materials/${txtFile}` as const
 }
 
 export const rfcCitePathBuilder = (
   rfcId: string,
   format: 'txt' | 'bibTeX' | 'xml'
-): string => {
+) => {
   const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'txt':
-      return `${PUBLIC_SITE}/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt`
+      return `/refs/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.txt` as const
     case 'xml':
-      return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml`
+      return `https://bib.ietf.org/public/rfc/bibxml/reference.${parsedRfcId.type.toUpperCase()}.${parsedRfcId.number}.xml` as const
     case 'bibTeX':
-      return `https://datatracker.ietf.org/doc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/bibtex/`
+      return `https://datatracker.ietf.org/doc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}/bibtex/` as const
   }
 }
 
-export const rfcFormatPathBuilder = (rfcId: string, format: 'html'): string => {
+export const rfcFormatPathBuilder = (rfcId: string, format: 'html') => {
   const parsedRfcId = parseRFCId(rfcId)
 
   switch (format) {
     case 'html':
-      return `${PUBLIC_SITE}/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html`
+      return `/rfc/${parsedRfcId.type.toLowerCase()}${parsedRfcId.number}.html` as const
   }
 }
 
-export const authorPathBuilder = (author: Rfc['authors'][number]): string => {
-  return `mailto:${author.email}`
+export const wikiDokuPathBuilder = (wikiPath: string) => {
+  return `/rpc/wiki/doku.php?id=${wikiPath}` as const
+}
+
+export const materialsPathBuilder = (materialsPath: string) => {
+  return `${MATERIALS_URL}${materialsPath}` as const
+}
+
+export const iadReportsPathBuilder = (IADPath: string) => {
+  return `${IAD_URL}${IADPath}` as const
+}
+
+export const dashboardPathBuilder = (dashboardPath: string) => {
+  return `${DASHBOARD_URL}${dashboardPath}` as const
+}
+
+export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
+  return `mailto:${author.email}` as const
 }
 
 const mailtoRegex = /^mailto:/
@@ -117,6 +241,8 @@ export const isExternalLink = (href?: string): boolean => {
 }
 
 export const isInternalLink = (href?: string): boolean => !isExternalLink(href)
+
+export const isHashLink = (href?: string): boolean => !!href?.startsWith('#')
 
 /**
  * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)
@@ -139,6 +265,12 @@ export const textToAnchorId = (text: string): string | undefined => {
 
   return kebabCase(normalized)
 }
+
+/**
+ * Based on the URL of the API detect whether it's prod
+ */
+export const isProdApi = (apiBaseUrl: string): boolean =>
+  !apiBaseUrl.includes('localhost')
 
 export const parseMaybeRfcLink = (
   href?: string

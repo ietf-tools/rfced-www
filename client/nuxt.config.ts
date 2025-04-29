@@ -2,6 +2,7 @@
 import tailwindcss from '@tailwindcss/vite'
 import redirects from './redirects.json'
 import { isMiddlewareRedirect } from './utilities/redirects'
+import { API_ROUTES_TO_PRERENDER } from './utilities/url'
 
 type RouteRules = NonNullable<
   Parameters<typeof defineNuxtConfig>[0]['routeRules']
@@ -26,6 +27,15 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/content'
   ],
+  content: {
+    markdown: {
+      remarkPlugins: {
+        'remark-heading-id': {
+          /* Options */
+        }
+      }
+    }
+  },
   colorMode: {
     classSuffix: ''
   },
@@ -60,63 +70,46 @@ export default defineNuxtConfig({
     cfServiceTokenSecret: '', // NUXT_CF_SERVICE_TOKEN_SECRET env var
     public: {
       // These settings are available client-side (others are server-side only)
-      datatrackerBase: 'http://localhost:8000/', // NUXT_PUBLIC_DATATRACKER_BASE env var
+      datatrackerBase: 'http://localhost:8000/' // NUXT_PUBLIC_DATATRACKER_BASE env var
     }
   },
-  // https://nitro.build/config#routerules
-  // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
-  routeRules: {
-    // The prerenders can increase build time A LOT but it's better than
-    // users waiting for responses.
-    '/': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc-index.txt': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc-index.xml': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc-index/': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc-index2/': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc-index-100a/': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc-index-100d/': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfcatom.xml': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfcrss.xml': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/reports/CurrQstats.txt': {
-      swr: oneDayInSeconds,
-      prerender: true
-    },
-    '/rfc/rfc**.json': {
-      swr: oneDayInSeconds,
-      prerender: false // there are too many RFCs to prerender them, but we can at least cache them via `swr: true`
-    },
-    ...redirects.redirects
-      .filter((redirect) => !isMiddlewareRedirect(redirect[0]))
-      .reduce((acc, redirect) => {
-        acc[redirect[0]] = { redirect: { to: redirect[1], statusCode: 301 } }
-        return acc
-      }, {} as RouteRules)
+  $production: {
+    /**
+     * Only apply route rules in production builds, because prerendering takes a while
+     */
+    routeRules: {
+      // https://nitro.build/config#routerules
+      // https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
+      '/': {
+        swr: oneDayInSeconds,
+        prerender: true
+      },
+      ...Object.assign(
+        // merge the array of route config into a single object so we can spread it into routeRules
+        {},
+        ...API_ROUTES_TO_PRERENDER.map((routePath) => ({
+          [routePath]: {
+            swr: oneDayInSeconds,
+            // The prerenders for API routes can increase build time by 10 minutes but it's
+            // better than users waiting for responses.
+            prerender: true
+          }
+        }))
+      ),
+      '/rfc/rfc**.json': {
+        swr: oneDayInSeconds,
+        prerender: false // there are too many RFCs to prerender them, but we can at least cache rendering via `swr`
+      },
+      ...redirects.redirects
+        .filter((redirect) => !isMiddlewareRedirect(redirect[0]))
+        .reduce((acc, redirect) => {
+          const [fromPath, toPathOrUrl] = redirect
+          if (typeof fromPath !== 'string' || typeof toPathOrUrl !== 'string') {
+            throw Error('Bad redirects.json file should only contain strings')
+          }
+          acc[fromPath] = { redirect: { to: toPathOrUrl, statusCode: 301 } }
+          return acc
+        }, {} as RouteRules)
+    }
   }
 })
