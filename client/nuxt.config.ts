@@ -17,21 +17,23 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
-    // Note: regarding 'Nuxt Device' see note in deviceMode.ts
+    '@nuxt/content',
+    // Note: don't use 'Nuxt Device' see note in responsiveMode.ts
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/icon',
-    '@nuxt/fonts',
-    '@nuxt/content'
+    '@nuxt/fonts'
   ],
   content: {
-    markdown: {
-      remarkPlugins: {
-        'remark-heading-id': {
-          /* Options */
+    build: {
+      markdown: {
+        remarkPlugins: {
+          'remark-heading-id': {
+            /* Options */
+          }
         }
       }
     }
