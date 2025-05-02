@@ -134,3 +134,7 @@ html.dark {
   */
   -webkit-print-color-adjust: exact !important;
 }
+
+.text-shadow-bold {
+  text-shadow:-0.5px 0px 0.5px black;
+}

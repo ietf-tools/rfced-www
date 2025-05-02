@@ -2,14 +2,7 @@
   <div class="min-h-[100vh]">
     <BodyLayoutDocument>
       <template #sidebar>
-        <div class="fixed w-full min-h-[100vh] overflow-y-auto">
-          <Heading level="2" class="m-0">Table of Contents</Heading>
-          <TableOfContents
-            v-if="page?.showToc && toc"
-            :value="toc"
-            list-type="ordered"
-          />
-        </div>
+        <TableOfContentsMarkdown v-if="page?.showToc && toc" :toc="toc" />
       </template>
       <ContentRenderer v-if="page" :value="page" />
       <ContentDocLastUpdated />

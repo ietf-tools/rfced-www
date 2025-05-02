@@ -2,7 +2,8 @@
   <component
     :is="`h${props.level}`"
     :id="
-      props.id ?? getAnchorId($slots.default) // we always make an id. hasInternalLink only affects whether to show a '#' link
+      props.id ?? getAnchorId($slots.default)
+      // we always make an id. hasInternalLink only affects whether to show a '#' link
     "
     :class="[headingStyles[`h${styleLevel || level}`], props.class, 'group']"
   >
@@ -83,11 +84,11 @@ type Props = {
 
 const headingStyles: Record<`h${Props['level']}`, string> = {
   /**
-   * Do not add margins/padding here. The headings are used in many different situations
+   * Do not add default margins/padding here. The headings are used in many different situations
    * that need different margins/padding.
    *
-   * Instead pass in the `class` prop for margins/padding, or make a wrapper component if you want
-   * more reuse.
+   * Instead pass in the `class` prop for margins/padding, or make a wrapper component that passes
+   * in the `class`
    */
   h1: 'text-3xl lg:text-5xl font-bold',
   h2: 'text-2xl font-bold',
@@ -98,10 +99,6 @@ const headingStyles: Record<`h${Props['level']}`, string> = {
 }
 
 const props = defineProps<Props>()
-
-const fallbackId = `id-${useId()}`
-
-const anchorIdCache = new Map() // not a global cache
 
 type VueDefaultSlotType =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -121,20 +118,10 @@ type VueDefaultSlotType =
  * An article on the general problem: https://zelig880.com/how-to-fix-slot-invoked-outside-of-the-render-function-in-vue-3
  *
  */
-const getAnchorId = (defaultSlot: VueDefaultSlotType): string => {
+const getAnchorId = (defaultSlot: VueDefaultSlotType): string | undefined => {
   const defaultSlotValue = defaultSlot ? defaultSlot() : []
-  const cachedAnchorId = anchorIdCache.get(defaultSlotValue)
-  if (cachedAnchorId) {
-    const typeOfCachedValue = typeof cachedAnchorId
-    if (typeOfCachedValue === 'string') {
-      return cachedAnchorId
-    }
-    anchorIdCache.delete(defaultSlotValue)
-  }
   const slotText = getVNodeText(defaultSlotValue)
   const anchorId = textToAnchorId(slotText)
-  if (!anchorId) return fallbackId
-  anchorIdCache.set(defaultSlotValue, anchorId)
   return anchorId
 }
 
