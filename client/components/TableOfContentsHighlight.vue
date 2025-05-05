@@ -82,6 +82,90 @@ if (
 
 const { setActive, activeId } = useActiveScroll(ids)
 
+onMounted(() => {
+  if (!import.meta.dev) {
+    console.log(
+      'Not validating TableOfContentsHighlight.vue ids in this environment',
+      import.meta.dev
+    )
+    return
+  }
+
+  /** FIXME: write a Playwright test for this and delete this onMounted() test.
+   *
+   *  There have been subtle bugs in Vue rendering HTML that affect DOM ids,
+   *  so --in the browser-- we check whether the ids given to useActiveScroll()
+   *  are actually in the page.
+   *
+   *  For context, there was a bug noticed first on the FAQ page where the '#' link
+   *  was pointing to the wrong heading id. There were two duplicate 'wg' DOM ids,
+   *  and `Heading.vue` '#'' link to #errata wasn't pointing anywhere. As well as
+   *  breaking the '#' link, this also broke useActiveScroll() because 'errata' wasn't
+   *  present.
+   *
+   *  The bug is not related to Markdown, but for those wanting more detail...
+   *
+   *      As an aside, the bug was to do with ProseA.vue reacting to the `id` attribute,
+   *      We're using the `remark-heading-id` plugin to support the Markdown {#id} syntax.
+   *      The markdown renderer supports overrides for rendering in
+   *      `components/content/Prose*.vue` and the `ProseA.vue` override for <a> anchors
+   *      wasn't passing `id` correctly somehow. The buggy previous code looked like
+   *      https://github.com/ietf-tools/rfced-www/blob/2c7344554882aaf95577d920dcce30eb29730253/client/components/content/ProseA.vue
+   *      When changed to a simple v-bind="$attrs" the bug was fixed.
+   *
+   *      The original reason for the custom `<a>` was for RFC Link Previews.
+   *
+   *      Best guess is that it because the `id` attribute wasn't reacting correctly,
+   *      perhaps only in dev mode, and perhaps relating to @vue-ignore weirdness
+   *      https://github.com/ietf-tools/rfced-www/blob/4d648ec74a5a94db16073b0b1363c42cea1b9913/client/utilities/html.ts#L21
+   *      in the previous props to <A>.
+   *
+   *      But to make matters stranger `Heading.vue` renders from the same prop and they
+   *      were getting out of sync wihin the same component, so something with reactivity
+   *      was broken. Both parts of Heading.vue's template render with
+   *      `props.id ?? getAnchorId($slots.default)` so they should result in the same
+   *      string, but apparently not! Feel free to rewind to late April 2025 to see the
+   *      bug for yourself.
+   *
+   *  Anyway, users of his component should provide valid ids so checking them (as a way
+   *  of surfacing this bug) is what this code does.
+   *
+   */
+
+  const problemIds = ids.value.filter((id) => {
+    // returns problematic ids
+
+    const targets = document.querySelectorAll(
+      // DON'T REFACTOR THIS TO getElementById() because we're using querySelectorAll()
+      // intentionally to query multiple identical ids, whereas getElementById would only
+      // return 1 max.
+
+      `#${
+        id // `id` is safe to use as selectors (ie, no whitespace that would affect the selector is in it)
+      }`
+    )
+
+    if (targets.length === 0) {
+      // PROBLEM FOUND: that id should exist in the DOM but it doesn't
+      return true
+    } else if (targets.length >= 2) {
+      // PROBLEM FOUND: that id shouldn't exist 2+ times in the DOM
+      return true
+    }
+
+    // else, it's ok
+    return false
+  })
+
+  if (problemIds.length > 0) {
+    const title = 'TableOfContentsHighlight.vue ids problem. Bad ids: '
+    console.error(title, problemIds)
+    throw Error(`${title} ${problemIds.join(', ')}`)
+  } else {
+    console.log('TableOfContentsHighlight.vue ids all found.')
+  }
+})
+
 const wrapperRef = ref<HTMLElement>()
 
 const makeTocId = (id: string) => `toc-${id}`
@@ -110,34 +194,9 @@ watch(activeId, () => {
 
   const targetTopPx =
     wrapper.scrollTop +
-    // top can be negative
+    // top can be negative at the end of a scroll so we Math.abs() to ensure a positive number because attempting to scroll too far is fine at the end of a scroll
     Math.abs(tocLinkRect.top) -
     wrapper.offsetHeight / 2
-
-  console.log('*** targettop', {
-    targetTopPx,
-    'wrapper.scrollTop': wrapper.scrollTop,
-    'tocLinkRect.top': tocLinkRect.top,
-    'Math.abs(tocLinkRect.top)': Math.abs(tocLinkRect.top),
-    'wrapperRect.height / 2': wrapperRect.height / 2
-  })
-
-  /**
-   * Before changing this scroll behaviour be sure to use the FAQ page as a test,
-   * and test scrolling all the way up and down and ensure it scrolls revealing
-   * the very last and first item
-   *
-   * Be sure to test with a very short browser window (height about 200px)
-   *
-   * I tried using scrollIntoView but it was jittery in Chrome/Firefox
-   *
-   *  tocLink.scrollIntoView({
-   *    behavior: 'smooth',
-   *    block: 'nearest',
-   *    inline: 'nearest'
-   *  })
-   *
-   */
 
   wrapper.scrollTo({
     top: targetTopPx,
