@@ -1,28 +1,13 @@
 <template>
-  <component :is="listTypeElement">
-    <li v-for="section in props.value.sections" :key="section.id">
-      <NuxtLink
-        :to="`#${section.id}`"
-        :class="{
-          'p-2': true
-        }"
-      >
-        {{ section.title }}
-      </NuxtLink>
-
-      <component
-        v-if="section.sections"
-        :is="listTypeElement"
-        class="pt-0 pl-4"
-      >
-        <li v-for="subSection in section.sections" :key="subSection.id">
-          <NuxtLink :to="`#${subSection.id}`">
-            {{ subSection.title }}
-          </NuxtLink>
-        </li>
-      </component>
-    </li>
-  </component>
+  <TableOfContentsSection
+    v-if="props.toc.sections"
+    :sections="props.toc.sections"
+    :list-type-element="listTypeElement"
+    :depth="0"
+    :list-class="props.listClass"
+    :nested-list-class="props.nestedListClass"
+    :list-item-class="props.listItemClass"
+  />
 </template>
 
 <script setup lang="ts">
@@ -34,8 +19,11 @@
 import type { RfcEditorToc } from '../utilities/tableOfContents'
 
 type Props = {
-  value: RfcEditorToc
+  toc: RfcEditorToc
   listType: 'numbered' | 'ordered'
+  listClass?: string
+  nestedListClass?: string
+  listItemClass?: string
 }
 
 const props = defineProps<Props>()

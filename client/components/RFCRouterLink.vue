@@ -1,6 +1,6 @@
 <template>
   <HoverCardRoot v-model:open="isHoverCardOpen">
-    <HoverCardTrigger as-child>
+    <HoverCardTrigger>
       <NuxtLink
         v-bind="propsWithHrefAsTo"
         @focus="loadRfc"
@@ -30,7 +30,7 @@
     </HoverCardPortal>
   </HoverCardRoot>
 
-  <div v-show="hasTouchStore.hasTouch === true" class="inline">
+  <div v-if="hasTouchStore.hasTouch === true" class="inline">
     <DialogRoot v-model:open="isDialogOpen">
       <DialogTrigger
         class="ml-1 px-1 align-baseline"

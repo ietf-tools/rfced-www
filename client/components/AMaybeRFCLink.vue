@@ -1,10 +1,10 @@
 <template>
-  <component
-    :is="isInternal && isRfcLink ? RFCRouterLink : Anchor"
-    v-bind="props"
-  >
+  <RFCRouterLink v-if="isInternal && isRfcLink" v-bind="$attrs">
     <slot />
-  </component>
+  </RFCRouterLink>
+  <Anchor v-else v-bind="$attrs">
+    <slot />
+  </Anchor>
 </template>
 
 <script setup lang="ts">
@@ -13,13 +13,11 @@
  *
  * with a fallback to Anchor
  */
-import { computed } from 'vue'
 import RFCRouterLink from './RFCRouterLink.vue'
 import Anchor from './A.vue'
-import type { AnchorProps } from '~/utilities/html'
 import { isInternalLink, parseMaybeRfcLink } from '~/utilities/url'
 
-const props = defineProps<AnchorProps>()
-const isInternal = computed(() => isInternalLink(props.href))
-const isRfcLink = computed(() => !!parseMaybeRfcLink(props.href))
+const props = defineProps<{ href?: string; id?: string }>()
+const isInternal = isInternalLink(props.href)
+const isRfcLink = !!parseMaybeRfcLink(props.href)
 </script>

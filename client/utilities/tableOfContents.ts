@@ -1,4 +1,5 @@
 import type { Toc as NuxtContentToc } from '@nuxt/content'
+import type { InjectionKey } from 'vue'
 
 type Section = {
   id: string
@@ -26,3 +27,8 @@ export const nuxtContentTocToRfcEditorToc = (
     }))
   }
 }
+
+export const tocKey = Symbol() as InjectionKey<{
+  showToc?: boolean
+  toc?: RfcEditorToc
+}>

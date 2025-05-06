@@ -2,7 +2,7 @@
   <div class="min-h-[100vh]">
     <BodyLayoutDocument>
       <template #sidebar>
-        <TableOfContentsMarkdown v-if="page?.showToc && toc" :toc="toc" />
+        <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
       </template>
       <ContentRenderer v-if="page" :value="page" />
       <ContentDocLastUpdated />
@@ -11,7 +11,11 @@
 </template>
 
 <script setup lang="ts">
-import { nuxtContentTocToRfcEditorToc } from '~/utilities/tableOfContents'
+import { provide } from 'vue'
+import {
+  nuxtContentTocToRfcEditorToc,
+  tocKey
+} from '~/utilities/tableOfContents'
 import { PUBLIC_SITE } from '~/utilities/url'
 
 const route = useRoute()
@@ -48,8 +52,12 @@ if (
   })
 }
 
+const showToc: boolean = Boolean(page.value?.showToc)
+
 const toc =
   page.value?.body.toc && nuxtContentTocToRfcEditorToc(page.value.body.toc)
+
+provide(tocKey, { showToc, toc })
 
 useHead({
   link: [{ rel: 'canonical', href: canonicalUrl }]

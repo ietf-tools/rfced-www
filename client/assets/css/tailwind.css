@@ -136,5 +136,7 @@ html.dark {
 }
 
 .text-shadow-bold {
+  /* this is an alternative to real bold that doesn't cause reflow,
+    so that elements can be toggled bold without distracting reflow */
   text-shadow:-0.5px 0px 0.5px black;
 }
