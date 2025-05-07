@@ -2,7 +2,7 @@
   <Heading
     v-bind="$attrs"
     level="1"
-    class="pt-10 pb-3"
+    class="pt-10 pb-3 px-2"
     :has-internal-link="false"
   >
     <slot />

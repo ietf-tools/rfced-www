@@ -4,10 +4,12 @@
       <template #sidebar>
         <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
       </template>
-      <div class="wrap-anywhere">
-        <ContentRenderer v-if="page" :value="page" />
+      <div class="">
+        <div class="wrap-anywhere">
+          <ContentRenderer v-if="page" :value="page" />
+        </div>
+        <ContentDocLastUpdated />
       </div>
-      <ContentDocLastUpdated />
     </BodyLayoutDocument>
   </div>
 </template>
@@ -54,7 +56,7 @@ if (
   })
 }
 
-const showToc: boolean = Boolean(page.value?.showToc)
+const showToc = Boolean(page.value?.showToc)
 
 const toc =
   page.value?.body.toc && nuxtContentTocToRfcEditorToc(page.value.body.toc)

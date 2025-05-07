@@ -1,4 +1,5 @@
 <template>
+  <slot />
   <TableOfContentsSection
     v-if="props.toc.sections"
     :sections="props.toc.sections"
