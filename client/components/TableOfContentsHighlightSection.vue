@@ -8,8 +8,8 @@
   >
     <li v-for="section in props.sections" :key="section.id">
       <NuxtLink
-        :to="`#${section.id}`"
         :id="makeTocId(section.id)"
+        :to="`#${section.id}`"
         :aria-current="section.id === props.activeId"
         :class="[
           props.listItemClass,
@@ -27,7 +27,7 @@
         :depth="props.depth + 1"
         :active-id="props.activeId"
         :handle-click="props.handleClick"
-        :makeTocId="props.makeTocId"
+        :make-toc-id="props.makeTocId"
         :is-ssr="props.isSsr"
         :list-class="props.listClass"
         :nested-list-class="props.nestedListClass"

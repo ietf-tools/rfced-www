@@ -140,3 +140,11 @@ html.dark {
     so that elements can be toggled bold without distracting reflow */
   text-shadow:-0.5px 0px 0.5px black;
 }
+
+.wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+.wrap-normal {
+  overflow-wrap: normal;
+}

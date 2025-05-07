@@ -4,7 +4,9 @@
       <template #sidebar>
         <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
       </template>
-      <ContentRenderer v-if="page" :value="page" />
+      <div class="wrap-anywhere">
+        <ContentRenderer v-if="page" :value="page" />
+      </div>
       <ContentDocLastUpdated />
     </BodyLayoutDocument>
   </div>
@@ -57,6 +59,10 @@ const showToc: boolean = Boolean(page.value?.showToc)
 const toc =
   page.value?.body.toc && nuxtContentTocToRfcEditorToc(page.value.body.toc)
 
+/**
+ * We want the mobile TOC to appear inline below the <h1> which is rendered in markdown by
+ * ContentRenderer, so we'll provide() the details for ProseH1 to render it.
+ */
 provide(tocKey, { showToc, toc })
 
 useHead({
