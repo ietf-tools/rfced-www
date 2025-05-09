@@ -8,21 +8,25 @@ export const fetchRetry = (
   maxRetries: number,
   fetchOptions?: FetchOptions
 ) =>
-  new Promise<Response>(async (resolve, reject) => {
-    let attemptsRemaining = maxRetries
-    let errors: string[] = []
-    for (let i = attemptsRemaining; i > 0; i--) {
-      try {
-        const response = await fetch(url, fetchOptions)
-        if (!response.ok) {
-          throw Error(`HTTP ${response.status}: ${response.statusText}`)
+  new Promise<Response>((resolve, reject) => {
+    ;(async () => {
+      let attemptsRemaining = maxRetries
+      const errors: string[] = []
+      for (let i = attemptsRemaining; i >= 0; i--) {
+        attemptsRemaining--
+
+        try {
+          const response = await fetch(url, fetchOptions)
+          if (!response.ok) {
+            throw Error(`HTTP ${response.status}: ${response.statusText}`)
+          }
+          resolve(response)
+          return
+        } catch (e: unknown) {
+          errors.push(typeof e === 'object' && e !== null ? e.toString() : '')
+          await setTimeoutPromise(delayBetweenRetriesMs)
         }
-        resolve(response)
-        return
-      } catch (e: any) {
-        errors.push(e.toString())
-        await setTimeoutPromise(delayBetweenRetriesMs)
       }
-    }
-    reject(errors.join(','))
+      reject(errors.join(','))
+    })()
   })

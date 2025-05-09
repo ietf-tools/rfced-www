@@ -2,8 +2,8 @@
   <RFCRouterLink
     v-if="isInternal && isRfcLink"
     v-bind="$attrs"
-    :href="props.href"
     :id="props.id"
+    :href="props.href"
   >
     <slot />
   </RFCRouterLink>

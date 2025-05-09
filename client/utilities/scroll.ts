@@ -133,17 +133,17 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
 
     if (targetIdIndex === activeIdIndex) {
       // nothing to do, exit early
-      console.log('No activeId change needed')
+      // console.log('No activeId change needed')
       return
     }
-    console.log(
-      `New scroll target from `,
-      activeIdIndex,
-      JSON.stringify(ids.value[activeIdIndex]),
-      ' to ',
-      targetIdIndex,
-      JSON.stringify(ids.value[targetIdIndex])
-    )
+    // console.log(
+    //   `New scroll target from `,
+    //   activeIdIndex,
+    //   JSON.stringify(ids.value[activeIdIndex]),
+    //   ' to ',
+    //   targetIdIndex,
+    //   JSON.stringify(ids.value[targetIdIndex])
+    // )
     const direction = targetIdIndex > activeIdIndex ? 1 : -1
     const distanceToIndex = Math.abs(targetIdIndex - activeIdIndex)
     velocity = Math.max(distanceToIndex / 5, MINIMUM_VELOCITY) * direction
