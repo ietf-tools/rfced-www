@@ -2,7 +2,7 @@
   <div
     ref="scroll-container"
     :class="{
-      'overflow-x-scroll w-full max-w-[100vw] transition-shadow duration-800': true,
+      'overflow-x-auto w-full max-w-[100vw] transition-shadow duration-800': true,
       'shadow-[inset_70px_0px_90px_-70px_rgba(0,_45,_60,_0.5),inset_36px_0px_20px_-36px_rgba(0,_45,_60,_0.5)] dark:shadow-[inset_70px_0px_90px_-70px_rgba(140,_201,_222,_0.5),inset_36px_0px_20px_-36px_rgba(140,_201,_222,_0.5)]':
         canScrollLeft && !canScrollRight,
       'shadow-[inset_-70px_0px_90px_-70px_rgba(0,_45,_60,_0.5),inset_-36px_0px_20px_-36px_rgba(0,_45,_60,_0.5)] dark:shadow-[inset_-70px_0px_90px_-70px_rgba(140,_201,_222,_0.5),inset_-36px_0px_20px_-36px_rgba(140,_201,_222,_0.5)]':
