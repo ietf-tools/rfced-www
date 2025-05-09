@@ -19,15 +19,16 @@ import type { ValidHrefs } from './url'
  * To fix this bug look at ValidHrefs itself, find the new type that is
  * overly broad and fix it. If you made a pathBuilder function ensure
  * the return value(s) have `as const` like the other path builder functions.
- *
  */
 // @ts-expect-error See preceding comment
 const _HrefThatShouldFail: ValidHrefs = '/href-that-should-fail/'
 
 /**
- * Although this should succeed with current markdown files it's possible
- * that future markdown changes removes this specific href target, and if so
- * choose a different href from ValidHrefs
+ * Should catch if ValidHrefs fails to match a markdown path.
+ *
+ * (Although this succeeds with current markdown files it's possible that future
+ * markdown changes to break this, and if so just choose another working href
+ * from ValidHrefs)
  */
 const _HrefThatShouldSucceed: ValidHrefs = '/series/rfc/#what-is-an-rfc'
 

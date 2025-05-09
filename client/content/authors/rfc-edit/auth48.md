@@ -1,4 +1,4 @@
-# Authors&#8217; Final Review (AUTH48)
+# Authors' Final Review (AUTH48)
 
 AUTH48 is the last chance to make changes to an RFC-to-be. Once the document is published as an RFC, we will not make changes. The general instructions for completing AUTH48 are below; they are similar to what you will receive via email when your document enters AUTH48 state. If your document is in AUTH48 state, we recommend referring to the email you received.
 
@@ -6,8 +6,6 @@ Additional resources:
 
 - [AUTH48 FAQ](/series/rfc-faq/#process)
 - [The Publication Process](/authors/rfc-edit/)
-
----
 
 ### Template of Instructions for Completing AUTH48
 
