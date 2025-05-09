@@ -34,4 +34,12 @@ const updateScrollHint = () => {
 }
 
 onMounted(updateScrollHint)
+
+onMounted(() => {
+  window.addEventListener('resize', updateScrollHint)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScrollHint)
+})
 </script>

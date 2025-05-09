@@ -23,7 +23,7 @@
  * Table of Contents that highlights titles that are in the browser viewport
  */
 import { watch } from 'vue'
-import { useActiveScroll } from 'vue-use-active-scroll'
+import { useActiveScroll } from '../utilities/scroll'
 import type { RfcEditorToc } from '../utilities/tableOfContents'
 import { prefersReducedMotion } from '~/utilities/accessibility'
 
@@ -167,7 +167,13 @@ onMounted(() => {
   if (problemIds.length > 0) {
     const title = 'TableOfContentsHighlight.vue ids problem. Bad ids: '
     console.error(title, problemIds)
-    throw Error(`${title} ${problemIds.join(', ')}`)
+    // FIXME: report bug
+    if (
+      // don't crash in prod. just stumble on
+      import.meta.dev
+    ) {
+      throw Error(`${title} ${problemIds.join(', ')}`)
+    }
   } else {
     console.log('TableOfContentsHighlight.vue ids all found.')
   }
@@ -189,22 +195,31 @@ watch(activeId, () => {
   const tocLinkRect = tocLink.getBoundingClientRect()
   const wrapperRect = wrapper.getBoundingClientRect()
 
-  const isVisible =
-    tocLinkRect.top >= wrapperRect.top + SCROLL_BUFFER_PX &&
+  const isMoreThanTop = tocLinkRect.top >= wrapperRect.top + SCROLL_BUFFER_PX
+  const isLessThanBottom =
     tocLinkRect.bottom <= wrapperRect.bottom - SCROLL_BUFFER_PX
+  const isVisible = isMoreThanTop && isLessThanBottom // is visible within viewport
 
   if (isVisible) {
+    // console.log(
+    //   "Checked whether TOC needed scrolling but it didn't (highlighted option was already visible)",
+    //   {
+    //     isVisible,
+    //     isMoreThanTop,
+    //     isLessThanBottom,
+    //     SCROLL_BUFFER_PX,
+    //     tocLinkRect,
+    //     wrapperRect
+    //   }
+    // )
     // nothing to do
     return
   }
 
+  const middleOfScrollableAreaPx = wrapper.offsetHeight / 2
+
   const targetTopPx =
-    wrapper.scrollTop +
-    // top can be negative at the end of a scroll so we Math.abs() to ensure
-    // a positive number because attempting to scroll too far is acceptable
-    // at the end of a scroll
-    Math.abs(tocLinkRect.top) -
-    wrapper.offsetHeight / 2
+    wrapper.scrollTop + tocLinkRect.top - middleOfScrollableAreaPx
 
   wrapper.scrollTo({
     top: targetTopPx,

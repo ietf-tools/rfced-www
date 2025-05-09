@@ -4,12 +4,10 @@
       <template #sidebar>
         <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
       </template>
-      <div class="">
-        <div class="wrap-anywhere">
-          <ContentRenderer v-if="page" :value="page" />
-        </div>
-        <ContentDocLastUpdated />
+      <div class="wrap-anywhere">
+        <ContentRenderer v-if="page" :value="page" />
       </div>
+      <ContentDocLastUpdated />
     </BodyLayoutDocument>
   </div>
 </template>

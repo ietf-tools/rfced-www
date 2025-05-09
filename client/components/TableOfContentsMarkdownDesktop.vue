@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hidden lg:sticky lg:top-[3px] lg:flex border-1 dark:border-gray-700 border-gray-300 lg:flex-col md:w-[400px] lg:w-[400px] p-2"
+    class="hidden lg:sticky lg:top-[3px] lg:flex border-1 dark:border-gray-700 border-gray-300 lg:flex-col lg:min-w-[200px] p-2"
   >
     <TableOfContentsHighlight
       :toc="props.toc"
