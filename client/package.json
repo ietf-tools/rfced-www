@@ -36,6 +36,7 @@
     "@nuxtjs/color-mode": "^3.4.4",
     "@pinia/nuxt": "^0.5.4",
     "@tailwindcss/vite": "4.0.14",
+    "@vueuse/core": "13.1.0",
     "apigen-ts": "^1.1.0",
     "core-js": "3.40.0",
     "feed": "^4.2.2",

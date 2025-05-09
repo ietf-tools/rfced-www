@@ -3,6 +3,7 @@
     <slot />
   </tr>
 </template>
+
 <script>
 /**
  * Be sure to use slightly transparent colours so that <HorizontalScrollable> can

@@ -74,13 +74,12 @@
 import { computed, onUnmounted, customRef } from 'vue'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import { NuxtLink } from '#components'
-import type { AnchorProps } from '~/utilities/html'
 import { formatTitle, RFC_TYPE_RFC } from '~/utilities/rfc'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
 import type { LoadingStatus } from '~/utilities/loading-status'
 
-const props = defineProps<AnchorProps>()
+const props = defineProps<{ href?: string; id?: string }>()
 const hasTouchStore = useHasTouchStore()
 const rfcJSON = ref<RFCJSON | undefined>()
 const isDialogOpen = ref<boolean>(false)
@@ -115,7 +114,7 @@ onUnmounted(() => {
 const propsWithHrefAsTo = computed(() => ({
   ...props,
   to: props.href, // copy `href` to `to` for usage
-  href: undefined // clobber 'href' with undefined because we're using
+  href: undefined // clobber 'href' with undefined because we're using NuxtLink
 }))
 
 /**
@@ -141,7 +140,7 @@ const loadRfc = async (): Promise<void> => {
 
   if (rfcId === undefined || rfcId.type !== RFC_TYPE_RFC) {
     console.warn(
-      `Received "${props.href}" which wasn't parsed as having an rfc id. Ignoring.`
+      `Received "${props.href}" which wasn't parsed as having an rfc id. Ignoring element ${JSON.stringify(props)}`
     )
     return
   }
