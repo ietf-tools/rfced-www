@@ -8,7 +8,7 @@ showToc: true
 
 The RFC Editor is no longer a single person; it is a small group of people. The [IETF Administration LLC (IETF LLC)](https://ietf.org/llc) contracts the RFC Editor function to [Association Management Solutions, LLC (AMS)](https://www.amsl.com). Through 2009, the home of the RFC Editor function was the Networking Division of the [USC Information Sciences Institute (ISI)](https://www.isi.edu) in Marina del Rey, CA. ISI played a key role in the development of the Internet, and Jon Postel was the Director of ISI'S Networking Division for many years. For a historical account of the RFC series, see ["30 Years of RFCs,"](/info/rfc2555/) ["40 Years of RFCs,"](/info/rfc5540/), and ["Fifty Years of RFCs."](/info/rfc8700/)
 
-## Every RFC was attributed to the "Network Working Group" What working group is that? {#wg}
+## Every RFC was attributed to the "Network Working Group" (before the publication of [RFC 5741](/info/rfc5741/)). What working group is that? {#wg}
 
 This label in the heading of RFCs is historical in form and symbolic in content. Historically, "Network Working Group" meant the set of researchers who developed the packet switching protocols for the ARPAnet, beginning in 1969. This label was maintained in RFCs as a reminder of the long and significant technical history that is recorded in the RFC series, and as a reminder that today's technical decisions, wise or not, may be with us for many years. Today, the "Network Working Group" should be interpreted as the set of users, vendors, and researchers who are working to improve and extend the Internet.
 

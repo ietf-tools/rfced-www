@@ -55,7 +55,7 @@ const regenerateContentMetadata = async (logger?: Logger) => {
                 resolve({ [relativePath]: undefined })
               }
             } catch (e: unknown) {
-              console.error('sdfsdf', e)
+              console.error(e)
               resolve({ [relativePath]: undefined })
             }
           })()

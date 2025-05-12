@@ -138,6 +138,7 @@ html.dark {
 .text-shadow-bold {
   /*
     AKA fake bold.
+
     This is an alternative to real bold that doesn't cause reflow,
     so that elements can be toggled bold without distracting reflow.
 
@@ -152,11 +153,16 @@ html.dark {
        preallocating an extra empty line of text for the bold version wouldn't
        look odd, but in a vertical list of TOC items then having some have extra
        whitespace between them does look odd.
-    3) using monospaced font isn't per the design
-    
+    3) using monospaced font, which isn't per the design
+    4) Using `-webkit-text-stroke`
+
     So this is the least worst approach until a better one comes along.
    */
   text-shadow:-0.5px 0px 0.5px black;
+}
+
+.text-fake-bold {
+  -webkit-text-stroke: 0.5px bold;
 }
 
 .wrap-anywhere {

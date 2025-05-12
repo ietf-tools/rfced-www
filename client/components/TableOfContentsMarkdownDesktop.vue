@@ -9,7 +9,7 @@
       list-class="mr-1"
       nested-list-class="pl-1"
       list-item-class="block px-3 py-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800"
-      list-item-active-class="text-shadow-bold bg-gray-200 dark:bg-gray-800"
+      list-item-active-class="text-fake-bold bg-gray-200 dark:bg-gray-800"
     >
       <Heading level="2" style-level="5" class="mb-1 pl-3">
         Table of Contents
