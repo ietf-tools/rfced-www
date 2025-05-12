@@ -136,8 +136,26 @@ html.dark {
 }
 
 .text-shadow-bold {
-  /* this is an alternative to real bold that doesn't cause reflow,
-    so that elements can be toggled bold without distracting reflow */
+  /*
+    AKA fake bold.
+    This is an alternative to real bold that doesn't cause reflow,
+    so that elements can be toggled bold without distracting reflow.
+
+    Arguably this causes poor text rendering, but is considered less
+    worse than the alternatives, which are:
+    1) toggling bold can cause line wrapping, bumping following TOC items further
+       down the page when bold which creates a lot of distracting movement;
+    2) preallocating layout space for bold like
+       https://css-tricks.com/bold-on-hover-without-the-layout-shift/ 
+       succesfully prevents one TOC item from affecting the layout of the next,
+       but that only works for particular layouts (eg horizontal) where
+       preallocating an extra empty line of text for the bold version wouldn't
+       look odd, but in a vertical list of TOC items then having some have extra
+       whitespace between them does look odd.
+    3) using monospaced font isn't per the design
+    
+    So this is the least worst approach until a better one comes along.
+   */
   text-shadow:-0.5px 0px 0.5px black;
 }
 
