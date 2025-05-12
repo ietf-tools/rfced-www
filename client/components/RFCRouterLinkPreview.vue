@@ -37,8 +37,8 @@
   ></div>
 
   <p class="text-xs mt-2 text-black dark:text-gray-300">
-    That was a preview of <component :is="formatTitle(props.rfcJson.doc_id)" />.
-    To read the complete document click the following link:
+    That was a preview of <component :is="formattedTitle" />. To read the
+    complete document click the following link:
   </p>
 
   <p class="clear-both text-right mt-6 mb-10">
@@ -46,7 +46,7 @@
       :href="rfcPathBuilder(props.rfcJson.doc_id)"
       class="flex-inline rounded no-underline justify-center items-center bg-gray-100 dark:bg-gray-700 text-blue-400 dark:text-white px-4 pt-3 pb-4 mr-6"
     >
-      <component :is="formatTitle(props.rfcJson.doc_id)" />
+      <component :is="formattedTitle" />
       <GraphicsChevron class="ml-2 inline -rotate-90" />
     </A>
   </p>
@@ -122,6 +122,8 @@ function formatObsoletedBy(
     )
   )
 }
+
+const formattedTitle = computed(() => formatTitle(props.rfcJson.doc_id))
 
 const obsoletedBy = computed(() => {
   return formatObsoletedBy(props.rfcJson.obsoleted_by)

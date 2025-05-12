@@ -3,8 +3,8 @@ import { throttle, clamp } from 'lodash-es'
 import { watchDebounced } from '@vueuse/core'
 import { prefersReducedMotion } from './accessibility'
 
-const SCROLL_FPS = 30
-const ANIMATE_INDEX_FPS = 10 // because we want transitions between ids
+const SCROLL_FPS = 60
+const ANIMATE_INDEX_FPS = 30 // because we want transitions between ids
 const MINIMUM_VELOCITY = 1
 const FRICTION = 0.5
 const ENDS_THRESHOLD_PX = 10
@@ -150,26 +150,42 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
     animateSoon()
   }
 
-  const throttledHandleScroll = throttle(handleScroll, 1000 / SCROLL_FPS)
+  const throttledHandleScroll = throttle(handleScroll, 1000 / SCROLL_FPS, {
+    // leading because we want this to fire as early as possible but not again for FPS
+    leading: true
+  })
 
-  const throttledHandleResize = throttle(() => {
-    updateElements()
-    handleScroll()
-  }, 100)
+  const throttledHandleResize = throttle(
+    () => {
+      updateElements()
+      handleScroll()
+    },
+    100,
+    { leading: true }
+  )
 
   onMounted(() => {
     updateElements()
     document.addEventListener('scroll', throttledHandleScroll, {
       passive: true
     })
+    document.addEventListener('scrollsnapchanging', throttledHandleScroll, {
+      passive: true
+    })
+
+    document.addEventListener('touchmove', throttledHandleScroll, {
+      passive: true
+    })
     document.addEventListener('resize', throttledHandleResize, {
       passive: true
     })
-    throttledHandleScroll()
+    handleScroll()
   })
 
   onUnmounted(() => {
     document.removeEventListener('scroll', throttledHandleScroll)
+    document.removeEventListener('scrollsnapchanging', throttledHandleScroll)
+    document.removeEventListener('touchmove', throttledHandleScroll)
     document.removeEventListener('resize', throttledHandleResize)
     if (animationCallbackHandle) {
       clearTimeout(animationCallbackHandle)

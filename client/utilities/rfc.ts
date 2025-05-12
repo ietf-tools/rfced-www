@@ -130,7 +130,7 @@ const parseRfcFormat = (format: string): Rfc['formats'][number] => {
 export const formatTitle = (rfcId: string) => {
   const parts = parseRFCId(rfcId)
 
-  return h('span', [
+  return h('span', () => [
     h('span', { class: 'font-normal' }, parts.type),
     NONBREAKING_SPACE,
     h('span', { class: 'font-bold' }, parts.number)

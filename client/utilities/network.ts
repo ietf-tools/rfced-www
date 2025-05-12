@@ -2,19 +2,23 @@ import { setTimeoutPromise } from './promises'
 
 type FetchOptions = NonNullable<Parameters<typeof fetch>[1]>
 
+const MAX_RETRIES_DEFAULT = 2
+const DELAY_BETWEEN_RETRIES_MS_DEFAULT = 200
+
 export const fetchRetry = (
   url: string,
-  delayBetweenRetriesMs: number,
-  maxRetries: number,
-  fetchOptions?: FetchOptions
+  fetchOptions?: FetchOptions,
+  retryOptions?: {
+    delayBetweenRetriesMs: number
+    maxRetries: number
+  }
 ) =>
   new Promise<Response>((resolve, reject) => {
     ;(async () => {
-      let attemptsRemaining = maxRetries
       const errors: string[] = []
-      for (let i = attemptsRemaining; i >= 0; i--) {
-        attemptsRemaining--
-
+      let remainingAttempts = retryOptions?.maxRetries ?? MAX_RETRIES_DEFAULT
+      while (remainingAttempts > 0) {
+        remainingAttempts--
         try {
           const response = await fetch(url, fetchOptions)
           if (!response.ok) {
@@ -23,8 +27,14 @@ export const fetchRetry = (
           resolve(response)
           return
         } catch (e: unknown) {
-          errors.push(typeof e === 'object' && e !== null ? e.toString() : '')
-          await setTimeoutPromise(delayBetweenRetriesMs)
+          errors.push(
+            typeof e === 'object' && e !== null ? e.toString() : `${e}`
+          )
+          console.log('error', remainingAttempts, e)
+          await setTimeoutPromise(
+            retryOptions?.delayBetweenRetriesMs ??
+              DELAY_BETWEEN_RETRIES_MS_DEFAULT
+          )
         }
       }
       reject(errors.join(','))

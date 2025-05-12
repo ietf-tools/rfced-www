@@ -21,16 +21,18 @@ const scrollContainer = useTemplateRef('scroll-container')
 const canScrollLeft = ref(false)
 const canScrollRight = ref<boolean>(false)
 
+const BUFFER_PX = 8
+
 const updateScrollHint = () => {
   const { value: scrollContainerElement } = scrollContainer
   if (!scrollContainerElement) {
     console.error('Unable to find scroll container. This is a bug')
     return
   }
-  canScrollLeft.value = scrollContainerElement.scrollLeft > 0
+  canScrollLeft.value = scrollContainerElement.scrollLeft > BUFFER_PX
   canScrollRight.value =
     scrollContainerElement.scrollLeft + scrollContainerElement.offsetWidth <
-    scrollContainerElement.scrollWidth
+    scrollContainerElement.scrollWidth - BUFFER_PX
 }
 
 onMounted(updateScrollHint)

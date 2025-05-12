@@ -1,6 +1,6 @@
 <template>
   <HorizontalScrollable>
-    <table class="border-2 border-black dark:border-white">
+    <table class="border-1 border-gray-400 dark:border-gray-500">
       <slot />
     </table>
   </HorizontalScrollable>

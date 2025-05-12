@@ -1,6 +1,6 @@
 <template>
   <HoverCardRoot v-model:open="isHoverCardOpen">
-    <HoverCardTrigger>
+    <HoverCardTrigger as-child>
       <NuxtLink
         v-bind="propsWithHrefAsTo"
         @focus="loadRfc"
@@ -89,8 +89,10 @@ const isHoverCardOpen = (() => {
   return customRef((track, trigger) => ({
     get() {
       track()
-      // we never want to open the hovercard while the dialog is open
-      return isDialogOpen.value ? false : value
+      // we never want to open the hovercard while the dialog is open, or if there was an error loading the data
+      return isDialogOpen.value || loadingStatus.value.type !== 'success' ?
+          false
+        : value
     },
     set(newValue) {
       value = newValue
@@ -98,8 +100,6 @@ const isHoverCardOpen = (() => {
     }
   }))
 })()
-
-const RETRY_TIMEOUT_MS = 5000 // Provide enough time for screen reader to speak errors
 
 const rfcId = parseMaybeRfcLink(props.href)
 
@@ -153,22 +153,27 @@ const loadRfc = async (): Promise<void> => {
   console.log(`Loading ${rfcJSONPath}`)
   let data: RFCJSON | undefined = undefined
   try {
-    const response = await fetchRetry(rfcJSONPath, 200, 2, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+    const response = await fetchRetry(
+      rfcJSONPath,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      {
+        maxRetries: 2,
+        delayBetweenRetriesMs: 50
       }
-    })
-
+    )
     data = await response.json()
   } catch (e) {
     console.error(e)
-    // Could be a transient network failure, try again soon
+    // hide the hover card if we can't load any content
     loadingStatus.value = {
       type: 'error',
       message: (e || '').toString()
     }
-    setTimeout(loadRfc, RETRY_TIMEOUT_MS)
     return
   }
   console.log(`Loaded ${rfcJSONPath}`)
