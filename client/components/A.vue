@@ -1,10 +1,13 @@
 <template>
-  <component
-    :is="isInternal && !isHash && !isMailTo ? NuxtLink : 'a'"
+  <NuxtLink
+    v-if="isInternal && !isHash && !isMailTo"
     v-bind="sanitisedAnchorProps"
   >
     <slot />
-  </component>
+  </NuxtLink>
+  <a v-else v-bind="sanitisedAnchorProps">
+    <slot />
+  </a>
 </template>
 
 <script setup lang="ts">
@@ -20,10 +23,9 @@
 import { computed } from 'vue'
 import { NuxtLink } from '#components'
 import { EXTERNAL_LINK_REL, TARGET_NEW_WINDOW } from '~/utilities/html'
-import type { AnchorProps } from '~/utilities/html'
 import { isHashLink, isInternalLink, isMailToLink } from '~/utilities/url'
 
-const props = defineProps<AnchorProps>()
+const props = defineProps<{ href?: string; id?: string }>()
 
 const isInternal = computed(() => isInternalLink(props.href))
 const isMailTo = computed(() => isMailToLink(props.href))

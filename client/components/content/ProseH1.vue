@@ -1,10 +1,21 @@
 <template>
-  <Heading level="1" class="pt-10 pb-3" :has-internal-link="false">
+  <Heading
+    v-bind="$attrs"
+    level="1"
+    class="pt-10 pb-3 px-2"
+    :has-internal-link="false"
+  >
     <slot />
   </Heading>
+  <TableOfContentsMarkdownMobile
+    v-if="tocInjection?.showToc && tocInjection?.toc"
+    :toc="tocInjection?.toc"
+  />
+  <span v-else> {{ tocInjection }} </span>
 </template>
 
 <script setup lang="ts">
-// Note, initially copied from https://github.com/nuxt-modules/mdc/blob/main/src/runtime/components/prose/ProseH1.vue
-// probably worth reviewing the source during an upgrade to see if there are any changes we should adopt
+import { tocKey } from '../../utilities/tableOfContents'
+
+const tocInjection = inject(tocKey)
 </script>

@@ -32,16 +32,18 @@ const regenerateContentMetadata = async (logger?: Logger) => {
     contentMarkdownPaths.map(
       (contentMarkdownPath) =>
         new Promise<ContentMetadata>((resolve) => {
-          git
-            .log({
-              file: contentMarkdownPath,
-              maxCount: 1,
-              strictDate: true
-            })
-            .then((gitLog) => {
-              const relativePath = contentMarkdownPath
-                .substring(contentPath.length)
-                .replace(/\.md$/, '/')
+          ;(async () => {
+            const relativePath = contentMarkdownPath
+              .substring(contentPath.length)
+              .replace(/\.md$/, '/')
+
+            try {
+              const gitLog = await git.log({
+                file: contentMarkdownPath,
+                maxCount: 1,
+                strictDate: true
+              })
+
               if (gitLog.latest?.date) {
                 resolve({
                   [relativePath]: { mtime: gitLog.latest?.date }
@@ -52,7 +54,11 @@ const regenerateContentMetadata = async (logger?: Logger) => {
                 )
                 resolve({ [relativePath]: undefined })
               }
-            })
+            } catch (e: unknown) {
+              console.error(e)
+              resolve({ [relativePath]: undefined })
+            }
+          })()
         })
     )
   )

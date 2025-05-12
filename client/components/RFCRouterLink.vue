@@ -30,7 +30,7 @@
     </HoverCardPortal>
   </HoverCardRoot>
 
-  <div v-show="hasTouchStore.hasTouch === true" class="inline">
+  <div v-if="hasTouchStore.hasTouch === true" class="inline">
     <DialogRoot v-model:open="isDialogOpen">
       <DialogTrigger
         class="ml-1 px-1 align-baseline"
@@ -74,13 +74,13 @@
 import { computed, onUnmounted, customRef } from 'vue'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import { NuxtLink } from '#components'
-import type { AnchorProps } from '~/utilities/html'
 import { formatTitle, RFC_TYPE_RFC } from '~/utilities/rfc'
+import { fetchRetry } from '~/utilities/network'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
 import type { LoadingStatus } from '~/utilities/loading-status'
 
-const props = defineProps<AnchorProps>()
+const props = defineProps<{ href?: string; id?: string }>()
 const hasTouchStore = useHasTouchStore()
 const rfcJSON = ref<RFCJSON | undefined>()
 const isDialogOpen = ref<boolean>(false)
@@ -89,8 +89,10 @@ const isHoverCardOpen = (() => {
   return customRef((track, trigger) => ({
     get() {
       track()
-      // we never want to open the hovercard while the dialog is open
-      return isDialogOpen.value ? false : value
+      // we never want to open the hovercard while the dialog is open, or if there was an error loading the data
+      return isDialogOpen.value || loadingStatus.value.type !== 'success' ?
+          false
+        : value
     },
     set(newValue) {
       value = newValue
@@ -99,11 +101,8 @@ const isHoverCardOpen = (() => {
   }))
 })()
 
-const RETRY_TIMEOUT_MS = 5000 // Provide enough time for screen reader to speak errors
-
 const rfcId = parseMaybeRfcLink(props.href)
 
-let attemptsRemaining = 2
 const hasUnmountedAbortController = new AbortController()
 
 const loadingStatus = ref<LoadingStatus>({ type: 'idle' })
@@ -115,7 +114,7 @@ onUnmounted(() => {
 const propsWithHrefAsTo = computed(() => ({
   ...props,
   to: props.href, // copy `href` to `to` for usage
-  href: undefined // clobber 'href' with undefined because we're using
+  href: undefined // clobber 'href' with undefined because we're using NuxtLink
 }))
 
 /**
@@ -141,62 +140,40 @@ const loadRfc = async (): Promise<void> => {
 
   if (rfcId === undefined || rfcId.type !== RFC_TYPE_RFC) {
     console.warn(
-      `Received "${props.href}" which wasn't parsed as having an rfc id. Ignoring.`
+      `Received "${props.href}" which wasn't parsed as having an rfc id (was: ${JSON.stringify(rfcId)}). Ignoring element ${JSON.stringify(props)}`
     )
     return
   }
 
   const rfcJSONPath = rfcJSONPathBuilder(`rfc${rfcId.number}`)
 
-  if (attemptsRemaining <= 0) {
-    console.log('Giving up after multiple failed requests for ', rfcJSONPath)
-    return
-  }
-
-  attemptsRemaining--
   loadingStatus.value = {
     type: 'loading'
   }
   console.log(`Loading ${rfcJSONPath}`)
   let data: RFCJSON | undefined = undefined
   try {
-    const response = await fetch(rfcJSONPath, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+    const response = await fetchRetry(
+      rfcJSONPath,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      {
+        maxRetries: 2,
+        delayBetweenRetriesMs: 50
       }
-    })
-    if (hasUnmountedAbortController.signal.aborted) {
-      return
-    }
-    if (!response.ok) {
-      console.error(
-        `Bad response was HTTP ${response.status} ${response.statusText}`,
-        response,
-        `Going to retry ${attemptsRemaining} time(s)`
-      )
-      setTimeout(loadRfc, 0)
-      return
-    }
-
+    )
     data = await response.json()
-    if (!data) {
-      console.error(
-        `Bad JSON from response HTTP ${response.status} ${response.statusText}`,
-        response,
-        `Going to retry ${attemptsRemaining} time(s)`
-      )
-      setTimeout(loadRfc, 0)
-      return
-    }
   } catch (e) {
     console.error(e)
-    // Could be a transient network failure, try again soon
+    // hide the hover card if we can't load any content
     loadingStatus.value = {
       type: 'error',
       message: (e || '').toString()
     }
-    setTimeout(loadRfc, RETRY_TIMEOUT_MS)
     return
   }
   console.log(`Loaded ${rfcJSONPath}`)
