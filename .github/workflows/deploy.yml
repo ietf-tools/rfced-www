@@ -4,6 +4,11 @@ run-name: Build ${{ github.run_number }} of branch ${{ github.ref_name }} by @${
 on:    
   workflow_dispatch:
     inputs:
+      datatrackerRef:
+        description: 'Datatracker API Spec Repo Ref'
+        required: true
+        type: string
+        default: 'feat/rpc-api'
       deploy:
         description: 'Deploy to K8S'
         default: 'Skip'
@@ -36,17 +41,56 @@ jobs:
       with:
         fetch-depth: 1
         fetch-tags: false
+        path: red
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+        fetch-tags: false
+        repository: ietf-tools/datatracker
+        ref: ${{ inputs.datatrackerRef }}
+        path: datatracker
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v4
       with:
         node-version: 22.x
 
+    - name: Generate red-api spec
+      working-directory: ./datatracker
+      run: |
+        cat > doit.bash <<EOF
+        echo "Creating and activating virtual environment..."
+        python -mvenv venv
+        source venv/bin/activate
+        echo "Installing requirements..."
+        pip install -r requirements.txt
+        echo "Generating OpenAPI spec..."
+        touch ietf/settings_local.py
+        ietf/manage.py spectacular --skip-checks > ../red-api.yml
+        EOF
+        docker run --rm --volume .:/workspace ghcr.io/datatracker-app-base:latest /bin/bash -e doit.bash
+
+    - name: Generate API client
+      working-directory: ./
+      run: |
+        npx apigen-ts ./red-api.yml --inline-enums --parse-dates red-client.ts
+        mkdir ./red/client/generated
+        cp red-client.ts ./red/client/generated/
+
+    - name: Archive red-api client
+      uses: actions/upload-artifact@v4
+      with:
+        name: red-api
+        path: |
+          red-api.yml
+          red-client.ts
+
     - name: NPM Install + Build Site
       run: |
         npm ci
-        npm run build
-      working-directory: ./client
+        npm run build:nuxt
+      working-directory: ./red/client
 
     - name: Set Build Variables
       id: buildvars
@@ -68,8 +112,8 @@ jobs:
       env:
         DOCKER_BUILD_SUMMARY: false
       with:
-        context: .
-        file: Dockerfile
+        context: ./red/
+        file: ./red/Dockerfile
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
