@@ -69,7 +69,7 @@ jobs:
         touch ietf/settings_local.py
         ietf/manage.py spectacular --skip-checks > ../red-api.yml
         EOF
-        docker run --rm --volume .:/workspace ghcr.io/datatracker-app-base:latest /bin/bash -e doit.bash
+        docker run --rm --volume .:/workspace ghcr.io/ietf-tools/datatracker-app-base:latest /bin/bash -e doit.bash
 
     - name: Generate API client
       working-directory: ./
