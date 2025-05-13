@@ -76,7 +76,6 @@ jobs:
       working-directory: ./
       run: |
         npx apigen-ts ./red-api.yml --inline-enums --parse-dates ./red-client.ts
-        mkdir ./red/client/generated
         cp red-client.ts ./red/client/generated/
 
     - name: Archive red-api client
