@@ -86,10 +86,11 @@ jobs:
           red-api.yml
           red-client.ts
 
+    # Build dev instead of production until we sort out how to do prerendering, which needs a live datatracker
     - name: NPM Install + Build Site
       run: |
         npm ci
-        npm run build:nuxt
+        npm run build:dev
       working-directory: ./red/client
 
     - name: Set Build Variables
