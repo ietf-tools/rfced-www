@@ -1,8 +1,8 @@
 <template>
-  <RFCRouterLink v-if="isInternal && isRfcLink" v-bind="$attrs">
+  <RFCRouterLink v-if="isInternal && isRfcLink" v-bind="props">
     <slot />
   </RFCRouterLink>
-  <Anchor v-else v-bind="$attrs">
+  <Anchor v-else v-bind="props">
     <slot />
   </Anchor>
 </template>
