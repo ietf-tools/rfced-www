@@ -11,7 +11,6 @@
     v-if="tocInjection?.showToc && tocInjection?.toc"
     :toc="tocInjection?.toc"
   />
-  <span v-else> {{ tocInjection }} </span>
 </template>
 
 <script setup lang="ts">
