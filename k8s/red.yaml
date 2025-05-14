@@ -29,6 +29,10 @@ spec:
           envFrom:
             - secretRef:
                 name: red-secrets-env
+          env:
+            # ensures the pod gets recreated on every deploy:
+            - name: "DEPLOY_UID"
+              value: "$DEPLOY_UID"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
