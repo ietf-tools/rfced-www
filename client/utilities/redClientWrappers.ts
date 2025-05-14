@@ -5,6 +5,7 @@ import { ApiClient } from '~/generated/red-client'
 
 export const getRedClient = () => {
   const isServer = import.meta.server
+  const isTest = import.meta.env.VITEST
 
   const config = useRuntimeConfig()
   const headers: ApiClient['Config']['headers'] = {}
@@ -22,7 +23,7 @@ export const getRedClient = () => {
   }
   if (typeof datatrackerBase !== 'string') {
     throw Error(
-      `Required nuxt.config.ts runtimeConfig.public.datatrackerBase not found (or not a string). Was typeof=${typeof datatrackerBase}. isServer=${isServer}`
+      `Required nuxt.config.ts runtimeConfig.public.datatrackerBase not found (or not a string). Was typeof=${typeof datatrackerBase}. isServer=${isServer}. isTest=${isTest}`
     )
   }
 
@@ -34,13 +35,14 @@ export const getRedClient = () => {
       typeof cfServiceTokenSecret !== 'string')
   ) {
     throw Error(
-      `Detected ${datatrackerBase} as prod API but required headers cfServiceTokenId=${typeof cfServiceTokenId} or cfServiceTokenSecret=${typeof cfServiceTokenSecret} were missing. isServer=${isServer}`
+      `Detected ${datatrackerBase} as prod API but required headers cfServiceTokenId=${typeof cfServiceTokenId} or cfServiceTokenSecret=${typeof cfServiceTokenSecret} were missing. isServer=${isServer}. isTest=${isTest}`
     )
   }
 
-  if (!isServer) {
+  if (!isServer && !isTest) {
+    console.log(import.meta)
     throw Error(
-      `redClientWrapper should only be called serverside. Was isServer=${isServer}`
+      `redClientWrapper should only be called serverside. Was isServer=${isServer}. isTest=${isTest}`
     )
   }
 
