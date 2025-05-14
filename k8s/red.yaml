@@ -41,15 +41,8 @@ spec:
             readOnlyRootFilesystem: true
             runAsUser: 1000
             runAsGroup: 1000
-          volumeMounts:
-            - mountPath: /app/data
-              name: red-unstorage-data
       restartPolicy: Always
       terminationGracePeriodSeconds: 5
-      volumes:
-        - name: red-unstorage-data
-          emptyDir:
-            sizeLimit: "100Mi"
 ---
 apiVersion: v1
 kind: Service
