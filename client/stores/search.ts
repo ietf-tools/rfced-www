@@ -325,6 +325,9 @@ export const useSearchStore = defineStore('search', () => {
       .filter(Boolean) as StatusValue[]
   )
   const toggleStatus = (status: StatusValue) => {
+    if (!Array.isArray(statuses.value)) {
+      throw Error(`statuses.value should be array`)
+    }
     /**
      * Mutate the statuses array per Vue docs:
      *
