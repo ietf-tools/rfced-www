@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "npm run generate && npm run build:nuxt",
-    "build:nuxt": "nuxt build",
+    "build:nuxt": "npx --no nuxt build",
     "build:dev": "npm run build:nuxt:dev",
-    "build:nuxt:dev": "npx nuxt build --envName development",
+    "build:nuxt:dev": "npx --no nuxt build --envName development",
     "dev": "npm run generate && npm run dev:nuxt",
     "dev:nuxt": "nuxt dev",
     "cleanup": "nuxt cleanup",

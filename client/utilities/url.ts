@@ -94,9 +94,9 @@ export const API_ROUTES_TO_PRERENDER = [
   RFC_INDEX_100_DESCENDING_PATH,
   QUEUE_XML_PATH,
   QUEUE_2_XML_PATH,
-  IN_NOTES_BCP_REF_TXT,
+  // IN_NOTES_BCP_REF_TXT, // FIXME reenable when supported
+  // IN_NOTES_STD_REF_TXT, // FIXME reenable when supported
   IN_NOTES_RFC_REF_TXT,
-  IN_NOTES_STD_REF_TXT,
   RSS_PATH,
   ATOM_PATH,
   NEVER_ISSUED_PATH // not an API route but has rarely changing API-driven content

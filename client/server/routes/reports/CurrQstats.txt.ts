@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
   })
 
   const redApi = getRedClient()
-  const result = await renderCurrQstatsDotTxt({
+  const txt = await renderCurrQstatsDotTxt({
     redApi
   })
-  return result
+  return txt
 })
