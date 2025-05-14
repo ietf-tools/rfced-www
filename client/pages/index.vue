@@ -25,14 +25,14 @@
             </Alert>
           </div>
 
-          <div v-if="searchResults?.length === 0">
+          <div v-if="topSearchResults?.length === 0">
             <Alert variant="warning" heading="Unable to load latest RFCs">
               Try again later (API error)
             </Alert>
           </div>
 
           <RFCCardSearchItem
-            v-for="searchResult in searchResults"
+            v-for="searchResult in topSearchResults"
             :key="searchResult.number"
             :search-item="searchResult"
             :show-abstract="false"
@@ -122,5 +122,8 @@ useSeoMeta({
 const { data: searchResponse, error: searchError } =
   await useFetch(SEARCH_API_PATH)
 
-const searchResults = searchResponse.value?.results.splice(0, 3)
+const allSearchResults = searchResponse.value?.results
+
+const topSearchResults =
+  Array.isArray(allSearchResults) ? allSearchResults.splice(0, 3) : []
 </script>
