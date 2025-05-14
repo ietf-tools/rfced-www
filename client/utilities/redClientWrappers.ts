@@ -4,6 +4,9 @@ import { isProdApi } from './url'
 import { ApiClient } from '~/generated/red-client'
 
 export const getRedClient = () => {
+  const isServer = import.meta.server
+  const isTest = import.meta.env.VITEST
+
   const config = useRuntimeConfig()
   const headers: ApiClient['Config']['headers'] = {}
   const {
@@ -20,7 +23,7 @@ export const getRedClient = () => {
   }
   if (typeof datatrackerBase !== 'string') {
     throw Error(
-      'Required nuxt.config.ts runtimeConfig.public.datatrackerBase not found (or not a string)'
+      `Required nuxt.config.ts runtimeConfig.public.datatrackerBase not found (or not a string). Was typeof=${typeof datatrackerBase}. isServer=${isServer}. isTest=${isTest}`
     )
   }
 
@@ -32,7 +35,13 @@ export const getRedClient = () => {
       typeof cfServiceTokenSecret !== 'string')
   ) {
     throw Error(
-      `Detected ${datatrackerBase} as prod API but problems with required headers cfServiceTokenId=${typeof cfServiceTokenId} or cfServiceTokenSecret=${typeof cfServiceTokenSecret} `
+      `Detected ${datatrackerBase} as prod API but required headers cfServiceTokenId=${typeof cfServiceTokenId} or cfServiceTokenSecret=${typeof cfServiceTokenSecret} were missing. isServer=${isServer}. isTest=${isTest}`
+    )
+  }
+
+  if (!isServer && !isTest) {
+    throw Error(
+      `redClientWrapper should only be called serverside or in a test runner. Was isServer=${isServer}. isTest=${isTest}`
     )
   }
 
