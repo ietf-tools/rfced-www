@@ -21,8 +21,6 @@ export default defineEventHandler(async (event) => {
         delayBetweenRequestsMs: DELAY_BETWEEN_REQUESTS_MS
       })
   )
-  
+
   return txt
 })
-
-
