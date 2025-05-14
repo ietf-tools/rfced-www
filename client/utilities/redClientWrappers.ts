@@ -40,9 +40,8 @@ export const getRedClient = () => {
   }
 
   if (!isServer && !isTest) {
-    console.log(import.meta)
     throw Error(
-      `redClientWrapper should only be called serverside. Was isServer=${isServer}. isTest=${isTest}`
+      `redClientWrapper should only be called serverside or in a test runner. Was isServer=${isServer}. isTest=${isTest}`
     )
   }
 
