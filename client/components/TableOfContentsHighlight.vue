@@ -61,11 +61,15 @@ if (
   // because if we pass non-strings to useActiveScroll then it will crash the page
   ids.value.some((id) => typeof id !== 'string')
 ) {
-  throw createError({
-    statusCode: 500,
-    statusMessage: `Server error. Please try again later. Toc ids were not string. Was: ${JSON.stringify(ids.value.map((id) => typeof id))}`,
-    fatal: true
-  })
+  const statusMessage = `Server error. Please try again later. Toc ids were not string. Was: ${JSON.stringify(ids.value.map((id) => typeof id))}`
+  console.error(statusMessage)
+  if (import.meta.dev) {
+    throw createError({
+      statusCode: 500,
+      statusMessage,
+      fatal: true
+    })
+  }
 }
 
 const { setActive: _setActive, activeId } = useTocActiveId(ids)
