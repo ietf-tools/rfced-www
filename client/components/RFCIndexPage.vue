@@ -138,17 +138,18 @@ useSeoMeta({
 })
 
 const createdOn = DateTime.now().toFormat('d LLLL yyyy')
-const apiClient = getRedClient()
+
 const { data: rfcs, error } = await useAsyncData(
   props.cacheKey, // technically it's a de-duplication key but cacheKey is clearer usage / prop name imo
-  () =>
-    getRFCs({
+  () => {
+    const apiClient = getRedClient()
+    return getRFCs({
       apiClient,
       sort: props.sort,
       rfcNumberLimit: props.rfcNumberLimit,
       delayBetweenRequestsMs: 0
     })
-)
+})
 const rfcRows = computed(() => {
   if (!rfcs.value) return []
   return rfcs.value.map(rfcToRfcIndexRow)
