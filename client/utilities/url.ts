@@ -3,6 +3,9 @@ import type { Rfc } from '../generated/red-client'
 import { parseRFCId } from '../utilities/rfc'
 import type { SearchParams } from '~/stores/search'
 
+/**
+ * Represents all known href string patterns
+ */
 export type ValidHrefs =
   | MarkdownValidHrefs // generated global type from types/markdown-valid-hrefs.d.ts
   | `https://${string}` // any external link is treated as valid (even if it might 404 we don't verify further)

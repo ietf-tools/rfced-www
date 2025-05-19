@@ -1,4 +1,4 @@
 export type BreadcrumbItem = {
-  url: string
+  url?: string
   label: string
 }

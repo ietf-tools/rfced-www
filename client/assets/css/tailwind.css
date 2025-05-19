@@ -154,11 +154,11 @@ html.dark {
        look odd, but in a vertical list of TOC items then having some have extra
        whitespace between them does look odd.
     3) using monospaced font, which isn't per the design
-    4) Using `-webkit-text-stroke`
+    4) using `-webkit-text-stroke`
 
     So this is the least worst approach until a better one comes along.
    */
-  text-shadow:-0.5px 0px 0.5px black;
+  text-shadow:-0.5px 0px 0.5px currentColor;
 }
 
 .text-fake-bold {

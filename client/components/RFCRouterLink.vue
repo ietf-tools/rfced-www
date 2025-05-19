@@ -3,6 +3,7 @@
     <HoverCardTrigger as-child>
       <NuxtLink
         v-bind="propsWithHrefAsTo"
+        :class="props.class"
         @focus="loadRfc"
         @mouseover="loadRfc"
         @blur="isHoverCardOpen = false"
@@ -79,8 +80,9 @@ import { fetchRetry } from '~/utilities/network'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
 import type { LoadingStatus } from '~/utilities/loading-status'
+import type { VueStyleClass } from '~/utilities/vue'
 
-const props = defineProps<{ href?: string; id?: string }>()
+const props = defineProps<{ href?: string; id?: string, class?: VueStyleClass }>()
 const hasTouchStore = useHasTouchStore()
 const rfcJSON = ref<RFCJSON | undefined>()
 const isDialogOpen = ref<boolean>(false)

@@ -5,6 +5,7 @@
         <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
       </template>
       <div class="wrap-anywhere">
+        <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
         <ContentRenderer v-if="page" :value="page" />
       </div>
       <ContentDocLastUpdated />
@@ -14,6 +15,7 @@
 
 <script setup lang="ts">
 import { provide } from 'vue'
+import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import {
   nuxtContentTocToRfcEditorToc,
   tocKey
@@ -35,7 +37,7 @@ const { error, data: page } = await useAsyncData(markdownPath, () =>
   queryCollection('content').path(markdownPath).first()
 )
 
-if (error.value) {
+if (error.value || page.value === null) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Not Found',
@@ -53,6 +55,13 @@ if (
     path: canonicalPath
   })
 }
+
+const breadcrumbItems = computed((): BreadcrumbItem[] => {
+  return [
+    { url: "/", "label": "Home"},
+    { url: undefined, label: page.value?.title ?? ""}
+  ]  
+})
 
 const showToc = Boolean(page.value?.showToc)
 
