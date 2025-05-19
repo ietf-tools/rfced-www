@@ -2,7 +2,7 @@
   <footer class="bg-blue-900 text-white dark:bg-blue-950 relative print:hidden">
     <div class="container mx-auto flex flex-col md:flex-row py-4 lg:py-8 gap-4">
       <div class="flex-1 flex flex-col gap-5 pr-4">
-        <p class="text-base">
+        <p class="text-base pl-3">
           rfc-editor.org is maintained by the
           <A
             :href="IETF_URL"
@@ -17,7 +17,7 @@
             Internet Society
           </A>
         </p>
-        <div class="flex gap-7 items-center mt-2 lg:mt-5">
+        <div class="flex gap-7 items-center mt-2 pl-3 lg:mt-5">
           <A :href="IETF_URL">
             <GraphicsIETFLogo width="105" height="60" />
           </A>

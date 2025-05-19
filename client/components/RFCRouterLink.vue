@@ -82,7 +82,11 @@ import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'
 import type { LoadingStatus } from '~/utilities/loading-status'
 import type { VueStyleClass } from '~/utilities/vue'
 
-const props = defineProps<{ href?: string; id?: string, class?: VueStyleClass }>()
+const props = defineProps<{
+  href?: string
+  id?: string
+  class?: VueStyleClass
+}>()
 const hasTouchStore = useHasTouchStore()
 const rfcJSON = ref<RFCJSON | undefined>()
 const isDialogOpen = ref<boolean>(false)

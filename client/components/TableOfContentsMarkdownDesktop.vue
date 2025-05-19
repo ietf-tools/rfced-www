@@ -11,7 +11,11 @@
       :list-item-class="`block text-sm py-2 border-t-1 border-t-gray-300 dark:border-t-gray-500 no-underline hover:underline ${ANCHOR_TAILWIND_STYLE}`"
       list-item-active-class="text-shadow-bold"
     >
-      <Heading level="2" style-level="5" class="mb-1 text-gray-800 dark:text-gray-300">
+      <Heading
+        level="2"
+        style-level="5"
+        class="mb-1 text-gray-800 dark:text-gray-300"
+      >
         In this section
       </Heading>
     </TableOfContentsHighlight>
@@ -20,7 +24,7 @@
 
 <script setup lang="ts">
 import type { RfcEditorToc } from '~/utilities/tableOfContents'
-import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme';
+import { ANCHOR_TAILWIND_STYLE } from '~/utilities/theme'
 
 type Props = {
   toc: RfcEditorToc

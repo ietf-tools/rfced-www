@@ -58,9 +58,9 @@ if (
 
 const breadcrumbItems = computed((): BreadcrumbItem[] => {
   return [
-    { url: "/", "label": "Home"},
-    { url: undefined, label: page.value?.title ?? ""}
-  ]  
+    { url: '/', label: 'Home' },
+    { url: undefined, label: page.value?.title ?? '' }
+  ]
 })
 
 const showToc = Boolean(page.value?.showToc)
