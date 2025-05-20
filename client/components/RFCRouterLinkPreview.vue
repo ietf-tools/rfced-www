@@ -108,11 +108,11 @@ function formatObsoletedBy(
           h(
             Anchor,
             {
-              href: infoRfcPathBuilder(`rfc${obsoletedByItem}`),
-              title: `${formatTitlePlaintext(`RFC${obsoletedByItem}`)}: ${obsoletedByItem}`,
+              href: infoRfcPathBuilder(obsoletedByItem),
+              title: `${formatTitlePlaintext(obsoletedByItem)}: ${obsoletedByItem}`,
               class: 'relative underline p-1 -m-1 hover:bg-gray-100'
             },
-            ['RFC', h('b', obsoletedByItem)]
+            [h('b', obsoletedByItem)]
           )
         )
 
