@@ -5,14 +5,14 @@
     disable-hover-trigger
   >
     <NavigationMenuList
-      class="m-0 flex gap-2 w-full justify-end list-none rounded-[6px]"
+      class="m-0 flex gap-2 w-full justify-end list-none rounded-md"
     >
       <NavigationMenuItem v-for="(menuItem, index) in menuData" :key="index">
         <NavigationMenuLink
           v-if="menuItem.href && !menuItem.children"
           :href="menuItem.href"
           :aria-label="menuItem.label"
-          class="hover:bg-blue-400 group flex select-none items-center justify-between gap-[2px] rounded-[4px] px-4 py-3 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
+          class="hover:bg-blue-400 group flex select-none items-center justify-between gap-[2px] rounded-md px-4 py-3 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
           @click="menuItem.click"
         >
           <Icon v-if="menuItem.icon" :name="menuItem.icon" />
@@ -36,14 +36,15 @@
             <li
               v-for="(level0, level0Index) in menuItem.children"
               :key="`${index}.${level0Index}`"
+              class="flex flex-col"
             >
               <NavigationMenuSub
                 v-if="level0.children"
                 :default-value="level0.label"
                 class="z-100"
               >
-                <NavigationMenuList class="w-full">
-                  <NavigationMenuItem :value="`${index}.${level0Index}`">
+                <NavigationMenuList>
+                  <NavigationMenuItem :value="`${index}.${level0Index}`" class="flex flex-col">
                     <NavigationMenuTrigger :class="MENU_ITEM_CLASS">
                       <span>
                         <Icon v-if="level0.icon" :name="level0.icon" />
@@ -54,12 +55,13 @@
                       />
                     </NavigationMenuTrigger>
                     <NavigationMenuContent
-                      class="bg-gray-200 inset-shadow-sm inset-shadow-gray-400 dark:bg-gray-700 dark:inset-shadow-gray-900"
+                      class="bg-gray-200 rounded-b-md mx-1 pb-1 inset-shadow-sm inset-shadow-gray-400 dark:bg-gray-700 dark:inset-shadow-gray-900"
                     >
                       <ul class="list-none">
                         <li
                           v-for="(level1, level1Index) in level0.children"
                           :key="`${index}.${level0Index}.${level1Index}`"
+                          class="flex flex-col"
                         >
                           <NavigationMenuLink
                             v-if="level1.href"
@@ -88,7 +90,8 @@
                     {{ level0.label }}
                     <Icon
                       v-if="!isInternalLink(level0.href)"
-                      name="fluent:arrow-flow-diagonal-up-right-12-filled"
+                      name="fluent:window-new-20-regular"
+                      class="text-lg absolute ml-1 -mt-1"
                     />
                   </span>
                   <GraphicsChevron
@@ -126,7 +129,7 @@
     </NavigationMenuList>
     <div class="perspective-[2000px] absolute top-full left-0 flex w-full">
       <NavigationMenuViewport
-        class="data-[state=open]:animate-scaleIn data-[state=closed]:animate-scaleOut relative h-(--reka-navigation-menu-viewport-height) w-full origin-[top_center] overflow-hidden rounded-xl bg-white dark:bg-gray-800 transition-[width,_height] duration-300 translate-x-(--reka-navigation-menu-viewport-left) sm:w-(--reka-navigation-menu-viewport-width) border shadow-2xl"
+        class="data-[state=open]:animate-scaleIn data-[state=closed]:animate-scaleOut relative h-(--reka-navigation-menu-viewport-height) w-full origin-[top_center] overflow-hidden rounded-md bg-white dark:bg-gray-800 transition-[width,_height] duration-300 translate-x-(--reka-navigation-menu-viewport-left) sm:w-(--reka-navigation-menu-viewport-width) border shadow-2xl"
       />
     </div>
   </NavigationMenuRoot>
@@ -148,7 +151,7 @@ import { useMenuData } from './HeaderNavData'
 import { isInternalLink, SEARCH_PATH } from '~/utilities/url'
 
 const MENU_ITEM_CLASS =
-  'group w-full select-none flex justify-between rounded-md px-3 py-2 text-sm font-medium leading-none no-underline outline-none text-black dark:text-white hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white'
+  'group select-none flex justify-between rounded-md data-[state=open]:rounded-b-none mx-1 px-3 py-2 text-sm font-medium leading-none no-underline outline-none text-black dark:text-white hover:bg-blue-500 hover:text-white focus:bg-blue-500 focus:text-white'
 
 const menuData = useMenuData()
 

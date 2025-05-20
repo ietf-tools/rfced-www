@@ -6,9 +6,15 @@
       props.depth >= 1 && props.nestedListClass
     ]"
   >
-    <li v-for="section in props.sections" :key="section.id">
-      <NuxtLink :to="`#${section.id}`" :class="props.listItemClass">
-        {{ section.title }}
+    <li v-for="section in props.sections" :key="section.id" class="">
+      <NuxtLink
+        :to="`#${section.id}`"
+        :class="[props.listItemClass, 'flex flex-row']"
+      >
+        <span class="grow-1">{{ section.title }}</span>
+        <GraphicsChevron
+          class="shrink-0 grow-0 basis-5 w-1.5 h-1.5 text-blue-100 group-hover:text-white ml-1 translate-y-1.5 -rotate-90"
+        />
       </NuxtLink>
 
       <TableOfContentsSection
@@ -25,11 +31,6 @@
 </template>
 
 <script setup lang="ts">
-/**
- * Table of Contents
- *
- * See also TableOfContentsHighlight.vue
- */
 import type { RfcEditorToc } from '../utilities/tableOfContents'
 
 type Sections = RfcEditorToc['sections']

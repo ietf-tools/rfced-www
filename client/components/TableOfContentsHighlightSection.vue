@@ -13,11 +13,17 @@
         :aria-current="section.id === props.activeId"
         :class="[
           props.listItemClass,
-          activeId === section.id && props.listItemActiveClass
+          activeId === section.id && props.listItemActiveClass,
+          'flex flex-row justify-between'
         ]"
         @click="handleClick(section.id)"
       >
-        {{ section.title }}
+        <span>
+          {{ section.title }}
+        </span>
+         <GraphicsChevron
+            class="shrink-0 grow-0 basis-5 w-1.5 h-1.5 text-blue-100 group-hover:text-white ml-1 translate-y-1.5 -rotate-90"
+          />
       </NuxtLink>
 
       <TableOfContentsHighlightSection
