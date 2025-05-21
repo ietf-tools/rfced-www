@@ -1,9 +1,12 @@
 import type { DateTime } from 'luxon'
 import { linkPreviewImageUrlBuilder } from './url'
 
+const OPENGRAPH_DIMENSIONS = [1200, 630]
+const TWITTER_DIMENSIONS = [1200, 675]
+
 export const imagePreviewDimensions = [
-  [1200, 630], // OpenGraph (Facebook)
-  [1200, 675] // Twitter
+  OPENGRAPH_DIMENSIONS, // OpenGraph (Facebook)
+  TWITTER_DIMENSIONS // Twitter
 ] as const
 
 const IMAGE_PREVIEW_ALT_TEXT = 'RFC-Editor: Official home of RFCs'
@@ -19,9 +22,14 @@ type UseRfcEditorProps = {
   title: string
   description?: string
   canonicalUrl: string
-  authors?: string
+  /**
+   * Markdown pages and RFCs are considered 'articles'
+   */
+  contentType: 'site-homepage' | 'article'
+  authors?: string[]
   modifiedDateTime?: DateTime
   publishedDateTime?: DateTime
+  keywords?: string[]
 }
 
 export const useRfcEditorHead = (props: UseRfcEditorProps) => {
@@ -48,8 +56,8 @@ const formatTitle = (title?: string) => {
 
 const linkPreviewImageBuilder = (mode: 'opengraph' | 'twitter') => {
   const dimensions: Record<typeof mode, WidthHeight> = {
-    opengraph: [1200, 630],
-    twitter: [1200, 675]
+    opengraph: OPENGRAPH_DIMENSIONS,
+    twitter: TWITTER_DIMENSIONS
   }
   const widthHeight = dimensions[mode]
 
@@ -104,45 +112,51 @@ const buildOpenGraph = (props: UseRfcEditorProps) => {
     {
       property: 'og:image:height',
       content: linkPreviewImage.widthHeight[1].toString()
-    },
-    {
-      property: 'og:type',
-      content: 'article'
     }
   ]
-
-  if (props.authors) {
-    metaTags.push({
-      property: 'article:author',
-      content: props.authors
-    })
-  }
-
-  if (props.publishedDateTime) {
-    const isoDate = props.publishedDateTime.toISODate()
-    if (isoDate) {
-      metaTags.push({
-        property: 'article:published_time',
-        content: isoDate
-      })
-    }
-  }
-
-  if (props.modifiedDateTime) {
-    const isoDate = props.modifiedDateTime.toISODate()
-    if (isoDate) {
-      metaTags.push({
-        property: 'article:modified_time',
-        content: isoDate
-      })
-    }
-  }
 
   if (props.description) {
     metaTags.push({
       property: 'og:description',
       content: props.description
     })
+  }
+
+  if (props.contentType === 'article') {
+    metaTags.push({
+      property: 'og:type',
+      content: props.contentType
+    })
+
+    if (props.authors) {
+      metaTags.push(
+        // OpenGraph uses a meta tag for each author
+        ...props.authors.map((author) => ({
+          property: 'article:author',
+          content: author
+        }))
+      )
+    }
+
+    if (props.publishedDateTime) {
+      const isoDate = props.publishedDateTime.toISODate()
+      if (isoDate) {
+        metaTags.push({
+          property: 'article:published_time',
+          content: isoDate
+        })
+      }
+    }
+
+    if (props.modifiedDateTime) {
+      const isoDate = props.modifiedDateTime.toISODate()
+      if (isoDate) {
+        metaTags.push({
+          property: 'article:modified_time',
+          content: isoDate
+        })
+      }
+    }
   }
 
   return metaTags
@@ -184,19 +198,32 @@ const buildTwitter = (props: UseRfcEditorProps) => {
 }
 
 const buildGeneric = (props: UseRfcEditorProps) => {
-  const metaTags: MetaTag[] = []
+  const metaTags: MetaTag[] = [
+    {
+      property: 'generator',
+      content: 'Nuxt'
+    }
+  ]
 
   if (props.authors) {
     metaTags.push({
-      property: 'authors',
-      content: props.authors
+      property: 'author',
+      content: props.authors.join(', ')
     })
   }
 
   if (props.description) {
     metaTags.push({
-      property: 'twitter:description',
+      property: 'description',
       content: props.description
+    })
+  }
+
+  // RFCs can have keywords. It's unclear who the consumers of this meta tag would be as this meta tag is mostly ignored these days
+  if (props.keywords) {
+    metaTags.push({
+      property: 'keywords',
+      content: props.keywords.join(', ')
     })
   }
 

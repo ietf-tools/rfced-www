@@ -19,28 +19,32 @@
       </HoverCardContent>
     </HoverCardPortal>
   </HoverCardRoot>
-  <p v-if="thisContentMetadata" class="hidden print:block font-mono">
+  <p class="hidden print:block font-mono">
     Last updated {{ relativeDate }}, {{ fullDate }}
   </p>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import _contentMetadata from '../generated/content-metadata.json'
-import type { ContentMetadata } from '~/modules/generate-content-metadata'
 
-const contentMetadata: ContentMetadata = _contentMetadata
-const route = useRoute()
-const thisContentMetadata = contentMetadata[route.path]
-const isHoverCardOpen = ref(false)
-
-let fullDate: string | null = null
-let relativeDate: string | null = null
-
-if (thisContentMetadata) {
-  // server rendered content should be generic (not have localised date formatting based on server timezone)
-  const datetime = DateTime.fromISO(thisContentMetadata.mtime)
-  relativeDate = datetime.toRelativeCalendar() // eg. X years ago
-  fullDate = thisContentMetadata.mtime.replace(/T/g, ' ') // Replace 'T' to allow line wrapping where necessary
+type Props = {
+  modifiedDateTime: DateTime
 }
+
+const props = defineProps<Props>()
+
+// Server rendered content should be generic (not have localised date formatting based on server timezone)
+
+// eg. X years ago
+const relativeDate = computed(() => props.modifiedDateTime.toRelativeCalendar())
+
+const fullDate = computed(() =>
+  props.modifiedDateTime.toISODate()?.replace(
+    /T/g,
+    // Replace 'T' to allow line wrapping where necessary
+    ' '
+  )
+)
+
+const isHoverCardOpen = ref(false)
 </script>
