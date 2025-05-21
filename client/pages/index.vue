@@ -122,8 +122,8 @@ useSeoMeta({
 const { data: searchResponse, error: searchError } =
   await useFetch(SEARCH_API_PATH)
 
-const allSearchResults = searchResponse.value?.results
-
-const topSearchResults =
-  Array.isArray(allSearchResults) ? allSearchResults.splice(0, 3) : []
+const topSearchResults = computed(() => {
+  const allSearchResults = searchResponse.value?.results
+  return Array.isArray(allSearchResults) ? allSearchResults.slice(0, 3) : []
+})
 </script>
