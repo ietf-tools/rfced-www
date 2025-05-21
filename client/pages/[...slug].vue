@@ -21,6 +21,7 @@ import {
   tocKey
 } from '~/utilities/tableOfContents'
 import { PUBLIC_SITE } from '~/utilities/url'
+import { useRfcEditorHead } from '~/utilities/head'
 
 const route = useRoute()
 
@@ -74,7 +75,9 @@ const toc =
  */
 provide(tocKey, { showToc, toc })
 
-useHead({
-  link: [{ rel: 'canonical', href: canonicalUrl }]
+useRfcEditorHead({
+  title: page.value.title,
+  canonicalUrl,
+  description: page.value.description
 })
 </script>

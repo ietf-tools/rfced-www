@@ -34,6 +34,7 @@
     "@nuxt/fonts": "^0.7.2",
     "@nuxt/icon": "^1.5.0",
     "@nuxtjs/color-mode": "^3.4.4",
+    "@nuxtjs/seo": "3.0.3",
     "@pinia/nuxt": "^0.5.4",
     "@tailwindcss/vite": "4.0.14",
     "@vueuse/core": "13.1.0",
@@ -46,6 +47,7 @@
     "pinia": "^2.2.2",
     "reka-ui": "2.1.1",
     "remark-heading-id": "1.0.1",
+    "sharp": "0.34.2",
     "simple-git": "^3.27.0",
     "tailwindcss": "4.0.14",
     "vue": "3.5.13"

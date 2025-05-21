@@ -17,8 +17,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: { strict: true },
   modules: [
-    '@nuxt/content',
-    // Note: don't use 'Nuxt Device' see note in responsiveMode.ts
+    '@nuxt/content', // Note: don't use 'Nuxt Device' see note in responsiveMode.ts
     'reka-ui/nuxt',
     '@nuxt/test-utils/module',
     '@nuxt/eslint',

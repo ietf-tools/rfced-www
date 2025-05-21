@@ -2,6 +2,7 @@ import { kebabCase } from 'lodash-es'
 import type { Rfc } from '../generated/red-client'
 import { parseRFCId } from '../utilities/rfc'
 import type { SearchParams } from '~/stores/search'
+import type { imagePreviewDimensions, ImagePreviewFilename } from './head'
 
 /**
  * Represents all known href string patterns
@@ -267,6 +268,13 @@ export const textToAnchorId = (text: string): string | undefined => {
   }
 
   return kebabCase(normalized)
+}
+
+export const linkPreviewImageUrlBuilder = (
+  widthPx: (typeof imagePreviewDimensions)[number][0],
+  heightPx: (typeof imagePreviewDimensions)[number][1]
+) => {
+  return `${PUBLIC_SITE}/link-preview-image-${widthPx}x${heightPx}.png` as const
 }
 
 /**
