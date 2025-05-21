@@ -1,8 +1,8 @@
 import { kebabCase } from 'lodash-es'
 import type { Rfc } from '../generated/red-client'
 import { parseRFCId } from '../utilities/rfc'
+import type { imagePreviewDimensions } from './head'
 import type { SearchParams } from '~/stores/search'
-import type { imagePreviewDimensions, ImagePreviewFilename } from './head'
 
 /**
  * Represents all known href string patterns

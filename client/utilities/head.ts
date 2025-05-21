@@ -20,8 +20,8 @@ type UseRfcEditorProps = {
   description?: string
   canonicalUrl: string
   authors?: string
-  modifiedTime?: DateTime
-  publishedTime?: DateTime
+  modifiedDateTime?: DateTime
+  publishedDateTime?: DateTime
 }
 
 export const useRfcEditorHead = (props: UseRfcEditorProps) => {
@@ -90,6 +90,10 @@ const buildOpenGraph = (props: UseRfcEditorProps) => {
       content: linkPreviewImage.url
     },
     {
+      property: 'og:image:alt',
+      content: IMAGE_PREVIEW_ALT_TEXT
+    },
+    {
       property: 'og:image:type',
       content: linkPreviewImage.mime
     },
@@ -109,9 +113,29 @@ const buildOpenGraph = (props: UseRfcEditorProps) => {
 
   if (props.authors) {
     metaTags.push({
-      property: 'og:author',
+      property: 'article:author',
       content: props.authors
     })
+  }
+
+  if (props.publishedDateTime) {
+    const isoDate = props.publishedDateTime.toISODate()
+    if (isoDate) {
+      metaTags.push({
+        property: 'article:published_time',
+        content: isoDate
+      })
+    }
+  }
+
+  if (props.modifiedDateTime) {
+    const isoDate = props.modifiedDateTime.toISODate()
+    if (isoDate) {
+      metaTags.push({
+        property: 'article:modified_time',
+        content: isoDate
+      })
+    }
   }
 
   if (props.description) {
@@ -160,8 +184,6 @@ const buildTwitter = (props: UseRfcEditorProps) => {
 }
 
 const buildGeneric = (props: UseRfcEditorProps) => {
-  const linkPreviewImage = linkPreviewImageBuilder('twitter')
-
   const metaTags: MetaTag[] = []
 
   if (props.authors) {

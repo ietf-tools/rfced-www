@@ -53,7 +53,7 @@ const regenerateLinkPreviewImages = async (logger?: Logger) => {
 }
 
 export default defineNuxtModule({
-  setup(options, nuxt) {
+  setup(options, _nuxt) {
     const logger = useLogger('generate-link-preview-images', {
       level: options.quiet ? 0 : 3
     })

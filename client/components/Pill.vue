@@ -10,7 +10,8 @@
     ]"
   >
     <div
-      v-for="(text, index) in props.text"
+      v-for="(textItem, index) in props.text"
+      :key="index"
       :class="{
         'py-1 uppercase': true,
         'px-2': props.size === 'small',
@@ -21,7 +22,7 @@
         'bg-blue-300 dark:bg-blue-700': index >= 1
       }"
     >
-      <Renderable :val="text" />
+      <Renderable :val="textItem" />
     </div>
   </div>
 </template>
