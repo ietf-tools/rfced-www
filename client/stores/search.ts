@@ -200,7 +200,6 @@ export const useSearchStore = defineStore('search', () => {
 
       // while fetching hide current results
       searchResponse.value = null
-      window.scrollTo(0, 0) // reset scroll to top of page
 
       const params = new URLSearchParams({
         q: q.value,
@@ -216,6 +215,11 @@ export const useSearchStore = defineStore('search', () => {
 
       const paramsString = params.toString()
 
+      if (route.path !== SEARCH_PATH) {
+        // Only search on the search route
+        return
+      }
+
       // delete any previous error as we're doing a new search
       searchError.value = ''
 
@@ -228,6 +232,7 @@ export const useSearchStore = defineStore('search', () => {
         .then((resp) => resp.json())
         .then((data: SearchResponse | SearchNuxtError) => {
           if (isSearchResponse(data)) {
+            window.scrollTo(0, 0) // reset scroll to top of page
             searchResponse.value = data
             if (data?.results) {
               data.results.forEach((result) => {
@@ -272,7 +277,6 @@ export const useSearchStore = defineStore('search', () => {
     : undefined
   )
   watch(publicationDateFrom, (newFrom) => {
-    console.log({ newFrom })
     resetOffsetDueToSearchChange()
     updateUrlParams({ from: stringifyDate(newFrom) })
     searchSoon()
