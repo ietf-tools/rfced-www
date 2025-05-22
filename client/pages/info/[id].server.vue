@@ -31,9 +31,9 @@ const {
   const redApi = getRedClient()
   console.log('got red client')
   const rfcNumber = parseInt(rfcId.number, 10)
-  console.log('rfc id')
+  console.log('rfc id', rfcNumber)
   try {
-    return redApi.red.docRetrieve(rfcNumber)
+    return await redApi.red.docRetrieve(rfcNumber)
   } catch (e) {
     console.error('rfc', e?.toString())
   }
