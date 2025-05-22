@@ -8,12 +8,18 @@
         <Breadcrumbs :breadcrumb-items="breadcrumbItems" />
         <ContentRenderer v-if="page" :value="page" />
       </div>
-      <ContentDocLastUpdated />
+      <ContentDocModifiedDateTime
+        v-if="modifiedDateTime"
+        :modified-date-time="modifiedDateTime"
+      />
     </BodyLayoutDocument>
   </div>
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
+import _contentMetadata from '../generated/content-metadata.json'
+import type { ContentMetadata } from '~/modules/generate-content-metadata'
 import { provide } from 'vue'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import {
@@ -21,6 +27,7 @@ import {
   tocKey
 } from '~/utilities/tableOfContents'
 import { PUBLIC_SITE } from '~/utilities/url'
+import { useRfcEditorHead } from '~/utilities/head'
 
 const route = useRoute()
 
@@ -48,9 +55,7 @@ if (error.value || page.value === null) {
 const canonicalPath = `/${normalizedSlug}/`
 const canonicalUrl = `${PUBLIC_SITE}${canonicalPath}`
 
-if (
-  !route.fullPath.endsWith('/') // if the path doesn't follow our URL style
-) {
+if (route.fullPath !== canonicalPath) {
   await navigateTo({
     path: canonicalPath
   })
@@ -70,11 +75,24 @@ const toc =
 
 /**
  * We want the mobile TOC to appear inline below the <h1> which is rendered in markdown by
- * ContentRenderer, so we'll provide() the details for ProseH1 to render it.
+ * ContentRenderer, so we'll `provide()` the details for `ProseH1.vue` to render it.
  */
 provide(tocKey, { showToc, toc })
 
-useHead({
-  link: [{ rel: 'canonical', href: canonicalUrl }]
+const contentMetadata: ContentMetadata = _contentMetadata
+const thisRouteContentMetadata = contentMetadata[route.path]
+
+let modifiedDateTime: DateTime | undefined = undefined
+
+if (thisRouteContentMetadata) {
+  modifiedDateTime = DateTime.fromISO(thisRouteContentMetadata.mtime)
+}
+
+useRfcEditorHead({
+  title: page.value.title,
+  canonicalUrl,
+  description: page.value.description,
+  modifiedDateTime,
+  contentType: 'article'
 })
 </script>

@@ -7,7 +7,7 @@ export default defineContentConfig({
       source: '**.md',
       schema: z.object({
         showToc: z.boolean(),
-        summary: z.string()
+        description: z.string()
       })
     })
   }

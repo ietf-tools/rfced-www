@@ -115,10 +115,6 @@ definePageMeta({
   layout: false
 })
 
-useSeoMeta({
-  title: 'RFC Editor'
-})
-
 const { data: searchResponse, error: searchError } =
   await useFetch(SEARCH_API_PATH)
 

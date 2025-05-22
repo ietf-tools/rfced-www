@@ -2,10 +2,7 @@
   <p class="text-base text-blue-900 dark:text-white mt-2">
     {{ props.rfc.title }}
   </p>
-
-  <div class="print:m-0 my-4">
-    <Tag size="normal" :text="tagText" />
-  </div>
+  <Pill size="small" :text="tagText" class="print:m-0 my-2" />
   <ul
     v-if="list1"
     class="hidden lg:block print:block text-base text-blue-900 dark:text-white"

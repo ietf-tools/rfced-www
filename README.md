@@ -35,6 +35,10 @@ See `/client/`
 
 _TODO_
 
+#### Documentation (markdown)
+
+Markdown files are in `client/content`. Markdown Frontmatter (metadata) fields supported are listed in [content.config.js](https://github.com/ietf-tools/red/blob/main/client/content.config.ts#L8).
+
 ## Testing
 
 ### Visual regression testing
