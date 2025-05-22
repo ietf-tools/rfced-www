@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon'
+import type { DateTime } from 'luxon'
 
 type Props = {
   modifiedDateTime: DateTime
