@@ -16,7 +16,11 @@ export interface ApigenRequest extends Omit<RequestInit, 'body'> {
   body?: unknown
 }
 
-async function readableStreamToString(stream) {
+async function readableStreamToString(
+  stream: ReadableStream<Uint8Array<ArrayBufferLike>> | null
+) {
+  if (!stream) return 'NO STREAM'
+
   const reader = stream.getReader()
   const decoder = new TextDecoder()
   let result = ''
