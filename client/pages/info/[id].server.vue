@@ -4,6 +4,8 @@
       <template v-if="rfcError">
         <Alert level="1" variant="warning" heading="Error">
           {{ rfcError }}
+
+          {{ JSON.stringify(rfcError) }}
         </Alert>
       </template>
       <template v-else-if="rfc && status === 'success'">
@@ -29,6 +31,10 @@ const {
   const rfcNumber = parseInt(id.number, 10)
   return redApi.red.docRetrieve(rfcNumber)
 })
+
+if (rfcError) {
+  console.error(JSON.stringify(rfcError.value))
+}
 
 definePageMeta({
   layout: false
