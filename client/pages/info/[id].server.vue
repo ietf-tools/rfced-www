@@ -26,10 +26,17 @@ const {
   status,
   error: rfcError
 } = await useAsyncData(`info-${route.params.id}`, async () => {
-  const id = parseRFCId(route.params.id.toString())
+  const rfcId = parseRFCId(route.params.id.toString())
+  console.log('parsed rfcId', JSON.stringify(rfcId))
   const redApi = getRedClient()
-  const rfcNumber = parseInt(id.number, 10)
-  return redApi.red.docRetrieve(rfcNumber)
+  console.log('got red client')
+  const rfcNumber = parseInt(rfcId.number, 10)
+  console.log('rfc id')
+  try {
+    return redApi.red.docRetrieve(rfcNumber)
+  } catch (e) {
+    console.error('rfc', e?.toString())
+  }
 })
 
 if (rfcError) {
