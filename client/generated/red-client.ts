@@ -16,6 +16,27 @@ export interface ApigenRequest extends Omit<RequestInit, 'body'> {
   body?: unknown
 }
 
+async function readableStreamToString(stream) {
+  const reader = stream.getReader()
+  const decoder = new TextDecoder()
+  let result = ''
+
+  while (true) {
+    const { value, done } = await reader.read()
+
+    if (value) {
+      // Decode the current chunk and append to result
+      result += decoder.decode(value, { stream: !done })
+    }
+
+    if (done) {
+      break
+    }
+  }
+
+  return result
+}
+
 export class ApiClient {
   ISO_FORMAT =
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?(?:[-+]\d{2}:?\d{2}|Z)?$/
@@ -38,6 +59,12 @@ export class ApiClient {
   }
 
   async ParseError(rep: Response) {
+    console.error('inside client url', rep.url)
+    console.error('inside client status', rep.status)
+    console.error('inside client statusText', rep.statusText)
+    const body = await readableStreamToString(rep.body)
+    console.error('inside client body', body)
+
     try {
       return await rep.json()
     } catch (e) {
