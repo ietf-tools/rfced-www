@@ -1,8 +1,8 @@
 <template>
   <Card :href="props.id" heading-level="3" has-cover-link>
     <template #headingTitle>{{ page?.title }} {{ error }}</template>
-    <p v-if="summary" class="text-base mt-2 text-blue-900 dark:text-white">
-      {{ summary }}
+    <p v-if="description" class="text-base mt-2 text-blue-900 dark:text-white">
+      {{ description }}
     </p>
   </Card>
 </template>
@@ -21,5 +21,5 @@ const { error, data: page } = await useAsyncData(props.id, () =>
   queryCollection('content').path(props.id).first()
 )
 
-const summary = page.value?.summary
+const description = computed(() => page.value?.description)
 </script>
