@@ -17,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
+import { provide } from 'vue'
 import { DateTime } from 'luxon'
 import _contentMetadata from '../generated/content-metadata.json'
 import type { ContentMetadata } from '~/modules/generate-content-metadata'
-import { provide } from 'vue'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 import {
   nuxtContentTocToRfcEditorToc,
