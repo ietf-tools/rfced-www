@@ -35,6 +35,11 @@ const {
   try {
     return await redApi.red.docRetrieve(rfcNumber)
   } catch (e) {
+    console.error('error from api client')
+    console.error(
+      JSON.stringify(e && typeof e === 'object' ? Object.keys(e) : 'not object')
+    )
+    console.error(JSON.stringify(e))
     console.error('rfc', e?.toString())
   }
 })
