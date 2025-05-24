@@ -37,6 +37,9 @@ export default defineNuxtConfig({
       }
     }
   },
+  alias: {
+    'typesense-instantsearch-adapter': 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
+  },
   colorMode: {
     classSuffix: ''
   },

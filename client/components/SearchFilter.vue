@@ -8,6 +8,11 @@
 
     <SearchFilterStatuses />
 
+    <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+      <span class="font-medium">Status</span>
+      <ais-refinement-list attribute="stdlevelname" class="mt-2" />
+    </div>
+
     <DateYearMonthRange
       v-model:start="startValue"
       v-model:end="endValue"
@@ -38,19 +43,46 @@
       :options="Object.entries(WorkingGroups)"
     />
 
-    <div class="hidden lg:block">
-      <button
-        type="button"
-        class="underline text-blue-700 dark:text-blue-100 px-3 py-2 -ml-3"
-        @click="searchStore.clearFilters()"
-      >
-        Clear all
-      </button>
+    <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+      <span class="font-medium">Stream</span>
+      <ais-refinement-list attribute="stream" class="mt-2" />
     </div>
+
+    <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+      <span class="font-medium">Area</span>
+      <ais-refinement-list attribute="area" :limit="10" show-more :show-more-limit="100" :sort-by="['isRefined', 'name']" class="mt-2" />
+    </div>
+
+    <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+      <span class="font-medium">Working Group</span>
+      <ais-refinement-list attribute="group" searchable :limit="10" class="mt-2" />
+    </div>
+
+    <ais-clear-refinements :excluded-attributes="['type']" class="hidden lg:block">
+      <template #default="{ canRefine, refine }">
+        <button
+          type="button"
+          class="underline text-blue-700 dark:text-blue-100 px-3 py-2 -ml-3"
+          :disabled="!canRefine"
+          @click.prevent="refine"
+        >
+          Clear all
+        </button>
+      </template>
+    </ais-clear-refinements>
   </form>
 </template>
 
 <script setup lang="ts">
+import {
+  AisInstantSearch,
+  AisSearchBox,
+  AisStats,
+  AisHits,
+  AisPagination,
+  AisRefinementList,
+  AisClearRefinements
+} from 'vue-instantsearch/vue3/es'
 // This template and any descendant components within it might be rendered multiple times
 // simultaneously in the DOM so please ensure unique DOM ids, or avoid them entirely (eg
 // <label> wrapping)
