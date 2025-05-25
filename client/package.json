@@ -42,7 +42,7 @@
     "feed": "^4.2.2",
     "lodash-es": "^4.17.21",
     "luxon": "^3.5.0",
-    "nuxt": "^3.13.1",
+    "nuxt": "3.17.4",
     "pinia": "^2.2.2",
     "reka-ui": "2.1.1",
     "remark-heading-id": "1.0.1",
