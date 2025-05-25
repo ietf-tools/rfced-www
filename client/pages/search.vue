@@ -110,8 +110,6 @@ import {
 } from 'vue-instantsearch/vue3/es'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 
-const responsiveModeStore = useResponsiveModeStore()
-
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
     apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
@@ -129,9 +127,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  So you can pass any parameters supported by the search endpoint below.
   //  query_by is required.
   additionalSearchParameters: {
-    query_by: 'rfc,filename,title,abstract,keywords,authors,adName,group,groupName,area,areaName',
-    infix: 'off,always,off,off,off,off,off,off,off,off,off',
-    query_by_weights: '127,50,50,20,20,1,1,1,1,1,1'
+    preset: 'red'
   }
 })
 const indexName = 'docs'
