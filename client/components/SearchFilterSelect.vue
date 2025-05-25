@@ -1,25 +1,18 @@
 <template>
-  <ais-menu-select :attribute="props.attribute" :limit="100">
-    <template #default="{ items, canRefine, refine }">
-      <label>
-        <span class="text-base font-bold block mb-1">{{ props.label }}</span>
-        <select
-          :disabled="!canRefine"
-          class="w-full text-base border border-gray-400 dark:border-white dark:text-white py-2 pl-1 pr-6 scheme-light dark:scheme-dark"
-          @change="refine($event.currentTarget.value)"
-        >
-          <option value="">All</option>
-          <option
-            v-for="item in items"
-            :key="item.value"
-            :value="item.value"
-          >
-            {{ item.label }}
-          </option>
-        </select>
-      </label>
-    </template>
-  </ais-menu-select>
+  <label>
+    <span class="text-base font-bold block mb-1">{{ props.label }}</span>
+    <ais-menu-select
+      :attribute="props.attribute"
+      :limit="100"
+      :class-names="{
+        'ais-MenuSelect': 'w-full text-base border border-gray-400 dark:border-white dark:text-white px-1 scheme-light dark:scheme-dark',
+        'ais-MenuSelect-select': 'w-full px-1 py-2'
+      }">
+      <template #defaultOption>
+        All
+      </template>
+    </ais-menu-select>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -43,6 +36,4 @@ type Props = {
 }
 
 const props = defineProps<Props>()
-
-const value = defineModel<string>()
 </script>

@@ -21,19 +21,16 @@
     />
 
     <SearchFilterSelect
-      v-model="searchStore.stream"
       label="Stream"
       attribute="stream"
     />
 
     <SearchFilterSelect
-      v-model="searchStore.area"
       label="Area"
       attribute="area"
     />
 
     <SearchFilterSelect
-      v-model="searchStore.workingGroup"
       label="Working group"
       attribute="group"
       searchable
@@ -43,7 +40,7 @@
       <template #default="{ canRefine, refine }">
         <button
           type="button"
-          class="underline text-blue-700 dark:text-blue-100 px-3 py-2 -ml-3"
+          class="underline text-blue-700 dark:text-blue-100 px-3 py-2 -ml-3 cursor-pointer"
           :disabled="!canRefine"
           @click.prevent="refine"
         >
