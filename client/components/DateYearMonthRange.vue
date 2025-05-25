@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, getLocalTimeZone, parseDate, today } from '@internationalized/date'
+import { CalendarDate, fromAbsolute, getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import { AisRangeInput } from 'vue-instantsearch/vue3/es'
 import {
   DateRangeFieldInput,
@@ -87,22 +87,24 @@ type Props = {
 
 const props = defineProps<Props>()
 
+const currentTimeZone = getLocalTimeZone()
+
 const minDateRange = props.startRangeDate ? parseDate(props.startRangeDate).subtract({ days: 1 }) : new CalendarDate(1968, 12, 31)
-const maxDateRange = props.endRangeDate ? parseDate(props.endRangeDate).add({ days: 1 }) : today(getLocalTimeZone()).add({ days: 1 })
-const minAisValue = computed(() => Math.floor(minDateRange.toDate(getLocalTimeZone()).valueOf() / 1000))
-const maxAisValue = computed(() => Math.floor(maxDateRange.toDate(getLocalTimeZone()).valueOf() / 1000))
+const maxDateRange = props.endRangeDate ? parseDate(props.endRangeDate).add({ days: 1 }) : today(currentTimeZone).add({ days: 1 })
+const minAisValue = computed(() => Math.floor(minDateRange.toDate(currentTimeZone).valueOf() / 1000))
+const maxAisValue = computed(() => Math.floor(maxDateRange.toDate(currentTimeZone).valueOf() / 1000))
 
 function convertUnixRange(unixRange): DateRange {
   return {
-    start: unixRange.min ? parseDate(new Date(unixRange.min * 1000).toISOString().substring(0, 10)) : undefined,
-    end: unixRange.max ? parseDate(new Date(unixRange.max * 1000).toISOString().substring(0, 10)) : undefined
+    start: unixRange.min ? fromAbsolute(unixRange.min * 1000, currentTimeZone) : undefined,
+    end: unixRange.max ? fromAbsolute(unixRange.max * 1000, currentTimeZone) : undefined
   }
 }
 
 function handleValueUpdate(dateRange: DateRange) {
   return {
-    min: dateRange.start ? Math.floor(dateRange.start.toDate(getLocalTimeZone()).valueOf() / 1000) : minAisValue.value,
-    max: dateRange.end ? Math.floor(dateRange.end.toDate(getLocalTimeZone()).valueOf() / 1000) : maxAisValue.value,
+    min: dateRange.start ? Math.floor(dateRange.start.toDate(currentTimeZone).valueOf() / 1000) : minAisValue.value,
+    max: dateRange.end ? Math.floor(dateRange.end.toDate(currentTimeZone).valueOf() / 1000) : maxAisValue.value,
   }
 }
 </script>
