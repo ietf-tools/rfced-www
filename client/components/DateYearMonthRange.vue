@@ -1,33 +1,84 @@
 <template>
   <fieldset class="w-full">
     <legend class="text-base font-bold mb-1">{{ props.label }}</legend>
-    <div class="w-full flex gap-2">
-      <YearMonthDropdown
-        v-model="startValue"
-        :placeholder="props.startPlaceholder"
-        :label="props.startLabel"
-        :start-date="props.startRangeDate"
-        :end-date="props.endRangeDate"
-      />
-      <YearMonthDropdown
-        v-model="endValue"
-        :placeholder="props.endPlaceholder"
-        :label="props.endLabel"
-        :start-date="props.startRangeDate"
-        :end-date="props.endRangeDate"
-      />
+    <div class="w-full text-base border border-gray-400 dark:border-white dark:text-white px-2 py-1 scheme-light dark:scheme-dark">
+      <ais-range-input
+        attribute="publicationDate"
+        :min="minAisValue"
+        :max="maxAisValue"
+        :precision="0"
+        >
+        <template #default="{ currentRefinement, refine }">
+          <DateRangeFieldRoot
+            v-slot="{ segments }"
+            granularity="day"
+            :min-value="minDateRange"
+            :max-value="maxDateRange"
+            class="flex flex-row justify-center"
+            :model-value="convertUnixRange(currentRefinement)"
+            @update:model-value="val => refine(handleValueUpdate(val))"
+            >
+            <template
+              v-for="item in segments.start"
+              :key="item.part"
+            >
+              <DateRangeFieldInput
+                v-if="item.part === 'literal'"
+                :part="item.part"
+                type="start"
+              >
+                {{ item.value }}
+              </DateRangeFieldInput>
+              <DateRangeFieldInput
+                v-else
+                :part="item.part"
+                class="rounded p-0.5  focus:outline-none focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-green9"
+                type="start"
+              >
+                {{ item.value }}
+              </DateRangeFieldInput>
+            </template>
+            <span class="mx-2"> -&gt; </span>
+            <template
+              v-for="item in segments.end"
+              :key="item.part"
+            >
+              <DateRangeFieldInput
+                v-if="item.part === 'literal'"
+                :part="item.part"
+                type="end"
+              >
+                {{ item.value }}
+              </DateRangeFieldInput>
+              <DateRangeFieldInput
+                v-else
+                :part="item.part"
+                class="rounded p-0.5  focus:outline-none focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-green9"
+                type="end"
+              >
+                {{ item.value }}
+              </DateRangeFieldInput>
+            </template>
+          </DateRangeFieldRoot>
+        </template>
+      </ais-range-input>
     </div>
   </fieldset>
 </template>
 
 <script setup lang="ts">
-const startValue = defineModel<string>('start')
-const endValue = defineModel<string>('end')
+import { CalendarDate, getLocalTimeZone, parseDate, today } from '@internationalized/date'
+import { AisRangeInput } from 'vue-instantsearch/vue3/es'
+import {
+  DateRangeFieldInput,
+  DateRangeFieldRoot,
+type DateRange
+} from 'reka-ui'
 
 type Props = {
   label: string
-  startRangeDate: Date
-  endRangeDate: Date
+  startRangeDate?: string
+  endRangeDate?: string
   startLabel: string
   endLabel: string
   startPlaceholder: string
@@ -35,4 +86,23 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+
+const minDateRange = props.startRangeDate ? parseDate(props.startRangeDate).subtract({ days: 1 }) : new CalendarDate(1968, 12, 31)
+const maxDateRange = props.endRangeDate ? parseDate(props.endRangeDate).add({ days: 1 }) : today(getLocalTimeZone()).add({ days: 1 })
+const minAisValue = computed(() => Math.floor(minDateRange.toDate(getLocalTimeZone()).valueOf() / 1000))
+const maxAisValue = computed(() => Math.floor(maxDateRange.toDate(getLocalTimeZone()).valueOf() / 1000))
+
+function convertUnixRange(unixRange): DateRange {
+  return {
+    start: unixRange.min ? parseDate(new Date(unixRange.min * 1000).toISOString().substring(0, 10)) : undefined,
+    end: unixRange.max ? parseDate(new Date(unixRange.max * 1000).toISOString().substring(0, 10)) : undefined
+  }
+}
+
+function handleValueUpdate(dateRange: DateRange) {
+  return {
+    min: dateRange.start ? Math.floor(dateRange.start.toDate(getLocalTimeZone()).valueOf() / 1000) : minAisValue.value,
+    max: dateRange.end ? Math.floor(dateRange.end.toDate(getLocalTimeZone()).valueOf() / 1000) : maxAisValue.value,
+  }
+}
 </script>

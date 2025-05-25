@@ -11,8 +11,7 @@
     <DateYearMonthRange
       v-model:start="startValue"
       v-model:end="endValue"
-      :start-range-date="OLDEST_RFC"
-      :end-range-date="NEWEST_POTENTIAL_RFC"
+      start-range-date="1968-12-31"
       label="Publication date"
       start-label="from"
       start-placeholder="Date from"
@@ -88,7 +87,4 @@ const endValue = computed({
     searchStore.publicationDateTo = parseDate(yearMonth)
   }
 })
-
-const OLDEST_RFC = new Date('1969-01-01')
-const NEWEST_POTENTIAL_RFC = new Date()
 </script>
