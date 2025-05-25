@@ -10,11 +10,7 @@
             <div class="lg:w-1/2">
               <ais-search-box
                 autofocus
-                :placeholder="
-                  responsiveModeStore.responsiveMode === 'Desktop' ?
-                    `Find an RFC (e.g. 'RFC7120')`
-                  : 'Find an RFC'
-                "
+                placeholder="Find an RFC"
                 :class-names="{
                   'ais-SearchBox-form': 'w-full flex pt-4 pb-6',
                   'ais-SearchBox-input': 'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2',
@@ -84,7 +80,15 @@
                       </div>
                     </div>
                   </li>
-                  <div class="flex flex-row justify-center"><ais-pagination /></div>
+                  <ais-pagination
+                    :class-names="{
+                      'ais-Pagination': 'w-full mt-4',
+                      'ais-Pagination-list': 'flex flex-row justify-center',
+                      'ais-Pagination-item': 'mr-1 py-2 px-3 bg-gray-200 rounded-xs',
+                      'ais-Pagination-item--selected': 'bg-gray-700 text-white',
+                      'ais-Pagination-item--disabled': 'bg-transparent text-gray-400'
+                    }"
+                  />
                 </ul>
               </template>
             </ais-hits>
