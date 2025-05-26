@@ -1,10 +1,18 @@
 <template>
   <div class="min-h-[100vh]">
-    <ais-instant-search :index-name="indexName" :search-client="searchClient" :initial-ui-state="initialUiState" :future="{ preserveSharedStateOnUnmount: true }">
+    <ais-instant-search
+      :index-name="indexName"
+      :search-client="searchClient"
+      :initial-ui-state="initialUiState"
+      :future="{ preserveSharedStateOnUnmount: true }"
+    >
       <NuxtLayout name="default">
         <template #subheader>
           <div class="container mx-auto">
-            <Heading level="1" class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance">
+            <Heading
+              level="1"
+              class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance"
+            >
               Search RFCs
             </Heading>
             <div class="lg:w-1/2">
@@ -13,10 +21,12 @@
                 placeholder="Find an RFC"
                 :class-names="{
                   'ais-SearchBox-form': 'w-full flex pt-4 pb-6',
-                  'ais-SearchBox-input': 'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2',
+                  'ais-SearchBox-input':
+                    'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2',
                   'ais-SearchBox-submit': 'bg-blue-200 px-2 flex items-center',
                   'ais-SearchBox-reset': 'hidden',
-                  'ais-SearchBox-loadingIndicator': 'bg-yellow-400 px-2 flex items-center text-white'
+                  'ais-SearchBox-loadingIndicator':
+                    'bg-yellow-400 px-2 flex items-center text-white'
                 }"
                 show-loading-indicator
               >
@@ -39,7 +49,13 @@
             <div class="flex flex-row justify-between items-center">
               <ais-stats>
                 <template #default="{ nbHits, processingTimeMS }">
-                  <div class="text-sm w-max text-zinc-500"><span class="font-medium">{{ nbHits.toLocaleString('en', { useGrouping: true }) }}</span> hits in <span class="font-medium">{{ processingTimeMS }}ms</span></div>
+                  <div class="text-sm w-max text-zinc-500">
+                    <span class="font-medium">{{
+                      nbHits.toLocaleString('en', { useGrouping: true })
+                    }}</span>
+                    hits in
+                    <span class="font-medium">{{ processingTimeMS }}ms</span>
+                  </div>
                 </template>
               </ais-stats>
               <div class="hidden lg:block">
@@ -48,11 +64,18 @@
                   <ais-sort-by
                     :items="[
                       { value: 'docs', label: 'Relevancy' },
-                      { value: 'docs/sort/rfcNumber:asc', label: 'RFC no. (Lowest first)' },
-                      { value: 'docs/sort/rfcNumber:desc', label: 'RFC no. (Highest first)' }
+                      {
+                        value: 'docs/sort/rfcNumber:asc',
+                        label: 'RFC no. (Lowest first)'
+                      },
+                      {
+                        value: 'docs/sort/rfcNumber:desc',
+                        label: 'RFC no. (Highest first)'
+                      }
                     ]"
                     :class-names="{
-                      'ais-SortBy-select': 'text-base ml-2 bg-white text-black dark:bg-black dark:text-white dark:border'
+                      'ais-SortBy-select':
+                        'text-base ml-2 bg-white text-black dark:bg-black dark:text-white dark:border'
                     }"
                   />
                 </label>
@@ -64,32 +87,27 @@
 
             <ais-hits class="mt-4">
               <template #default="{ items }">
-                <ul>
-                  <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 dark:bg-gray-950 p-4 shadow-sm rounded-xs mb-2">
-                    <div class="flex flex-row">
-                      <h1 class="font-medium text-black dark:text-white grow"><a :href="`/info/` + item.filename + `/`">{{ item.title }}</a></h1>
-                      <span class="text-sm font-bold text-gray-600 dark:text-gray-300 uppercase">RFC&nbsp;{{ item.rfc }}</span>
-                    </div>
-                    <span class="text-sm font-medium text-teal-800 dark:text-teal-400 text-right">{{ item.stdlevelname }}</span>
-                    <span class="text-sm text-gray-700 dark:text-gray-400 line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
-                    <div class="flex flex-row mt-2">
-                      <div class="flex-auto">
-                        <div class="text-sm font-medium text-sky-700 dark:text-sky-400 grow">{{ item.authors?.map(a => a.name).join(', ') }}</div>
-                        <div class="text-xs text-teal-600 dark:text-teal-400">{{ humanizeDate(item.publicationDate) }}</div>
-                      </div>
-                      <div v-if="item.groupName" class="flex-auto text-right">
-                        <div class="text-sm text-orange-800 dark:text-amber-400">{{ item.groupName }}</div>
-                        <div v-if="item.areaName" class="text-xs text-orange-800 dark:text-amber-500">{{ item.areaName }}</div>
-                      </div>
-                    </div>
+                <ul class="flex flex-col gap-4">
+                  <li
+                    v-for="item in items as TypeSenseSearchItem[]"
+                    :key="item.objectID"
+                    class="flex flex-col"
+                  >
+                    <RFCCardTypeSenseItem
+                      heading-level="3"
+                      :type-sense-search-item="item"
+                    />
                   </li>
                   <ais-pagination
                     :class-names="{
                       'ais-Pagination': 'w-full mt-4',
                       'ais-Pagination-list': 'flex flex-row justify-center',
-                      'ais-Pagination-item': 'mr-1 py-2 px-3 bg-gray-200 dark:bg-gray-900 rounded-xs',
-                      'ais-Pagination-item--selected': 'bg-gray-700 dark:bg-blue-200! text-white',
-                      'ais-Pagination-item--disabled': 'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800'
+                      'ais-Pagination-item':
+                        'mr-1 py-2 px-3 bg-gray-200 dark:bg-gray-900 rounded-xs',
+                      'ais-Pagination-item--selected':
+                        'bg-gray-700 dark:bg-blue-200! text-white',
+                      'ais-Pagination-item--disabled':
+                        'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800'
                     }"
                   />
                 </ul>
@@ -111,8 +129,9 @@ import {
   AisPagination,
   AisSortBy
 } from 'vue-instantsearch/vue3/es'
-import { DateTime } from 'luxon'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
+import type { TypeSenseSearchItem } from '../utilities/typesense'
+import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -122,10 +141,10 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
         host: 'typesense.ietf.org',
         path: '',
         port: 443,
-        protocol: 'https',
-      },
+        protocol: 'https'
+      }
     ],
-    cacheSearchResultsForSeconds: 2 * 60, // Cache search results from server. Defaults to 2 minutes. Set to 0 to disable caching.
+    cacheSearchResultsForSeconds: 2 * 60 // Cache search results from server. Defaults to 2 minutes. Set to 0 to disable caching.
   },
   // The following parameters are directly passed to Typesense's search API endpoint.
   //  So you can pass any parameters supported by the search endpoint below.
@@ -142,10 +161,6 @@ const initialUiState = {
       type: ['rfc']
     }
   }
-}
-
-function humanizeDate(unixTimestamp: number): string {
-  return DateTime.fromSeconds(unixTimestamp).toLocaleString(DateTime.DATE_MED)
 }
 
 definePageMeta({
