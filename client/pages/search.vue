@@ -65,16 +65,19 @@
             <ais-hits class="mt-4">
               <template #default="{ items }">
                 <ul>
-                  <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 p-4 shadow-sm mb-2">
+                  <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 p-4 shadow-sm rounded-xs mb-2">
                     <div class="flex flex-row">
                       <h1 class="font-medium grow"><a :href="`/info/` + item.filename + `/`">{{ item.title }}</a></h1>
-                      <span v-if="item.ref" class="text-sm font-medium text-rose-800">{{ item.ref.toUpperCase() }}</span>
+                      <span class="text-sm font-bold text-gray-600 uppercase">RFC&nbsp;{{ item.rfc }}</span>
                     </div>
-                    <span class="text-sm font-medium text-gray-600 uppercase">{{ item.filename }}</span>
-                    <span class="text-sm line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
+                    <span class="text-sm font-medium text-teal-800 text-right">{{ item.stdlevelname }}</span>
+                    <span class="text-sm text-gray-700 line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
                     <div class="flex flex-row mt-2">
-                      <div class="text-sm font-medium text-sky-700 grow">{{ item.authors?.map(a => a.name).join(', ') }}</div>
-                      <div v-if="item.groupName" class="text-right">
+                      <div class="flex-auto">
+                        <div class="text-sm font-medium text-sky-700 grow">{{ item.authors?.map(a => a.name).join(', ') }}</div>
+                        <div class="text-xs text-teal-600">{{ humanizeDate(item.publicationDate) }}</div>
+                      </div>
+                      <div v-if="item.groupName" class="flex-auto text-right">
                         <div class="text-sm text-orange-800">{{ item.groupName }}</div>
                         <div v-if="item.areaName" class="text-xs text-orange-800">{{ item.areaName }}</div>
                       </div>
@@ -108,6 +111,7 @@ import {
   AisPagination,
   AisSortBy
 } from 'vue-instantsearch/vue3/es'
+import { DateTime } from 'luxon'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
@@ -138,6 +142,10 @@ const initialUiState = {
       type: ['rfc']
     }
   }
+}
+
+function humanizeDate(unixTimestamp: number): string {
+  return DateTime.fromSeconds(unixTimestamp).toLocaleString(DateTime.DATE_MED)
 }
 
 definePageMeta({
