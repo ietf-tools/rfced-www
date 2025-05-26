@@ -65,21 +65,21 @@
             <ais-hits class="mt-4">
               <template #default="{ items }">
                 <ul>
-                  <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 p-4 shadow-sm rounded-xs mb-2">
+                  <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 dark:bg-gray-950 p-4 shadow-sm rounded-xs mb-2">
                     <div class="flex flex-row">
-                      <h1 class="font-medium grow"><a :href="`/info/` + item.filename + `/`">{{ item.title }}</a></h1>
-                      <span class="text-sm font-bold text-gray-600 uppercase">RFC&nbsp;{{ item.rfc }}</span>
+                      <h1 class="font-medium text-black dark:text-white grow"><a :href="`/info/` + item.filename + `/`">{{ item.title }}</a></h1>
+                      <span class="text-sm font-bold text-gray-600 dark:text-gray-300 uppercase">RFC&nbsp;{{ item.rfc }}</span>
                     </div>
-                    <span class="text-sm font-medium text-teal-800 text-right">{{ item.stdlevelname }}</span>
-                    <span class="text-sm text-gray-700 line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
+                    <span class="text-sm font-medium text-teal-800 dark:text-teal-400 text-right">{{ item.stdlevelname }}</span>
+                    <span class="text-sm text-gray-700 dark:text-gray-400 line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
                     <div class="flex flex-row mt-2">
                       <div class="flex-auto">
-                        <div class="text-sm font-medium text-sky-700 grow">{{ item.authors?.map(a => a.name).join(', ') }}</div>
-                        <div class="text-xs text-teal-600">{{ humanizeDate(item.publicationDate) }}</div>
+                        <div class="text-sm font-medium text-sky-700 dark:text-sky-400 grow">{{ item.authors?.map(a => a.name).join(', ') }}</div>
+                        <div class="text-xs text-teal-600 dark:text-teal-400">{{ humanizeDate(item.publicationDate) }}</div>
                       </div>
                       <div v-if="item.groupName" class="flex-auto text-right">
-                        <div class="text-sm text-orange-800">{{ item.groupName }}</div>
-                        <div v-if="item.areaName" class="text-xs text-orange-800">{{ item.areaName }}</div>
+                        <div class="text-sm text-orange-800 dark:text-amber-400">{{ item.groupName }}</div>
+                        <div v-if="item.areaName" class="text-xs text-orange-800 dark:text-amber-500">{{ item.areaName }}</div>
                       </div>
                     </div>
                   </li>
@@ -87,9 +87,9 @@
                     :class-names="{
                       'ais-Pagination': 'w-full mt-4',
                       'ais-Pagination-list': 'flex flex-row justify-center',
-                      'ais-Pagination-item': 'mr-1 py-2 px-3 bg-gray-200 rounded-xs',
-                      'ais-Pagination-item--selected': 'bg-gray-700 text-white',
-                      'ais-Pagination-item--disabled': 'bg-transparent text-gray-400'
+                      'ais-Pagination-item': 'mr-1 py-2 px-3 bg-gray-200 dark:bg-gray-900 rounded-xs',
+                      'ais-Pagination-item--selected': 'bg-gray-700 dark:bg-blue-200! text-white',
+                      'ais-Pagination-item--disabled': 'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800'
                     }"
                   />
                 </ul>
