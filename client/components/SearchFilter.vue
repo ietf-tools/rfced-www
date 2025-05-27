@@ -19,23 +19,16 @@
       end-placeholder="Date to"
     />
 
-    <SearchFilterSelect
-      label="Stream"
-      attribute="stream"
-    />
+    <SearchFilterSelect label="Stream" attribute="stream" />
 
-    <SearchFilterSelect
-      label="Area"
-      attribute="area"
-    />
+    <SearchFilterSelect label="Area" attribute="area" />
 
-    <SearchFilterSelect
-      label="Working group"
-      attribute="group"
-      searchable
-    />
+    <SearchFilterSelect label="Working group" attribute="group" searchable />
 
-    <ais-clear-refinements :excluded-attributes="['type']" class="hidden lg:block">
+    <ais-clear-refinements
+      :excluded-attributes="['type']"
+      class="hidden lg:block"
+    >
       <template #default="{ canRefine, refine }">
         <button
           type="button"

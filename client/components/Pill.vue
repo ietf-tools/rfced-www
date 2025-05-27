@@ -33,7 +33,7 @@ import type { VueStyleClass } from '~/utilities/vue'
 type Props = {
   text: (string | VNode)[]
   class?: VueStyleClass
-  size: 'normal' | 'small'
+  size?: 'normal' | 'small'
 }
 
 const props = withDefaults(defineProps<Props>(), {

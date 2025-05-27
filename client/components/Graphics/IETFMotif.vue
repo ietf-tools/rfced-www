@@ -29,7 +29,7 @@ type Props = {
   width?: string
   height?: string
   class?: VueStyleClass
-  opacity: number
+  opacity?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
