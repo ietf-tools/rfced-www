@@ -1,5 +1,5 @@
-import type { Rfc } from '../generated/red-client'
 import { z } from 'zod'
+import type { Rfc } from '../generated/red-client'
 
 export type TypeSenseSearchItem = z.infer<typeof TypeSenseSearchItemSchema>
 
@@ -36,7 +36,7 @@ export const typeSenseSearchItemToRFC = (
   return {
     number: parseInt(item.rfc, 10),
     title: item.title,
-    published: new Date(item.publicationDate).toUTCString(),
+    published: new Date(item.publicationDate).toISOString(),
     authors:
       item.authors?.map((author, index) => ({
         person: index,

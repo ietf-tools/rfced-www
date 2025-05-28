@@ -1,10 +1,10 @@
 <template>
   <div class="min-h-[100vh]">
     <ais-instant-search
-      :index-name="indexName"
+      :index-name="INDEX_NAME"
       :search-client="searchClient"
-      :initial-ui-state="initialUiState"
       :future="{ preserveSharedStateOnUnmount: true }"
+      :routing="routing"
     >
       <NuxtLayout name="default">
         <template #subheader>
@@ -132,6 +132,9 @@ import {
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
+// import { singleIndex as singleIndexMapping } from 'instantsearch.js/es/lib/stateMappings'
+
+const route = useRoute()
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -153,12 +156,80 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
     preset: 'red'
   }
 })
-const indexName = 'docs'
+const INDEX_NAME = 'docs'
 const searchClient = typesenseInstantsearchAdapter.searchClient
-const initialUiState = {
-  docs: {
-    refinementList: {
-      type: ['rfc']
+
+type StdLevelName = 'Best Current Practice'
+
+type UIState = {
+  [key in typeof INDEX_NAME]: {
+    query?: string
+    range: {
+      publicationDate: string // eg "-31752000:1748433600"
+    }
+    refinementList?: {
+      type: string[]
+      stdlevelname?: StdLevelName[]
+    }
+    sortBy?: string
+  }
+}
+
+/**
+ * A 'no op' router
+ */
+const noOpRouter = {
+  write(...args: unknown[]) {
+    console.log('write', { args })
+  },
+  read(...args: unknown[]) {
+    console.log('read', { args })
+  },
+  onUpdate(...args: unknown[]) {
+    console.log('onUpdate', { args })
+  },
+  dispose(...args: unknown[]) {
+    console.log('dispose', { args })
+  },
+  createURL(...args: unknown[]) {
+    console.log('createURL', { args })
+  }
+}
+
+const routing = {
+  router: noOpRouter,
+  stateMapping: {
+    stateToRoute(uiState: UIState): void {
+      const q = uiState[INDEX_NAME].query ?? null
+      const stdlevelname =
+        uiState[INDEX_NAME].refinementList?.stdlevelname?.join(',') ?? null
+      // TODO: don't navigateTo when the resulting URL would be the same
+      navigateTo(
+        {
+          query: {
+            q,
+            stdlevelname
+          }
+        },
+        { replace: true }
+      )
+    },
+    routeToState(routeState: unknown): UIState {
+      console.log('routeToState', routeState)
+      const query = route.query.q?.toString() ?? ''
+      const stdlevelname = route.query.stdlevelname?.toString().split(',')
+      return {
+        [INDEX_NAME]: {
+          query,
+          range: {
+            publicationDate: '-31752000:1748433600'
+          },
+          refinementList: {
+            type: ['rfc'],
+            stdlevelname: stdlevelname as StdLevelName[]
+          }
+        }
+      }
     }
   }
 }
