@@ -48,36 +48,7 @@ import { AisClearRefinements } from 'vue-instantsearch/vue3/es'
 // This template and any descendant components within it might be rendered multiple times
 // simultaneously in the DOM so please ensure unique DOM ids, or avoid them entirely (eg
 // <label> wrapping)
-import { useSearchStore } from '~/stores/search'
 
-const searchStore = useSearchStore()
-
-function parseDate(yearMonth: string): Date | undefined {
-  if (yearMonth === '') {
-    return undefined
-  }
-  const [year, month] = yearMonth.split('-')
-  return new Date(parseFloat(year), parseFloat(month) - 1)
-}
-
-/**
- * The store uses `Date` objects whereas <DateYearMonthRange> expects
- * strings of `YYYY-M` (eg `2024-3`) so we'll convert them here.
- **/
-const startValue = computed({
-  get() {
-    return stringifyDate(searchStore.publicationDateFrom)
-  },
-  set(yearMonth: string) {
-    searchStore.publicationDateFrom = parseDate(yearMonth)
-  }
-})
-const endValue = computed({
-  get() {
-    return stringifyDate(searchStore.publicationDateTo)
-  },
-  set(yearMonth: string) {
-    searchStore.publicationDateTo = parseDate(yearMonth)
-  }
-})
+const startValue = ref()
+const endValue = ref()
 </script>

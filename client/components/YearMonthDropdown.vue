@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDateString } from '~/stores/search'
+import { formatDateString } from '~/utilities/date'
 
 type Props = {
   label: string

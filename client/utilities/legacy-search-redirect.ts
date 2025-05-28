@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { DateTime } from 'luxon'
-import type { Statuses, Streams, Areas } from '../stores/search'
 import type { SearchParamsSchema } from '../server/api/search'
 import { monthNames } from '../utilities/strings'
 
@@ -136,10 +135,7 @@ const monthNameToNumber = (
   return index + 1 // index is zero based but we want +1 because Jan=1, Feb=2, etc
 }
 
-const statusMappingFromLegacyToNew: Record<
-  keyof typeof Statuses,
-  string | string[]
-> = {
+const statusMappingFromLegacyToNew: Record<string, string | string[]> = {
   any: 'Any',
   standard: [
     'Standards Track',
@@ -159,7 +155,7 @@ const sortedStatusMappingFromLegacyToNew = Object.entries(
   statusMappingFromLegacyToNew
 ).sort((a, b) => a[0].localeCompare(b[0]))
 
-const streamMappingFromLegacyToNew: Record<keyof typeof Streams, string> = {
+const streamMappingFromLegacyToNew: Record<string, string> = {
   '': 'Any',
   ietf: 'IETF',
   irtf: 'IRTF',
@@ -169,7 +165,7 @@ const streamMappingFromLegacyToNew: Record<keyof typeof Streams, string> = {
   legacy: 'Legacy'
 }
 
-const areasMappingFromLegacyToNew: Record<keyof typeof Areas, string> = {
+const areasMappingFromLegacyToNew: Record<string, string> = {
   '': '',
   app: 'app',
   art: 'art',

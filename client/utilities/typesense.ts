@@ -3,9 +3,11 @@ import type { Rfc } from '../generated/red-client'
 
 export type TypeSenseSearchItem = z.infer<typeof TypeSenseSearchItemSchema>
 
+// Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
 export const TypeSenseSearchItemSchema = z.object({
   objectID: z.string(),
   rfc: z.string(),
+  rfcNumber: z.number(),
   filename: z.string(),
   title: z.string(),
   stdlevelname: z.string(),
@@ -18,8 +20,10 @@ export const TypeSenseSearchItemSchema = z.object({
     )
     .optional(),
   publicationDate: z.number(),
-  groupName: z.string(),
-  areaName: z.string().optional()
+  group: z.string(), // slug
+  groupName: z.string(), // name
+  area: z.string().optional(), // slug
+  areaName: z.string().optional() // name
 })
 
 export const typeSenseSearchItemToRFC = (
@@ -34,7 +38,7 @@ export const typeSenseSearchItemToRFC = (
   const item = result.data
 
   return {
-    number: parseInt(item.rfc, 10),
+    number: item.rfcNumber,
     title: item.title,
     published: new Date(item.publicationDate).toISOString(),
     authors:
@@ -43,14 +47,14 @@ export const typeSenseSearchItemToRFC = (
         name: author.name
       })) ?? [],
     area:
-      item.areaName ?
+      item.area && item.areaName ?
         {
-          acronym: item.areaName,
+          acronym: item.area,
           name: item.areaName
         }
       : undefined,
     group: {
-      acronym: item.groupName,
+      acronym: item.group,
       name: item.groupName
     },
     abstract: item.abstract,

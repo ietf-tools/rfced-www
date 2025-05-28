@@ -55,7 +55,7 @@
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card
-            :href="searchPathBuilder({ order: 'stream' })"
+            :href="searchPathBuilder({ sortby: 'stream' })"
             heading-level="3"
             has-cover-link
           >
@@ -66,7 +66,7 @@
           </Card>
 
           <Card
-            :href="searchPathBuilder({ order: 'status' })"
+            :href="searchPathBuilder({ sortby: 'status' })"
             heading-level="3"
             has-cover-link
           >
@@ -77,7 +77,7 @@
           </Card>
 
           <Card
-            :href="searchPathBuilder({ order: 'service' })"
+            :href="searchPathBuilder({ sortby: 'service' })"
             heading-level="3"
             has-cover-link
           >

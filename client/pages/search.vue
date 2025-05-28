@@ -132,7 +132,7 @@ import {
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
-// import { singleIndex as singleIndexMapping } from 'instantsearch.js/es/lib/stateMappings'
+import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
@@ -171,7 +171,6 @@ type UIState = {
       type: string[]
       stdlevelname?: StdLevelName[]
     }
-    sortBy?: string
   }
 }
 
@@ -203,13 +202,17 @@ const routing = {
       const q = uiState[INDEX_NAME].query ?? null
       const stdlevelname =
         uiState[INDEX_NAME].refinementList?.stdlevelname?.join(',') ?? null
+      // const sortby = uiState[INDEX_NAME].sortby ?? null
+      // const status = uiState[INDEX_NAME].status?.join(',') ?? null
       // TODO: don't navigateTo when the resulting URL would be the same
       navigateTo(
         {
           query: {
             q,
-            stdlevelname
-          }
+            stdlevelname,
+
+            status
+          } satisfies Partial<SearchParams>
         },
         { replace: true }
       )
@@ -218,6 +221,7 @@ const routing = {
       console.log('routeToState', routeState)
       const query = route.query.q?.toString() ?? ''
       const stdlevelname = route.query.stdlevelname?.toString().split(',')
+      // const status = route.query.status?.toString().split(',')
       return {
         [INDEX_NAME]: {
           query,
