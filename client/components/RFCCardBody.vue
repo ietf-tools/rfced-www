@@ -2,7 +2,12 @@
   <p class="text-base text-blue-900 dark:text-white mt-2">
     {{ props.rfc.title }}
   </p>
-  <Pill size="small" :text="tagText" class="print:m-0 my-2" />
+  <Pill
+    v-if="tagText.length > 0"
+    size="small"
+    :text="tagText"
+    class="print:m-0 my-2"
+  />
   <ul
     v-if="list1"
     class="hidden lg:block print:block text-base text-blue-900 dark:text-white"
@@ -149,7 +154,10 @@ const list1 = computed(() => [
 const list2 = computed(() => formatStreamAndArea(props.rfc))
 
 const tagText = computed(() => {
-  const tagText = [props.rfc.status.name]
+  const tagText = []
+  if (props.rfc.status.name) {
+    tagText.push(props.rfc.status.name)
+  }
   const datetime = DateTime.fromISO(props.rfc.published)
   const relativeCalendar = datetime.toRelativeCalendar()
   if (props.showTagDate && relativeCalendar) {

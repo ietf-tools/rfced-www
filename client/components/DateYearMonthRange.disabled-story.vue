@@ -28,6 +28,6 @@ import { ref } from 'vue'
 const startValue = ref('2020-1')
 const endValue = ref('2023-3')
 
-const OLDEST_RFC = new Date('1969-01-01')
-const NEWEST_POTENTIAL_RFC = new Date()
+const OLDEST_RFC = new Date('1969-01-01').toUTCString()
+const NEWEST_POTENTIAL_RFC = new Date().toUTCString()
 </script>

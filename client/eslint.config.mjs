@@ -13,6 +13,7 @@ export default withNuxt([
       'vue/multi-word-component-names': 'off',
       'vue/operator-linebreak': 'off',
       'vue/singleline-html-element-content-newline': 'off',
+      'nuxt/nuxt-config-keys-order': 'off',
       '@stylistic/comma-dangle': 'off',
       '@stylistic/indent': 'off',
       '@stylistic/quotes': 'off',

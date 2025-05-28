@@ -30,29 +30,7 @@
           <div
             class="flex flex-row justify-between mt-4 border-t border-t-gray-200 w-full px-2 py-2"
           >
-            <button
-              type="button"
-              class="underline text-blue-700 dark:text-blue-300 px-3 py-2"
-              @click="clearFiltersAndCloseDialog()"
-            >
-              Clear all
-            </button>
-            <button
-              type="button"
-              class="border font-bold px-3 py-2 bg-blue-400 text-white"
-              @click="isOpen = false"
-            >
-              <template v-if="searchStore.searchResponse === null">
-                loading...
-              </template>
-              <template v-else>
-                Show {{ searchStore.searchResponse.count }}
-                <template v-if="searchStore.searchResponse.count === 1">
-                  RFC
-                </template>
-                <template v-else> RFCs </template>
-              </template>
-            </button>
+            TODO
           </div>
         </DialogDescription>
         <DialogClose />
@@ -74,10 +52,4 @@ import {
 } from 'reka-ui'
 
 const isOpen = ref(false)
-const searchStore = useSearchStore()
-
-function clearFiltersAndCloseDialog() {
-  searchStore.clearFilters()
-  isOpen.value = false
-}
 </script>

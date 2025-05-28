@@ -31,10 +31,19 @@ import { useRfcEditorHead } from '~/utilities/head'
 
 const route = useRoute()
 
-const slug: string = (
-  Array.isArray(route.params.slug) ?
-    route.params.slug
-  : [route.params.slug]).join('/')
+const { slug: paramSlug } = route.params
+
+if (!paramSlug) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Not Found',
+    fatal: true
+  })
+}
+
+const slug: string = (Array.isArray(paramSlug) ? paramSlug : [paramSlug]).join(
+  '/'
+)
 
 const normalizedSlug = slug.replace(/^\//, '').replace(/\/$/, '')
 

@@ -2,7 +2,6 @@ import { kebabCase } from 'lodash-es'
 import type { Rfc } from '../generated/red-client'
 import { parseRFCId } from '../utilities/rfc'
 import type { imagePreviewDimensions } from './head'
-import type { SearchParams } from '~/stores/search'
 
 /**
  * Represents all known href string patterns
@@ -119,7 +118,8 @@ const _FIXME_URLS = [
   FIXME_INNOTES_PRERELEASE_PATH
 ] as const
 
-type SearchKeys = keyof SearchParams
+export type SearchParamKeys = 'q' | 'stdlevelname' | 'sortby' | 'status'
+export type SearchParams = Record<SearchParamKeys, string | null>
 
 export const searchPathBuilder = (
   searchParams: Partial<SearchParams>
@@ -127,7 +127,7 @@ export const searchPathBuilder = (
   const hasParams = Object.values(searchParams).join('').trim().length > 0
   return `${SEARCH_PATH}${hasParams ? '?' : ''}${
     hasParams ?
-      (Object.keys(searchParams) as SearchKeys[])
+      (Object.keys(searchParams) as SearchParamKeys[])
         .sort() // normalize order
         .map((searchKey) => {
           const searchValue = searchParams[searchKey]
