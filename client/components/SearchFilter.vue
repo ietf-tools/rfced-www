@@ -44,10 +44,7 @@
 </template>
 
 <script setup lang="ts">
-// import { AisClearRefinements } from 'vue-instantsearch/vue3/es'
-// This template and any descendant components within it might be rendered multiple times
-// simultaneously in the DOM so please ensure unique DOM ids, or avoid them entirely (eg
-// <label> wrapping)
+import { AisClearRefinements } from 'vue-instantsearch/vue3/es'
 
 const startValue = ref()
 const endValue = ref()

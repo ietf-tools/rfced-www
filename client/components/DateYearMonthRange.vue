@@ -72,7 +72,7 @@ import {
   parseDate,
   today
 } from '@internationalized/date'
-// import { AisRangeInput } from 'vue-instantsearch/vue3/es'
+import { AisRangeInput } from 'vue-instantsearch/vue3/es'
 import {
   DateRangeFieldInput,
   DateRangeFieldRoot,

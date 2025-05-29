@@ -121,43 +121,43 @@
 </template>
 
 <script setup lang="ts">
-// import {
-//   AisInstantSearch,
-//   AisSearchBox,
-//   AisStats,
-//   AisHits,
-//   AisPagination,
-//   AisSortBy
-// } from 'vue-instantsearch/vue3/es'
-// import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
+import {
+  AisInstantSearch,
+  AisSearchBox,
+  AisStats,
+  AisHits,
+  AisPagination,
+  AisSortBy
+} from 'vue-instantsearch/vue3/es'
+import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
-// const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
-//   server: {
-//     apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
-//     nodes: [
-//       {
-//         host: 'typesense.ietf.org',
-//         path: '',
-//         port: 443,
-//         protocol: 'https'
-//       }
-//     ],
-//     cacheSearchResultsForSeconds: 2 * 60 // Cache search results from server. Defaults to 2 minutes. Set to 0 to disable caching.
-//   },
-//   // The following parameters are directly passed to Typesense's search API endpoint.
-//   //  So you can pass any parameters supported by the search endpoint below.
-//   //  query_by is required.
-//   additionalSearchParameters: {
-//     preset: 'red'
-//   }
-// })
+const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+  server: {
+    apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
+    nodes: [
+      {
+        host: 'typesense.ietf.org',
+        path: '',
+        port: 443,
+        protocol: 'https'
+      }
+    ],
+    cacheSearchResultsForSeconds: 2 * 60 // Cache search results from server. Defaults to 2 minutes. Set to 0 to disable caching.
+  },
+  // The following parameters are directly passed to Typesense's search API endpoint.
+  //  So you can pass any parameters supported by the search endpoint below.
+  //  query_by is required.
+  additionalSearchParameters: {
+    preset: 'red'
+  }
+})
 const INDEX_NAME = 'docs'
-// const searchClient = typesenseInstantsearchAdapter.searchClient
+const searchClient = typesenseInstantsearchAdapter.searchClient
 
 type StdLevelName = 'Best Current Practice'
 
