@@ -161,6 +161,18 @@ jobs:
         tags: |
           ghcr.io/ietf-tools/red:${{ steps.buildvars.outputs.pkg_version }}
 
+    - name: Create Draft Release
+      if: ${{ env.IS_RELEASE == 'true' }}
+      uses: ncipollo/release-action@v1.16.0
+      with:
+        prerelease: true
+        draft: false
+        commit: ${{ github.sha }}
+        tag: ${{ steps.semver.outputs.nextStrict }}
+        name: ${{ steps.semver.outputs.nextStrict }}
+        body: '*pending*'
+        token: ${{ github.token }}
+
     - name: Generate CHANGELOG
       id: changelog
       uses: Requarks/changelog-action@v1
@@ -178,7 +190,6 @@ jobs:
         allowUpdates: true
         makeLatest: true
         draft: false
-        commit: ${{ github.sha }}
         tag: ${{ steps.semver.outputs.nextStrict }}
         name: ${{ steps.semver.outputs.nextStrict }}
         body: ${{ steps.changelog.outputs.changes }}
