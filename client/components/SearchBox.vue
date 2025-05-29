@@ -25,5 +25,6 @@
 <script setup lang="ts">
 import { formatTitlePlaintext } from '~/utilities/rfc'
 import { SEARCH_PATH } from '~/utilities/url'
+
 const responsiveModeStore = useResponsiveModeStore()
 </script>
