@@ -18,7 +18,9 @@
             :max-value="maxDateRange"
             class="flex flex-row justify-center"
             :model-value="convertUnixRange(currentRefinement)"
-            @update:model-value="(val) => refine(handleValueUpdate(val))"
+            @update:model-value="
+              (val: DateRange) => refine(handleValueUpdate(val))
+            "
           >
             <template v-for="item in segments.start" :key="item.part">
               <DateRangeFieldInput

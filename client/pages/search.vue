@@ -136,7 +136,14 @@ import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
-const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+// Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt
+// so this workaround ensures we have the Class
+const tiSA = (
+  'default' in TypesenseInstantSearchAdapter ?
+    TypesenseInstantSearchAdapter.default
+  : TypesenseInstantSearchAdapter) as typeof TypesenseInstantSearchAdapter
+
+const typesenseAdapter = new tiSA({
   server: {
     apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
     nodes: [
@@ -157,7 +164,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   }
 })
 const INDEX_NAME = 'docs'
-const searchClient = typesenseInstantsearchAdapter.searchClient
+const searchClient = typesenseAdapter.searchClient
 
 type StdLevelName = 'Best Current Practice'
 
