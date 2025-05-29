@@ -31,7 +31,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     outputs:
       pkg_version: ${{ steps.buildvars.outputs.pkg_version }}
@@ -166,6 +166,8 @@ jobs:
       with:
         prerelease: true
         draft: false
+        owner: ietf-tools
+        repo: red
         commit: ${{ github.sha }}
         tag: ${{ steps.semver.outputs.nextStrict }}
         name: ${{ steps.semver.outputs.nextStrict }}
@@ -189,6 +191,8 @@ jobs:
         allowUpdates: true
         makeLatest: true
         draft: false
+        owner: ietf-tools
+        repo: red
         tag: ${{ steps.semver.outputs.nextStrict }}
         name: ${{ steps.semver.outputs.nextStrict }}
         body: ${{ steps.changelog.outputs.changes }}
