@@ -136,7 +136,15 @@ import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
-const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
+// @ts-ignore
+const tiSA = (
+  'default' in TypesenseInstantSearchAdapter ?
+    TypesenseInstantSearchAdapter.default
+  : TypesenseInstantSearchAdapter) as typeof TypesenseInstantSearchAdapter
+
+console.log('TypesenseInstantSearchAdapter', tiSA)
+
+const typesenseAdapter = new tiSA({
   server: {
     apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
     nodes: [
@@ -157,7 +165,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   }
 })
 const INDEX_NAME = 'docs'
-const searchClient = typesenseInstantsearchAdapter.searchClient
+const searchClient = typesenseAdapter.searchClient
 
 type StdLevelName = 'Best Current Practice'
 

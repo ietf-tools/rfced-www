@@ -30,6 +30,8 @@
   },
   "//": "If updating lost-pixel sync the version to the visual-regression-test.yml and post-create.sh or rendering / filenames generated etc may be different",
   "dependencies": {
+    "@histoire/plugin-nuxt": "1.0.0-alpha.2",
+    "@histoire/plugin-vue": "1.0.0-alpha.2",
     "@internationalized/date": "3.8.1",
     "@nuxt/content": "3.5.1",
     "@nuxt/eslint": "1.4.1",
@@ -42,6 +44,7 @@
     "apigen-ts": "^1.1.0",
     "core-js": "3.40.0",
     "feed": "^4.2.2",
+    "histoire": "1.0.0-alpha.2",
     "lodash-es": "^4.17.21",
     "luxon": "^3.5.0",
     "nitropack": "2.10.4",
