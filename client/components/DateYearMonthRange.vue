@@ -18,7 +18,9 @@
             :max-value="maxDateRange"
             class="flex flex-row justify-center"
             :model-value="convertUnixRange(currentRefinement)"
-            @update:model-value="(val) => refine(handleValueUpdate(val))"
+            @update:model-value="
+              (val: unknown) => refine(handleValueUpdate(val))
+            "
           >
             <template v-for="item in segments.start" :key="item.part">
               <DateRangeFieldInput
@@ -70,7 +72,7 @@ import {
   parseDate,
   today
 } from '@internationalized/date'
-import { AisRangeInput } from 'vue-instantsearch/vue3/es'
+// import { AisRangeInput } from 'vue-instantsearch/vue3/es'
 import {
   DateRangeFieldInput,
   DateRangeFieldRoot,

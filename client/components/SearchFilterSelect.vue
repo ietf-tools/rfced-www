@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { AisMenuSelect } from 'vue-instantsearch/vue3/es'
+// import { AisMenuSelect } from 'vue-instantsearch/vue3/es'
 import type { VueStyleClass } from '~/utilities/vue'
 
 type Props = {

@@ -23,5 +23,5 @@
 </template>
 
 <script setup>
-import { AisRefinementList } from 'vue-instantsearch/vue3/es'
+// import { AisRefinementList } from 'vue-instantsearch/vue3/es'
 </script>
