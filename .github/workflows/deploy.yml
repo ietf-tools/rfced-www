@@ -96,7 +96,6 @@ jobs:
         fi
 
     - name: Set package.json version
-      if: ${{ inputs.deploy != 'Skip' }}
       uses: KageKirin/set-node-package-version@v1.0.0
       with:
         file: red/client/package.json
@@ -149,7 +148,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build Image
+    - name: Build Docker Image
       uses: docker/build-push-action@v6
       env:
         DOCKER_BUILD_SUMMARY: false
@@ -183,7 +182,7 @@ jobs:
         toTag: ${{ steps.semver.outputs.current }}
         writeToFile: false
 
-    - name: Create Release
+    - name: Finalize Release
       if: ${{ env.IS_RELEASE == 'true' }}
       uses: ncipollo/release-action@v1.16.0
       with:
