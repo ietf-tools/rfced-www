@@ -136,13 +136,12 @@ import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
-// @ts-ignore
+// Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt
+// so this workaround ensures we have the Class
 const tiSA = (
   'default' in TypesenseInstantSearchAdapter ?
     TypesenseInstantSearchAdapter.default
   : TypesenseInstantSearchAdapter) as typeof TypesenseInstantSearchAdapter
-
-console.log('TypesenseInstantSearchAdapter', tiSA)
 
 const typesenseAdapter = new tiSA({
   server: {

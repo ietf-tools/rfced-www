@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { IAB_URL, IETF_URL, IRTF_URL } from '~/utilities/url'
-</script>
-
 <template>
   <div class="container mx-auto">
     <div class="absolute pointer-events-none inset-0 overflow-hidden">
@@ -56,3 +52,7 @@ import { IAB_URL, IETF_URL, IRTF_URL } from '~/utilities/url'
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { IAB_URL, IETF_URL, IRTF_URL } from '~/utilities/url'
+</script>
