@@ -36,7 +36,7 @@ jobs:
     outputs:
       pkg_version: ${{ steps.buildvars.outputs.pkg_version }}
 
-    steps:   
+    steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 1
@@ -55,6 +55,52 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 22.x
+
+    - name: Get Next Version
+      id: semver
+      if: ${{ inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Prod' }}
+      uses: ietf-tools/semver-action@v1
+      with:
+        token: ${{ github.token }}
+        branch: main
+        skipInvalidTags: true
+        patchList: fix, bugfix, perf, refactor, test, tests, chore
+
+    - name: Get Dev Version
+      if: ${{ inputs.deploy == 'Skip' }}
+      id: semverdev
+      uses: ietf-tools/semver-action@v1
+      with:
+        token: ${{ github.token }}
+        branch: main
+        skipInvalidTags: true
+        noVersionBumpBehavior: 'current'
+        noNewCommitBehavior: 'current'
+
+    - name: Set Release Flag
+      if: ${{ inputs.deploy == 'Staging Only' || inputs.deploy == 'Staging + Prod' }}
+      run: |
+        echo "IS_RELEASE=true" >> $GITHUB_ENV
+
+    - name: Set Build Variables
+      id: buildvars
+      run: |
+        if [[ $IS_RELEASE ]]; then
+          echo "Using AUTO SEMVER mode: ${{ steps.semver.outputs.nextStrict }}"
+          echo "pkg_version=${{ steps.semver.outputs.nextStrict }}" >> $GITHUB_OUTPUT
+          echo "::notice::Release ${{ steps.semver.outputs.nextStrict }} created using branch $GITHUB_REF_NAME"
+        else
+          echo "Using DEV mode: ${{ steps.semverdev.outputs.nextMajorStrict }}.0.0-dev.$GITHUB_RUN_NUMBER"
+          echo "pkg_version=${{ steps.semverdev.outputs.nextMajorStrict }}.0.0-dev.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "::notice::Non-production build ${{ steps.semverdev.outputs.nextMajorStrict }}.0.0-dev.$GITHUB_RUN_NUMBER created using branch $GITHUB_REF_NAME"
+        fi
+
+    - name: Set package.json version
+      if: ${{ inputs.deploy != 'Skip' }}
+      uses: KageKirin/set-node-package-version@v1.0.0
+      with:
+        file: red/client/package.json
+        version: ${{ steps.buildvars.outputs.pkg_version }}
 
     - name: Generate red-api spec
       working-directory: ./datatracker
@@ -93,11 +139,6 @@ jobs:
         npm run build:dev
       working-directory: ./red/client
 
-    - name: Set Build Variables
-      id: buildvars
-      run: |
-        echo "pkg_version=latest" >> $GITHUB_OUTPUT
-
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -118,7 +159,30 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
-          ghcr.io/ietf-tools/red:latest
+          ghcr.io/ietf-tools/red:${{ steps.buildvars.outputs.pkg_version }}
+
+    - name: Generate CHANGELOG
+      id: changelog
+      uses: Requarks/changelog-action@v1
+      if: ${{ env.IS_RELEASE == 'true' }}
+      with:
+        token: ${{ github.token }}
+        fromTag: ${{ steps.semver.outputs.nextStrict }}
+        toTag: ${{ steps.semver.outputs.current }}
+        writeToFile: false
+
+    - name: Create Release
+      if: ${{ env.IS_RELEASE == 'true' }}
+      uses: ncipollo/release-action@v1.16.0
+      with:
+        allowUpdates: true
+        makeLatest: true
+        draft: false
+        commit: ${{ github.sha }}
+        tag: ${{ steps.semver.outputs.nextStrict }}
+        name: ${{ steps.semver.outputs.nextStrict }}
+        body: ${{ steps.changelog.outputs.changes }}
+        token: ${{ github.token }}
 
   # -----------------------------------------------------------------
   # STAGING
