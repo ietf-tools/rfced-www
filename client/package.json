@@ -1,7 +1,8 @@
 {
-  "name": "rfced-www",
+  "name": "red",
   "private": true,
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
     "build": "npm run generate && npm run build:nuxt",
     "build:nuxt": "npx --no nuxt build",
