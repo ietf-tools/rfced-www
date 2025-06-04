@@ -49,36 +49,17 @@
             <div class="flex flex-row justify-between items-center">
               <ais-stats>
                 <template #default="{ nbHits, processingTimeMS }">
-                  <div class="text-sm w-max text-zinc-500">
-                    <span class="font-medium">{{
+                  <div class="text-sm font-normal w-max text-zinc-500">
+                    <span class="font-semibold">{{
                       nbHits.toLocaleString('en', { useGrouping: true })
                     }}</span>
                     hits in
-                    <span class="font-medium">{{ processingTimeMS }}ms</span>
+                    <span class="font-semibold">{{ processingTimeMS }} ms</span>
                   </div>
                 </template>
               </ais-stats>
               <div class="hidden lg:block">
-                <label class="text-base">
-                  <span>Sort by</span>
-                  <ais-sort-by
-                    :items="[
-                      { value: 'docs', label: 'Relevancy' },
-                      {
-                        value: 'docs/sort/rfcNumber:asc',
-                        label: 'RFC no. (Lowest first)'
-                      },
-                      {
-                        value: 'docs/sort/rfcNumber:desc',
-                        label: 'RFC no. (Highest first)'
-                      }
-                    ]"
-                    :class-names="{
-                      'ais-SortBy-select':
-                        'text-base ml-2 bg-white text-black dark:bg-black dark:text-white dark:border'
-                    }"
-                  />
-                </label>
+                <SearchSortBy />
               </div>
               <div class="lg:hidden print:hidden">
                 <SearchMobileFilter />
@@ -126,8 +107,7 @@ import {
   AisSearchBox,
   AisStats,
   AisHits,
-  AisPagination,
-  AisSortBy
+  AisPagination
 } from 'vue-instantsearch/vue3/es'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import type { TypeSenseSearchItem } from '../utilities/typesense'

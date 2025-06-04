@@ -8,6 +8,7 @@ type RouteRules = NonNullable<
   Parameters<typeof defineNuxtConfig>[0]['routeRules']
 >
 
+const isProduction = process.env.NODE_ENV === 'production'
 const oneHourInSeconds = 60 * 60
 const oneDayInSeconds = 24 * oneHourInSeconds
 
@@ -35,6 +36,12 @@ export default defineNuxtConfig({
           }
         }
       }
+    }
+  },
+  // 
+  ...!isProduction && {
+    alias: {
+      'typesense-instantsearch-adapter': 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
     }
   },
   colorMode: {
