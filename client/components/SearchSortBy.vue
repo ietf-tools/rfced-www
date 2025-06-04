@@ -1,6 +1,6 @@
 <template>
-  <label class="text-base">
-    <span>Sort by</span>
+  <label class="text-base flex flex-row items-center">
+    <span class="mr-2">Sort by</span>
     <ais-sort-by
       :items="[
         {
@@ -25,8 +25,8 @@
         }
       ]"
       :class-names="{
-        'ais-SortBy-select':
-          'text-base ml-2 bg-white text-black dark:bg-black dark:text-white dark:border'
+        'ais-SortBy': 'px-2 bg-white text-base border border-gray-400 dark:border-white dark:text-white px-1 scheme-light dark:scheme-dark',
+        'ais-SortBy-select': 'py-2 text-base dark:text-white scheme-light dark:scheme-dark'
       }"
     />
   </label>

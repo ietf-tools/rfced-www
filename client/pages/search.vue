@@ -47,17 +47,7 @@
           </div>
           <div class="w-full lg:w-2/3">
             <div class="flex flex-row justify-between items-center">
-              <ais-stats>
-                <template #default="{ nbHits, processingTimeMS }">
-                  <div class="text-sm font-normal w-max text-zinc-500">
-                    <span class="font-semibold">{{
-                      nbHits.toLocaleString('en', { useGrouping: true })
-                    }}</span>
-                    hits in
-                    <span class="font-semibold">{{ processingTimeMS }} ms</span>
-                  </div>
-                </template>
-              </ais-stats>
+              <SearchStats />
               <div class="hidden lg:block">
                 <SearchSortBy />
               </div>
@@ -79,21 +69,11 @@
                       :type-sense-search-item="item"
                     />
                   </li>
-                  <ais-pagination
-                    :class-names="{
-                      'ais-Pagination': 'w-full mt-4',
-                      'ais-Pagination-list': 'flex flex-row justify-center',
-                      'ais-Pagination-item':
-                        'mr-1 py-2 px-3 bg-gray-200 dark:bg-gray-900 rounded-xs',
-                      'ais-Pagination-item--selected':
-                        'bg-gray-700 dark:bg-blue-200! text-white',
-                      'ais-Pagination-item--disabled':
-                        'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800'
-                    }"
-                  />
                 </ul>
               </template>
             </ais-hits>
+
+            <SearchPagination />
           </div>
         </div>
       </NuxtLayout>
@@ -105,9 +85,7 @@
 import {
   AisInstantSearch,
   AisSearchBox,
-  AisStats,
-  AisHits,
-  AisPagination
+  AisHits
 } from 'vue-instantsearch/vue3/es'
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
