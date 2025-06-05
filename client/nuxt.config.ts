@@ -8,7 +8,6 @@ type RouteRules = NonNullable<
   Parameters<typeof defineNuxtConfig>[0]['routeRules']
 >
 
-const isProduction = process.env.NODE_ENV === 'production'
 const oneHourInSeconds = 60 * 60
 const oneDayInSeconds = 24 * oneHourInSeconds
 
@@ -36,12 +35,6 @@ export default defineNuxtConfig({
           }
         }
       }
-    }
-  },
-  // 
-  ...!isProduction && {
-    alias: {
-      'typesense-instantsearch-adapter': 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
     }
   },
   colorMode: {
@@ -79,6 +72,11 @@ export default defineNuxtConfig({
     public: {
       // These settings are available client-side (others are server-side only)
       datatrackerBase: 'http://localhost:8000/' // NUXT_PUBLIC_DATATRACKER_BASE env var
+    }
+  },
+  $development: {
+    alias: {
+      'typesense-instantsearch-adapter': 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
     }
   },
   $production: {
