@@ -23,6 +23,7 @@ export default withNuxt([
       '@stylistic/arrow-parens': 'off',
       '@stylistic/multiline-ternary': 'off',
       '@stylistic/indent-binary-ops': 'off',
+      '@stylistic/eol-last': 'off',
       '@stylistic/member-delimiter-style': [
         'error',
         {
