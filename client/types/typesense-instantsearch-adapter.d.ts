@@ -1,4 +1,4 @@
-declare module 'typesense-instantsearch-adapter' {
+declare module 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js' {
     export default class SearchAdaptor {
         constructor(args: {
             server: {
@@ -6,7 +6,7 @@ declare module 'typesense-instantsearch-adapter' {
                 nodes: {
                     host: string
                     port: number
-                    protocol: 'https'
+                protocol: 'https'
                     path: string
                 }[]
                 cacheSearchResultsForSeconds: number

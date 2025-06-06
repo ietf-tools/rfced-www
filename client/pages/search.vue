@@ -87,21 +87,15 @@ import {
   AisSearchBox,
   AisHits
 } from 'vue-instantsearch/vue3/es'
-import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
+// Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
+import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
-// Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt
-// so this workaround ensures we have the Class
-const tiSA = (
-  'default' in TypesenseInstantSearchAdapter ?
-    TypesenseInstantSearchAdapter.default
-  : TypesenseInstantSearchAdapter) as typeof TypesenseInstantSearchAdapter
-
-const typesenseAdapter = new tiSA({
+const typesenseAdapter = new TypesenseInstantSearchAdapter({
   server: {
     apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
     nodes: [
