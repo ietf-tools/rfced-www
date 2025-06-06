@@ -74,11 +74,6 @@ export default defineNuxtConfig({
       datatrackerBase: 'http://localhost:8000/' // NUXT_PUBLIC_DATATRACKER_BASE env var
     }
   },
-  $development: {
-    alias: {
-     // 'typesense-instantsearch-adapter': 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js',
-    }
-  },
   $production: {
     /**
      * Only apply route rules in production builds, because prerendering takes a while
