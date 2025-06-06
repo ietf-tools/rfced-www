@@ -47,38 +47,9 @@
           </div>
           <div class="w-full lg:w-2/3">
             <div class="flex flex-row justify-between items-center">
-              <ais-stats>
-                <template #default="{ nbHits, processingTimeMS }">
-                  <div class="text-sm w-max text-zinc-500">
-                    <span class="font-medium">{{
-                      nbHits.toLocaleString('en', { useGrouping: true })
-                    }}</span>
-                    hits in
-                    <span class="font-medium">{{ processingTimeMS }}ms</span>
-                  </div>
-                </template>
-              </ais-stats>
+              <SearchStats />
               <div class="hidden lg:block">
-                <label class="text-base">
-                  <span>Sort by</span>
-                  <ais-sort-by
-                    :items="[
-                      { value: 'docs', label: 'Relevancy' },
-                      {
-                        value: 'docs/sort/rfcNumber:asc',
-                        label: 'RFC no. (Lowest first)'
-                      },
-                      {
-                        value: 'docs/sort/rfcNumber:desc',
-                        label: 'RFC no. (Highest first)'
-                      }
-                    ]"
-                    :class-names="{
-                      'ais-SortBy-select':
-                        'text-base ml-2 bg-white text-black dark:bg-black dark:text-white dark:border'
-                    }"
-                  />
-                </label>
+                <SearchSortBy />
               </div>
               <div class="lg:hidden print:hidden">
                 <SearchMobileFilter />
@@ -98,21 +69,11 @@
                       :type-sense-search-item="item"
                     />
                   </li>
-                  <ais-pagination
-                    :class-names="{
-                      'ais-Pagination': 'w-full mt-4',
-                      'ais-Pagination-list': 'flex flex-row justify-center',
-                      'ais-Pagination-item':
-                        'mr-1 py-2 px-3 bg-gray-200 dark:bg-gray-900 rounded-xs',
-                      'ais-Pagination-item--selected':
-                        'bg-gray-700 dark:bg-blue-200! text-white',
-                      'ais-Pagination-item--disabled':
-                        'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800'
-                    }"
-                  />
                 </ul>
               </template>
             </ais-hits>
+
+            <SearchPagination />
           </div>
         </div>
       </NuxtLayout>
@@ -124,26 +85,17 @@
 import {
   AisInstantSearch,
   AisSearchBox,
-  AisStats,
-  AisHits,
-  AisPagination,
-  AisSortBy
+  AisHits
 } from 'vue-instantsearch/vue3/es'
-import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
+// Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
+import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import type { SearchParams } from '~/utilities/url'
 
 const route = useRoute()
 
-// Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt
-// so this workaround ensures we have the Class
-const tiSA = (
-  'default' in TypesenseInstantSearchAdapter ?
-    TypesenseInstantSearchAdapter.default
-  : TypesenseInstantSearchAdapter) as typeof TypesenseInstantSearchAdapter
-
-const typesenseAdapter = new tiSA({
+const typesenseAdapter = new TypesenseInstantSearchAdapter({
   server: {
     apiKey: 'j2ZodfQTgoa4Vn5BCOdvKJe7fWmcqYhH', // Be sure to use an API key that only allows search operations
     nodes: [
