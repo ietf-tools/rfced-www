@@ -38,11 +38,11 @@
 
     <SearchFilterSelect label="Stream" attribute="stream" />
 
-    <SearchFilterSelect label="Area" attribute="area" />
+    <SearchFilterSelect label="Area" attribute="area.full" />
 
     <SearchFilterList
       label="Working group"
-      attribute="group"
+      attribute="group.full"
       searchable
       search-placeholder="Search for group..."
       show-more
@@ -54,6 +54,7 @@
       searchable
       search-placeholder="Search for author..."
       show-more
+      double-cols
     />
   </form>
 </template>

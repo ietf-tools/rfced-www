@@ -20,10 +20,14 @@ export const TypeSenseSearchItemSchema = z.object({
     )
     .optional(),
   publicationDate: z.number(),
-  group: z.string(), // slug
-  groupName: z.string(), // name
-  area: z.string().optional(), // slug
-  areaName: z.string().optional() // name
+  group: z.object({
+    acronym: z.string(),
+    name: z.string()
+  }),
+  area: z.object({
+    acronym: z.string(),
+    name: z.string()
+  }).optional()
 })
 
 export const typeSenseSearchItemToRFC = (
@@ -46,17 +50,8 @@ export const typeSenseSearchItemToRFC = (
         person: index,
         name: author.name
       })) ?? [],
-    area:
-      item.area && item.areaName ?
-        {
-          acronym: item.area,
-          name: item.areaName
-        }
-      : undefined,
-    group: {
-      acronym: item.group,
-      name: item.groupName
-    },
+    area: item.area,
+    group: item.group,
     abstract: item.abstract,
     status: {
       slug: 'unknown',

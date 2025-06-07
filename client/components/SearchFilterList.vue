@@ -3,8 +3,8 @@
     <span class="text-base font-bold block mb-1">{{ props.label }}</span>
     <ais-refinement-list
       :attribute="props.attribute"
-      :limit="10"
-      :show-more-limit="100"
+      :limit="props.doubleCols ? 10 : 5"
+      :show-more-limit="maxItems"
       :searchable="props.searchable"
       :show-more="props.showMore"
     >
@@ -26,7 +26,7 @@
           :placeholder="props.searchPlaceholder"
           @input="searchForItems(($event.target as HTMLInputElement)?.value ?? '')"
           >
-        <ul class="grid-cols-1 2xl:grid-cols-2 grid gap-1">
+        <ul :class="['grid-cols-1 grid gap-1', props.doubleCols && '2xl:grid-cols-2']">
           <li v-if="isFromSearch && !items.length">No results.</li>
           <li v-for="item in items" :key="item.value" class="overflow-hidden whitespace-nowrap text-clip">
             <label class="text-base cursor-pointer">
@@ -44,7 +44,7 @@
         </ul>
         <div v-if="canToggleShowMore" class="mt-2">
           <div
-            v-if="items.length >= 100 && isShowingMore"
+            v-if="items.length >= maxItems && isShowingMore"
             class="text-gray-500 text-sm bg-gray-50 rounded p-2 italic flex items-center shadow mb-2"
             >
             <Icon name="fluent:warning-24-filled" size="2em" class="mr-2" />
@@ -74,8 +74,11 @@ type Props = {
   searchable?: boolean
   searchPlaceholder?: string
   showMore?: boolean
+  doubleCols?: boolean
   class?: VueStyleClass
 }
 
 const props = defineProps<Props>()
+
+const maxItems = computed(() => props.doubleCols ? 100 : 50)
 </script>
