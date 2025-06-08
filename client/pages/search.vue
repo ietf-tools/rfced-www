@@ -61,12 +61,14 @@
                 <ul class="flex flex-col gap-4">
                   <li
                     v-for="item in items as TypeSenseSearchItem[]"
-                    :key="item.objectID"
+                    :key="item.id"
                     class="flex flex-col"
                   >
                     <RFCCardTypeSenseItem
                       heading-level="3"
                       :type-sense-search-item="item"
+                      :show-abstract="true"
+                      :show-tag-date="true"
                     />
                   </li>
                 </ul>
