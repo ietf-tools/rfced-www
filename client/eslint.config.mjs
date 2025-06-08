@@ -24,6 +24,7 @@ export default withNuxt([
       '@stylistic/multiline-ternary': 'off',
       '@stylistic/indent-binary-ops': 'off',
       '@stylistic/eol-last': 'off',
+      'no-loss-of-precision': 'off',
       '@stylistic/member-delimiter-style': [
         'error',
         {
