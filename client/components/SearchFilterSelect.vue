@@ -5,11 +5,11 @@
       :attribute="props.attribute"
       :limit="200"
       :class-names="{
-        'ais-MenuSelect': 'w-full text-base bg-white border border-gray-400 dark:bg-black dark:border-white dark:text-white px-1 scheme-light dark:scheme-dark',
+        'ais-MenuSelect': 'w-full text-base bg-white border border-gray-400 dark:bg-black dark:border-white dark:text-white px-1 rounded-xs scheme-light dark:scheme-dark',
         'ais-MenuSelect-select': 'w-full px-1 py-2'
       }"
     >
-      <template #defaultOption> All </template>
+      <template #defaultOption>Any</template>
     </ais-menu-select>
   </label>
 </template>

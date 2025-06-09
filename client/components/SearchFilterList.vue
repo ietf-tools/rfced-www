@@ -22,7 +22,7 @@
       >
         <input
           v-if="props.searchable"
-          class="w-full px-3 py-2 mb-3 text-base border border-gray-400 dark:border-white dark:text-white bg-white dark:bg-black scheme-light dark:scheme-dark"
+          class="w-full px-3 py-1.5 mb-3 text-base border border-gray-400 dark:border-white dark:text-white bg-white dark:bg-black rounded-xs scheme-light dark:scheme-dark"
           :placeholder="props.searchPlaceholder"
           @input="searchForItems(($event.target as HTMLInputElement)?.value ?? '')"
           >
@@ -52,7 +52,7 @@
           </div>
           <button
             type="button"
-            class="underline text-blue-700 dark:text-blue-100 px-3 py-2 -ml-3 cursor-pointer text-nowrap"
+            class="underline text-sky-700 dark:text-blue-100 px-3 py-2 -ml-3 cursor-pointer text-nowrap"
             :disabled="!canToggleShowMore"
             @click.prevent="toggleShowMore"
           >

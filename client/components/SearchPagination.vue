@@ -4,12 +4,10 @@
       :class-names="{
         'ais-Pagination': 'w-full',
         'ais-Pagination-list': 'flex flex-row justify-center',
-        'ais-Pagination-item':
-          'mr-1 py-2 px-3 bg-gray-200 dark:bg-gray-900 rounded-xs',
-        'ais-Pagination-item--selected':
-          'bg-gray-700 dark:bg-blue-200! text-white',
-        'ais-Pagination-item--disabled':
-          'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800'
+        'ais-Pagination-item': 'mr-1 bg-gray-200 dark:bg-gray-900 rounded-xs',
+        'ais-Pagination-item--selected': 'bg-gray-700 dark:bg-blue-200! text-white',
+        'ais-Pagination-item--disabled': 'bg-transparent dark:bg-transparent text-gray-400 dark:text-gray-800',
+        'ais-Pagination-link': 'cursor-pointer py-2 px-3 block no-underline hover:underline focus:underline'
       }"
     />
     <ais-hits-per-page
@@ -20,7 +18,7 @@
         { label: '100 per page', value: 100 }
       ]"
       :class-names="{
-        'ais-HitsPerPage': 'px-2 bg-white text-base border border-gray-400 dark:bg-black dark:border-white dark:text-white px-1 scheme-light dark:scheme-dark',
+        'ais-HitsPerPage': 'px-2 bg-white text-base border border-gray-400 dark:bg-black dark:border-white dark:text-white px-1 rounded-xs scheme-light dark:scheme-dark',
         'ais-HitsPerPage-select': 'py-2 text-base dark:text-white scheme-light dark:scheme-dark'
       }"
     />

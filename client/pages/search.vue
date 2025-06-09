@@ -22,8 +22,8 @@
                 :class-names="{
                   'ais-SearchBox-form': 'w-full flex pt-4 pb-6',
                   'ais-SearchBox-input':
-                    'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2',
-                  'ais-SearchBox-submit': 'bg-blue-200 px-2 flex items-center',
+                    'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 rounded-l-xs',
+                  'ais-SearchBox-submit': 'bg-blue-200 px-2 flex items-center rounded-r-xs',
                   'ais-SearchBox-reset': 'hidden',
                   'ais-SearchBox-loadingIndicator':
                     'bg-yellow-400 px-2 flex items-center text-white'
@@ -125,9 +125,9 @@ type StdLevelName = 'Best Current Practice'
 type UIState = {
   [key in typeof INDEX_NAME]: {
     query?: string
-    range: {
-      publicationDate: string // eg "-31752000:1748433600"
-    }
+    // range: {
+    //   publicationDate: string // eg "-31752000:1748433600"
+    // }
     refinementList?: {
       type: string[]
       stdlevelname?: StdLevelName[]
@@ -140,19 +140,19 @@ type UIState = {
  */
 const noOpRouter = {
   write(...args: unknown[]) {
-    console.log('write', { args })
+    // console.log('write', { args })
   },
   read(...args: unknown[]) {
-    console.log('read', { args })
+    // console.log('read', { args })
   },
   onUpdate(...args: unknown[]) {
-    console.log('onUpdate', { args })
+    // console.log('onUpdate', { args })
   },
   dispose(...args: unknown[]) {
-    console.log('dispose', { args })
+    // console.log('dispose', { args })
   },
   createURL(...args: unknown[]) {
-    console.log('createURL', { args })
+    // console.log('createURL', { args })
   }
 }
 
@@ -186,9 +186,9 @@ const routing = {
       return {
         [INDEX_NAME]: {
           query,
-          range: {
-            publicationDate: '-31752000:1748433600'
-          },
+          // range: {
+          //   publicationDate: '-31752000:1748433600' // -> DO NOT SET MANUALLY, let instantsearch query the values by itself
+          // },
           refinementList: {
             type: ['rfc'],
             stdlevelname: stdlevelname as StdLevelName[]
