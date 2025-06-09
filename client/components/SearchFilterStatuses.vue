@@ -33,9 +33,9 @@ const predefinedOrder = [
   'Proposed Standard',
   'Draft Standard',
   'Best Current Practice',
+  'Informational',
   'Experimental',
   'Historic',
-  'Informational',
   'Unknown'
 ]
 
