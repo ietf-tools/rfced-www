@@ -22,7 +22,7 @@
       >
         <input
           v-if="props.searchable"
-          class="w-full px-3 py-1.5 mb-3 text-base border border-gray-400 dark:border-white dark:text-white bg-white dark:bg-black rounded-xs scheme-light dark:scheme-dark"
+          class="w-full px-3 py-1.5 mb-3 text-base border border-gray-400 dark:border-white dark:text-white bg-white dark:bg-black rounded-xs shadow-sm scheme-light dark:scheme-dark"
           :placeholder="props.searchPlaceholder"
           @input="searchForItems(($event.target as HTMLInputElement)?.value ?? '')"
           >
@@ -31,7 +31,7 @@
           <li v-for="item in items" :key="item.value" class="overflow-hidden whitespace-nowrap text-clip">
             <label class="text-base cursor-pointer">
               <input
-                class="mr-2 size-5 align-middle scheme-light dark:scheme-dark"
+                class="mr-2 size-5 align-middle shadow-sm scheme-light dark:scheme-dark"
                 type="checkbox"
                 :value="item.value"
                 :checked="item.isRefined"

@@ -10,7 +10,7 @@
           <li v-for="item in items" :key="item.value">
             <label class="text-base cursor-pointer">
               <input
-                class="mr-1 size-6 align-middle scheme-light dark:scheme-dark"
+                class="mr-1 size-6 align-middle shadow-sm scheme-light dark:scheme-dark"
                 type="checkbox"
                 :value="item.value"
                 :checked="item.isRefined"

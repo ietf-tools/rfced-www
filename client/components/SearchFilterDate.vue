@@ -10,7 +10,7 @@
       >
         <template #default="{ currentRefinement, range, refine }">
           <div class="flex items-center">
-            <div class="flex items-center bg-white dark:bg-black border rounded-xs border-gray-400 dark:border-white dark:text-white px-2 py-1.5 scheme-light dark:scheme-dark">
+            <div class="flex items-center bg-white dark:bg-black border rounded-xs border-gray-400 dark:border-white dark:text-white px-2 py-1.5 shadow-sm scheme-light dark:scheme-dark">
               <!-- START YEAR -->
               <select-root
                 :model-value="getYear(currentRefinement.min, range.min)"
@@ -79,7 +79,7 @@
               </select-root>
             </div>
             <span class="px-2">to</span>
-            <div class="flex items-center bg-white dark:bg-black border rounded-xs border-gray-400 dark:border-white dark:text-white px-2 py-1.5 scheme-light dark:scheme-dark">
+            <div class="flex items-center bg-white dark:bg-black border rounded-xs border-gray-400 dark:border-white dark:text-white px-2 py-1.5 shadow-sm scheme-light dark:scheme-dark">
               <!-- END YEAR -->
               <select-root
                 :model-value="getYear(currentRefinement.max, range.max)"

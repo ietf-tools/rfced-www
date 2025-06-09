@@ -48,8 +48,10 @@
           <div class="w-full lg:w-2/3">
             <div class="flex flex-row justify-between items-center">
               <SearchStats />
-              <div class="hidden lg:block">
+              <div class="hidden lg:flex lg:items-center lg:h-10">
                 <SearchSortBy />
+                <Separator orientation="vertical" decorative class="bg-gray-400 data-[orientation=vertical]:h-7 data-[orientation=vertical]:w-px mx-3" />
+                <SearchDensity v-model="density" />
               </div>
               <div class="lg:hidden print:hidden">
                 <SearchMobileFilter />
@@ -89,6 +91,7 @@ import {
   AisSearchBox,
   AisHits
 } from 'vue-instantsearch/vue3/es'
+import { Separator } from 'reka-ui'
 // Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
 import type { TypeSenseClient, TypeSenseSearchItem } from '../utilities/typesense'
@@ -120,6 +123,8 @@ const typesenseAdapter = new TypesenseInstantSearchAdapter({
 })
 const INDEX_NAME = 'docs'
 const searchClient = adaptSearchClient(typesenseAdapter.searchClient as TypeSenseClient)
+
+const density = ref('dense')
 
 type StdLevelName = 'Best Current Practice'
 
