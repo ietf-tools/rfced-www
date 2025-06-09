@@ -139,6 +139,7 @@ type UIState = {
  * A 'no op' router
  */
 const noOpRouter = {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   write(...args: unknown[]) {
     // console.log('write', { args })
   },
@@ -154,6 +155,7 @@ const noOpRouter = {
   createURL(...args: unknown[]) {
     // console.log('createURL', { args })
   }
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 }
 
 const routing = {
