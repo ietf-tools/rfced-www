@@ -91,9 +91,10 @@ import {
 } from 'vue-instantsearch/vue3/es'
 // Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
-import type { TypeSenseSearchItem } from '../utilities/typesense'
+import type { TypeSenseClient, TypeSenseSearchItem } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import type { SearchParams } from '~/utilities/url'
+import { adaptSearchClient } from '~/utilities/search-client-middleware'
 
 const route = useRoute()
 
@@ -118,7 +119,7 @@ const typesenseAdapter = new TypesenseInstantSearchAdapter({
   }
 })
 const INDEX_NAME = 'docs'
-const searchClient = typesenseAdapter.searchClient
+const searchClient = adaptSearchClient(typesenseAdapter.searchClient as TypeSenseClient)
 
 type StdLevelName = 'Best Current Practice'
 

@@ -1,6 +1,21 @@
 import { z } from 'zod'
 import type { Rfc } from '../generated/red-client'
 
+export type TypeSenseClient = {
+  clearCache: () => void
+  search: (searchRequests: Array<TypeSenseSearchRequest>) => void
+  searchForFacetValues: (searchRequests: Array<TypeSenseSearchRequest>) => void
+}
+
+export type TypeSenseSearchRequest = {
+  indexName: string
+  params: {
+    query: string
+    facets?: string[]
+    facetFilters?: string[]
+  }
+}
+
 export type TypeSenseSearchItem = z.infer<typeof TypeSenseSearchItemSchema>
 
 // Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
