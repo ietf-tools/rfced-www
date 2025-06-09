@@ -43,5 +43,5 @@ import { ToggleGroupItem, ToggleGroupRoot } from 'reka-ui'
 
 const value = defineModel<string>()
 
-const toggleGroupItemClasses = 'hover:bg-gray-100 text-sky-950 data-[state=on]:bg-gray-200 flex h-[37px] w-[37px] items-center justify-center bg-white first:rounded-l-xs last:rounded-r-xs'
+const toggleGroupItemClasses = 'hover:bg-gray-100 dark:hover:bg-gray-800 text-sky-950 dark:text-white data-[state=on]:bg-gray-200 dark:data-[state=on]:bg-gray-700 flex h-[37px] w-[37px] items-center justify-center bg-white dark:bg-black first:rounded-l-xs last:rounded-r-xs'
 </script>

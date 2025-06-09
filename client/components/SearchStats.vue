@@ -2,11 +2,11 @@
   <ais-stats>
     <template #default="{ nbHits, processingTimeMS }">
       <div class="text-base font-normal w-max">
-        <span class="font-semibold text-blue-900">{{
+        <span class="font-semibold text-blue-900 dark:text-sky-100">{{
           nbHits.toLocaleString('en', { useGrouping: true })
         }}</span>
         results in
-        <span class="font-semibold text-blue-900">{{ processingTimeMS }} ms</span>
+        <span class="font-semibold text-blue-900 dark:text-sky-100">{{ processingTimeMS }} ms</span>
       </div>
     </template>
   </ais-stats>
