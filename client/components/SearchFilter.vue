@@ -42,5 +42,16 @@
       show-more
       double-cols
     />
+
+    <Separator orientation="horizontal" decorative class="bg-gray-400 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />
+
+    <SearchFilterDisplay
+      label="Hide from results"
+      :attributes="[{ attribute: 'flags.obsoleted', label: 'Obsoleted' }, { attribute: 'flags.updated', label: 'Updated' }]"
+    />
   </form>
 </template>
+
+<script setup lang="ts">
+import { Separator } from 'reka-ui'
+</script>

@@ -69,7 +69,7 @@
                     <RFCCardTypeSenseItem
                       heading-level="3"
                       :type-sense-search-item="item"
-                      :show-abstract="true"
+                      :show-abstract="false"
                       :show-tag-date="true"
                     />
                   </li>
@@ -137,6 +137,7 @@ type UIState = {
     refinementList?: {
       type: string[]
       stdlevelname?: StdLevelName[]
+      'flags.obsoleted': boolean
     }
   }
 }
@@ -200,6 +201,9 @@ const routing = {
           refinementList: {
             type: ['rfc'],
             stdlevelname: stdlevelname as StdLevelName[]
+          },
+          toggle: {
+            'flags.obsoleted': true
           }
         }
       }

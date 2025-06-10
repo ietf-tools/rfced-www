@@ -1,6 +1,6 @@
 <template>
   <ais-clear-refinements
-    :excluded-attributes="['type']"
+    :excluded-attributes="['type', 'flags.obsoleted', 'flags.updated']"
   >
     <template #default="{ canRefine, refine }">
       <button

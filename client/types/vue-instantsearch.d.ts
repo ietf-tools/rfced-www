@@ -11,4 +11,5 @@ declare module 'vue-instantsearch/vue3/es' {
   declare class AisRangeInput extends Vue {}
   declare class AisRefinementList extends Vue {}
   declare class AisHighlight extends Vue {}
+  declare class AisToggleRefinement extends Vue {}
 }
