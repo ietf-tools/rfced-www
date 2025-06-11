@@ -58,16 +58,12 @@
               </div>
             </div>
 
+            <SearchSeriesBar v-if="searchStore.isSeries" :label="searchStore.seriesLabel" :href="searchStore.seriesHref" />
+
             <ais-hits class="mt-4">
               <template #default="{ items }">
                 <!-- NO RESULTS -->
-                <div
-                  v-if="!items?.length"
-                  class="rounded-xs bg-gray-200 text-gray-700 flex flex-col items-center justify-center px-3 py-5"
-                  >
-                  <Icon name="radix-icons:value-none" size="5em" class="text-gray-300" />
-                  <span class="mt-3">No RFCs match your search query and active filters.</span>
-                </div>
+                <SearchNoResults v-if="!items.length" />
                 <!-- RESULTS -->
                 <ul class="flex flex-col gap-4">
                   <li
@@ -109,6 +105,7 @@ import type { SearchParams } from '~/utilities/url'
 import { adaptSearchClient } from '~/utilities/search-client-middleware'
 
 const route = useRoute()
+const searchStore = useSearchStore()
 
 const typesenseAdapter = new TypesenseInstantSearchAdapter({
   server: {

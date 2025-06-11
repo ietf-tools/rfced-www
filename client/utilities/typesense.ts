@@ -3,8 +3,8 @@ import type { Rfc } from '../generated/red-client'
 
 export type TypeSenseClient = {
   clearCache: () => void
-  search: (searchRequests: Array<TypeSenseSearchRequest>) => void
-  searchForFacetValues: (searchRequests: Array<TypeSenseSearchRequest>) => void
+  search: (searchRequests: Array<TypeSenseSearchRequest>) => Promise<TypeSenseSearchResponse>
+  searchForFacetValues: (searchRequests: Array<TypeSenseSearchRequest>) => Promise<TypeSenseSearchResponse>
 }
 
 export type TypeSenseSearchRequest = {
@@ -14,6 +14,12 @@ export type TypeSenseSearchRequest = {
     facets?: string[]
     facetFilters?: string[]
   }
+}
+
+export type TypeSenseSearchResponse = {
+  results: {
+    nbHits: number
+  }[]
 }
 
 export type TypeSenseSearchItem = z.infer<typeof TypeSenseSearchItemSchema>
