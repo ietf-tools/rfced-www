@@ -23,7 +23,8 @@
                   'ais-SearchBox-form': 'w-full flex pt-4 pb-6',
                   'ais-SearchBox-input':
                     'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 rounded-l-xs',
-                  'ais-SearchBox-submit': 'bg-blue-200 px-2 flex items-center rounded-r-xs',
+                  'ais-SearchBox-submit':
+                    'bg-blue-200 px-2 flex items-center rounded-r-xs',
                   'ais-SearchBox-reset': 'hidden',
                   'ais-SearchBox-loadingIndicator':
                     'bg-yellow-400 px-2 flex items-center text-white'
@@ -50,7 +51,11 @@
               <SearchStats />
               <div class="hidden lg:flex lg:items-center lg:h-10">
                 <SearchSortBy />
-                <Separator orientation="vertical" decorative class="bg-gray-400 data-[orientation=vertical]:h-7 data-[orientation=vertical]:w-px mx-3" />
+                <Separator
+                  orientation="vertical"
+                  decorative
+                  class="bg-gray-400 data-[orientation=vertical]:h-7 data-[orientation=vertical]:w-px mx-3"
+                />
                 <SearchDensity v-model="density" />
               </div>
               <div class="lg:hidden print:hidden">
@@ -58,7 +63,11 @@
               </div>
             </div>
 
-            <SearchSeriesBar v-if="searchStore.isSeries" :label="searchStore.seriesLabel" :href="searchStore.seriesHref" />
+            <SearchSeriesBar
+              v-if="searchStore.isSeries"
+              :label="searchStore.seriesLabel"
+              :href="searchStore.seriesHref"
+            />
 
             <ais-hits class="mt-4">
               <template #default="{ items }">
@@ -99,7 +108,10 @@ import {
 import { Separator } from 'reka-ui'
 // Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
-import type { TypeSenseClient, TypeSenseSearchItem } from '../utilities/typesense'
+import type {
+  TypeSenseClient,
+  TypeSenseSearchItem
+} from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import type { SearchParams } from '~/utilities/url'
 import { adaptSearchClient } from '~/utilities/search-client-middleware'
@@ -128,7 +140,9 @@ const typesenseAdapter = new TypesenseInstantSearchAdapter({
   }
 })
 const INDEX_NAME = 'docs'
-const searchClient = adaptSearchClient(typesenseAdapter.searchClient as TypeSenseClient)
+const searchClient = adaptSearchClient(
+  typesenseAdapter.searchClient as TypeSenseClient
+)
 
 const density = ref('dense')
 
@@ -143,7 +157,9 @@ type UIState = {
     refinementList?: {
       type: string[]
       stdlevelname?: StdLevelName[]
-      'flags.obsoleted': boolean
+    }
+    toggle?: {
+      'flags.obsoleted': true
     }
   }
 }
