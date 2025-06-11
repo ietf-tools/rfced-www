@@ -28,6 +28,7 @@
             <template v-for="(item, index) in menuData" :key="index.toString()">
               <A v-if="item.href" :href="item.href" :class="MENU_ITEM_CLASS">
                 <GraphicsChevron
+                  v-if="item.hideDropdownIconDesktop"
                   class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
                 />
                 {{ item.label }}
@@ -47,10 +48,6 @@
                       :href="level0.href"
                       :class="MENU_ITEM_CLASS"
                     >
-                      <GraphicsChevron
-                        class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
-                      />
-
                       {{ level0.label }}
                     </A>
                     <button
@@ -96,9 +93,6 @@
                               :href="level1.href"
                               :class="MENU_ITEM_CLASS"
                             >
-                              <GraphicsChevron
-                                class="absolute right-0 mt-1 mr-4 size-4 -rotate-90 text-blue-100"
-                              />
                               {{ level1.label }}
                             </A>
                           </li>
