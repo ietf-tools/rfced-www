@@ -30,7 +30,7 @@ export function adaptSearchClient(searchClient: TypeSenseClient): TypeSenseClien
         if (!r.params.facetFilters) {
           r.params.facetFilters = []
         }
-        r.params.facetFilters.push(`${seriesMatch.groups.series}:${seriesMatch.groups.num}`)
+        r.params.facetFilters.push(`${seriesMatch.groups.series.toLowerCase()}:${seriesMatch.groups.num}`)
         r.params.query = '*'
 
         isSeries = true
