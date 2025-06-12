@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'bg-white dark:bg-black relative dark:border-2 pl-5 pr-7 py-4 rounded print:border-2 print:border-black',
+      'bg-white dark:bg-black relative dark:border-2 pl-5 pr-7 py-4 rounded shadow-xs print:border-2 print:border-black',
       props.class
     ]"
   >
