@@ -159,7 +159,7 @@ type UIState = {
       stdlevelname?: StdLevelName[]
     }
     toggle?: {
-      'flags.obsoleted': true
+      'flags.obsoleted': boolean
     }
   }
 }
