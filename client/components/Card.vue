@@ -5,7 +5,7 @@
       props.class
     ]"
   >
-    <component :is="hasAsideSlot ? 'div' : Fragment">
+    <div :class="props.containerClass">
       <Heading :level="props.headingLevel">
         <NuxtLink
           :to="props.href"
@@ -36,7 +36,7 @@
         </NuxtLink>
       </Heading>
       <slot />
-    </component>
+    </div>
     <aside v-if="hasAsideSlot" :class="props.asideSlotClass">
       <slot name="aside"></slot>
     </aside>
@@ -45,14 +45,14 @@
 
 <script setup lang="ts">
 import type { VueStyleClass } from '../utilities/vue'
-import Fragment from './Fragment.vue'
+import type { HeadingLevel } from '~/utilities/html'
 
 type Props = {
   class?: VueStyleClass
   defaultSlotClass?: VueStyleClass
   asideSlotClass?: VueStyleClass
   containerClass?: VueStyleClass
-  headingLevel: '1' | '2' | '3' | '4' | '5' | '6'
+  headingLevel: HeadingLevel
   hasCoverLink?: boolean
   href: string
   chevronPosition?: 'center' | 'end'

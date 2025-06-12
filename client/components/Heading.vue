@@ -37,8 +37,9 @@ import type { VueStyleClass } from '~/utilities/vue'
 import { getVNodeText } from '~/utilities/vue'
 import { textToAnchorId } from '~/utilities/url'
 import { copyToClipboard } from '~/utilities/clipboard'
+import type { HeadingLevel } from '~/utilities/html'
 
-type Level = '1' | '2' | '3' | '4' | '5' | '6'
+type Level = HeadingLevel
 
 type Props = {
   /**

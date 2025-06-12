@@ -3,11 +3,10 @@
     <DialogTrigger>
       <button
         type="button"
-        class="flex justify-between w-full py-5 px-4 items-center"
+        class="flex justify-between w-full py-2 px-3 items-center border-1 border-gray-400 font-bold"
         @click="isOpen = false"
       >
-        <div class="pl-1 font-bold text-base">Filter RFCs</div>
-        <GraphicsClose />
+        Filter RFCs
       </button>
     </DialogTrigger>
     <DialogPortal>
