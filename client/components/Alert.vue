@@ -22,8 +22,10 @@
 </template>
 
 <script setup lang="ts">
+import type { HeadingLevel } from '~/utilities/html'
+
 type Props = {
-  level?: '1' | '2' | '3' | '4' | '5' | '6'
+  level?: HeadingLevel
   variant: 'warning' | 'info'
   heading: string
 }

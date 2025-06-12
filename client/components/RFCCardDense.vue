@@ -38,7 +38,7 @@ import type { Rfc } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
 import { formatTitle } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
-import { parseHeadingLevel, type HeadingLevel } from '~/utilities/html'
+import type { HeadingLevel } from '~/utilities/html'
 
 type Props = {
   rfc: Rfc

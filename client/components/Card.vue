@@ -44,8 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import type { HeadingLevel } from '~/utilities/html'
 import type { VueStyleClass } from '../utilities/vue'
+import type { HeadingLevel } from '~/utilities/html'
 
 type Props = {
   class?: VueStyleClass
