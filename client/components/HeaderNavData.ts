@@ -12,6 +12,8 @@ import type { VueClick } from '~/utilities/vue'
 export type MenuItem = {
   icon?: string
   label: string
+  hideLabelDesktop?: boolean
+  hideDropdownIconDesktop?: boolean
   href?: string
   click?: VueClick
   isActiveFn?: () => boolean
@@ -146,7 +148,10 @@ export const useMenuData = () => {
       href: SEARCH_PATH
     },
     {
+      icon: 'fluent:dark-theme-20-filled',
       label: 'Theme',
+      hideLabelDesktop: true,
+      hideDropdownIconDesktop: true,
       children: colorPreferences.map((colorPreference) => ({
         label: `${colorPreference.label}`,
         activeLabelFn: () =>

@@ -21,10 +21,14 @@
         <NavigationMenuTrigger
           v-if="!menuItem.href && menuItem.children"
           class="hover:bg-blue-400 group flex select-none items-center justify-between gap-2 rounded-md px-4 py-3 text-[15px] leading-none outline-none focus:shadow-[0_0_0_2px]"
+          :aria-label="menuItem.label"
         >
           <Icon v-if="menuItem.icon" :name="menuItem.icon" />
-          {{ menuItem.label }}
+          <span v-if="!menuItem.hideLabelDesktop">
+            {{ menuItem.label }}
+          </span>
           <GraphicsChevron
+            v-if="!menuItem.hideDropdownIconDesktop"
             class="ml-1 top-[1px] text-blue-100 group-hover:text-white transition-transform duration-[150ms] ease-in group-data-[state=open]:-rotate-180"
           />
         </NavigationMenuTrigger>
@@ -44,7 +48,10 @@
                 class="z-100"
               >
                 <NavigationMenuList>
-                  <NavigationMenuItem :value="`${index}.${level0Index}`" class="flex flex-col">
+                  <NavigationMenuItem
+                    :value="`${index}.${level0Index}`"
+                    class="flex flex-col"
+                  >
                     <NavigationMenuTrigger :class="MENU_ITEM_CLASS">
                       <span>
                         <Icon v-if="level0.icon" :name="level0.icon" />
@@ -66,7 +73,7 @@
                           <NavigationMenuLink
                             v-if="level1.href"
                             :href="level1.href"
-                            :class="[MENU_ITEM_CLASS, 'pl-8']"
+                            :class="[MENU_ITEM_CLASS, 'pl-5']"
                             @click="level1.click"
                           >
                             <Icon v-if="level1.icon" :name="level1.icon" />
@@ -94,9 +101,6 @@
                       class="text-lg absolute ml-1 -mt-1"
                     />
                   </span>
-                  <GraphicsChevron
-                    class="text-blue-100 group-hover:text-white ml-1 translate-y-1 -rotate-90"
-                  />
                 </A>
                 <button
                   v-else
