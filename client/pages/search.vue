@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-[100vh]">
+    <noscript> This search requires JavaScript. </noscript>
     <ais-instant-search
       :index-name="INDEX_NAME"
       :search-client="searchClient"

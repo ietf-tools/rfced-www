@@ -33,7 +33,7 @@
       >
         <!-- desktop abstract -->
         <Heading
-          level="4"
+          :level="abstractHeadingLevel"
           style-level="5"
           class="text-blue-900 dark:text-gray-300 inline-block mt-3 pt-2 border-t-1 border-gray-200"
         >
@@ -54,15 +54,20 @@ import type { Rfc } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
 import { formatTitle } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
+import { parseHeadingLevel, type HeadingLevel } from '~/utilities/html'
 
 type Props = {
   rfc: Rfc
   showAbstract?: boolean
   showTagDate?: boolean
-  headingLevel?: '1' | '2' | '3' | '4' | '5' | '6'
+  headingLevel?: HeadingLevel
 }
 
 const props = withDefaults(defineProps<Props>(), { headingLevel: '1' })
+
+const abstractHeadingLevel = computed(() =>
+  parseHeadingLevel((parseFloat(props.headingLevel) + 1).toString())
+)
 
 const responsiveModeStore = useResponsiveModeStore()
 </script>

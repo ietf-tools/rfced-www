@@ -32,7 +32,7 @@
           type="button"
           :aria-expanded="isMobileAbstractOpen"
           :aria-controls="abstractDomId"
-          class="relative z-50 text-blue-800 dark:text-blue-100 underline text-base p-3 -left-3 -top-3 -mb-3 print:hidden"
+          class="relative z-50 text-blue-800 cursor-pointer dark:text-blue-100 underline text-base p-3 -left-3 -top-3 -mb-3 print:hidden"
           @click="isMobileAbstractOpen = !isMobileAbstractOpen"
         >
           <template v-if="isMobileAbstractOpen">Hide abstract</template>

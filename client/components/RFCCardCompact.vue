@@ -8,14 +8,14 @@
         'center'
       : 'end'
     "
-    class="flex flex-row items-start"
+    class="flex flex-row items-center"
     container-class="flex"
   >
     <template #headingTitle>
       <component :is="formatTitle(`rfc${props.rfc.number}`)" />
     </template>
     <p
-      class="ml-4 pl-4 border-l-1 border-gray-300 text-base text-blue-900 dark:text-white"
+      class="ml-4 pl-4 border-l-1 border-gray-300 text-base text-blue-900 dark:text-white flex items-center"
     >
       {{ props.rfc.title }}
     </p>
@@ -27,12 +27,11 @@ import type { Rfc } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
 import { formatTitle } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
+import type { HeadingLevel } from '~/utilities/html'
 
 type Props = {
   rfc: Rfc
-  showAbstract?: boolean
-  showTagDate?: boolean
-  headingLevel?: '1' | '2' | '3' | '4' | '5' | '6'
+  headingLevel?: HeadingLevel
 }
 
 const props = withDefaults(defineProps<Props>(), { headingLevel: '1' })

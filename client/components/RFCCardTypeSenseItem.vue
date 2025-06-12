@@ -1,22 +1,16 @@
 <template>
   <RFCCard
     v-if="density === 'full'"
-    :rfc="rfc"
-    :show-abstract="props.showAbstract"
-    :show-tag-date="props.showTagDate"
-  />
-  <RFCCardDense
-    v-else-if="density === 'dense'"
     heading-level="3"
     :rfc="rfc"
-    :show-abstract="false"
-    :show-tag-date="props.showTagDate"
+    :show-abstract="true"
+    :show-tag-date="true"
   />
+  <RFCCardDense v-else-if="density === 'dense'" heading-level="3" :rfc="rfc" />
   <RFCCardCompact
     v-else-if="density === 'compact'"
+    heading-level="3"
     :rfc="rfc"
-    :show-abstract="props.showAbstract"
-    :show-tag-date="props.showTagDate"
   />
 </template>
 
@@ -26,8 +20,6 @@ import type { Density, TypeSenseSearchItem } from '~/utilities/typesense'
 
 type Props = {
   typeSenseSearchItem: TypeSenseSearchItem
-  showAbstract?: boolean
-  showTagDate?: boolean
   density: Density
 }
 

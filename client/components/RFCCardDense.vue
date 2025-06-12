@@ -30,23 +30,6 @@
         :show-tag-date="props.showTagDate"
       />
     </template>
-    <template v-if="props.showAbstract && !!props.rfc.abstract" #aside>
-      <div class="hidden lg:block mt-5">
-        <!-- desktop abstract -->
-        <Heading
-          level="4"
-          style-level="5"
-          class="text-blue-900 dark:text-gray-300 inline-block"
-        >
-          Abstract
-        </Heading>
-        <p
-          class="leading-snug text-gray-800 dark:text-gray-300 pb-2 text-pretty"
-        >
-          {{ props.rfc.abstract }}
-        </p>
-      </div>
-    </template>
   </Card>
 </template>
 
@@ -55,12 +38,13 @@ import type { Rfc } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
 import { formatTitle } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
+import { parseHeadingLevel, type HeadingLevel } from '~/utilities/html'
 
 type Props = {
   rfc: Rfc
   showAbstract?: boolean
   showTagDate?: boolean
-  headingLevel?: '1' | '2' | '3' | '4' | '5' | '6'
+  headingLevel?: HeadingLevel
 }
 
 const props = withDefaults(defineProps<Props>(), { headingLevel: '1' })

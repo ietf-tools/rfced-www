@@ -44,15 +44,15 @@
 </template>
 
 <script setup lang="ts">
+import type { HeadingLevel } from '~/utilities/html'
 import type { VueStyleClass } from '../utilities/vue'
-import Fragment from './Fragment.vue'
 
 type Props = {
   class?: VueStyleClass
   defaultSlotClass?: VueStyleClass
   asideSlotClass?: VueStyleClass
   containerClass?: VueStyleClass
-  headingLevel: '1' | '2' | '3' | '4' | '5' | '6'
+  headingLevel: HeadingLevel
   hasCoverLink?: boolean
   href: string
   chevronPosition?: 'center' | 'end'
