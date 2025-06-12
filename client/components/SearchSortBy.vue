@@ -26,7 +26,7 @@
       ]"
     >
       <template #default="{ items, currentRefinement, refine }">
-        <Select
+        <SelectNeue
           :model-value="currentRefinement"
           @update:model-value="(val) => refine(val)"
         >
@@ -38,7 +38,7 @@
           >
             {{ item.label }}
           </option>
-        </Select>
+        </SelectNeue>
       </template>
     </ais-sort-by>
   </label>
