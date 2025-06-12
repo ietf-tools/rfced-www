@@ -10,11 +10,13 @@
     "
     :class="props.showAbstract && props.rfc.abstract ? 'lg:flex' : undefined"
     :default-slot-class="
-      props.showAbstract && props.rfc.abstract ? 'pr-4' : 'ff'
+      props.showAbstract && props.rfc.abstract ?
+        'lg:w-1/2 xl:w-2/5 pr-4'
+      : undefined
     "
     :aside-slot-class="
       props.showAbstract && props.rfc.abstract ?
-        'flex-1 lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
+        'lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
       : undefined
     "
   >
@@ -27,15 +29,14 @@
         :show-abstract="props.showAbstract"
         :show-tag-date="props.showTagDate"
       />
-      <div
-        v-if="props.showAbstract && !!props.rfc.abstract"
-        class="hidden lg:block"
-      >
+    </template>
+    <template v-if="props.showAbstract && !!props.rfc.abstract" #aside>
+      <div class="hidden lg:block mt-5">
         <!-- desktop abstract -->
         <Heading
           level="4"
           style-level="5"
-          class="text-blue-900 dark:text-gray-300 inline-block mt-3 pt-2 border-t-1 border-gray-200"
+          class="text-blue-900 dark:text-gray-300 inline-block"
         >
           Abstract
         </Heading>

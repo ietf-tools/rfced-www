@@ -5,7 +5,7 @@
       props.class
     ]"
   >
-    <component :is="hasAsideSlot ? 'div' : Fragment">
+    <div :class="props.containerClass">
       <Heading :level="props.headingLevel">
         <NuxtLink
           :to="props.href"
@@ -36,7 +36,7 @@
         </NuxtLink>
       </Heading>
       <slot />
-    </component>
+    </div>
     <aside v-if="hasAsideSlot" :class="props.asideSlotClass">
       <slot name="aside"></slot>
     </aside>

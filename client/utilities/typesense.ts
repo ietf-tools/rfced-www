@@ -3,8 +3,12 @@ import type { Rfc } from '../generated/red-client'
 
 export type TypeSenseClient = {
   clearCache: () => void
-  search: (searchRequests: Array<TypeSenseSearchRequest>) => Promise<TypeSenseSearchResponse>
-  searchForFacetValues: (searchRequests: Array<TypeSenseSearchRequest>) => Promise<TypeSenseSearchResponse>
+  search: (
+    searchRequests: Array<TypeSenseSearchRequest>
+  ) => Promise<TypeSenseSearchResponse>
+  searchForFacetValues: (
+    searchRequests: Array<TypeSenseSearchRequest>
+  ) => Promise<TypeSenseSearchResponse>
 }
 
 export type TypeSenseSearchRequest = {
@@ -108,3 +112,5 @@ export const typeSenseSearchItemToRFC = (
     text: ''
   }
 }
+
+export type Density = 'full' | 'dense' | 'compact'

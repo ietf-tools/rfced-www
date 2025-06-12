@@ -25,8 +25,10 @@
         }
       ]"
       :class-names="{
-        'ais-SortBy': 'px-2 bg-white text-base border border-gray-400 dark:bg-black dark:border-white dark:text-white px-1 shadow-sm rounded-xs scheme-light dark:scheme-dark',
-        'ais-SortBy-select': 'py-2 text-base dark:text-white scheme-light dark:scheme-dark'
+        'ais-SortBy':
+          'px-0 bg-white text-base border border-gray-400 dark:bg-black dark:border-white dark:text-white shadow-sm rounded-xs scheme-light dark:scheme-dark',
+        'ais-SortBy-select':
+          'px-2 py-2 text-base dark:text-white scheme-light dark:scheme-dark'
       }"
     />
   </label>

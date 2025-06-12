@@ -83,8 +83,9 @@
                     <RFCCardTypeSenseItem
                       heading-level="3"
                       :type-sense-search-item="item"
-                      :show-abstract="false"
+                      :show-abstract="true"
                       :show-tag-date="true"
+                      :density="density"
                     />
                   </li>
                 </ul>
@@ -109,6 +110,7 @@ import { Separator } from 'reka-ui'
 // Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
 import type {
+  Density,
   TypeSenseClient,
   TypeSenseSearchItem
 } from '../utilities/typesense'
@@ -144,7 +146,7 @@ const searchClient = adaptSearchClient(
   typesenseAdapter.searchClient as TypeSenseClient
 )
 
-const density = ref('dense')
+const density = ref<Density>('full')
 
 type StdLevelName = 'Best Current Practice'
 
@@ -168,23 +170,21 @@ type UIState = {
  * A 'no op' router
  */
 const noOpRouter = {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  write(...args: unknown[]) {
+  write(..._args: unknown[]) {
     // console.log('write', { args })
   },
-  read(...args: unknown[]) {
+  read(..._args: unknown[]) {
     // console.log('read', { args })
   },
-  onUpdate(...args: unknown[]) {
+  onUpdate(..._args: unknown[]) {
     // console.log('onUpdate', { args })
   },
-  dispose(...args: unknown[]) {
+  dispose(..._args: unknown[]) {
     // console.log('dispose', { args })
   },
-  createURL(...args: unknown[]) {
+  createURL(..._args: unknown[]) {
     // console.log('createURL', { args })
   }
-  /* eslint-enable @typescript-eslint/no-unused-vars */
 }
 
 const routing = {
