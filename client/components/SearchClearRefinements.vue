@@ -4,9 +4,9 @@
   >
     <template #default="{ canRefine, refine }">
       <button
+        v-show="canRefine"
         type="button"
-        class="underline text-sky-700 dark:text-blue-100 px-3 py-2 -ml-3 cursor-pointer"
-        :disabled="!canRefine"
+        class="underline text-sky-700 dark:text-blue-100 px-3 py-0 -ml-3 cursor-pointer"
         @click.prevent="refine"
       >
         Clear all

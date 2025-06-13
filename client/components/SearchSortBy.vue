@@ -34,7 +34,7 @@
             v-for="item of items"
             :key="item.value"
             :value="item.value"
-            class="flex items-center pl-[20px] cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700"
+            class="bg-white dark:bg-black"
           >
             {{ item.label }}
           </option>

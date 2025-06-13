@@ -1,10 +1,10 @@
 <template>
   <span
-    class="inline-block outline-1 rounded-xs outline-gray-400 focus-within:ring-black focus-within:ring-offset-4 focus-within:ring-2"
+    :class="['inline-block bg-white dark:bg-black shadow-sm outline-1 rounded-xs outline-gray-400 focus-within:ring-black focus-within:ring-offset-3 focus-within:ring-1', props.class]"
   >
     <select
       v-bind="$attrs"
-      :class="['focus:ring-none focus:outline-none py-2 mx-4', props.class]"
+      :class="['focus:ring-none focus:outline-none py-2 mx-2', props.selectClass]"
     >
       <slot />
     </select>
@@ -26,6 +26,7 @@ import type { VueStyleClass } from '~/utilities/vue'
 
 type Props = {
   class?: VueStyleClass
+  selectClass?: VueStyleClass
 }
 
 const props = defineProps<Props>()
