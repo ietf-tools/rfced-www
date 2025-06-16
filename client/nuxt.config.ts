@@ -47,7 +47,15 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/tailwind.css'],
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        preserveEntrySignatures: 'strict',
+        output: {
+          preserveModules: true
+        }
+      }
+    }
   },
   nitro: {
     // Production
