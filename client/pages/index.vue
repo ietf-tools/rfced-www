@@ -18,30 +18,32 @@
             </A>
           </p>
         </div>
-        <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-if="searchStatus === 'error' && searchError">
-            <Alert variant="warning" heading="Unable to load latest RFCs">
-              {{ searchError.statusMessage }}
-            </Alert>
-          </div>
 
-          <div
-            v-if="searchStatus === 'success' && topSearchResults?.length === 0"
-          >
-            <Alert variant="warning" heading="Unable to load latest RFCs">
-              Try again later (API error)
-            </Alert>
-          </div>
+        <div v-if="searchStatus === 'error' && searchError">
+          <Alert variant="warning" heading="Unable to load latest RFCs">
+            {{ searchError.statusMessage }}
+          </Alert>
+        </div>
 
-          <div v-if="searchStatus === 'success'">
-            <RFCCardSearchItem
-              v-for="searchResult in topSearchResults"
-              :key="searchResult.number"
-              :search-item="searchResult"
-              :show-abstract="false"
-              :show-tag-date="true"
-            />
-          </div>
+        <div
+          v-if="searchStatus === 'success' && topSearchResults?.length === 0"
+        >
+          <Alert variant="warning" heading="Unable to load latest RFCs">
+            Try again later (API error)
+          </Alert>
+        </div>
+
+        <div
+          v-if="searchStatus === 'success'"
+          class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <RFCCardSearchItem
+            v-for="searchResult in topSearchResults"
+            :key="searchResult.number"
+            :search-item="searchResult"
+            :show-abstract="false"
+            :show-tag-date="true"
+          />
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
