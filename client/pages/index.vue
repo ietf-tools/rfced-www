@@ -33,14 +33,15 @@
             </Alert>
           </div>
 
-          <RFCCardSearchItem
-            v-if="searchStatus === 'success'"
-            v-for="searchResult in topSearchResults"
-            :key="searchResult.number"
-            :search-item="searchResult"
-            :show-abstract="false"
-            :show-tag-date="true"
-          />
+          <div v-if="searchStatus === 'success'">
+            <RFCCardSearchItem
+              v-for="searchResult in topSearchResults"
+              :key="searchResult.number"
+              :search-item="searchResult"
+              :show-abstract="false"
+              :show-tag-date="true"
+            />
+          </div>
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
