@@ -19,25 +19,29 @@
           </p>
         </div>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-if="searchError">
+          <div v-if="searchStatus === 'error' && searchError">
             <Alert variant="warning" heading="Unable to load latest RFCs">
               {{ searchError.statusMessage }}
             </Alert>
           </div>
 
-          <div v-if="topSearchResults?.length === 0">
+          <div
+            v-if="searchStatus === 'success' && topSearchResults?.length === 0"
+          >
             <Alert variant="warning" heading="Unable to load latest RFCs">
               Try again later (API error)
             </Alert>
           </div>
 
-          <RFCCardSearchItem
-            v-for="searchResult in topSearchResults"
-            :key="searchResult.number"
-            :search-item="searchResult"
-            :show-abstract="false"
-            :show-tag-date="true"
-          />
+          <div v-if="searchStatus === 'success'">
+            <RFCCardSearchItem
+              v-for="searchResult in topSearchResults"
+              :key="searchResult.number"
+              :search-item="searchResult"
+              :show-abstract="false"
+              :show-tag-date="true"
+            />
+          </div>
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
@@ -115,8 +119,11 @@ definePageMeta({
   layout: false
 })
 
-const { data: searchResponse, error: searchError } =
-  await useFetch(SEARCH_API_PATH)
+const {
+  data: searchResponse,
+  status: searchStatus,
+  error: searchError
+} = await useAsyncData(() => $fetch(SEARCH_API_PATH))
 
 const topSearchResults = computed(() => {
   const allSearchResults = searchResponse.value?.results
