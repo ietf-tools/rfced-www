@@ -7,7 +7,6 @@
       :search-client="searchClient"
       :future="{ preserveSharedStateOnUnmount: true }"
       :routing="routing"
-      :on-state-change="handleStateChange"
     >
       <NuxtLayout name="default">
         <template #subheader>
