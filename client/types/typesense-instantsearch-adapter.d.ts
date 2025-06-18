@@ -16,5 +16,10 @@ declare module 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapte
             }
         }): void
         searchClient: unknown
+        configuration: {
+            additionalSearchParameters: {
+                preset: string
+            }
+        }
     }
 }

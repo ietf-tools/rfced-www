@@ -2,6 +2,7 @@
   <div class="min-h-[100vh]">
     <noscript> This search requires JavaScript. </noscript>
     <ais-instant-search
+      ref="aisInstantSearchRef"
       :index-name="INDEX_NAME"
       :search-client="searchClient"
       :future="{ preserveSharedStateOnUnmount: true }"
@@ -16,12 +17,13 @@
             >
               Search RFCs
             </Heading>
-            <div class="lg:w-1/2">
+            <div class="flex flex-row items-center pt-4 pb-6">
               <ais-search-box
                 autofocus
-                placeholder="Find an RFC"
+                placeholder="Find an RFC (number, subseries, title, author, etc.)"
                 :class-names="{
-                  'ais-SearchBox-form': 'w-full flex pt-4 pb-6',
+                  'ais-SearchBox': 'grow',
+                  'ais-SearchBox-form': 'w-full flex',
                   'ais-SearchBox-input':
                     'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 rounded-l-xs',
                   'ais-SearchBox-submit':
@@ -39,6 +41,16 @@
                   <Icon name="eos-icons:loading" size="2em" />
                 </template>
               </ais-search-box>
+              <div class="pl-5 grow">
+                <label class="text-base cursor-pointer flex items-center">
+                  <input
+                    v-model="searchStore.searchContents"
+                    class="mr-1 size-5 scheme-light dark:scheme-dark"
+                    type="checkbox"
+                  />
+                  <span>Search in RFC contents</span>
+                </label>
+              </div>
             </div>
           </div>
         </template>
@@ -57,7 +69,7 @@
                   decorative
                   class="bg-gray-400 data-[orientation=vertical]:h-7 data-[orientation=vertical]:w-px mx-3"
                 />
-                <SearchDensity v-model="density" />
+                <SearchDensity v-model="searchStore.density" />
               </div>
               <div class="lg:hidden print:hidden">
                 <SearchMobileFilter />
@@ -86,7 +98,7 @@
                       :type-sense-search-item="item"
                       :show-abstract="true"
                       :show-tag-date="true"
-                      :density="density"
+                      :density="searchStore.density"
                     />
                   </li>
                 </ul>
@@ -111,7 +123,6 @@ import { Separator } from 'reka-ui'
 // Packaging of default export of 'typesense-instantsearch-adapter' seems to confuse Nuxt so we'll import this directly
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter/src/TypesenseInstantsearchAdapter.js'
 import type {
-  Density,
   TypeSenseClient,
   TypeSenseSearchItem
 } from '../utilities/typesense'
@@ -121,6 +132,10 @@ import { adaptSearchClient } from '~/utilities/search-client-middleware'
 
 const route = useRoute()
 const searchStore = useSearchStore()
+
+/**
+ * Typesense Search Client
+ */
 
 const typesenseAdapter = new TypesenseInstantSearchAdapter({
   server: {
@@ -139,15 +154,26 @@ const typesenseAdapter = new TypesenseInstantSearchAdapter({
   //  So you can pass any parameters supported by the search endpoint below.
   //  query_by is required.
   additionalSearchParameters: {
-    preset: 'red'
+    preset: searchStore.searchContents ? 'red-content' : 'red'
   }
 })
 const INDEX_NAME = 'docs'
 const searchClient = adaptSearchClient(
   typesenseAdapter.searchClient as TypeSenseClient
 )
+const aisInstantSearchRef = useTemplateRef('aisInstantSearchRef')
 
-const density = ref<Density>('full')
+/**
+ * Switch search preset if toggling search in RFC contents option
+ */
+watch(() => searchStore.searchContents, newValue => {
+  typesenseAdapter.configuration.additionalSearchParameters.preset = newValue ? 'red-content' : 'red'
+  aisInstantSearchRef.value?.instantSearchInstance.helper.search()
+})
+
+/**
+ * UI State
+ */
 
 type StdLevelName = 'Best Current Practice'
 
