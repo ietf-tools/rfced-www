@@ -270,15 +270,6 @@ const routing = {
   }
 }
 
-type HandleStateChangeProps = {
-  uiState: unknown
-  setUiState: unknown
-}
-
-const handleStateChange = ({ uiState, setUiState }: HandleStateChangeProps) => {
-  console.log('handleStateChange', { uiState })
-}
-
 definePageMeta({
   layout: false
 })
