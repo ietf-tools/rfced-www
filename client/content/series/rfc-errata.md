@@ -1,3 +1,7 @@
+---
+description: Understand errors and corrections in RFCs
+---
+
 # Errata in RFCs
 
 Authors and editors of RFCs carefully proofread every document prior to publication, but sometimes errors happen. Because RFCs do not change after publication, there is an errata system to note these errors.

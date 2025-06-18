@@ -50,46 +50,31 @@
           Learn about RFCs
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MarkdownCard id="/authors/rfc-edit/" />
-          <MarkdownCard id="/authors/rfc-edit/auth48/" />
+          <MarkdownCard id="/series/rfc/" />
+          <MarkdownCard id="/series/rfc-tips/" />
           <MarkdownCard id="/series/rfc-errata/" />
-          <MarkdownCard id="/series/rfc-faq/" />
+          <MarkdownCard id="/about/rfc-editor/" />
         </div>
 
         <Heading level="2" has-icon class="pl-5 mt-10 mb-5 md:p-0">
           Browse RFCs
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card
-            :href="searchPathBuilder({ sortby: 'stream' })"
-            heading-level="3"
-            has-cover-link
-          >
-            <template #headingTitle>By Stream</template>
+          <Card :href="searchPathBuilder({})" heading-level="3" has-cover-link>
+            <template #headingTitle>Standards</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
+              Stable or mature protocols and services
             </p>
           </Card>
 
           <Card
-            :href="searchPathBuilder({ sortby: 'status' })"
+            :href="searchPathBuilder({ status: ['Best Current Practice'] })"
             heading-level="3"
             has-cover-link
           >
-            <template #headingTitle>By Status</template>
+            <template #headingTitle>Best Current Practices</template>
             <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
-            </p>
-          </Card>
-
-          <Card
-            :href="searchPathBuilder({ sortby: 'service' })"
-            heading-level="3"
-            has-cover-link
-          >
-            <template #headingTitle>By Service</template>
-            <p class="text-base mt-2 text-blue-900 dark:text-white">
-              Short description of the page here if it seems useful to show
+              Common guidelines for policies, operations, or procedures
             </p>
           </Card>
 
@@ -100,10 +85,29 @@
           Start Participating
         </Heading>
         <div class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MarkdownCard id="/authors/rfc-edit/" />
-          <MarkdownCard id="/authors/rfc-edit/auth48/" />
-          <MarkdownCard id="/series/rfc-errata/" />
-          <MarkdownCard id="/series/rfc-faq/" />
+          <Card :href="IETF_URL" heading-level="3" has-cover-link>
+            <template #headingTitle>Internet Engineering Task Force</template>
+            <p class="text-base mt-2 text-blue-900 dark:text-white">
+              Protocol standards, best current practices, experimental, and
+              informational documents
+            </p>
+          </Card>
+
+          <Card :href="IRTF_URL" heading-level="3" has-cover-link>
+            <template #headingTitle>Internet Research Task Force</template>
+            <p class="text-base mt-2 text-blue-900 dark:text-white">
+              Research issues related to the Internet
+            </p>
+          </Card>
+
+          <Card :href="IAB_URL" heading-level="3" has-cover-link>
+            <template #headingTitle>Internet Architecture Board</template>
+            <p class="text-base mt-2 text-blue-900 dark:text-white">
+              Long-range technical direction for Internet development
+            </p>
+          </Card>
+
+          <MarkdownCard id="/authors/rfc-independent-submissions/" />
         </div>
       </div>
     </NuxtLayout>
@@ -111,8 +115,13 @@
 </template>
 
 <script setup lang="ts">
+import { useRfcEditorHead } from '~/utilities/head'
 import {
   DATATRACKER_URL,
+  IAB_URL,
+  IETF_URL,
+  IRTF_URL,
+  PUBLIC_SITE,
   SEARCH_API_PATH,
   searchPathBuilder
 } from '~/utilities/url'
@@ -130,5 +139,13 @@ const {
 const topSearchResults = computed(() => {
   const allSearchResults = searchResponse.value?.results
   return Array.isArray(allSearchResults) ? allSearchResults.slice(0, 3) : []
+})
+
+useRfcEditorHead({
+  title: '',
+  canonicalUrl: PUBLIC_SITE,
+  description:
+    'The official home of RFCs. RFCs outline computer networking and Internet foundations, including Internet Standards and historical or informative content.',
+  contentType: 'website'
 })
 </script>

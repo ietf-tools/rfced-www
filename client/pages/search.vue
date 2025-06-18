@@ -116,7 +116,6 @@ import type {
   TypeSenseSearchItem
 } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
-import type { SearchParams } from '~/utilities/url'
 import { adaptSearchClient } from '~/utilities/search-client-middleware'
 
 const route = useRoute()
@@ -202,10 +201,8 @@ const routing = {
         {
           query: {
             q,
-            stdlevelname,
-
-            status
-          } satisfies Partial<SearchParams>
+            stdlevelname
+          }
         },
         { replace: true }
       )

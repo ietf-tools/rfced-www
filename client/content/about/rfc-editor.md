@@ -1,3 +1,7 @@
+---
+description: RFC Editor publishes and archives official RFCs
+---
+
 # About the RFC Editor
 
 The RFC Editor is made up of several different groups who work together to edit, publish, and archive [RFCs](https://docs.google.com/document/d/1GIzY1ZT_PJTOxacaFkAauUZ2p3eMPtui_v5RKORjyiw/edit?tab=t.0#heading=h.iikducyomqip).

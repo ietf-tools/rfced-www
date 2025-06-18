@@ -48,27 +48,27 @@ export const useMenuData = () => {
           children: [
             {
               label: 'Standards',
-              href: searchPathBuilder({ status: 'standards' })
+              href: searchPathBuilder({ status: ['Internet Standard'] })
             },
             {
               label: 'Best Current Practices (BCP)',
-              href: searchPathBuilder({ status: 'bcp' })
+              href: searchPathBuilder({ status: ['Best Current Practice'] })
             },
             {
               label: 'Informational',
-              href: searchPathBuilder({ status: 'informational' })
+              href: searchPathBuilder({ status: ['Informational'] })
             },
             {
               label: 'Experimental',
-              href: searchPathBuilder({ status: 'experimental' })
+              href: searchPathBuilder({ status: ['Experimental'] })
             },
             {
               label: 'Historic',
-              href: searchPathBuilder({ status: 'historic' })
+              href: searchPathBuilder({ status: ['Historic'] })
             },
             {
-              label: 'Uncategorized',
-              href: searchPathBuilder({ status: 'uncategorized' })
+              label: 'Unknown',
+              href: searchPathBuilder({ status: ['Unknown'] })
             }
           ]
         },
