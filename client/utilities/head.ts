@@ -25,7 +25,7 @@ type UseRfcEditorProps = {
   /**
    * Markdown pages and RFCs are considered 'articles'
    */
-  contentType: 'site-homepage' | 'article'
+  contentType: 'website' | 'article'
   authors?: string[]
   modifiedDateTime?: DateTime
   publishedDateTime?: DateTime
