@@ -21,6 +21,16 @@
     <template #headingTitle>
       <component :is="formatTitle(`rfc${props.rfc.number}`)" />
     </template>
+    <template #afterHeadingTitle>
+      <span class="text-gray-600"> :</span>
+      <NuxtLink
+        to="/"
+        class="relative z-100 no-underline hover:underline focus:underline hover:bg-gray-200 focus:bg-gray-200 px-2 py-1 rounded text-gray-700"
+        title="Part of BCP10"
+      >
+        <component :is="formatTitle(`bcp10`)" />
+      </NuxtLink>
+    </template>
     <template #default>
       <RFCCardBody
         :rfc="props.rfc"
