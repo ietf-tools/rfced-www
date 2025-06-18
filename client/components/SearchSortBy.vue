@@ -28,7 +28,14 @@
       <template #default="{ items, currentRefinement, refine }">
         <SelectNeue
           :model-value="currentRefinement"
-          @update:model-value="(val) => refine(val)"
+          @change="
+            (event: Event) => {
+              const select = event.target
+              if (isSelectElement(select)) {
+                refine(select.value)
+              }
+            }
+          "
         >
           <option
             v-for="item of items"
@@ -46,4 +53,5 @@
 
 <script setup lang="ts">
 import { AisSortBy } from 'vue-instantsearch/vue3/es'
+import { isSelectElement } from '~/utilities/html'
 </script>
