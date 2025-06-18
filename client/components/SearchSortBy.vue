@@ -54,8 +54,4 @@
 <script setup lang="ts">
 import { AisSortBy } from 'vue-instantsearch/vue3/es'
 import { isSelectElement } from '~/utilities/html'
-
-type X = HTMLSelectElement
-type Change = X['onchange']
-type param = Parameters<NonNullable<Change>>
 </script>
