@@ -1,3 +1,7 @@
+---
+description: Helpful information about common conventions in RFCs
+---
+
 # Tips for Reading RFCs
 
 The RFC Series uses certain conventions that may not be familiar to all readers. Some of the most common are listed here; refer to this more [in-depth overview](https://www.ietf.org/blog/how-read-rfc/) for further information.

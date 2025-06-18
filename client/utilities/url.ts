@@ -118,20 +118,50 @@ const _FIXME_URLS = [
   FIXME_INNOTES_PRERELEASE_PATH
 ] as const
 
-export type SearchParamKeys = 'q' | 'stdlevelname' | 'sortby' | 'status'
-export type SearchParams = Record<SearchParamKeys, string | null>
+type Status =
+  | 'Internet Standard'
+  | 'Proposed Standard'
+  | 'Draft Standard'
+  | 'Best Current Practice'
+  | 'Informational'
+  | 'Experimental'
+  | 'Historic'
+  | 'Unknown'
+
+type SearchPathBuilderProps = {
+  status: Status[]
+}
+
+/**
+ * Optionally specify a different URL param name to the searchPathBuilder key
+ */
+const searchKeyOverride: Record<
+  keyof SearchPathBuilderProps,
+  string | undefined
+> = {
+  status: 'stdlevelname'
+}
 
 export const searchPathBuilder = (
-  searchParams: Partial<SearchParams>
+  searchParams: Partial<SearchPathBuilderProps>
 ): `${typeof SEARCH_PATH}${string}` => {
   const hasParams = Object.values(searchParams).join('').trim().length > 0
   return `${SEARCH_PATH}${hasParams ? '?' : ''}${
     hasParams ?
-      (Object.keys(searchParams) as SearchParamKeys[])
+      Object.keys(searchParams)
         .sort() // normalize order
         .map((searchKey) => {
-          const searchValue = searchParams[searchKey]
-          return searchValue ? `${searchKey}=${searchValue}` : ''
+          const typesenseSearchKey =
+            searchKeyOverride[searchKey as keyof SearchPathBuilderProps] ??
+            searchKey
+          const searchValue =
+            searchParams[searchKey as keyof SearchPathBuilderProps]
+
+          return searchValue ?
+              `${encodeURIComponent(typesenseSearchKey)}=${typeSenseEncodeUriComponent(
+                Array.isArray(searchValue) ? searchValue.join(',') : searchValue
+              )}`
+            : ''
         })
         .filter(Boolean)
         .join('&')
@@ -291,3 +321,13 @@ export const parseMaybeRfcLink = (
   if (!rfcMatch) return undefined
   return parseRFCId(rfcMatch[0])
 }
+
+/**
+ * TypeSense wants spaces encoded as '+' char not '%20'.
+ * This is questionable but necessary for integation with our search engine.
+ * See also:
+ *  * RFC 1866
+ *  * https://stackoverflow.com/a/29948396
+ */
+const typeSenseEncodeUriComponent = (uriComponent: string) =>
+  encodeURIComponent(uriComponent).replace(/%20/g, '+')
