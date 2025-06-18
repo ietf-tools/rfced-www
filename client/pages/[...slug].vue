@@ -1,5 +1,10 @@
 <template>
-  <div class="min-h-[100vh]">
+  <div
+    :class="{
+      'min-h-[100vh]': true,
+      'lg:max-w-[calc(100vw-300px)]': !showToc
+    }"
+  >
     <BodyLayoutDocument>
       <template #sidebar>
         <TableOfContentsMarkdownDesktop v-if="showToc && toc" :toc="toc" />
