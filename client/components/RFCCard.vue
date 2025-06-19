@@ -19,7 +19,7 @@
     "
   >
     <template #headingTitle>
-      <component :is="formatTitle(`rfc${props.rfc.number}`)" />
+      <component :is="formatTitleAsVNode(`rfc${props.rfc.number}`)" />
     </template>
     <template #afterHeadingTitle>
       <span class="absolute z-100 right-3">
@@ -29,7 +29,7 @@
           class="no-underline hover:underline focus:underline hover:bg-gray-200 focus:bg-gray-200 px-2 py-1 rounded text-gray-700"
           title="Part of BCP10"
         >
-          <component :is="formatTitle(`bcp10`)" />
+          <component :is="formatTitleAsVNode(`bcp10`)" />
         </NuxtLink>
       </span>
     </template>
@@ -62,14 +62,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Rfc } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
-import { formatTitle } from '~/utilities/rfc'
+import { formatTitleAsVNode } from '~/utilities/rfc'
+import type { RfcCommon } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 import { parseHeadingLevel, type HeadingLevel } from '~/utilities/html'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
   showAbstract?: boolean
   showTagDate?: boolean
   headingLevel?: HeadingLevel

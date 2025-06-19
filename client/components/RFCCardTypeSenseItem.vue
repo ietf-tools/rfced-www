@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { typeSenseSearchItemToRFC } from '~/utilities/typesense'
+import { typeSenseSearchItemToRFCCommon } from '~/utilities/typesense'
 import type { Density, TypeSenseSearchItem } from '~/utilities/typesense'
 
 type Props = {
@@ -25,5 +25,7 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const rfc = computed(() => typeSenseSearchItemToRFC(props.typeSenseSearchItem))
+const rfc = computed(() =>
+  typeSenseSearchItemToRFCCommon(props.typeSenseSearchItem)
+)
 </script>

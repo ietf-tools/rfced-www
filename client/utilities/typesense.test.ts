@@ -1,8 +1,8 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { typeSenseSearchItemToRFC } from './typesense'
+import { typeSenseSearchItemToRFCCommon } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
-import type { Rfc } from '~/generated/red-client'
+import type { RfcCommon } from './rfc'
 
 const exampleTypesenseResult = {
   results: [
@@ -230,7 +230,9 @@ const exampleTypesenseResult = {
 
 test('typeSenseSearchItemToRFC', () => {
   expect(
-    typeSenseSearchItemToRFC(exampleTypesenseResult.results[0].hits[0].document)
+    typeSenseSearchItemToRFCCommon(
+      exampleTypesenseResult.results[0].hits[0].document
+    )
   ).toEqual({
     number: 8589,
     abstract:
@@ -259,15 +261,12 @@ test('typeSenseSearchItemToRFC', () => {
       name: 'Applications and Real-Time Area'
     },
     published: '2019-05-21T18:05:35.000Z',
-    status: {
-      name: 'Informational',
-      slug: 'unknown'
-    },
+    status: 'Informational',
     stream: {
-      name: 'Informational',
+      name: 'IETF',
       slug: 'unknown'
     },
     text: '',
     title: "The 'leaptofrogans' URI Scheme"
-  } satisfies Rfc)
+  } satisfies RfcCommon)
 })

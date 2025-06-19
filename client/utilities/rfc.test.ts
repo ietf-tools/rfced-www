@@ -1,18 +1,17 @@
 // @vitest-environment nuxt
 import { vi, test, expect, describe, beforeEach, afterEach } from 'vitest'
 import { DateTime } from 'luxon'
-import {
-  parseRFCId,
-  refsRefRfcIdTxt,
-  rfcToRfcJSON,
-  formatDatePublished,
-  parseRfcJsonPubDateToISO
-} from './rfc'
+import { parseRFCId, refsRefRfcIdTxt } from './rfc'
 import { NONBREAKING_SPACE } from './strings'
 import rfcRefs from './rfc-refs.json'
 import rfcJsons from './rfc-jsons.json'
 import { FIXME_getRFCWithMissingData } from './rfc.mocks'
 import { testRFCDocListResponse } from './doc-list-all.mocks'
+import { rfcToRfcJSON } from './rfc-converters'
+import {
+  formatDatePublished,
+  parseRfcJsonPubDateToISO
+} from './rfc-converters-utils'
 import type { ApiClient, Rfc, RfcMetadata } from '~/generated/red-client'
 
 test('parseRFCId', () => {

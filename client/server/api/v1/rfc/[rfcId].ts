@@ -1,5 +1,5 @@
 import { docRetrieve, getRedClient } from '~/utilities/redClientWrappers'
-import { rfcToRfcJSON } from '~/utilities/rfc'
+import { rfcToRfcJSON } from '~/utilities/rfc-converters'
 import { FIXME_getRFCWithMissingData } from '~/utilities/rfc.mocks'
 import { rfcJSONPathBuilder } from '~/utilities/url'
 

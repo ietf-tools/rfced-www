@@ -75,12 +75,12 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import type { Rfc, RfcMetadata } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
-import { formatTitlePlaintext } from '~/utilities/rfc'
+import type { RfcCommon } from '~/utilities/rfc'
+import { formatTitlePlaintext } from '~/utilities/rfc-converters-utils'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
   showAbstract?: boolean
   showTagDate?: boolean
 }
@@ -91,7 +91,7 @@ const isMobileAbstractOpen = ref<boolean>(false)
 
 const abstractDomId = useId()
 
-function formatAuthors(authors: Rfc['authors']): string {
+function formatAuthors(authors: RfcCommon['authors']): string {
   if (authors.length === 0) {
     return ''
   }
@@ -104,7 +104,7 @@ function formatAuthors(authors: Rfc['authors']): string {
   }`
 }
 
-function formatStreamAndArea(rfc: Rfc): string[] {
+function formatStreamAndArea(rfc: RfcCommon): string[] {
   return [rfc.stream?.name, rfc.area?.name].filter(Boolean) as string[]
 }
 
@@ -114,7 +114,7 @@ function formatDate(isoDate: string): string {
 }
 
 function formatObsoletedBy(
-  obsoletedBy: RfcMetadata['obsoleted_by']
+  obsoletedBy: RfcCommon['obsoleted_by']
 ): VNode | undefined {
   if (!obsoletedBy || obsoletedBy.length === 0) return undefined
 
@@ -157,8 +157,8 @@ const list2 = computed(() => formatStreamAndArea(props.rfc))
 
 const tagText = computed(() => {
   const tagText = []
-  if (props.rfc.status.name) {
-    tagText.push(props.rfc.status.name)
+  if (props.rfc.status) {
+    tagText.push(props.rfc.status)
   }
   const datetime = DateTime.fromISO(props.rfc.published)
   const relativeCalendar = datetime.toRelativeCalendar()

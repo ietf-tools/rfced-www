@@ -20,7 +20,7 @@
             v-if="rfcId"
             class="mx-auto sticky top-0 z-2 block w-50 px-4 pt-1 pb-2 mb-4 text-center bg-gray-200 dark:bg-gray-700 rounded-b-xl"
           >
-            <component :is="formatTitle(`rfc${rfcId.number}`)" />
+            <component :is="formatTitleAsVNode(`rfc${rfcId.number}`)" />
             Preview
           </div>
           <RFCRouterLinkPreview :rfc-json="rfcJSON" />
@@ -54,7 +54,7 @@
             class="mx-auto sticky top-0 z-2 block w-50 px-4 pt-1 pb-2 mb-6 text-center bg-gray-200 dark:bg-gray-700 rounded-b-xl"
           >
             <span v-if="rfcId">
-              <component :is="formatTitle(`rfc${rfcId.number}`)" />
+              <component :is="formatTitleAsVNode(`rfc${rfcId.number}`)" />
               Preview
             </span>
           </DialogTitle>
@@ -75,7 +75,7 @@
 import { computed, onUnmounted, customRef } from 'vue'
 import RFCRouterLinkPreview from './RFCRouterLinkPreview.vue'
 import { NuxtLink } from '#components'
-import { formatTitle, RFC_TYPE_RFC } from '~/utilities/rfc'
+import { formatTitleAsVNode, RFC_TYPE_RFC } from '~/utilities/rfc'
 import { fetchRetry } from '~/utilities/network'
 import type { RFCJSON } from '~/utilities/rfc'
 import { parseMaybeRfcLink, rfcJSONPathBuilder } from '~/utilities/url'

@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import type { RfcCard } from './rfc'
+import type { RfcCommon } from './rfc'
+import { parseRfcStatusSlug } from './rfc-converters-utils'
 
 export type TypeSenseClient = {
   clearCache: () => void
@@ -90,7 +91,7 @@ export const TypeSenseSearchItemSchema = z.object({
 })
 
 /**
- * 
+ *
  {
   "abstract": "The PPP Working group has developed two protocols, one to control compression on PPP links; the Compression Control Protocol (CCP), documented in draft-ietf-pppext-compression-04.txt. The second is the Encryption Control Protocol (ECP), used to control encryption on serial links, documented in draft-ietf-pppext-encryption-03.txt. This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.",
   "authors": [
@@ -130,9 +131,9 @@ export const TypeSenseSearchItemSchema = z.object({
 
  */
 
-export const typeSenseSearchItemToRFC = (
+export const typeSenseSearchItemToRFCCommon = (
   typeSenseSearchItem: TypeSenseSearchItem
-): RfcCard => {
+): RfcCommon => {
   const result = TypeSenseSearchItemSchema.safeParse(typeSenseSearchItem)
   if (result.error) {
     console.error(result.error.toString())
@@ -165,13 +166,9 @@ export const typeSenseSearchItemToRFC = (
     },
     number: item.rfcNumber,
     published,
-    status: {
-      name: item.stdlevelname,
-      slug: 'unknown'
-    },
-    stdlevelname: typeSenseSearchItem.stdlevelname,
+    status: parseRfcStatusSlug(item.stdlevelname),
     stream: {
-      name: item.stdlevelname,
+      name: item.stream,
       slug: 'unknown'
     },
     text: '',
