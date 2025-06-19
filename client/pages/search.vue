@@ -23,7 +23,6 @@
                   autofocus
                   placeholder="Find an RFC (number, subseries, title, author, etc.)"
                   :class-names="{
-                    'ais-SearchBox': 'grow',
                     'ais-SearchBox-form': 'w-full flex',
                     'ais-SearchBox-input':
                       'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 h-12 rounded-l-xs',
