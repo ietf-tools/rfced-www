@@ -5,9 +5,21 @@ import { NONBREAKING_SPACE } from './strings'
 import { infoRfcPathBuilder, PUBLIC_SITE } from './url'
 import { FIXME_getRFCWithMissingData } from './rfc.mocks'
 
-const cache: Record<string, Rfc> = {}
+export type RfcDetails = Rfc & {
+  stdlevelname?:
+    | 'Internet Standard'
+    | 'Proposed Standard'
+    | 'Draft Standard'
+    | 'Best Current Practice'
+    | 'Informational'
+    | 'Experimental'
+    | 'Historic'
+    | 'Unknown'
+}
 
-export const rfcMetadataToRfc = (rfcMetadata: RfcMetadata): Rfc => {
+const cache: Record<string, RfcDetails> = {}
+
+export const rfcMetadataToRfc = (rfcMetadata: RfcMetadata): RfcDetails => {
   const rfcId = parseRFCId(`rfc${rfcMetadata.number}`)
   const cacheId = `${rfcId.type}${rfcId.number}`
   if (!cache[cacheId]) {
@@ -31,7 +43,7 @@ export const rfcMetadataToRfc = (rfcMetadata: RfcMetadata): Rfc => {
   return cache[cacheId]
 }
 
-export const blankRfc: Rfc = {
+export const blankRfc: RfcDetails = {
   number: 0,
   title: '',
   published: '1950-1-1',
@@ -103,7 +115,7 @@ export const parseRFCId = (title: string): RFCId => {
   }
 }
 
-const parseRfcFormat = (format: string): Rfc['formats'][number] => {
+const parseRfcFormat = (format: string): RfcDetails['formats'][number] => {
   switch (format.toLowerCase()) {
     case 'xml':
       return 'xml'
