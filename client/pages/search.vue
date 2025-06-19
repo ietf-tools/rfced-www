@@ -18,29 +18,31 @@
               Search RFCs
             </Heading>
             <div class="flex flex-row items-center pt-4 pb-6">
-              <ais-search-box
-                autofocus
-                placeholder="Find an RFC (number, subseries, title, author, etc.)"
-                :class-names="{
-                  'ais-SearchBox': 'grow',
-                  'ais-SearchBox-form': 'w-full flex',
-                  'ais-SearchBox-input':
-                    'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 rounded-l-xs',
-                  'ais-SearchBox-submit':
-                    'bg-blue-200 px-2 flex items-center rounded-r-xs',
-                  'ais-SearchBox-reset': 'hidden',
-                  'ais-SearchBox-loadingIndicator':
-                    'bg-yellow-400 px-2 flex items-center text-white'
-                }"
-                show-loading-indicator
-              >
-                <template #submit-icon>
-                  <Icon name="fluent:search-12-filled" size="2em" />
-                </template>
-                <template #loading-indicator>
-                  <Icon name="eos-icons:loading" size="2em" />
-                </template>
-              </ais-search-box>
+              <div class="w-2/3 h-12">
+                <ais-search-box
+                  autofocus
+                  placeholder="Find an RFC (number, subseries, title, author, etc.)"
+                  :class-names="{
+                    'ais-SearchBox-form': 'w-full flex',
+                    'ais-SearchBox-input':
+                      'flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3 pr-2 h-12 rounded-l-xs',
+                    'ais-SearchBox-submit':
+                      'bg-blue-200 px-2 flex items-center rounded-r-xs',
+                    'ais-SearchBox-reset': 'hidden',
+                    'ais-SearchBox-loadingIndicator':
+                      'bg-yellow-400 px-2 flex items-center text-white'
+                  }"
+                  show-loading-indicator
+                >
+                  <template #submit-icon>
+                    <Icon name="fluent:search-12-filled" size="2em" />
+                  </template>
+                  <template #loading-indicator>
+                    <Icon name="eos-icons:loading" size="2em" />
+                    <div class="bg-red-500 w-5 h-5"></div>
+                  </template>
+                </ais-search-box>
+              </div>
               <div class="pl-5 grow">
                 <label class="text-base cursor-pointer flex items-center">
                   <input
@@ -55,7 +57,9 @@
           </div>
         </template>
 
-        <div class="container mx-auto flex flex-row items-start py-5">
+        <div
+          class="container mx-auto flex flex-row items-start py-5 lg:min-h-screen"
+        >
           <div class="hidden lg:w-1/3 lg:block">
             <SearchFilter />
           </div>
@@ -128,6 +132,8 @@ import type {
 } from '../utilities/typesense'
 import RFCCardTypeSenseItem from '~/components/RFCCardTypeSenseItem.vue'
 import { adaptSearchClient } from '~/utilities/search-client-middleware'
+import { useRfcEditorHead } from '~/utilities/head'
+import { searchPathBuilder } from '~/utilities/url'
 
 const route = useRoute()
 const searchStore = useSearchStore()
@@ -160,15 +166,20 @@ const INDEX_NAME = 'docs'
 const searchClient = adaptSearchClient(
   typesenseAdapter.searchClient as TypeSenseClient
 )
+
 const aisInstantSearchRef = useTemplateRef('aisInstantSearchRef')
 
 /**
  * Switch search preset if toggling search in RFC contents option
  */
-watch(() => searchStore.searchContents, newValue => {
-  typesenseAdapter.configuration.additionalSearchParameters.preset = newValue ? 'red-content' : 'red'
-  aisInstantSearchRef.value?.instantSearchInstance.helper.search()
-})
+watch(
+  () => searchStore.searchContents,
+  (newValue) => {
+    typesenseAdapter.configuration.additionalSearchParameters.preset =
+      newValue ? 'red-content' : 'red'
+    aisInstantSearchRef.value?.instantSearchInstance.helper.search()
+  }
+)
 
 /**
  * UI State
@@ -259,5 +270,12 @@ const routing = {
 
 definePageMeta({
   layout: false
+})
+
+useRfcEditorHead({
+  title: 'Search',
+  canonicalUrl: searchPathBuilder({}),
+  description: 'Search RFCs by number, title, subseries, author, etc.',
+  contentType: 'website'
 })
 </script>
