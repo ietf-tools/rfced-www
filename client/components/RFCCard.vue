@@ -22,7 +22,10 @@
       <component :is="formatTitleAsVNode(`rfc${props.rfc.number}`)" />
     </template>
     <template #afterHeadingTitle>
-      <span class="absolute z-100 right-3">
+      <span
+        v-if="props.rfc.status === 'Best Current Practice'"
+        class="absolute z-100 right-3"
+      >
         <span class="text-sm text-gray-600 -mr-1"> part of </span>
         <NuxtLink
           to="/"

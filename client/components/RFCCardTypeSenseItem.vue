@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { typeSenseSearchItemToRFCCommon } from '~/utilities/typesense'
+import { typeSenseSearchItemToRFCCommon } from '~/utilities/rfc-converters'
 import type { Density, TypeSenseSearchItem } from '~/utilities/typesense'
 
 type Props = {

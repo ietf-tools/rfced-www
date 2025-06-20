@@ -1,19 +1,52 @@
 import { NONBREAKING_SPACE } from './strings'
 
+export const subseriesCommonType: Record<
+  RfcCommonSubseriesType,
+  RfcCommonSubserie
+> = {
+  bcp: {
+    name: 'Best Current Practice',
+    acronym: 'bcp'
+  },
+  fyi: {
+    name: 'Informational',
+    acronym: 'fyi'
+  },
+  std: {
+    name: 'Internet Standard',
+    acronym: 'bcp'
+  }
+}
+
+type RfcCommonSubserie = { name: string; acronym: RfcCommonSubseriesType }
+
+export type RfcCommonSubseriesType = 'bcp' | 'fyi' | 'std'
+
+export type RfcCommonStatus =
+  | 'Best Current Practice'
+  | 'Experimental'
+  | 'Historic'
+  | 'Informational'
+  | 'Not Issued'
+  | 'Internet Standard'
+  | 'Unknown'
+  | 'Proposed Standard'
+  | 'Draft Standard'
+
 export type RfcCommon = {
   number: number
   title: string
   published: string
-  status:
-    | 'Internet Standard'
-    | 'Proposed Standard'
-    | 'Draft Standard'
-    | 'Best Current Practice'
-    | 'Informational'
-    | 'Experimental'
-    | 'Historic'
-    | 'Unknown'
-    | 'Not Issued'
+  area?: {
+    acronym: string
+    name: string
+  }
+  status: RfcCommonStatus
+  subseries?: {
+    type: RfcCommonSubseriesType
+    number?: number
+    subseriesLength?: number
+  }
   pages?: number | null
   authors: {
     person: number
@@ -23,10 +56,6 @@ export type RfcCommon = {
     country?: string
   }[]
   group: {
-    acronym: string
-    name: string
-  }
-  area?: {
     acronym: string
     name: string
   }
@@ -77,8 +106,8 @@ export const blankRfcCommon: RfcCommon = {
   number: 0,
   title: '',
   published: '1950-1-1',
-  status: 'Unknown',
   pages: 0,
+  status: 'Unknown',
   authors: [],
   group: {
     acronym: '',

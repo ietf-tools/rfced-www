@@ -1,7 +1,10 @@
 import { range } from 'lodash-es'
 import { DateTime } from 'luxon'
-import { parseRFCId, type RfcCommon, type RFCJSON } from './rfc'
+import { z } from 'zod'
+import { parseRFCId } from './rfc'
+import type { RfcCommon, RFCJSON } from './rfc'
 import { NONBREAKING_SPACE } from './strings'
+import { assertIsString } from './typescript'
 import type { HintedString } from './typescript'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
@@ -232,4 +235,94 @@ export const parseRfcStatusSlug = (
       return 'Draft Standard'
   }
   throw Error(`Unable to parse status slug "${rfcStatusSlug}"`)
+}
+
+// Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
+export const TypeSenseSearchItemSchema = z.object({
+  abstract: z.string(),
+  adName: z.string().optional(),
+  area: z
+    .object({
+      acronym: z.string(),
+      name: z.string(),
+      full: z.string()
+    })
+    .optional(),
+  authors: z
+    .array(
+      z.object({
+        name: z.string(),
+        affiliation: z.string()
+      })
+    )
+    .optional(),
+  bcp: z.string().optional(),
+  date: z.number(),
+  filename: z.string(),
+  flags: z
+    .object({
+      obsoleted: z.boolean(),
+      updated: z.boolean()
+    })
+    .optional(),
+  fyi: z.string().optional(),
+  group: z.object({
+    acronym: z.string(),
+    name: z.string(),
+    full: z.string()
+  }),
+  id: z.string(),
+  keywords: z.array(z.string()),
+  pages: z.number(),
+  publicationDate: z.number(),
+  ranking: z.number(),
+  rfc: z.string(),
+  rfcNumber: z.number(),
+  state: z.array(z.string()),
+  std: z.string().optional(),
+  stdlevelname: z
+    .enum([
+      'Internet Standard',
+      'Proposed Standard',
+      'Draft Standard',
+      'Best Current Practice',
+      'Informational',
+      'Experimental',
+      'Historic',
+      'Unknown'
+    ])
+    .optional(),
+  stream: z.string(),
+  subserieTotal: z.number().optional(),
+  title: z.string(),
+  type: z.string()
+})
+
+export const parseTypeSenseSubseries = (
+  item: z.infer<typeof TypeSenseSearchItemSchema>
+): RfcCommon['subseries'] => {
+  switch (item.stdlevelname) {
+    case 'Best Current Practice':
+      assertIsString(item.bcp)
+      return {
+        type: 'bcp',
+        number: parseFloat(item.bcp),
+        subseriesLength: item.subserieTotal
+      }
+    case 'Informational':
+      assertIsString(item.fyi)
+      return {
+        type: 'fyi',
+        number: parseFloat(item.fyi),
+        subseriesLength: item.subserieTotal
+      }
+    case 'Internet Standard':
+      assertIsString(item.std)
+      return {
+        type: 'std',
+        number: parseFloat(item.std),
+        subseriesLength: item.subserieTotal
+      }
+  }
+  return undefined
 }

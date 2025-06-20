@@ -1,8 +1,8 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { typeSenseSearchItemToRFCCommon } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
 import type { RfcCommon } from './rfc'
+import { typeSenseSearchItemToRFCCommon } from './rfc-converters'
 
 const exampleTypesenseResult = {
   results: [
@@ -148,6 +148,8 @@ const exampleTypesenseResult = {
             rfc: '8589',
             rfcNumber: 8589,
             state: ['Published'],
+            fyi: '5',
+            subserieTotal: 10,
             stdlevelname: 'Informational',
             stream: 'IETF',
             title: "The 'leaptofrogans' URI Scheme",
@@ -262,6 +264,11 @@ test('typeSenseSearchItemToRFC', () => {
     },
     published: '2019-05-21T18:05:35.000Z',
     status: 'Informational',
+    subseries: {
+      type: 'fyi',
+      number: 5,
+      subseriesLength: 10
+    },
     stream: {
       name: 'IETF',
       slug: 'unknown'

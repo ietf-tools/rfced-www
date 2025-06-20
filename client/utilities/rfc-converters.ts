@@ -7,8 +7,11 @@ import {
   formatFormat,
   parseRfcFormat,
   parseRfcJsonPubDateToISO,
-  parseRfcStatusSlug
+  parseRfcStatusSlug,
+  parseTypeSenseSubseries,
+  TypeSenseSearchItemSchema
 } from './rfc-converters-utils'
+import type { TypeSenseSearchItem } from './typesense'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
 /**
@@ -18,6 +21,7 @@ const cacheResponse = <T extends Rfc | RfcMetadata>(
   fn: (rfcData: T) => RfcCommon
 ): ((rfcData: T) => RfcCommon) => {
   const cache: Record<string, RfcCommon> = {}
+
   return (rfcData: T) => {
     const cacheKey = `${rfcData.number}`
     if (!(cacheKey in cache)) {
@@ -194,5 +198,53 @@ export const rfcJSONToRfcCommon = (rfcJson: RFCJSON): RfcCommon => {
     keywords: rfcJson.keywords,
     errata: [],
     text: ''
+  }
+}
+
+export const typeSenseSearchItemToRFCCommon = (
+  unverifiedTypeSenseSearchItem: TypeSenseSearchItem
+): RfcCommon => {
+  const result = TypeSenseSearchItemSchema.safeParse(
+    unverifiedTypeSenseSearchItem
+  )
+  if (result.error) {
+    console.error(result.error.toString())
+    throw Error(result.error.toString())
+  }
+
+  const item = result.data
+
+  const published = new Date(item.publicationDate * 1000).toISOString()
+  const authors =
+    item.authors?.map((author, index) => ({
+      person: index,
+      name: author.name
+    })) ?? []
+
+  return {
+    abstract: item.abstract,
+    area:
+      item.area ?
+        {
+          name: item.area.name,
+          acronym: item.area.acronym
+        }
+      : undefined,
+    authors,
+    formats: [],
+    group: {
+      acronym: item.group.acronym,
+      name: item.group.name
+    },
+    number: item.rfcNumber,
+    published,
+    subseries: item.stdlevelname ? parseTypeSenseSubseries(item) : undefined,
+    status: parseRfcStatusSlug(item.stdlevelname),
+    stream: {
+      name: item.stream,
+      slug: 'unknown'
+    },
+    text: '',
+    title: item.title
   }
 }
