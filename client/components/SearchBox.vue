@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatTitlePlaintext } from '~/utilities/rfc'
+import { formatTitlePlaintext } from '~/utilities/rfc-converters-utils'
 import { SEARCH_PATH } from '~/utilities/url'
 
 const responsiveModeStore = useResponsiveModeStore()

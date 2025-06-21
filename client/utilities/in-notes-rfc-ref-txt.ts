@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
 import { padStart } from 'lodash-es'
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
-import { formatAuthor, formatIdentifiers, parseRFCId } from './rfc'
+import { parseRFCId } from './rfc'
 import { setTimeoutPromise } from './promises'
 import { PUBLIC_SITE, infoRfcPathBuilder } from './url'
+import { formatAuthor, formatIdentifiers } from './rfc-converters-utils'
 import type { ApiClient, RfcMetadata } from '~/generated/red-client'
 
 type DocListArg = Parameters<ApiClient['red']['docList']>[0]

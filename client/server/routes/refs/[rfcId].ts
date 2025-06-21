@@ -1,6 +1,6 @@
 import { refsRefTxtPathBuilder } from '~/utilities/url'
 import { docRetrieve, getRedClient } from '~/utilities/redClientWrappers'
-import { refsRefRfcIdTxt } from '~/utilities/rfc'
+import { refsRefRfcIdTxt } from '~/utilities/refs'
 
 const refRegex = /^ref([0-9]+)\.txt$/
 

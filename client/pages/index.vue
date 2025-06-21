@@ -37,10 +37,11 @@
           v-if="searchStatus === 'success'"
           class="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          <RFCCardSearchItem
+          <RFCCard
             v-for="searchResult in topSearchResults"
             :key="searchResult.number"
-            :search-item="searchResult"
+            heading-level="3"
+            :rfc="searchResult"
             :show-abstract="false"
             :show-tag-date="true"
           />
@@ -116,6 +117,7 @@
 
 <script setup lang="ts">
 import { useRfcEditorHead } from '~/utilities/head'
+import { rfcMetadataToRfcCommon } from '~/utilities/rfc-converters'
 import {
   DATATRACKER_URL,
   IAB_URL,
@@ -138,7 +140,9 @@ const {
 
 const topSearchResults = computed(() => {
   const allSearchResults = searchResponse.value?.results
-  return Array.isArray(allSearchResults) ? allSearchResults.slice(0, 3) : []
+  return Array.isArray(allSearchResults) ?
+      allSearchResults.slice(0, 3).map(rfcMetadataToRfcCommon)
+    : []
 })
 
 useRfcEditorHead({

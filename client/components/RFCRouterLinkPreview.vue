@@ -57,12 +57,11 @@
 import { DateTime } from 'luxon'
 import { infoRfcPathBuilder, rfcPathBuilder } from '../utilities/url'
 import Anchor from './A.vue'
+import { formatTitleAsVNode, type RFCJSON } from '~/utilities/rfc'
 import {
-  formatTitle,
   formatTitlePlaintext,
-  parseRfcJsonPubDateToISO,
-  type RFCJSON
-} from '~/utilities/rfc'
+  parseRfcJsonPubDateToISO
+} from '~/utilities/rfc-converters-utils'
 
 type Props = {
   rfcJson: RFCJSON
@@ -123,7 +122,7 @@ function formatObsoletedBy(
   )
 }
 
-const formattedTitle = computed(() => formatTitle(props.rfcJson.doc_id))
+const formattedTitle = computed(() => formatTitleAsVNode(props.rfcJson.doc_id))
 
 const obsoletedBy = computed(() => {
   return formatObsoletedBy(props.rfcJson.obsoleted_by)

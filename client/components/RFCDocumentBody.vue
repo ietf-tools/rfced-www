@@ -17,7 +17,7 @@
   </button>
 
   <Heading level="1" class="mb-2 px-1 xs:px-0 print:px-0">
-    <component :is="formatTitle(`${rfcId.type}${rfcId.number}`)" />
+    <component :is="formatTitleAsVNode(`${rfcId.type}${rfcId.number}`)" />
   </Heading>
 
   <RFCMobileBanner :rfc="rfc" :is-fixed="true" />
@@ -50,13 +50,13 @@
             <p class="leading-6">
               For the definition of <b>Status</b>, see
               <A :href="infoRfcPathBuilder('rfc2026')">
-                <component :is="formatTitle('rfc2026')" />
+                <component :is="formatTitleAsVNode('rfc2026')" />
               </A>
             </p>
             <p class="leading-6">
               For the definition of <b>Stream</b>, see
               <A :href="infoRfcPathBuilder('rfc8729')">
-                <component :is="formatTitle('rfc8729')" /> </A
+                <component :is="formatTitleAsVNode('rfc8729')" /> </A
               >.
             </p>
           </PopoverContent>
@@ -92,7 +92,7 @@
           :key="obsoletedByItemIndex"
         >
           <A :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
-            <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
+            <component :is="formatTitleAsVNode(`RFC${obsoletedByItem.id}`)" />
             {{ obsoletedByItem.title }}
           </A>
         </li>
@@ -118,7 +118,7 @@ import {
   PopoverTrigger
 } from 'reka-ui'
 import type { Rfc } from '../generated/red-client'
-import { formatTitle, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
+import { formatTitleAsVNode, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
