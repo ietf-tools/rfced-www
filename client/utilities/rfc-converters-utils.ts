@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { parseRFCId } from './rfc'
 import type { RfcCommon, RFCJSON } from './rfc'
 import { NONBREAKING_SPACE } from './strings'
-import { assertIsString } from './typescript'
+import { assertIsString, assertNever } from './typescript'
 import type { HintedString } from './typescript'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
@@ -31,36 +31,34 @@ export const formatAuthor = (
       if (style === 'regular') {
         return true
       }
-
-      // if style === 'brief' then discard middlenames
-      return index === 0 || index === arr.length - 1
+      // otherwise discard middlenames
+      const isStart = index === 0
+      const isEnd = index === arr.length - 1
+      return isStart || isEnd
     })
     .reduce((acc, item, index, arr) => {
-      if (style === 'regular') {
-        const newBit =
-          index === arr.length - 1 ?
-            ` ${item}`
-          : `${item.substring(0, 1).toUpperCase()}.`
-        return `${acc}${newBit}`
+      let newBit = ''
+      switch (style) {
+        case 'regular':
+          newBit =
+            index === arr.length - 1 ?
+              ` ${item}`
+            : `${item.substring(0, 1).toUpperCase()}.`
+          return `${acc}${newBit}`
+        case 'brief':
+          newBit =
+            index === arr.length - 1 ?
+              `${item}, `
+            : `${item.substring(0, 1).toUpperCase()}.`
+          return `${newBit}${acc}`
+        case 'reverse':
+          newBit =
+            index === arr.length - 1 ?
+              `${item}, `
+            : `${item.substring(0, 1).toUpperCase()}.`
+          return `${newBit}${acc}`
       }
-
-      if (style === 'brief') {
-        const newBit =
-          index === arr.length - 1 ?
-            `${item}, `
-          : `${item.substring(0, 1).toUpperCase()}.`
-        return `${newBit}${acc}`
-      }
-
-      if (style === 'reverse') {
-        const newBit =
-          index === arr.length - 1 ?
-            `${item}, `
-          : `${item.substring(0, 1).toUpperCase()}.`
-        return `${newBit}${acc}`
-      }
-
-      return acc
+      assertNever(style)
     }, '')
 
   return author.affiliation === 'Editor' ? `${name}, Ed.` : name
