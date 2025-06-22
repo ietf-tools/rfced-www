@@ -148,9 +148,9 @@ const exampleTypesenseResult = {
             rfc: '8589',
             rfcNumber: 8589,
             state: ['Published'],
-            fyi: '5',
+            bcp: '5',
             subserieTotal: 10,
-            stdlevelname: 'Informational',
+            stdlevelname: 'Best Current Practice', // this isn't a BCP, this is just test data
             stream: {
               slug: 'ietf',
               name: 'IETF'
@@ -266,9 +266,9 @@ test('typeSenseSearchItemToRFC', () => {
       name: 'Applications and Real-Time Area'
     },
     published: '2019-05-21T18:05:35.000Z',
-    status: 'Informational',
+    status: 'Best Current Practice',
     subseries: {
-      type: 'fyi',
+      type: 'bcp',
       number: 5,
       subseriesLength: 10
     },

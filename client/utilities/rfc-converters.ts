@@ -8,9 +8,9 @@ import {
   parseRfcFormat,
   parseRfcJsonPubDateToISO,
   parseRfcStatusSlug,
-  parseTypeSenseSubseries,
-  TypeSenseSearchItemSchema
+  parseTypeSenseSubseries
 } from './rfc-converters-utils'
+import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 

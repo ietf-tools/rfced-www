@@ -57,7 +57,8 @@
 import { DateTime } from 'luxon'
 import { infoRfcPathBuilder, rfcPathBuilder } from '../utilities/url'
 import Anchor from './A.vue'
-import { formatTitleAsVNode, type RFCJSON } from '~/utilities/rfc'
+import { formatTitleAsVNode } from '~/utilities/rfc'
+import type { RFCJSON } from '~/utilities/rfc'
 import {
   formatTitlePlaintext,
   parseRfcJsonPubDateToISO
