@@ -149,7 +149,10 @@ const exampleTypesenseResult = {
             rfcNumber: 8589,
             state: ['Published'],
             stdlevelname: 'Informational',
-            stream: 'IETF',
+            stream: {
+              slug: 'ietf',
+              name: 'IETF'
+            },
             title: "The 'leaptofrogans' URI Scheme",
             type: 'rfc'
           } satisfies TypeSenseSearchItem,
