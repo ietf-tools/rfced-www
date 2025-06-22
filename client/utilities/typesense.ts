@@ -41,7 +41,6 @@ export const TypeSenseSearchItemSchema = z.object({
   type: z.string(),
   date: z.number(),
   pages: z.number(),
-  stream: z.string(),
   keywords: z.array(z.string()),
   state: z.array(z.string()),
   authors: z
@@ -64,6 +63,12 @@ export const TypeSenseSearchItemSchema = z.object({
       acronym: z.string(),
       name: z.string(),
       full: z.string()
+    })
+    .optional(),
+  stream: z
+    .object({
+      slug: z.string(),
+      name: z.string()
     })
     .optional()
 })
@@ -106,8 +111,8 @@ export const typeSenseSearchItemToRFC = (
     },
     formats: [],
     stream: {
-      slug: 'unknown',
-      name: item.stdlevelname
+      name: item.stream?.name || 'unknown',
+      slug: item.stream?.slug || 'Unknown'
     },
     text: ''
   }

@@ -18,7 +18,7 @@
 
     <SearchFilterSelect
       label="Stream"
-      attribute="stream"
+      attribute="stream.name"
     />
 
     <SearchFilterSelect

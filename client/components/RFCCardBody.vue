@@ -21,6 +21,9 @@
       v-if="list2"
       class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
     >
+      <li v-if="isAprilFool" class="inline pr-2">
+        <Icon name="fa6-solid:masks-theater" size="1em" class="text-violet-500 -mb-0.5" />
+      </li>
       <li v-for="(part, index) in list2" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
       </li>
@@ -94,23 +97,16 @@ const abstractDomId = useId()
 function formatAuthors(authors: Rfc['authors']): string {
   if (authors.length === 0) {
     return ''
-  }
-  if (authors.length === 1) {
+  } else if (authors.length === 1) {
     return `${authors[0].name}`
+  } else {
+    return authors.slice(0, authors.length - 1).map(author => author.name).join(', ') + ` and ${authors.at(-1)?.name}`
   }
-
-  return `${authors[0].name} and ${authors.length - 1} other${
-    authors.length > 2 ? 's' : ''
-  }`
-}
-
-function formatStreamAndArea(rfc: Rfc): string[] {
-  return [rfc.stream?.name, rfc.area?.name].filter(Boolean) as string[]
 }
 
 function formatDate(isoDate: string): string {
   const datetime = DateTime.fromISO(isoDate)
-  return datetime.toLocaleString({ month: 'long', year: 'numeric' })
+  return datetime.toLocaleString({ month: 'long', year: 'numeric', ...isAprilFool.value && { day: 'numeric' } })
 }
 
 function formatObsoletedBy(
@@ -149,11 +145,14 @@ const obsoletedBy = computed(() => {
 })
 
 const list1 = computed(() => [
-  formatAuthors(props.rfc.authors),
-  formatDate(props.rfc.published)
+  formatAuthors(props.rfc.authors)
 ])
 
-const list2 = computed(() => formatStreamAndArea(props.rfc))
+const list2 = computed(() => [
+  formatDate(props.rfc.published),
+  props.rfc.stream?.name,
+  props.rfc.area?.name
+].filter(Boolean) as string[])
 
 const tagText = computed(() => {
   const tagText = []
@@ -166,5 +165,10 @@ const tagText = computed(() => {
     tagText.push(relativeCalendar)
   }
   return tagText
+})
+
+const isAprilFool = computed(() => {
+  const datetime = DateTime.fromISO(props.rfc.published)
+  return (datetime.month === 4 && datetime.day === 1)
 })
 </script>

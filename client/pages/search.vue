@@ -18,7 +18,7 @@
               Search RFCs
             </Heading>
             <div class="flex flex-row items-center pt-4 pb-6">
-              <div class="w-2/3 h-12">
+              <div class="w-full md:w-2/3 h-12">
                 <ais-search-box
                   autofocus
                   placeholder="Find an RFC (number, subseries, title, author, etc.)"
@@ -43,7 +43,7 @@
                   </template>
                 </ais-search-box>
               </div>
-              <div class="pl-5 grow">
+              <div class="hidden md:block pl-5 grow">
                 <label class="text-base cursor-pointer flex items-center">
                   <input
                     v-model="searchStore.searchContents"
