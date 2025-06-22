@@ -9,9 +9,7 @@
       : 'end'
     "
     :class="props.showAbstract && props.rfc.abstract ? 'lg:flex' : undefined"
-    :default-slot-class="
-      props.showAbstract && props.rfc.abstract ? 'pr-4' : 'ff'
-    "
+    :default-slot-class="props.showAbstract && props.rfc.abstract ? 'pr-4' : ''"
     :aside-slot-class="
       props.showAbstract && props.rfc.abstract ?
         'flex-1 lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
@@ -19,7 +17,25 @@
     "
   >
     <template #headingTitle>
-      <component :is="formatTitle(`rfc${props.rfc.number}`)" />
+      <component :is="formatTitleAsVNode(`rfc${props.rfc.number}`)" />
+    </template>
+    <template #afterHeadingTitle>
+      <span v-if="props.rfc.subseries">
+        <span>: </span>
+        <NuxtLink
+          to="/"
+          class="relative z-50 no-underline hover:underline focus:underline px-2 py-3 rounded text-gray-700"
+          :title="`part of ${props.rfc.subseries.type.toUpperCase()}${props.rfc.subseries.number}`"
+        >
+          <component
+            :is="
+              formatTitleAsVNode(
+                `${props.rfc.subseries.type}${props.rfc.subseries.number}`
+              )
+            "
+          />
+        </NuxtLink>
+      </span>
     </template>
     <template #default>
       <RFCCardBody
@@ -50,14 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Rfc } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
-import { formatTitle } from '~/utilities/rfc'
+import { formatTitleAsVNode } from '~/utilities/rfc'
+import type { RfcCommon } from '~/utilities/rfc'
 import { useResponsiveModeStore } from '~/stores/responsiveMode'
 import { parseHeadingLevel, type HeadingLevel } from '~/utilities/html'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
   showAbstract?: boolean
   showTagDate?: boolean
   headingLevel?: HeadingLevel

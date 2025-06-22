@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { FIXME_getRFCMetadataWithMissingData } from './rfc.mocks'
-import { formatAuthor, formatFormat } from './rfc'
+import { formatAuthor, formatFormat } from './rfc-converters-utils'
 import { getXMLBuilder } from './test-utils/html-test-utils'
 import { setTimeoutPromise } from './promises'
 import type { ApiClient } from '~/generated/red-client'

@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
+import { rfcToRfcJSON } from '~/utilities/rfc-converters'
 import { exampleRfc } from '~/utilities/rfc.mocks'
-import { rfcToRfcJSON } from '~/utilities/rfc'
 
 const exampleRfcJson = rfcToRfcJSON(exampleRfc)
 </script>

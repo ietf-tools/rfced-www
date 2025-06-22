@@ -23,7 +23,7 @@
             :key="obsoletedByItemIndex"
           >
             <A :href="infoRfcPathBuilder(`RFC${obsoletedByItem.id}`)">
-              <component :is="formatTitle(`RFC${obsoletedByItem.id}`)" />
+              <component :is="formatTitleAsVNode(`RFC${obsoletedByItem.id}`)" />
               {{ obsoletedByItem.title }}
             </A>
           </li>
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import type { Rfc } from '~/generated/red-client'
-import { formatTitle, RFC_TYPE_RFC, parseRFCId } from '~/utilities/rfc'
+import { formatTitleAsVNode, RFC_TYPE_RFC, parseRFCId } from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 
 type Props = {

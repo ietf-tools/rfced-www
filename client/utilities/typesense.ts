@@ -1,5 +1,81 @@
 import { z } from 'zod'
-import type { Rfc } from '../generated/red-client'
+
+// Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
+export const TypeSenseSearchItemSchema = z.object({
+  id: z.string(),
+
+  rfcNumber: z.number(),
+  date: z.number(),
+  publicationDate: z.number(),
+
+  title: z.string(),
+
+  stdlevelname: z
+    .enum([
+      'Internet Standard',
+      'Proposed Standard',
+      'Draft Standard',
+      'Best Current Practice',
+      'Informational',
+      'Experimental',
+      'Historic',
+      'Unknown'
+    ])
+    .optional(),
+  abstract: z.string(),
+
+  adName: z.string().optional(),
+  authors: z
+    .array(
+      z.object({
+        name: z.string(),
+        affiliation: z.string()
+      })
+    )
+    .optional(),
+
+  subserieTotal: z.number().optional(),
+  bcp: z.string().optional(),
+  fyi: z.string().optional(),
+  std: z.string().optional(),
+  his: z.string().optional(),
+  rfc: z.string(),
+
+  area: z
+    .object({
+      acronym: z.string(),
+      name: z.string(),
+      full: z.string()
+    })
+    .optional(),
+  group: z.object({
+    acronym: z.string(),
+    name: z.string(),
+    full: z.string()
+  }),
+
+  stream: z
+    .object({
+      slug: z.string(),
+      name: z.string()
+    })
+    .optional(),
+  ranking: z.number(),
+  state: z.array(z.string()),
+
+  type: z.string(),
+
+  filename: z.string(),
+  pages: z.number(),
+  keywords: z.array(z.string()),
+
+  flags: z
+    .object({
+      obsoleted: z.boolean(),
+      updated: z.boolean()
+    })
+    .optional()
+})
 
 export type TypeSenseClient = {
   clearCache: () => void
@@ -27,95 +103,5 @@ export type TypeSenseSearchResponse = {
 }
 
 export type TypeSenseSearchItem = z.infer<typeof TypeSenseSearchItemSchema>
-
-// Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
-export const TypeSenseSearchItemSchema = z.object({
-  id: z.string(),
-  abstract: z.string(),
-  adName: z.string().optional(),
-  rfc: z.string(),
-  rfcNumber: z.number(),
-  filename: z.string(),
-  title: z.string(),
-  stdlevelname: z.string(),
-  type: z.string(),
-  date: z.number(),
-  pages: z.number(),
-  keywords: z.array(z.string()),
-  state: z.array(z.string()),
-  authors: z
-    .array(
-      z.object({
-        name: z.string(),
-        affiliation: z.string()
-      })
-    )
-    .optional(),
-  publicationDate: z.number(),
-  ranking: z.number(),
-  group: z.object({
-    acronym: z.string(),
-    name: z.string(),
-    full: z.string()
-  }),
-  area: z
-    .object({
-      acronym: z.string(),
-      name: z.string(),
-      full: z.string()
-    })
-    .optional(),
-  stream: z
-    .object({
-      slug: z.string(),
-      name: z.string()
-    })
-    .optional()
-})
-
-export const typeSenseSearchItemToRFC = (
-  typeSenseSearchItem: TypeSenseSearchItem
-): Rfc => {
-  const result = TypeSenseSearchItemSchema.safeParse(typeSenseSearchItem)
-  if (result.error) {
-    console.error(result.error.toString())
-    throw Error(result.error.toString())
-  }
-
-  const item = result.data
-
-  return {
-    number: item.rfcNumber,
-    title: item.title,
-    published: new Date(item.publicationDate * 1000).toISOString(),
-    authors:
-      item.authors?.map((author, index) => ({
-        person: index,
-        name: author.name
-      })) ?? [],
-    area:
-      item.area ?
-        {
-          name: item.area.name,
-          acronym: item.area.acronym
-        }
-      : undefined,
-    group: {
-      name: item.group.name,
-      acronym: item.group.acronym
-    },
-    abstract: item.abstract,
-    status: {
-      slug: 'unknown',
-      name: item.stdlevelname
-    },
-    formats: [],
-    stream: {
-      name: item.stream?.name || 'unknown',
-      slug: item.stream?.slug || 'Unknown'
-    },
-    text: ''
-  }
-}
 
 export type Density = 'full' | 'dense' | 'compact'

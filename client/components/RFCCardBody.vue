@@ -22,7 +22,11 @@
       class="hidden lg:block print:block text-base text-gray-800 mt-1 dark:text-white"
     >
       <li v-if="isAprilFool" class="inline pr-2">
-        <Icon name="fa6-solid:masks-theater" size="1em" class="text-violet-500 -mb-0.5" />
+        <Icon
+          name="fa6-solid:masks-theater"
+          size="1em"
+          class="text-violet-500 -mb-0.5"
+        />
       </li>
       <li v-for="(part, index) in list2" :key="index" class="inline">
         <GraphicsDiamond v-if="index > 0" class="align-middle" />{{ part }}
@@ -78,12 +82,12 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import type { Rfc, RfcMetadata } from '../generated/red-client'
 import { infoRfcPathBuilder } from '../utilities/url'
-import { formatTitlePlaintext } from '~/utilities/rfc'
+import type { RfcCommon } from '~/utilities/rfc'
+import { formatTitlePlaintext } from '~/utilities/rfc-converters-utils'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
   showAbstract?: boolean
   showTagDate?: boolean
 }
@@ -94,23 +98,32 @@ const isMobileAbstractOpen = ref<boolean>(false)
 
 const abstractDomId = useId()
 
-function formatAuthors(authors: Rfc['authors']): string {
+function formatAuthors(authors: RfcCommon['authors']): string {
   if (authors.length === 0) {
     return ''
   } else if (authors.length === 1) {
     return `${authors[0].name}`
   } else {
-    return authors.slice(0, authors.length - 1).map(author => author.name).join(', ') + ` and ${authors.at(-1)?.name}`
+    return (
+      authors
+        .slice(0, authors.length - 1)
+        .map((author) => author.name)
+        .join(', ') + ` and ${authors.at(-1)?.name}`
+    )
   }
 }
 
 function formatDate(isoDate: string): string {
   const datetime = DateTime.fromISO(isoDate)
-  return datetime.toLocaleString({ month: 'long', year: 'numeric', ...isAprilFool.value && { day: 'numeric' } })
+  return datetime.toLocaleString({
+    month: 'long',
+    year: 'numeric',
+    ...(isAprilFool.value && { day: 'numeric' })
+  })
 }
 
 function formatObsoletedBy(
-  obsoletedBy: RfcMetadata['obsoleted_by']
+  obsoletedBy: RfcCommon['obsoleted_by']
 ): VNode | undefined {
   if (!obsoletedBy || obsoletedBy.length === 0) return undefined
 
@@ -144,20 +157,21 @@ const obsoletedBy = computed(() => {
   return formatObsoletedBy(props.rfc.obsoleted_by)
 })
 
-const list1 = computed(() => [
-  formatAuthors(props.rfc.authors)
-])
+const list1 = computed(() => [formatAuthors(props.rfc.authors)])
 
-const list2 = computed(() => [
-  formatDate(props.rfc.published),
-  props.rfc.stream?.name,
-  props.rfc.area?.name
-].filter(Boolean) as string[])
+const list2 = computed(
+  () =>
+    [
+      formatDate(props.rfc.published),
+      props.rfc.stream?.name,
+      props.rfc.area?.name
+    ].filter(Boolean) as string[]
+)
 
 const tagText = computed(() => {
   const tagText = []
-  if (props.rfc.status.name) {
-    tagText.push(props.rfc.status.name)
+  if (props.rfc.status) {
+    tagText.push(props.rfc.status)
   }
   const datetime = DateTime.fromISO(props.rfc.published)
   const relativeCalendar = datetime.toRelativeCalendar()
@@ -169,6 +183,6 @@ const tagText = computed(() => {
 
 const isAprilFool = computed(() => {
   const datetime = DateTime.fromISO(props.rfc.published)
-  return (datetime.month === 4 && datetime.day === 1)
+  return datetime.month === 4 && datetime.day === 1
 })
 </script>

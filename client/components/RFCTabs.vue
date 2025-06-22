@@ -157,13 +157,13 @@ import {
 } from 'reka-ui'
 import { DateTime } from 'luxon'
 import type { Rfc } from '~/generated/red-client'
-import { formatDatePublished } from '~/utilities/rfc'
 import { COMMA, SPACE } from '~/utilities/strings'
 import {
   authorMailtoBuilder,
   rfcCitePathBuilder,
   rfcFormatPathBuilder
 } from '~/utilities/url'
+import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 
 type Props = {
   rfc: Rfc

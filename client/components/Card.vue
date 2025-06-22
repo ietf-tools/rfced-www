@@ -6,11 +6,11 @@
     ]"
   >
     <div :class="props.containerClass">
-      <Heading :level="props.headingLevel">
+      <Heading :level="props.headingLevel" class="text-[22px]">
         <NuxtLink
           :to="props.href"
           :class="[
-            'block text-[22px] font-bold text-blue-300 dark:text-blue-100 print:text-black no-underline focus:underline hover:underline group',
+            'font-bold text-blue-300 dark:text-blue-100 print:text-black no-underline focus:underline hover:underline group',
             props.hasCoverLink &&
               `before:absolute before:content-[\'\'] before:inset-0 before:transition-all dark:before:shadow-slate-700 hover:before:shadow-xl focus:before:shadow-xl dark:hover:before:shadow-[0_0px_40px_20px_#00101c] ${
                 /* this is only a template string so I can write an inline comment:
@@ -34,6 +34,7 @@
             ]"
           />
         </NuxtLink>
+        <slot name="afterHeadingTitle"></slot>
       </Heading>
       <slot />
     </div>

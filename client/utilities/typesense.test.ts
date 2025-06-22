@@ -1,8 +1,8 @@
 // @vitest-environment nuxt
 import { test, expect } from 'vitest'
-import { typeSenseSearchItemToRFC } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
-import type { Rfc } from '~/generated/red-client'
+import type { RfcCommon } from './rfc'
+import { typeSenseSearchItemToRFCCommon } from './rfc-converters'
 
 const exampleTypesenseResult = {
   results: [
@@ -148,7 +148,9 @@ const exampleTypesenseResult = {
             rfc: '8589',
             rfcNumber: 8589,
             state: ['Published'],
-            stdlevelname: 'Informational',
+            bcp: '5',
+            subserieTotal: 10,
+            stdlevelname: 'Best Current Practice', // this isn't a BCP, this is just test data
             stream: {
               slug: 'ietf',
               name: 'IETF'
@@ -233,7 +235,9 @@ const exampleTypesenseResult = {
 
 test('typeSenseSearchItemToRFC', () => {
   expect(
-    typeSenseSearchItemToRFC(exampleTypesenseResult.results[0].hits[0].document)
+    typeSenseSearchItemToRFCCommon(
+      exampleTypesenseResult.results[0].hits[0].document
+    )
   ).toEqual({
     number: 8589,
     abstract:
@@ -262,9 +266,11 @@ test('typeSenseSearchItemToRFC', () => {
       name: 'Applications and Real-Time Area'
     },
     published: '2019-05-21T18:05:35.000Z',
-    status: {
-      name: 'Informational',
-      slug: 'unknown'
+    status: 'Best Current Practice',
+    subseries: {
+      type: 'bcp',
+      number: 5,
+      subseriesLength: 10
     },
     stream: {
       name: 'IETF',
@@ -272,5 +278,5 @@ test('typeSenseSearchItemToRFC', () => {
     },
     text: '',
     title: "The 'leaptofrogans' URI Scheme"
-  } satisfies Rfc)
+  } satisfies RfcCommon)
 })

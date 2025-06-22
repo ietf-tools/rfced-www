@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import type { getRFCs } from './redClientWrappers'
-import { formatAuthor } from './rfc'
 import { infoRfcPathBuilder } from './url'
 import { COMMA } from './strings'
+import { formatAuthor } from './rfc-converters-utils'
 
 type Rfc = Awaited<ReturnType<typeof getRFCs>>[number]
 
