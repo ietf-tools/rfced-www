@@ -289,7 +289,12 @@ export const TypeSenseSearchItemSchema = z.object({
     full: z.string()
   }),
 
-  stream: z.string(),
+  stream: z
+    .object({
+      slug: z.string(),
+      name: z.string()
+    })
+    .optional(),
   ranking: z.number(),
   state: z.array(z.string()),
 

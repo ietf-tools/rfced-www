@@ -151,7 +151,10 @@ const exampleTypesenseResult = {
             fyi: '5',
             subserieTotal: 10,
             stdlevelname: 'Informational',
-            stream: 'IETF',
+            stream: {
+              slug: 'ietf',
+              name: 'IETF'
+            },
             title: "The 'leaptofrogans' URI Scheme",
             type: 'rfc'
           } satisfies TypeSenseSearchItem,
@@ -271,7 +274,7 @@ test('typeSenseSearchItemToRFC', () => {
     },
     stream: {
       name: 'IETF',
-      slug: 'unknown'
+      slug: 'ietf'
     },
     text: '',
     title: "The 'leaptofrogans' URI Scheme"
