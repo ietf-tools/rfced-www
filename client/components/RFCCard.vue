@@ -9,9 +9,7 @@
       : 'end'
     "
     :class="props.showAbstract && props.rfc.abstract ? 'lg:flex' : undefined"
-    :default-slot-class="
-      props.showAbstract && props.rfc.abstract ? 'pr-4' : 'ff'
-    "
+    :default-slot-class="props.showAbstract && props.rfc.abstract ? 'pr-4' : ''"
     :aside-slot-class="
       props.showAbstract && props.rfc.abstract ?
         'flex-1 lg:w-1/2 xl:w-3/5 border-l pl-12 pr-4'
@@ -22,17 +20,20 @@
       <component :is="formatTitleAsVNode(`rfc${props.rfc.number}`)" />
     </template>
     <template #afterHeadingTitle>
-      <span
-        v-if="props.rfc.status === 'Best Current Practice'"
-        class="absolute z-100 right-3"
-      >
-        <span class="text-sm text-gray-600 -mr-1"> part of </span>
+      <span v-if="props.rfc.subseries">
+        <span>: </span>
         <NuxtLink
           to="/"
-          class="no-underline hover:underline focus:underline hover:bg-gray-200 focus:bg-gray-200 px-2 py-1 rounded text-gray-700"
-          title="Part of BCP10"
+          class="relative z-50 no-underline hover:underline focus:underline px-2 py-3 rounded text-gray-700"
+          :title="`part of ${props.rfc.subseries.type.toUpperCase()}${props.rfc.subseries.number}`"
         >
-          <component :is="formatTitleAsVNode(`bcp10`)" />
+          <component
+            :is="
+              formatTitleAsVNode(
+                `${props.rfc.subseries.type}${props.rfc.subseries.number}`
+              )
+            "
+          />
         </NuxtLink>
       </span>
     </template>

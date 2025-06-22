@@ -324,12 +324,13 @@ export const parseTypeSenseSubseries = (
         subseriesLength: item.subserieTotal
       }
     case 'Informational':
-      assertIsString(item.fyi)
-      return {
-        type: 'fyi',
-        number: parseFloat(item.fyi),
-        subseriesLength: item.subserieTotal
-      }
+      return undefined
+    // assertIsString(item.fyi)
+    // return {
+    //   type: 'fyi',
+    //   number: parseFloat(item.fyi),
+    //   subseriesLength: item.subserieTotal
+    // }
     case 'Internet Standard':
       assertIsString(item.std)
       return {
