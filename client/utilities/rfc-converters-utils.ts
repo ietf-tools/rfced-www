@@ -193,91 +193,58 @@ export const formatIdentifiers = (
 export const parseRfcStatusSlug = (
   rfcStatusSlug: HintedString<RfcMetadata['status']['slug']> | undefined
 ): RfcCommon['status'] => {
-  switch (rfcStatusSlug) {
-    case 'Best Current Practice':
+  const normalisedSlug = rfcStatusSlug?.toLowerCase().replace(/[^a-z]/g, '')
+
+  switch (normalisedSlug) {
+    case 'bestcurrentpractice':
     case 'bcp':
       return 'Best Current Practice'
 
-    case 'Experimental':
     case 'experimental':
       return 'Experimental'
 
-    case 'Historic':
+    case 'his':
     case 'historic':
       return 'Historic'
 
-    case 'Informational':
+    case 'fyi':
     case 'informational':
       return 'Informational'
 
-    case 'Not Issued':
-    case 'not-issued':
+    case 'notissued':
       return 'Not Issued'
 
-    case 'Internet Standard':
+    case 'internetstandard':
     case 'standard':
+    case 'std':
       return 'Internet Standard'
 
-    case 'Unknown':
     case 'unknown':
       return 'Unknown'
 
-    case 'Proposed Standard':
-    case 'proposed-standard':
+    case 'proposedstandard':
     case 'proposed':
       return 'Proposed Standard'
 
-    case 'Draft Standard':
-    case 'draft-standard':
+    case 'draftstandard':
     case 'draft':
       return 'Draft Standard'
   }
-  throw Error(`Unable to parse status slug "${rfcStatusSlug}"`)
+  throw Error(
+    `Unable to parse status slug "${rfcStatusSlug}" (normalized as "${normalisedSlug}")`
+  )
 }
 
 // Schema definition https://github.com/ietf-tools/search/blob/main/schemas/docs.md
 export const TypeSenseSearchItemSchema = z.object({
-  abstract: z.string(),
-  adName: z.string().optional(),
-  area: z
-    .object({
-      acronym: z.string(),
-      name: z.string(),
-      full: z.string()
-    })
-    .optional(),
-  authors: z
-    .array(
-      z.object({
-        name: z.string(),
-        affiliation: z.string()
-      })
-    )
-    .optional(),
-  bcp: z.string().optional(),
-  date: z.number(),
-  filename: z.string(),
-  flags: z
-    .object({
-      obsoleted: z.boolean(),
-      updated: z.boolean()
-    })
-    .optional(),
-  fyi: z.string().optional(),
-  group: z.object({
-    acronym: z.string(),
-    name: z.string(),
-    full: z.string()
-  }),
   id: z.string(),
-  keywords: z.array(z.string()),
-  pages: z.number(),
-  publicationDate: z.number(),
-  ranking: z.number(),
-  rfc: z.string(),
+
   rfcNumber: z.number(),
-  state: z.array(z.string()),
-  std: z.string().optional(),
+  date: z.number(),
+  publicationDate: z.number(),
+
+  title: z.string(),
+
   stdlevelname: z
     .enum([
       'Internet Standard',
@@ -290,10 +257,54 @@ export const TypeSenseSearchItemSchema = z.object({
       'Unknown'
     ])
     .optional(),
-  stream: z.string(),
+  abstract: z.string(),
+
+  adName: z.string().optional(),
+  authors: z
+    .array(
+      z.object({
+        name: z.string(),
+        affiliation: z.string()
+      })
+    )
+    .optional(),
+
   subserieTotal: z.number().optional(),
-  title: z.string(),
-  type: z.string()
+  bcp: z.string().optional(),
+  fyi: z.string().optional(),
+  std: z.string().optional(),
+  his: z.string().optional(),
+  rfc: z.string(),
+
+  area: z
+    .object({
+      acronym: z.string(),
+      name: z.string(),
+      full: z.string()
+    })
+    .optional(),
+  group: z.object({
+    acronym: z.string(),
+    name: z.string(),
+    full: z.string()
+  }),
+
+  stream: z.string(),
+  ranking: z.number(),
+  state: z.array(z.string()),
+
+  type: z.string(),
+
+  filename: z.string(),
+  pages: z.number(),
+  keywords: z.array(z.string()),
+
+  flags: z
+    .object({
+      obsoleted: z.boolean(),
+      updated: z.boolean()
+    })
+    .optional()
 })
 
 export const parseTypeSenseSubseries = (
