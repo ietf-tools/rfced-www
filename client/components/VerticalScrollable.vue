@@ -29,6 +29,9 @@ const updateScrollHint = () => {
     console.error('Unable to find scroll container. This is a bug')
     return
   }
+  if (!(scrollContainerElement instanceof HTMLElement)) {
+    throw Error("Scroll container isn't HTML Element. This is a bug.")
+  }
   canScrollUp.value = scrollContainerElement.scrollTop > BUFFER_PX
   canScrollDown.value =
     scrollContainerElement.scrollTop + scrollContainerElement.offsetHeight <

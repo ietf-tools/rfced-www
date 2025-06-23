@@ -43,8 +43,8 @@
         </VerticalScrollable>
         <button
           type="button"
-          @click="isOpen = false"
           class="flex-none w-full font-bold bg-black text-white px-2 py-2"
+          @click="isOpen = false"
         >
           Ok
         </button>
@@ -61,7 +61,6 @@
 import {
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogOverlay,
   DialogPortal,
   DialogRoot,
