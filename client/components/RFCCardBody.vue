@@ -103,12 +103,14 @@ function formatAuthors(authors: RfcCommon['authors']): string {
     return ''
   } else if (authors.length === 1) {
     return `${authors[0].name}`
+  } else if (authors.length === 2) {
+    return `${authors[0].name} and ${authors[1].name}`
   } else {
     return (
       authors
         .slice(0, authors.length - 1)
         .map((author) => author.name)
-        .join(', ') + ` and ${authors.at(-1)?.name}`
+        .join(', ') + `, and ${authors.at(-1)?.name}`
     )
   }
 }
