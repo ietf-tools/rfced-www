@@ -19,7 +19,7 @@
 <script setup lang="ts">
 const scrollContainer = useTemplateRef('scroll-container')
 const canScrollLeft = ref(false)
-const canScrollRight = ref<boolean>(false)
+const canScrollRight = ref(false)
 
 const BUFFER_PX = 8
 

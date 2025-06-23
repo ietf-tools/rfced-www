@@ -4,7 +4,7 @@
       <span class="block mr-4">
         <button
           type="button"
-          class="flex justify-between w-full py-2 px-3 items-center border-1 border-gray-400 font-bold"
+          class="flex justify-between w-full py-2 px-3 items-center border-1 border-gray-400 font-bold bg-white text-black dark:bg-black dark:text-white"
           @click="isOpen = false"
         >
           Filter RFCs
@@ -15,42 +15,40 @@
       <DialogOverlay />
 
       <DialogContent
-        :class="// needs overflow-y-scroll to force scrollbars, to ensure same page width as the main view
-        'absolute inset-0 z-50 bg-white text-black dark:bg-blue-950 dark:text-white overflow-y-scroll h-full'"
+        class="absolute inset-0 z-50 bg-white text-black dark:bg-blue-950 dark:text-white h-full h-[100vh] flex flex-col"
       >
-        <DialogTitle class="flex justify-between text-xl pl-3 font-bold">
-          <span class="block p-2"> Filter RFCs </span>
+        <DialogTitle
+          class="flex justify-between text-xl pl-3 font-bold border-b-1 border-b-gray-400"
+        >
+          <span class="block px-2 py-4"> Filter RFCs </span>
           <DialogClose class="px-3 py-2">
             <GraphicsClose class="text-white" />
           </DialogClose>
         </DialogTitle>
-        <DialogDescription>
-          <div class="flex flex-col mb-20">
-            <div class="ml-5 mb-3">
-              <SearchInRfcComments />
-            </div>
+        <VerticalScrollable v-if="isOpen" class="flex-1">
+          <div class="flex flex-col mb-6 pt-4">
             <fieldset class="ml-5 mr-5">
-              <legend class="font-bold">UI Density</legend>
-              <div class="flex items-center lg:h-10">
+              <legend class="font-bold">Card Density</legend>
+              <div class="flex items-center">
                 <SearchDensity v-model="searchStore.density" />
               </div>
             </fieldset>
+            <div class="ml-5 mb-1 pt-4">
+              <SearchInRfcComments />
+            </div>
             <div class="pr-5">
               <SearchFilter />
             </div>
           </div>
-          <div
-            class="fixed bottom-0 flex flex-row justify-between mt-4 border-t border-t-gray-200 w-full"
-          >
-            <button
-              type="button"
-              @click="isOpen = false"
-              class="border-1 w-full font-bold bg-black text-white px-2 py-2"
-            >
-              Ok
-            </button>
-          </div>
-        </DialogDescription>
+        </VerticalScrollable>
+        <button
+          type="button"
+          @click="isOpen = false"
+          class="flex-none w-full font-bold bg-black text-white px-2 py-2"
+        >
+          Ok
+        </button>
+
         <DialogClose class="fixed top-4 right-5">
           <GraphicsClose class="text-black" />
         </DialogClose>
