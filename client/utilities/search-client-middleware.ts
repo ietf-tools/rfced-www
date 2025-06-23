@@ -6,7 +6,7 @@ export function adaptSearchClient(searchClient: TypeSenseClient): TypeSenseClien
   return {
   ...searchClient,
   search: async (searchRequests) => {
-    let isSeries = false
+    let isSubseries = false
 
     const resp = await searchClient.search(searchRequests.map(r => {
       // ------------------------------------------
@@ -24,27 +24,27 @@ export function adaptSearchClient(searchClient: TypeSenseClient): TypeSenseClien
         return r
       }
 
-      // Series query (BCP, STD, FYI)
-      const seriesMatch = r.params?.query.match(/^(?<series>bcp|std|fyi)[ :=]{0,3}(?<num>[0-9]+)\s?$/i)
-      if (seriesMatch?.groups?.num) {
+      // Subseries query (BCP, STD, FYI)
+      const subseriesMatch = r.params?.query.match(/^(?<subseries>bcp|std|fyi)[ :=]{0,3}(?<num>[0-9]+)\s?$/i)
+      if (subseriesMatch?.groups?.num) {
         if (!r.params.facetFilters) {
           r.params.facetFilters = []
         }
-        r.params.facetFilters.push(`${seriesMatch.groups.series.toLowerCase()}:${seriesMatch.groups.num}`)
+        r.params.facetFilters.push(`${subseriesMatch.groups.subseries.toLowerCase()}:${subseriesMatch.groups.num}`)
         r.params.query = '*'
 
-        isSeries = true
-        searchStore.seriesLabel = `${seriesMatch.groups.series.toUpperCase()} ${seriesMatch.groups.num}`
-        searchStore.seriesHref = `/info/${seriesMatch.groups.series.toLowerCase()}${seriesMatch.groups.num}`
+        isSubseries = true
+        searchStore.subseriesLabel = `${subseriesMatch.groups.subseries.toUpperCase()} ${subseriesMatch.groups.num}`
+        searchStore.subseriesHref = `/info/${subseriesMatch.groups.subseries.toLowerCase()}${subseriesMatch.groups.num}`
       } else {
-        isSeries = false
+        isSubseries = false
       }
 
       return r
     }))
 
     // Set series only if there're results
-    searchStore.isSeries = Boolean(isSeries && resp.results?.[0].nbHits > 0)
+    searchStore.isSubseries = Boolean(isSubseries && resp.results?.[0].nbHits > 0)
 
     return resp
   }

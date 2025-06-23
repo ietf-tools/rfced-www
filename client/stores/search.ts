@@ -3,10 +3,10 @@ import type { Density } from "~/utilities/typesense"
 export const useSearchStore = defineStore('searchStore', {
   state: () => ({
     density: 'full' as Density,
-    isSeries: false,
+    isSubseries: false,
     searchContents: false,
-    seriesLabel: '',
-    seriesHref: ''
+    subseriesLabel: '',
+    subseriesHref: ''
   }),
   persist: {
     pick: ['density', 'searchContents']

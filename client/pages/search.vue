@@ -80,10 +80,10 @@
               </div>
             </div>
 
-            <SearchSeriesBar
-              v-if="searchStore.isSeries"
-              :label="searchStore.seriesLabel"
-              :href="searchStore.seriesHref"
+            <SearchSubseriesBar
+              v-if="searchStore.isSubseries"
+              :label="searchStore.subseriesLabel"
+              :href="searchStore.subseriesHref"
             />
 
             <ais-hits class="mt-4">
