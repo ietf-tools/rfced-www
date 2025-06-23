@@ -7,6 +7,7 @@
   >
     <ToggleGroupItem
       value="full"
+      title="Full Display"
       aria-label="Full Display"
       :class="toggleGroupItemClasses"
     >
@@ -17,6 +18,7 @@
     </ToggleGroupItem>
     <ToggleGroupItem
       value="dense"
+      title="Dense Display"
       aria-label="Dense Display"
       :class="toggleGroupItemClasses"
       class="border-x"
@@ -28,6 +30,7 @@
     </ToggleGroupItem>
     <ToggleGroupItem
       value="compact"
+      title="Compact Display"
       aria-label="Compact Display"
       :class="toggleGroupItemClasses"
     >

@@ -7,10 +7,10 @@
       class="flex-1 bg-white text-black dark:bg-black dark:text-white dark:border-white dark:border pl-4 py-3"
       :placeholder="
         responsiveModeStore.responsiveMode === 'Desktop' ?
-          `Find an RFC (e.g. ‘${formatTitlePlaintext('RFC7120')}’)`
+          'Find an RFC (number, subseries, title, author, etc.)'
         : 'Find an RFC'
       "
-      :aria-label="`Find an RFC (e.g. ‘${formatTitlePlaintext('RFC7120')}’)`"
+      aria-label="Find an RFC (number, subseries, title, author, etc.)"
     />
     <button
       type="submit"
@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { formatTitlePlaintext } from '~/utilities/rfc-converters-utils'
 import { SEARCH_PATH } from '~/utilities/url'
 
 const responsiveModeStore = useResponsiveModeStore()

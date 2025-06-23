@@ -7,5 +7,8 @@ export const useSearchStore = defineStore('searchStore', {
     searchContents: false,
     seriesLabel: '',
     seriesHref: ''
-  })
+  }),
+  persist: {
+    pick: ['density', 'searchContents']
+  }
 })

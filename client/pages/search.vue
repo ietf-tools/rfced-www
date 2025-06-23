@@ -170,9 +170,33 @@ watch(
   (newValue) => {
     typesenseAdapter.configuration.additionalSearchParameters.preset =
       newValue ? 'red-content' : 'red'
-    aisInstantSearchRef.value?.instantSearchInstance.helper.search()
+
+    const value = aisInstantSearchRef.value
+    if (isAisInstanceSearchValue(value)) {
+      value.instantSearchInstance.helper.search()
+    } else {
+      console.error(`Unable to search, debug:`, {
+        value: value,
+        '!!value': !!value,
+        keyInValue:
+          value && typeof value === 'object' && 'instantSearchInstance' in value
+      })
+    }
   }
 )
+
+const isAisInstanceSearchValue = (
+  value: unknown
+): value is AisInstantSearch => {
+  return !!(
+    value &&
+    typeof value === 'object' &&
+    'instantSearchInstance' in value &&
+    value.instantSearchInstance &&
+    typeof value.instantSearchInstance === 'object' &&
+    'helper' in value.instantSearchInstance
+  )
+}
 
 /**
  * UI State
