@@ -19,9 +19,11 @@
 <script setup lang="ts">
 const scrollContainer = useTemplateRef('scroll-container')
 const canScrollLeft = ref(false)
-const canScrollRight = ref<boolean>(false)
+const canScrollRight = ref(false)
 
 const BUFFER_PX = 8
+
+let timer: ReturnType<typeof setTimeout>
 
 const updateScrollHint = () => {
   const { value: scrollContainerElement } = scrollContainer
@@ -29,19 +31,25 @@ const updateScrollHint = () => {
     console.error('Unable to find scroll container. This is a bug')
     return
   }
+  if (!(scrollContainerElement instanceof HTMLElement)) {
+    throw Error("Scroll container isn't HTML Element. This is a bug.")
+  }
   canScrollLeft.value = scrollContainerElement.scrollLeft > BUFFER_PX
   canScrollRight.value =
     scrollContainerElement.scrollLeft + scrollContainerElement.offsetWidth <
     scrollContainerElement.scrollWidth - BUFFER_PX
 }
 
-onMounted(updateScrollHint)
-
 onMounted(() => {
   window.addEventListener('resize', updateScrollHint)
+
+  timer = setTimeout(updateScrollHint, 50)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateScrollHint)
+  if (timer) {
+    clearTimeout(timer)
+  }
 })
 </script>
