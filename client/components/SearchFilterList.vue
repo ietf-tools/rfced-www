@@ -22,7 +22,7 @@
       >
         <input
           v-if="props.searchable"
-          class="w-full px-3 py-1.5 mb-3 text-base border border-gray-400 dark:border-white dark:text-white bg-white dark:bg-black rounded-xs shadow-sm scheme-light dark:scheme-dark"
+          class="w-full px-3 py-1.5 mb-3 text-base border border-gray-400 hover:border-black dark:border-white dark:hover:border-gray-300 dark:text-white bg-white dark:bg-black rounded-xs shadow-sm scheme-light dark:scheme-dark"
           :placeholder="props.searchPlaceholder"
           @input="searchForItems(($event.target as HTMLInputElement)?.value ?? '')"
           >

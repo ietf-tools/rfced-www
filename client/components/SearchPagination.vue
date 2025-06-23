@@ -18,7 +18,7 @@
         { label: '100 per page', value: 100 }
       ]"
       :class-names="{
-        'ais-HitsPerPage': 'px-2 bg-white text-base border border-gray-400 dark:bg-black dark:border-white dark:text-white px-1 rounded-xs shadow-sm scheme-light dark:scheme-dark',
+        'ais-HitsPerPage': 'px-2 bg-white text-base border border-gray-400 hover:border-black dark:bg-black dark:border-white dark:hover:border-gray-300 dark:text-white px-1 rounded-xs shadow-sm scheme-light dark:scheme-dark',
         'ais-HitsPerPage-select': 'py-2 text-base dark:text-white scheme-light dark:scheme-dark'
       }"
     />
