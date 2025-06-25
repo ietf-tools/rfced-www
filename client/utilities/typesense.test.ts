@@ -86,7 +86,7 @@ const exampleTypesenseResult = {
               value: 'Informational'
             }
           ],
-          field_name: 'stdlevelname',
+          field_name: 'status.name',
           sampled: false,
           stats: {
             total_values: 1
@@ -148,9 +148,14 @@ const exampleTypesenseResult = {
             rfc: '8589',
             rfcNumber: 8589,
             state: ['Published'],
-            bcp: '5',
-            subserieTotal: 10,
-            stdlevelname: 'Best Current Practice', // this isn't a BCP, this is just test data
+            subseries: {
+              bcp: '5',
+              total: 10
+            },
+            status: {
+              name: 'Best Current Practice', // this isn't a BCP, this is just test data
+              slug: 'bcp'
+            },
             stream: {
               slug: 'ietf',
               name: 'IETF'

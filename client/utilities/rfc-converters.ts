@@ -238,8 +238,8 @@ export const typeSenseSearchItemToRFCCommon = (
     },
     number: item.rfcNumber,
     published,
-    subseries: item.stdlevelname ? parseTypeSenseSubseries(item) : undefined,
-    status: parseRfcStatusSlug(item.stdlevelname),
+    subseries: item.status?.name ? parseTypeSenseSubseries(item) : undefined,
+    status: parseRfcStatusSlug(item.status?.name),
     stream: {
       name: item.stream?.name || 'unknown',
       slug: item.stream?.slug || 'Unknown'

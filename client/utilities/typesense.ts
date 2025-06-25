@@ -10,17 +10,22 @@ export const TypeSenseSearchItemSchema = z.object({
 
   title: z.string(),
 
-  stdlevelname: z
-    .enum([
-      'Internet Standard',
-      'Proposed Standard',
-      'Draft Standard',
-      'Best Current Practice',
-      'Informational',
-      'Experimental',
-      'Historic',
-      'Unknown'
-    ])
+  status: z
+    .object({
+      name: z
+        .enum([
+          'Internet Standard',
+          'Proposed Standard',
+          'Draft Standard',
+          'Best Current Practice',
+          'Informational',
+          'Experimental',
+          'Historic',
+          'Unknown'
+        ])
+        .optional(),
+      slug: z.string().optional()
+    })
     .optional(),
   abstract: z.string(),
 
@@ -34,11 +39,15 @@ export const TypeSenseSearchItemSchema = z.object({
     )
     .optional(),
 
-  subserieTotal: z.number().optional(),
-  bcp: z.string().optional(),
-  fyi: z.string().optional(),
-  std: z.string().optional(),
-  his: z.string().optional(),
+  subseries: z
+    .object({
+      bcp: z.string().optional(),
+      fyi: z.string().optional(),
+      std: z.string().optional(),
+      his: z.string().optional(),
+      total: z.number().optional()
+    })
+    .optional(),
   rfc: z.string(),
 
   area: z

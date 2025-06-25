@@ -202,7 +202,7 @@ const isAisInstanceSearchValue = (
  * UI State
  */
 
-type StdLevelName = 'Best Current Practice'
+type StatusName = 'Best Current Practice'
 
 type UIState = {
   [key in typeof INDEX_NAME]: {
@@ -212,7 +212,7 @@ type UIState = {
     // }
     refinementList?: {
       type: string[]
-      stdlevelname?: StdLevelName[]
+      'status.name'?: StatusName[]
     }
     toggle?: {
       'flags.obsoleted': boolean
@@ -246,16 +246,16 @@ const routing = {
   stateMapping: {
     stateToRoute(uiState: UIState): void {
       const q = uiState[INDEX_NAME].query ?? null
-      const stdlevelname =
-        uiState[INDEX_NAME].refinementList?.stdlevelname?.join(',') ?? null
+      const status =
+        uiState[INDEX_NAME].refinementList?.['status.name']?.join(',') ?? null
       // const sortby = uiState[INDEX_NAME].sortby ?? null
       // const status = uiState[INDEX_NAME].status?.join(',') ?? null
       // TODO: don't navigateTo when the resulting URL would be the same
       navigateTo(
         {
           query: {
-            q,
-            stdlevelname
+            ...q && { q },
+            ...status && { status }
           }
         },
         { replace: true }
@@ -264,7 +264,7 @@ const routing = {
     routeToState(routeState: unknown): UIState {
       console.log('routeToState', routeState)
       const query = route.query.q?.toString() ?? ''
-      const stdlevelname = route.query.stdlevelname?.toString().split(',')
+      const status = route.query.status?.toString().split(',')
       // const status = route.query.status?.toString().split(',')
       return {
         [INDEX_NAME]: {
@@ -274,7 +274,7 @@ const routing = {
           // },
           refinementList: {
             type: ['rfc'],
-            stdlevelname: stdlevelname as StdLevelName[]
+            ...status && { 'status.name': status as StatusName[] }
           },
           toggle: {
             'flags.obsoleted': true

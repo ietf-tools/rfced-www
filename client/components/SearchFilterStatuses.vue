@@ -1,6 +1,6 @@
 <template>
   <ais-refinement-list
-    attribute="stdlevelname"
+    attribute="status.name"
     :sort-by="reorderItems"
   >
     <template #default="{ items, refine }">

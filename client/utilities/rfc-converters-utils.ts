@@ -239,29 +239,30 @@ export const parseRfcStatusSlug = (
 export const parseTypeSenseSubseries = (
   item: z.infer<typeof TypeSenseSearchItemSchema>
 ): RfcCommon['subseries'] => {
-  switch (item.stdlevelname) {
+  switch (item.status?.name) {
     case 'Best Current Practice':
-      assertIsString(item.bcp)
+      assertIsString(item.subseries?.bcp)
       return {
         type: 'bcp',
-        number: parseFloat(item.bcp),
-        subseriesLength: item.subserieTotal
+        number: parseFloat(item.subseries?.bcp),
+        subseriesLength: item.subseries?.total
       }
     case 'Informational':
-      return undefined
-    // TODO: use 'Informational' subseries number when available
-    // assertIsString(item.fyi)
-    // return {
-    //   type: 'fyi',
-    //   number: parseFloat(item.fyi),
-    //   subseriesLength: item.subserieTotal
-    // }
+      if (item.subseries?.fyi) {
+        assertIsString(item.subseries?.fyi)
+        return {
+          type: 'fyi',
+          number: parseFloat(item.subseries?.fyi),
+          subseriesLength: item.subseries?.total
+        }
+      }
+      break
     case 'Internet Standard':
-      assertIsString(item.std)
+      assertIsString(item.subseries?.std)
       return {
         type: 'std',
-        number: parseFloat(item.std),
-        subseriesLength: item.subserieTotal
+        number: parseFloat(item.subseries?.std),
+        subseriesLength: item.subseries?.total
       }
   }
   return undefined
