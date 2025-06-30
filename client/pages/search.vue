@@ -213,6 +213,12 @@ type UIState = {
     refinementList?: {
       type: string[]
       'status.name'?: StatusName[]
+      'group.full'?: string[]
+      'authors.name'?: string[]
+    }
+    menu?: {
+      'stream.name'?: string
+      'area.full'?: string
     }
     toggle?: {
       'flags.obsoleted': boolean
@@ -246,16 +252,21 @@ const routing = {
   stateMapping: {
     stateToRoute(uiState: UIState): void {
       const q = uiState[INDEX_NAME].query ?? null
-      const status =
-        uiState[INDEX_NAME].refinementList?.['status.name']?.join(',') ?? null
-      // const sortby = uiState[INDEX_NAME].sortby ?? null
-      // const status = uiState[INDEX_NAME].status?.join(',') ?? null
+      const status = uiState[INDEX_NAME].refinementList?.['status.name']?.join(',') ?? null
+      const stream = uiState[INDEX_NAME].menu?.['stream.name'] ?? null
+      const area = uiState[INDEX_NAME].menu?.['area.full'] ?? null
+      const group = uiState[INDEX_NAME].refinementList?.['group.full']?.join(',') ?? null
+      const authors = uiState[INDEX_NAME].refinementList?.['authors.name']?.join(',') ?? null
       // TODO: don't navigateTo when the resulting URL would be the same
       navigateTo(
         {
           query: {
             ...q && { q },
-            ...status && { status }
+            ...status && { status },
+            ...stream && { stream },
+            ...area && { area },
+            ...group && { group },
+            ...authors && { authors }
           }
         },
         { replace: true }
@@ -265,7 +276,10 @@ const routing = {
       console.log('routeToState', routeState)
       const query = route.query.q?.toString() ?? ''
       const status = route.query.status?.toString().split(',')
-      // const status = route.query.status?.toString().split(',')
+      const stream = route.query.stream?.toString() ?? ''
+      const area = route.query.area?.toString() ?? ''
+      const group = route.query.group?.toString().split(',')
+      const authors = route.query.authors?.toString().split(',')
       return {
         [INDEX_NAME]: {
           query,
@@ -274,7 +288,13 @@ const routing = {
           // },
           refinementList: {
             type: ['rfc'],
-            ...status && { 'status.name': status as StatusName[] }
+            ...status && { 'status.name': status as StatusName[] },
+            ...group && { 'group.full': group },
+            ...authors && { 'authors.name': authors }
+          },
+          menu: {
+            ...stream && { 'stream.name': stream },
+            ...area && { 'area.full': area }
           },
           toggle: {
             'flags.obsoleted': true

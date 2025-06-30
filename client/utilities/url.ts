@@ -139,7 +139,7 @@ const searchKeyOverride: Record<
   keyof SearchPathBuilderProps,
   string | undefined
 > = {
-  status: 'stdlevelname'
+  status: 'status'
 }
 
 export const searchPathBuilder = (
