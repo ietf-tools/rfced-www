@@ -1,6 +1,6 @@
 <template>
   <label>
-    <span class="text-base font-bold block mb-1">{{ props.label }}</span>
+    <span v-if="props.label" class="text-base font-bold block mb-1">{{ props.label }}</span>
     <ais-toggle-refinement
       v-for="attr of props.attributes"
       :key="attr.attribute"
@@ -9,7 +9,7 @@
       :on="false"
       >
       <template #default="{ value, refine }">
-        <label class="text-base cursor-pointer block mb-1">
+        <label class="text-base cursor-pointer flex items-center">
           <input
             class="mr-1 size-5 align-middle shadow-sm scheme-light dark:scheme-dark"
             type="checkbox"
@@ -17,7 +17,8 @@
             :checked="value.isRefined"
             @click="refine(value)"
           />
-          <span>{{ attr.label }}</span>
+          <span class="ml-1">Hide <span class="text-red-800 dark:text-red-400">{{ attr.label }}</span></span>
+          <Icon v-if="value.isRefined" name="mdi:hide" class="text-gray-400 ml-2" size="1.2em" />
         </label>
       </template>
     </ais-toggle-refinement>
@@ -34,7 +35,7 @@ type DisplayAttribute = {
 }
 
 type Props = {
-  label: string
+  label?: string
   attributes: DisplayAttribute[]
   class?: VueStyleClass
 }
