@@ -1,6 +1,6 @@
 <template>
   <label>
-    <span class="text-base font-bold block mb-1">{{ props.label }}</span>
+    <span class="text-base font-bold text-blue-900 dark:text-slate-300 block mb-1">{{ props.label }}</span>
     <ais-refinement-list
       :attribute="props.attribute"
       :limit="props.doubleCols ? 10 : 5"

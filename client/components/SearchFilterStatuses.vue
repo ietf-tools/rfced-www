@@ -5,7 +5,7 @@
   >
     <template #default="{ items, refine }">
       <fieldset>
-        <legend class="text-base font-bold mb-2">Status</legend>
+        <legend class="text-base font-bold text-blue-900 dark:text-slate-300 mb-2">Status</legend>
         <ul class="grid-cols-1 2xl:grid-rows-4 grid gap-1 2xl:grid-flow-col 2xl:auto-cols-fr">
           <li v-for="item in items" :key="item.value">
             <label class="text-base cursor-pointer">

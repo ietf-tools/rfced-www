@@ -1,6 +1,6 @@
 <template>
   <fieldset class="w-full">
-    <legend class="text-base font-bold mb-1">{{ props.label }}</legend>
+    <legend class="text-base font-bold text-blue-900 dark:text-slate-300 mb-1">{{ props.label }}</legend>
     <div
       class="w-full text-base"
     >

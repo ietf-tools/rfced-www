@@ -2,7 +2,7 @@
   <form
     class="flex flex-col gap-5 text-base text-grey-800 pt-3 lg:pt-0 pl-5 lg:pl-0 lg:pr-10"
   >
-    <div class="hidden lg:flex items-center">
+    <div class="hidden text-blue-900 dark:text-slate-300 lg:flex items-center">
       <Heading level="2" style-level="3">
         Filter
       </Heading>
@@ -11,13 +11,13 @@
 
     <SearchFilterStatuses />
 
-    <Separator orientation="horizontal" decorative class="bg-gray-400 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />
+    <Separator orientation="horizontal" decorative class="bg-gray-300 dark:bg-gray-700 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />
 
     <SearchFilterDisplay
       :attributes="[{ attribute: 'flags.obsoleted', label: 'obsoleted' }]"
     />
 
-    <Separator orientation="horizontal" decorative class="bg-gray-400 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />
+    <Separator orientation="horizontal" decorative class="bg-gray-300 dark:bg-gray-700 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full" />
 
     <SearchFilterDate
       label="Publication date"

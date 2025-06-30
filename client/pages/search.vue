@@ -10,7 +10,7 @@
     >
       <NuxtLayout name="default">
         <template #subheader>
-          <div class="container mx-auto">
+          <div class="container mx-auto px-2">
             <Heading
               level="1"
               class="w-full mt-0 mb-3 pl-5 md:p-0 text-balance"
@@ -51,7 +51,7 @@
         </template>
 
         <div
-          class="container mx-auto flex flex-row items-start py-5 lg:min-h-screen"
+          class="container mx-auto flex flex-row items-start py-5 lg:min-h-screen px-2"
         >
           <div class="hidden lg:w-1/3 lg:block">
             <SearchFilter />
@@ -207,9 +207,9 @@ type StatusName = 'Best Current Practice'
 type UIState = {
   [key in typeof INDEX_NAME]: {
     query?: string
-    // range: {
-    //   publicationDate: string // eg "-31752000:1748433600"
-    // }
+    range?: {
+      publicationDate?: string // eg "-31752000:1748433600"
+    }
     refinementList?: {
       type: string[]
       'status.name'?: StatusName[]
@@ -257,6 +257,8 @@ const routing = {
       const area = uiState[INDEX_NAME].menu?.['area.full'] ?? null
       const group = uiState[INDEX_NAME].refinementList?.['group.full']?.join(',') ?? null
       const authors = uiState[INDEX_NAME].refinementList?.['authors.name']?.join(',') ?? null
+      const pubDate = uiState[INDEX_NAME].range?.['publicationDate'] ?? null
+      const showObsoleted = !(uiState[INDEX_NAME].toggle?.['flags.obsoleted'] || false)
       // TODO: don't navigateTo when the resulting URL would be the same
       navigateTo(
         {
@@ -266,7 +268,9 @@ const routing = {
             ...stream && { stream },
             ...area && { area },
             ...group && { group },
-            ...authors && { authors }
+            ...authors && { authors },
+            ...pubDate && { pubDate },
+            ...showObsoleted && { showObsoleted: 1 }
           }
         },
         { replace: true }
@@ -280,12 +284,14 @@ const routing = {
       const area = route.query.area?.toString() ?? ''
       const group = route.query.group?.toString().split(',')
       const authors = route.query.authors?.toString().split(',')
+      const pubDate = route.query.pubDate?.toString() ?? ''
+      const showObsoleted = route.query.showObsoleted === '1'
       return {
         [INDEX_NAME]: {
           query,
-          // range: {
-          //   publicationDate: '-31752000:1748433600' // -> DO NOT SET MANUALLY, let instantsearch query the values by itself
-          // },
+          range: {
+            ...pubDate && { publicationDate: pubDate }
+          },
           refinementList: {
             type: ['rfc'],
             ...status && { 'status.name': status as StatusName[] },
@@ -297,7 +303,7 @@ const routing = {
             ...area && { 'area.full': area }
           },
           toggle: {
-            'flags.obsoleted': true
+            'flags.obsoleted': !showObsoleted
           }
         }
       }

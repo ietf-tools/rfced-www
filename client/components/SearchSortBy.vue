@@ -1,6 +1,6 @@
 <template>
   <label class="text-base flex flex-row items-center">
-    <span class="mr-2">Sort by</span>
+    <span class="text-blue-900 dark:text-slate-300 mr-2">Sort by</span>
     <ais-sort-by
       :items="[
         {

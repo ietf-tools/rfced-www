@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row justify-between items-center mt-4 mr-5">
+  <div class="flex flex-row justify-between items-center mt-4">
     <ais-pagination
       :class-names="{
         'ais-Pagination': 'w-full ',

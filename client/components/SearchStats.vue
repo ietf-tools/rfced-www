@@ -1,7 +1,7 @@
 <template>
   <ais-stats>
     <template #default="{ nbHits, processingTimeMS }">
-      <div class="text-base font-normal w-max ml-5">
+      <div class="text-base text-slate-500 dark:text-slate-400 font-normal w-max ml-5">
         <span class="font-semibold text-blue-900 dark:text-sky-100">
           {{ nbHits.toLocaleString('en', { useGrouping: true }) }}
         </span>
