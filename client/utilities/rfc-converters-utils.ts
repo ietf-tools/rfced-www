@@ -241,12 +241,15 @@ export const parseTypeSenseSubseries = (
 ): RfcCommon['subseries'] => {
   switch (item.status?.name) {
     case 'Best Current Practice':
-      assertIsString(item.subseries?.bcp)
-      return {
-        type: 'bcp',
-        number: parseFloat(item.subseries?.bcp),
-        subseriesLength: item.subseries?.total
+      if (item.subseries?.bcp) {
+        assertIsString(item.subseries?.bcp)
+        return {
+          type: 'bcp',
+          number: parseFloat(item.subseries?.bcp),
+          subseriesLength: item.subseries?.total
+        }
       }
+      break
     case 'Informational':
       if (item.subseries?.fyi) {
         assertIsString(item.subseries?.fyi)
@@ -258,12 +261,15 @@ export const parseTypeSenseSubseries = (
       }
       break
     case 'Internet Standard':
-      assertIsString(item.subseries?.std)
-      return {
-        type: 'std',
-        number: parseFloat(item.subseries?.std),
-        subseriesLength: item.subseries?.total
+      if (item.subseries?.std) {
+        assertIsString(item.subseries?.std)
+        return {
+          type: 'std',
+          number: parseFloat(item.subseries?.std),
+          subseriesLength: item.subseries?.total
+        }
       }
+      break
   }
   return undefined
 }
