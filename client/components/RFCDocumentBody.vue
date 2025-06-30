@@ -20,13 +20,13 @@
     <component :is="formatTitleAsVNode(`${rfcId.type}${rfcId.number}`)" />
   </Heading>
 
-  <RFCMobileBanner :rfc="rfc" :is-fixed="true" />
+  <RFCMobileBanner :rfc="rfcDoc" :is-fixed="true" />
 
   <p
-    v-if="props.rfc.abstract"
+    v-if="props.rfcDoc.abstract"
     class="px-1 xs:px-0 mb-2 text-base lg:text-xl print:px-0 text-pretty"
   >
-    {{ props.rfc.abstract }}
+    {{ props.rfcDoc.abstract }}
   </p>
 
   <div class="flex flex-row justify-between items-center flex-wrap">
@@ -34,7 +34,7 @@
       <Tag
         :text="
           rfcId.type === RFC_TYPE_RFC ?
-            ['Internet Standard', `${props.rfc.number}`]
+            ['Internet Standard', `${props.rfcDoc.number}`]
           : [rfcId.type, rfcId.number]
         "
         size="normal"
@@ -79,7 +79,7 @@
   </div>
 
   <Alert
-    v-if="props.rfc.obsoleted_by?.length"
+    v-if="props.rfcDoc.obsoleted_by?.length"
     variant="warning"
     heading="This RFC is now obsolete"
   >
@@ -87,7 +87,7 @@
       For more information, please refer to
       <ul>
         <li
-          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfcDoc
             .obsoleted_by"
           :key="obsoletedByItemIndex"
         >
@@ -101,9 +101,10 @@
   </Alert>
 
   <div class="mt-10 text-[9px] sm:text-base lg:text-base">
-    <div class="font-mono whitespace-pre-wrap px-3 xs:px-0">
-      {{ props.rfc.text }}
-    </div>
+    <div
+      class="font-mono whitespace-pre-wrap px-3 xs:px-0"
+      v-html="props.rfcHtml"
+    ></div>
   </div>
 </template>
 
@@ -123,7 +124,8 @@ import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
-  rfc: Rfc
+  rfcDoc: Rfc
+  rfcHtml: string
   gotoErrata: () => void
   breadcrumbItems: BreadcrumbItem[]
 }
@@ -132,5 +134,5 @@ const props = defineProps<Props>()
 
 const isModalOpen = defineModel<boolean>('isModalOpen')
 
-const rfcId = computed(() => parseRFCId(`rfc${props.rfc.number}`))
+const rfcId = computed(() => parseRFCId(`rfc${props.rfcDoc.number}`))
 </script>

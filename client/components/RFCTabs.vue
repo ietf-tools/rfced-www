@@ -53,7 +53,7 @@
         <dd>
           <ul class="-mt-1">
             <li
-              v-for="(author, authorIndex) in props.rfc.authors"
+              v-for="(author, authorIndex) in props.rfcDoc.authors"
               :key="authorIndex"
               class="inline"
             >
@@ -63,7 +63,7 @@
               >
                 {{ author.name }}
               </A>
-              <template v-if="authorIndex < props.rfc.authors.length - 1">
+              <template v-if="authorIndex < props.rfcDoc.authors.length - 1">
                 {{ COMMA }}
                 {{ SPACE }}
               </template>
@@ -74,26 +74,26 @@
 
         <dt class="font-bold mt-2">Working group</dt>
         <dd>
-          <template v-if="props.rfc.group.acronym">
-            {{ props.rfc.group.acronym.toUpperCase() }}
+          <template v-if="props.rfcDoc.group.acronym">
+            {{ props.rfcDoc.group.acronym.toUpperCase() }}
           </template>
-          {{ props.rfc.group.name }}
+          {{ props.rfcDoc.group.name }}
         </dd>
 
         <dt class="font-bold mt-2">Area</dt>
         <dd>
-          <template v-if="props.rfc.area?.acronym">
-            {{ props.rfc.area.acronym.toUpperCase() }}
+          <template v-if="props.rfcDoc.area?.acronym">
+            {{ props.rfcDoc.area.acronym.toUpperCase() }}
           </template>
-          {{ props.rfc.area?.name }}
+          {{ props.rfcDoc.area?.name }}
         </dd>
 
         <dt class="font-bold mt-2">Stream</dt>
-        <dd>{{ props.rfc.stream.name }}</dd>
+        <dd>{{ props.rfcDoc.stream.name }}</dd>
 
-        <template v-if="props.rfc.identifiers">
+        <template v-if="props.rfcDoc.identifiers">
           <template
-            v-for="(identifier, identifierIndex) in props.rfc.identifiers"
+            v-for="(identifier, identifierIndex) in props.rfcDoc.identifiers"
             :key="identifierIndex"
           >
             <dt class="font-bold mt-2">
@@ -137,7 +137,7 @@
     <TabsContent :value="2">
       <ul class="text-sm">
         <li
-          v-for="(errataItem, errataIndex) in props.rfc.obsoleted_by"
+          v-for="(errataItem, errataIndex) in props.rfcDoc.obsoleted_by"
           :key="errataIndex"
         >
           {{ errataItem }}
@@ -166,7 +166,7 @@ import {
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
 
 type Props = {
-  rfc: Rfc
+  rfcDoc: Rfc
 }
 
 const props = defineProps<Props>()
@@ -178,16 +178,22 @@ function changeTab(index: number) {
 }
 
 const formattedPublished = computed(() => {
-  const dt = DateTime.fromISO(props.rfc.published)
+  const dt = DateTime.fromISO(props.rfcDoc.published)
   return formatDatePublished(dt, true)
 })
 
 const citations = computed(() => {
   return [
-    { url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'txt'), title: 'TXT' },
-    { url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'xml'), title: 'XML' },
     {
-      url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'bibTeX'),
+      url: rfcCitePathBuilder(`RFC${props.rfcDoc.number}`, 'txt'),
+      title: 'TXT'
+    },
+    {
+      url: rfcCitePathBuilder(`RFC${props.rfcDoc.number}`, 'xml'),
+      title: 'XML'
+    },
+    {
+      url: rfcCitePathBuilder(`RFC${props.rfcDoc.number}`, 'bibTeX'),
       title: 'BibTeX'
     }
   ]
@@ -196,7 +202,7 @@ const citations = computed(() => {
 const formats = computed(() => {
   return [
     {
-      url: rfcFormatPathBuilder(`RFC${props.rfc.number}`, 'html'),
+      url: rfcFormatPathBuilder(`RFC${props.rfcDoc.number}`, 'html'),
       title: 'HTML'
     }
   ]

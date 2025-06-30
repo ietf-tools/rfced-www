@@ -169,27 +169,18 @@ export const searchPathBuilder = (
   }`
 }
 
-export const refsRefTxtPathBuilder = (
-  rfcId: string
-): `/refs/ref${string}.txt` => {
+export const refsRefTxtPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/refs/ref${rfcParts.number}.txt` as const
 }
 
-export const infoRfcPathBuilder = (
-  rfcId: string
-): `/info/${string}${string}/` => {
+export const infoRfcPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/` as const
 }
 
-export const rfcJSONPathBuilder = (
-  rfcId: string
-): `/api/v1/rfc/rfc${string}.json` => {
+export const rfcJSONPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/api/v1/rfc/rfc${rfcParts.number}.json` as const
 }
 
@@ -205,7 +196,6 @@ export const rfcPathBuilder = (
   sectionHash?: `section-${string}`
 ) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/${sectionHash ? (`#${sectionHash}` as const) : ''}` as const
 }
 
@@ -256,6 +246,16 @@ export const dashboardPathBuilder = (dashboardPath: string) => {
 
 export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
   return `mailto:${author.email}` as const
+}
+
+/** APIs shouldn't be part of VALID_URLS  */
+export const apiRfcHtmlFragmentPathBuilder = (rfcNumber: number) => {
+  return `${PUBLIC_SITE}/rfc-neue/rfc${rfcNumber}.html` as const
+}
+
+/** This is an API for HTML fragments and it should not be directly browsed to, so this function shouldn't be in VALID_URLS  */
+export const apiRfcDocRetrievePathBuilder = (rfcNumber: number) => {
+  return `/api/v1/docretrieve/rfc${rfcNumber}.json` as const
 }
 
 const mailtoRegex = /^mailto:/

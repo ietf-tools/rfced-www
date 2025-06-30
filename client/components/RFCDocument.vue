@@ -4,14 +4,16 @@
       <RFCDocumentSidebar
         v-model:selected-tab="selectedTab"
         v-model:is-modal-open="isModalOpen"
-        :rfc="props.rfc"
+        :rfc-doc="props.rfcDoc"
+        :rfc-html="props.rfcHtml"
         :goto-errata="gotoErrata"
         :change-tab="changeTab"
       />
     </template>
     <RFCDocumentBody
       v-model:is-modal-open="isModalOpen"
-      :rfc="props.rfc"
+      :rfc-doc="props.rfcDoc"
+      :rfc-html="props.rfcHtml"
       :breadcrumb-items="breadcrumbItems"
       :goto-errata="gotoErrata"
       :change-tab="changeTab"
@@ -24,7 +26,8 @@ import type { Rfc } from '../generated/red-client'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
-  rfc: Rfc
+  rfcDoc: Rfc
+  rfcHtml: string
 }
 
 const props = defineProps<Props>()

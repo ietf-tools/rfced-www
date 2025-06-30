@@ -4,21 +4,21 @@
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab0"
-        :rfc="exampleRfc"
+        :rfcDoc="exampleRfc"
       />
     </Variant>
     <Variant title="Selected tab 1">
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab1"
-        :rfc="exampleRfc"
+        :rfcDoc="exampleRfc"
       />
     </Variant>
     <Variant title="Has errata">
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab2"
-        :rfc="exampleRfc"
+        :rfcDoc="exampleRfc"
       />
     </Variant>
   </Story>

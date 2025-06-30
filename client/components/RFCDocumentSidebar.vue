@@ -10,7 +10,7 @@
         >
           <DialogTitle />
           <DialogDescription>
-            <RFCMobileBanner :rfc="props.rfc" :is-fixed="false">
+            <RFCMobileBanner :rfc="props.rfcDoc" :is-fixed="false">
               <button
                 class="bg-white rounded-l text-black p-2 flex items-center"
                 aria-label="Close"
@@ -23,7 +23,7 @@
               <RFCTabs
                 ref="mobileRFCTabs"
                 v-model:selected-tab="selectedTab"
-                :rfc="props.rfc"
+                :rfcDoc="props.rfcDoc"
               />
             </div>
           </DialogDescription>
@@ -35,7 +35,7 @@
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab"
-        :rfc="props.rfc"
+        :rfcDoc="props.rfcDoc"
       />
     </div>
   </div>
@@ -55,7 +55,8 @@ import {
 import type { Rfc } from '../generated/red-client'
 
 type Props = {
-  rfc: Rfc
+  rfcDoc: Rfc
+  rfcHtml: string
   gotoErrata: () => void
 }
 

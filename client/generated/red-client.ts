@@ -146,6 +146,20 @@ export class ApiClient {
     }
   }
 
+  rpc = {
+    searchPerson: (search: {
+      limit?: number
+      offset?: number
+      search?: string
+    }) => {
+      return this.Fetch<PaginatedPersonList>(
+        'get',
+        '/api/rpc/persons/search/',
+        { search }
+      )
+    }
+  }
+
   schema = {
     retrieve: (search: { format?: 'json' | 'yaml' }) => {
       return this.Fetch<Record<string, unknown>>('get', '/api/schema/', {
@@ -184,6 +198,13 @@ export type Group = {
   name: string
 }
 
+export type PaginatedPersonList = {
+  count: number
+  next?: string | null
+  previous?: string | null
+  results: Person[]
+}
+
 export type PaginatedRfcMetadataList = {
   count: number
   next?: string | null
@@ -202,6 +223,12 @@ export type ParseErrorCodeEnum = 'parse_error'
 export type ParseErrorResponse = {
   type: ClientErrorEnum
   errors: ParseError[]
+}
+
+export type Person = {
+  id?: number
+  plain_name?: string
+  picture?: string
 }
 
 export type RedDocListAreaErrorComponent = {
@@ -340,6 +367,8 @@ export type RfcStatus = {
 }
 
 export type SchemaRetrieveErrorResponse400 = ParseErrorResponse
+
+export type SearchPersonErrorResponse400 = ParseErrorResponse
 
 export type SlugEnum =
   | 'bcp'
