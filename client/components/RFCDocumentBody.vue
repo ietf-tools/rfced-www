@@ -102,7 +102,7 @@
 
   <div class="mt-10 text-[9px] sm:text-base lg:text-base">
     <div
-      class="font-mono whitespace-pre-wrap px-3 xs:px-0"
+      class="px-3 xs:px-0"
       v-html="props.rfcBucketHtmlDoc.documentHtml"
     ></div>
   </div>

@@ -59,10 +59,13 @@ const {
   return $fetch(apiRfcBucketHtmlURLBuilder(rfcNumber))
 })
 
-const rfcBucketHtmlDocument = computed(() => {
-  if (!rfcHtml.value) return undefined
-  return rfcBucketHtmlToRfcDocument(rfcHtml.value)
-})
+const { data: rfcBucketHtmlDocument } = await useAsyncData(
+  `info-dochtml-${route.params.id}`,
+  async () => {
+    if (!rfcHtml.value) return undefined
+    return await rfcBucketHtmlToRfcDocument(rfcHtml.value)
+  }
+)
 
 definePageMeta({
   layout: false

@@ -5,6 +5,7 @@ import {
   formatAuthor,
   formatDatePublished,
   formatFormat,
+  isTocSection,
   parseRfcFormat,
   parseRfcJsonPubDateToISO,
   parseRfcStatusSlug,
@@ -15,6 +16,7 @@ import type { TypeSenseSearchItem } from './typesense'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 import type { RfcEditorToc } from './tableOfContents'
 import { b } from 'vitest/dist/chunks/suite.B2jumIFP.js'
+import { getDOMParser } from './dom'
 
 /**
  * Caches response to avoid computation but mostly to make === comparisons of RFCs easier
@@ -251,10 +253,10 @@ export const typeSenseSearchItemToRFCCommon = (
   }
 }
 
-export const rfcBucketHtmlToRfcDocument = (
+export const rfcBucketHtmlToRfcDocument = async (
   rfcBucketHtml: string
-): RfcBucketHtmlDocument => {
-  const parser = new DOMParser()
+): Promise<RfcBucketHtmlDocument> => {
+  const parser = await getDOMParser()
   const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
 
   let tableOfContents: RfcEditorToc | undefined
@@ -262,8 +264,6 @@ export const rfcBucketHtmlToRfcDocument = (
   const rfc: RfcCommon = {
     ...blankRfcCommon
   }
-
-  let generator = ''
 
   // Parse useful stuff from <head>
   const headNodes = Array.from(dom.head.childNodes)
@@ -325,10 +325,6 @@ export const rfcBucketHtmlToRfcDocument = (
           }
           break
       }
-    } else if (node instanceof Comment) {
-      if (node.nodeValue?.toLowerCase().includes('generator')) {
-        generator = node.nodeValue
-      }
     }
   })
 
@@ -371,6 +367,9 @@ export const rfcBucketHtmlToRfcDocument = (
       return ''
     })
     .join('')
+    .trim()
+
+  console.log(documentHtml)
 
   return {
     rfc,
@@ -383,7 +382,7 @@ type TocSections = RfcEditorToc['sections']
 type TocSection = TocSections[number]
 
 const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
-  const walk = (node: Node): TocSection => {
+  const walk = (node: Node): TocSection | undefined => {
     if (node instanceof HTMLElement) {
       if (node.nodeName.toLowerCase() === 'li') {
         const newSection: TocSection = {
@@ -393,7 +392,9 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
           .filter((childNode) => {
             if (childNode instanceof HTMLElement) {
               if (childNode.nodeName.toLowerCase() === 'ul') {
-                newSection.sections = Array.from(childNode.childNodes).map(walk)
+                newSection.sections = Array.from(childNode.childNodes)
+                  .map(walk)
+                  .filter(isTocSection)
                 return false
               }
               return true
@@ -403,18 +404,23 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
           .forEach((childNode) => {
             if (childNode instanceof HTMLElement) {
               childNode.querySelectorAll('a.internal').forEach((anchor) => {
-                if (anchor instanceof HTMLElement) {
-                  const id = anchor.getAttribute('id')
+                if (anchor instanceof HTMLAnchorElement) {
+                  const href = anchor.getAttribute('href')
                   const title = anchor.innerText
-                  if (!id || !title) {
+                  if (typeof href === 'string' && typeof title === 'string') {
+                    newSection.links.push({
+                      id: href,
+                      title
+                    })
+                  } else {
                     throw Error(
-                      'Expected to find href and innerText of TOC anchor'
+                      `Expected to find href and innerText of TOC anchor but was id="${href}" (typeof ${typeof href}), title="${title}" (typeof ${typeof title}) `
                     )
                   }
-                  newSection.links.push({
-                    id,
-                    title
-                  })
+                } else {
+                  throw Error(
+                    `Unexpected querySelectorAll result of ${anchor} ${anchor.nodeType} ${anchor.nodeValue}`
+                  )
                 }
               })
             }
@@ -423,7 +429,6 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
         return newSection
       }
     }
-    throw Error(`Unexpected node type ${node.nodeType}: ${node}`)
   }
 
   const root = toc.querySelector('ul')
@@ -432,10 +437,12 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
     throw Error("Couldn't find root node")
   }
 
-  const sections: TocSections = Array.from(root.childNodes).map(walk)
+  const sections: TocSections = Array.from(root.childNodes)
+    .map(walk)
+    .filter(isTocSection)
 
   return {
-    title: '',
+    title: 'Table of Contents',
     sections
   }
 }
