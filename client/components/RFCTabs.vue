@@ -53,17 +53,21 @@
         <dd>
           <ul class="-mt-1">
             <li
-              v-for="(author, authorIndex) in props.rfcDoc.authors"
+              v-for="(author, authorIndex) in props.rfc.authors"
               :key="authorIndex"
               class="inline"
             >
               <A
-                :href="authorMailtoBuilder(author)"
+                v-if="author.email"
+                :href="mailToBuilder(author.email)"
                 class="whitespace-nowrap underline inline-block py-0.5 pr-1 mb-0.5"
               >
                 {{ author.name }}
               </A>
-              <template v-if="authorIndex < props.rfcDoc.authors.length - 1">
+              <span v-else>
+                {{ author.name }}
+              </span>
+              <template v-if="authorIndex < props.rfc.authors.length - 1">
                 {{ COMMA }}
                 {{ SPACE }}
               </template>
@@ -74,26 +78,26 @@
 
         <dt class="font-bold mt-2">Working group</dt>
         <dd>
-          <template v-if="props.rfcDoc.group.acronym">
-            {{ props.rfcDoc.group.acronym.toUpperCase() }}
+          <template v-if="props.rfc.group.acronym">
+            {{ props.rfc.group.acronym.toUpperCase() }}
           </template>
-          {{ props.rfcDoc.group.name }}
+          {{ props.rfc.group.name }}
         </dd>
 
         <dt class="font-bold mt-2">Area</dt>
         <dd>
-          <template v-if="props.rfcDoc.area?.acronym">
-            {{ props.rfcDoc.area.acronym.toUpperCase() }}
+          <template v-if="props.rfc.area?.acronym">
+            {{ props.rfc.area.acronym.toUpperCase() }}
           </template>
-          {{ props.rfcDoc.area?.name }}
+          {{ props.rfc.area?.name }}
         </dd>
 
         <dt class="font-bold mt-2">Stream</dt>
-        <dd>{{ props.rfcDoc.stream.name }}</dd>
+        <dd>{{ props.rfc.stream.name }}</dd>
 
-        <template v-if="props.rfcDoc.identifiers">
+        <template v-if="props.rfc.identifiers">
           <template
-            v-for="(identifier, identifierIndex) in props.rfcDoc.identifiers"
+            v-for="(identifier, identifierIndex) in props.rfc.identifiers"
             :key="identifierIndex"
           >
             <dt class="font-bold mt-2">
@@ -137,7 +141,7 @@
     <TabsContent :value="2">
       <ul class="text-sm">
         <li
-          v-for="(errataItem, errataIndex) in props.rfcDoc.obsoleted_by"
+          v-for="(errataItem, errataIndex) in props.rfc.obsoleted_by"
           :key="errataIndex"
         >
           {{ errataItem }}
@@ -156,17 +160,18 @@ import {
   TabsTrigger
 } from 'reka-ui'
 import { DateTime } from 'luxon'
-import type { Rfc } from '~/generated/red-client'
 import { COMMA, SPACE } from '~/utilities/strings'
 import {
-  authorMailtoBuilder,
+  mailToBuilder,
   rfcCitePathBuilder,
   rfcFormatPathBuilder
 } from '~/utilities/url'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
+import type { RfcBucketHtmlDocument, RfcCommon } from '~/utilities/rfc'
 
 type Props = {
-  rfcDoc: Rfc
+  rfc: RfcCommon
+  rfcBucketHtmlDoc: RfcBucketHtmlDocument
 }
 
 const props = defineProps<Props>()
@@ -178,22 +183,22 @@ function changeTab(index: number) {
 }
 
 const formattedPublished = computed(() => {
-  const dt = DateTime.fromISO(props.rfcDoc.published)
+  const dt = DateTime.fromISO(props.rfc.published)
   return formatDatePublished(dt, true)
 })
 
 const citations = computed(() => {
   return [
     {
-      url: rfcCitePathBuilder(`RFC${props.rfcDoc.number}`, 'txt'),
+      url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'txt'),
       title: 'TXT'
     },
     {
-      url: rfcCitePathBuilder(`RFC${props.rfcDoc.number}`, 'xml'),
+      url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'xml'),
       title: 'XML'
     },
     {
-      url: rfcCitePathBuilder(`RFC${props.rfcDoc.number}`, 'bibTeX'),
+      url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'bibTeX'),
       title: 'BibTeX'
     }
   ]
@@ -202,7 +207,7 @@ const citations = computed(() => {
 const formats = computed(() => {
   return [
     {
-      url: rfcFormatPathBuilder(`RFC${props.rfcDoc.number}`, 'html'),
+      url: rfcFormatPathBuilder(`RFC${props.rfc.number}`, 'html'),
       title: 'HTML'
     }
   ]

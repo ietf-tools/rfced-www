@@ -6,16 +6,18 @@
       props.depth >= 1 && props.nestedListClass
     ]"
   >
-    <li v-for="section in props.sections" :key="section.id" class="">
+    <li v-for="(section, index) in props.sections" :key="index">
       <NuxtLink
-        :to="`#${section.id}`"
+        v-for="(link, linkIndex) in section.links"
+        :key="linkIndex"
+        :to="`#${link.id}`"
         :class="[props.listItemClass, 'flex flex-row']"
       >
-        <span class="grow-1">{{ section.title }}</span>
-        <GraphicsChevron
-          class="shrink-0 grow-0 basis-5 w-1.5 h-1.5 text-blue-100 group-hover:text-white ml-1 translate-y-1.5 -rotate-90"
-        />
+        <span class="grow-1">{{ link.title }}</span>
       </NuxtLink>
+      <GraphicsChevron
+        class="shrink-0 grow-0 basis-5 w-1.5 h-1.5 text-blue-100 group-hover:text-white ml-1 translate-y-1.5 -rotate-90"
+      />
 
       <TableOfContentsSection
         v-if="section.sections"

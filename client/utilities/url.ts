@@ -30,7 +30,7 @@ export type ValidHrefs =
   | (typeof _FIXME_URLS)[number]
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
-  | ReturnType<typeof authorMailtoBuilder>
+  | ReturnType<typeof mailToBuilder>
   | ReturnType<typeof refsRefTxtPathBuilder>
   | ReturnType<typeof infoRfcPathBuilder>
   | ReturnType<typeof rfcJSONPathBuilder>
@@ -41,6 +41,8 @@ export type ValidHrefs =
   | ReturnType<typeof wikiDokuPathBuilder>
   | ReturnType<typeof materialsPathBuilder>
   | ReturnType<typeof dashboardPathBuilder>
+  | ReturnType<typeof apiRfcBucketHtmlURLBuilder>
+  | ReturnType<typeof apiRfcDocRetrievePathBuilder>
 
 export const HOME_PATH = '/'
 
@@ -244,16 +246,18 @@ export const dashboardPathBuilder = (dashboardPath: string) => {
   return `${DASHBOARD_URL}${dashboardPath}` as const
 }
 
-export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
-  return `mailto:${author.email}` as const
+export const mailToBuilder = (email: string) => {
+  return `mailto:${email}` as const
 }
 
-/** APIs shouldn't be part of VALID_URLS  */
-export const apiRfcHtmlFragmentPathBuilder = (rfcNumber: number) => {
+export const apiRfcBucketHtmlURLBuilder = (rfcNumber: number) => {
+  // Intentionally not a relative url, the PUBLIC_SITE prefix is because this URL is served
+  // from a bucket on prod; it's not something that a localhost Nuxt can serve.
+  // The CORS headers of the prod URL should allow access from localhost:3000 as well as staging,
+  // etc. sites.
   return `${PUBLIC_SITE}/rfc-neue/rfc${rfcNumber}.html` as const
 }
 
-/** This is an API for HTML fragments and it should not be directly browsed to, so this function shouldn't be in VALID_URLS  */
 export const apiRfcDocRetrievePathBuilder = (rfcNumber: number) => {
   return `/api/v1/docretrieve/rfc${rfcNumber}.json` as const
 }

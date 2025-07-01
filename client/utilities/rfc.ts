@@ -1,4 +1,5 @@
 import { NONBREAKING_SPACE } from './strings'
+import type { RfcEditorToc } from './tableOfContents'
 
 export const subseriesCommonType: Record<
   RfcCommonSubseriesType,
@@ -49,7 +50,7 @@ export type RfcCommon = {
   }
   pages?: number | null
   authors: {
-    person: number
+    person?: number // generally should be present except when parsed from HTML
     name: string
     email?: string
     affiliation?: string
@@ -205,4 +206,10 @@ export type RFCJSON = {
   see_also: string[]
   doi: string | null
   errata_url: string | null
+}
+
+export type RfcBucketHtmlDocument = {
+  rfc: RfcCommon
+  tableOfContents?: RfcEditorToc
+  documentHtml: string
 }

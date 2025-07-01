@@ -10,7 +10,11 @@
         >
           <DialogTitle />
           <DialogDescription>
-            <RFCMobileBanner :rfc="props.rfcDoc" :is-fixed="false">
+            <RFCMobileBanner
+              :rfc="props.rfc"
+              :rfc-bucket-html-doc="props.rfcBucketHtmlDoc"
+              :is-fixed="false"
+            >
               <button
                 class="bg-white rounded-l text-black p-2 flex items-center"
                 aria-label="Close"
@@ -23,7 +27,8 @@
               <RFCTabs
                 ref="mobileRFCTabs"
                 v-model:selected-tab="selectedTab"
-                :rfcDoc="props.rfcDoc"
+                :rfc="props.rfc"
+                :rfc-bucket-html-doc="props.rfcBucketHtmlDoc"
               />
             </div>
           </DialogDescription>
@@ -35,7 +40,8 @@
       <RFCTabs
         ref="desktopRFCTabs"
         v-model:selected-tab="selectedTab"
-        :rfcDoc="props.rfcDoc"
+        :rfc="props.rfc"
+        :rfc-bucket-html-doc="props.rfcBucketHtmlDoc"
       />
     </div>
   </div>
@@ -52,11 +58,11 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
-import type { Rfc } from '../generated/red-client'
+import type { RfcBucketHtmlDocument, RfcCommon } from '~/utilities/rfc'
 
 type Props = {
-  rfcDoc: Rfc
-  rfcHtml: string
+  rfc: RfcCommon
+  rfcBucketHtmlDoc: RfcBucketHtmlDocument
   gotoErrata: () => void
 }
 

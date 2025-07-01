@@ -20,13 +20,13 @@
     <component :is="formatTitleAsVNode(`${rfcId.type}${rfcId.number}`)" />
   </Heading>
 
-  <RFCMobileBanner :rfc="rfcDoc" :is-fixed="true" />
+  <RFCMobileBanner :rfc="rfc" :is-fixed="true" />
 
   <p
-    v-if="props.rfcDoc.abstract"
+    v-if="props.rfc.abstract"
     class="px-1 xs:px-0 mb-2 text-base lg:text-xl print:px-0 text-pretty"
   >
-    {{ props.rfcDoc.abstract }}
+    {{ props.rfc.abstract }}
   </p>
 
   <div class="flex flex-row justify-between items-center flex-wrap">
@@ -34,7 +34,7 @@
       <Tag
         :text="
           rfcId.type === RFC_TYPE_RFC ?
-            ['Internet Standard', `${props.rfcDoc.number}`]
+            ['Internet Standard', `${props.rfc.number}`]
           : [rfcId.type, rfcId.number]
         "
         size="normal"
@@ -79,7 +79,7 @@
   </div>
 
   <Alert
-    v-if="props.rfcDoc.obsoleted_by?.length"
+    v-if="props.rfc.obsoleted_by?.length"
     variant="warning"
     heading="This RFC is now obsolete"
   >
@@ -87,7 +87,7 @@
       For more information, please refer to
       <ul>
         <li
-          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfcDoc
+          v-for="(obsoletedByItem, obsoletedByItemIndex) in props.rfc
             .obsoleted_by"
           :key="obsoletedByItemIndex"
         >
@@ -103,7 +103,7 @@
   <div class="mt-10 text-[9px] sm:text-base lg:text-base">
     <div
       class="font-mono whitespace-pre-wrap px-3 xs:px-0"
-      v-html="props.rfcHtml"
+      v-html="props.rfcBucketHtmlDoc.documentHtml"
     ></div>
   </div>
 </template>
@@ -118,14 +118,19 @@ import {
   PopoverRoot,
   PopoverTrigger
 } from 'reka-ui'
-import type { Rfc } from '../generated/red-client'
-import { formatTitleAsVNode, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
+import {
+  formatTitleAsVNode,
+  parseRFCId,
+  RFC_TYPE_RFC,
+  type RfcBucketHtmlDocument,
+  type RfcCommon
+} from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
-  rfcDoc: Rfc
-  rfcHtml: string
+  rfc: RfcCommon
+  rfcBucketHtmlDoc: RfcBucketHtmlDocument
   gotoErrata: () => void
   breadcrumbItems: BreadcrumbItem[]
 }
@@ -134,5 +139,5 @@ const props = defineProps<Props>()
 
 const isModalOpen = defineModel<boolean>('isModalOpen')
 
-const rfcId = computed(() => parseRFCId(`rfc${props.rfcDoc.number}`))
+const rfcId = computed(() => parseRFCId(`rfc${props.rfc.number}`))
 </script>

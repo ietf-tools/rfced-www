@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { blankRfcCommon, parseRFCId } from './rfc'
-import type { RfcCommon, RFCJSON } from './rfc'
+import type { RfcCommon, RfcBucketHtmlDocument, RFCJSON } from './rfc'
 import {
   formatAuthor,
   formatDatePublished,
@@ -13,6 +13,8 @@ import {
 import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
+import type { RfcEditorToc } from './tableOfContents'
+import { b } from 'vitest/dist/chunks/suite.B2jumIFP.js'
 
 /**
  * Caches response to avoid computation but mostly to make === comparisons of RFCs easier
@@ -246,5 +248,194 @@ export const typeSenseSearchItemToRFCCommon = (
     },
     text: '',
     title: item.title
+  }
+}
+
+export const rfcBucketHtmlToRfcDocument = (
+  rfcBucketHtml: string
+): RfcBucketHtmlDocument => {
+  const parser = new DOMParser()
+  const dom = parser.parseFromString(rfcBucketHtml, 'text/html')
+
+  let tableOfContents: RfcEditorToc | undefined
+
+  const rfc: RfcCommon = {
+    ...blankRfcCommon
+  }
+
+  let generator = ''
+
+  // Parse useful stuff from <head>
+  const headNodes = Array.from(dom.head.childNodes)
+  headNodes.forEach((node) => {
+    if (node instanceof HTMLElement) {
+      switch (node.nodeName.toLowerCase()) {
+        case 'meta':
+          const name = node.getAttribute('name')
+          const content = node.getAttribute('content')
+          if (content) {
+            switch (name) {
+              case 'author':
+                rfc.authors.push({
+                  name: content
+                })
+                break
+              case 'description':
+                rfc.abstract = content
+                break
+              case 'rfc.number':
+                if (rfc.number === blankRfcCommon.number) {
+                  rfc.number = parseInt(content, 10)
+                }
+                break
+              case 'keyword':
+                if (rfc.keywords === undefined) {
+                  rfc.keywords = []
+                }
+                rfc.keywords.push(content)
+                break
+            }
+          }
+          break
+        case 'title':
+          // we don't try to parse the <title> because it also has the RFC number in it,
+          // so the title in the <body> is easier to use
+          break
+        case 'link':
+          const rel = node.getAttribute('rel')
+          const href = node.getAttribute('href')
+          if (href && rel) {
+            if (rel === 'alternate') {
+              if (rfc.identifiers === undefined) {
+                rfc.identifiers = []
+              }
+
+              if (href.includes('doi.org')) {
+                rfc.identifiers.push({
+                  type: 'doi',
+                  value: href
+                })
+              } else if (href.includes('urn:issn:')) {
+                rfc.identifiers.push({
+                  type: 'issn',
+                  value: href
+                })
+              }
+            }
+          }
+          break
+      }
+    } else if (node instanceof Comment) {
+      if (node.nodeValue?.toLowerCase().includes('generator')) {
+        generator = node.nodeValue
+      }
+    }
+  })
+
+  // Parse useful stuff from <body>
+  const bodyNodes = Array.from(dom.body.childNodes)
+  const documentHtml = bodyNodes
+    .filter((node, i) => {
+      if (node instanceof HTMLElement) {
+        switch (node.nodeName.toLowerCase()) {
+          case 'script':
+            return false
+          case 'table':
+            if (node.classList.contains('ears')) {
+              return false
+            }
+            break
+        }
+
+        if (node.id === 'rfcnum' && rfc.number === blankRfcCommon.number) {
+          rfc.number = parseInt(node.innerText.replace(/[^0-9]/gi, ''), 10)
+        } else if (node.id === 'title') {
+          rfc.title = node.innerText
+        } else if (node.id === 'toc') {
+          tableOfContents = parseRfcBucketHtmlToc(node)
+        }
+
+        const idsToRemove = ['toc', 'external-metadata', 'internal-metadata']
+        if (idsToRemove.includes(node.id)) {
+          return false
+        }
+      }
+      return true
+    })
+    .map((node): string => {
+      if (node instanceof HTMLElement) {
+        return node.outerHTML
+      } else if (node instanceof Text) {
+        return node.textContent ?? ''
+      }
+      return ''
+    })
+    .join('')
+
+  return {
+    rfc,
+    tableOfContents,
+    documentHtml
+  }
+}
+
+type TocSections = RfcEditorToc['sections']
+type TocSection = TocSections[number]
+
+const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
+  const walk = (node: Node): TocSection => {
+    if (node instanceof HTMLElement) {
+      if (node.nodeName.toLowerCase() === 'li') {
+        const newSection: TocSection = {
+          links: []
+        }
+        Array.from(node.childNodes)
+          .filter((childNode) => {
+            if (childNode instanceof HTMLElement) {
+              if (childNode.nodeName.toLowerCase() === 'ul') {
+                newSection.sections = Array.from(childNode.childNodes).map(walk)
+                return false
+              }
+              return true
+            }
+            return false
+          })
+          .forEach((childNode) => {
+            if (childNode instanceof HTMLElement) {
+              childNode.querySelectorAll('a.internal').forEach((anchor) => {
+                if (anchor instanceof HTMLElement) {
+                  const id = anchor.getAttribute('id')
+                  const title = anchor.innerText
+                  if (!id || !title) {
+                    throw Error(
+                      'Expected to find href and innerText of TOC anchor'
+                    )
+                  }
+                  newSection.links.push({
+                    id,
+                    title
+                  })
+                }
+              })
+            }
+          })
+
+        return newSection
+      }
+    }
+    throw Error(`Unexpected node type ${node.nodeType}: ${node}`)
+  }
+
+  const root = toc.querySelector('ul')
+
+  if (!root) {
+    throw Error("Couldn't find root node")
+  }
+
+  const sections: TocSections = Array.from(root.childNodes).map(walk)
+
+  return {
+    title: '',
+    sections
   }
 }
