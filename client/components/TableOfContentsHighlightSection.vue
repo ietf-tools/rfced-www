@@ -9,8 +9,8 @@
     <li v-for="(section, index) in props.sections" :key="index">
       <NuxtLink
         v-for="(link, linkIndex) in section.links"
-        :key="linkIndex"
         :id="makeTocId(link.id)"
+        :key="linkIndex"
         :to="`#${link.id}`"
         :aria-current="link.id === props.activeId"
         :class="[

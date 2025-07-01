@@ -9,8 +9,7 @@ import {
   isInternalLink,
   isMailToLink,
   parseMaybeRfcLink,
-  isHashLink,
-  PUBLIC_SITE
+  isHashLink
 } from './url'
 import type { ValidHrefs } from './url'
 

@@ -13,10 +13,9 @@ import {
 } from './rfc-converters-utils'
 import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
-import type { Rfc, RfcMetadata } from '~/generated/red-client'
 import type { RfcEditorToc } from './tableOfContents'
-import { b } from 'vitest/dist/chunks/suite.B2jumIFP.js'
 import { getDOMParser } from './dom'
+import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
 /**
  * Caches response to avoid computation but mostly to make === comparisons of RFCs easier
@@ -269,10 +268,15 @@ export const rfcBucketHtmlToRfcDocument = async (
   const headNodes = Array.from(dom.head.childNodes)
   headNodes.forEach((node) => {
     if (node instanceof HTMLElement) {
+      let name: string | null,
+        content: string | null,
+        rel: string | null,
+        href: string | null
+
       switch (node.nodeName.toLowerCase()) {
         case 'meta':
-          const name = node.getAttribute('name')
-          const content = node.getAttribute('content')
+          name = node.getAttribute('name')
+          content = node.getAttribute('content')
           if (content) {
             switch (name) {
               case 'author':
@@ -298,12 +302,12 @@ export const rfcBucketHtmlToRfcDocument = async (
           }
           break
         case 'title':
-          // we don't try to parse the <title> because it also has the RFC number in it,
-          // so the title in the <body> is easier to use
+          // don't try to parse the <title> because it has both the RFC title and RFC number in it,
+          // so we'll use other parts of the HTML (the title in the <body>) which are easier to use
           break
         case 'link':
-          const rel = node.getAttribute('rel')
-          const href = node.getAttribute('href')
+          rel = node.getAttribute('rel')
+          href = node.getAttribute('href')
           if (href && rel) {
             if (rel === 'alternate') {
               if (rfc.identifiers === undefined) {
@@ -331,7 +335,7 @@ export const rfcBucketHtmlToRfcDocument = async (
   // Parse useful stuff from <body>
   const bodyNodes = Array.from(dom.body.childNodes)
   const documentHtml = bodyNodes
-    .filter((node, i) => {
+    .filter((node) => {
       if (node instanceof HTMLElement) {
         switch (node.nodeName.toLowerCase()) {
           case 'script':

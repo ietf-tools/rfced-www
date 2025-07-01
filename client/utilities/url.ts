@@ -1,5 +1,4 @@
 import { kebabCase } from 'lodash-es'
-import type { Rfc } from '../generated/red-client'
 import { parseRFCId } from '../utilities/rfc'
 import type { imagePreviewDimensions } from './head'
 
