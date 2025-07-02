@@ -106,7 +106,7 @@
       ref="rfc-html-container"
       v-html="props.rfcBucketHtmlDoc.documentHtml"
     />
-    <Renderable v-else :val="enrichedDocument" />
+    <component v-else :is="enrichedDocument" />
   </div>
 </template>
 
@@ -175,9 +175,7 @@ onMounted(async () => {
     return
   }
 
-  console.time('enriching')
   enrichedDocument.value = await enrichRfcDocument([...htmlElement.childNodes])
-  console.timeEnd('enriching')
 })
 
 const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
@@ -187,17 +185,31 @@ const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
       const children = await Promise.all(
         Array.from(node.childNodes).map(enrichNode)
       )
-
+      let childrenForVue = wrapChildrenForVue(children)
       if (isAnchorElement(node)) {
-        return h(AMaybeRFCLink, attributes, children)
+        // fix Vue "Non-function value encountered for default slot." performance warning
+        // by wrapping children in a function so the Vue can defer rendering
+        return h(AMaybeRFCLink, attributes, () => childrenForVue)
       }
-      return h(node.nodeName, attributes, children)
+      return h(node.nodeName, attributes, childrenForVue)
     } else if (isTextNode(node)) {
       return createTextVNode(node.nodeValue ?? '')
     }
     throw Error(`Unhandled node type ${node.nodeType} ${node}`)
   }
 
-  return h('div', await Promise.all(nodes.map(enrichNode)))
+  const children = await Promise.all(nodes.map(enrichNode))
+  return h('div', {}, children)
+}
+
+const wrapChildrenForVue = (vnodes: VNode[]) => {
+  switch (vnodes.length) {
+    case 0:
+      return undefined
+    case 1:
+      return vnodes[0]
+    default:
+      return vnodes
+  }
 }
 </script>
