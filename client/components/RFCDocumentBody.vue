@@ -143,6 +143,7 @@ type Props = {
   rfcBucketHtmlDoc: RfcBucketHtmlDocument
   gotoErrata: () => void
   breadcrumbItems: BreadcrumbItem[]
+  changeTab: (index: number) => void
 }
 
 const props = defineProps<Props>()
@@ -155,7 +156,7 @@ const rfcHtmlContainer = useTemplateRef('rfc-html-container')
 
 const enrichedDocument = ref<VNode>()
 
-onMounted(() => {
+onMounted(async () => {
   if (
     // if we've already computed it,
     // TODO: check whhether enrichedDocument would reset when navigating to another info RFC page via SPA nav
@@ -175,33 +176,28 @@ onMounted(() => {
   }
 
   console.time('enriching')
-  enrichedDocument.value = enrichRfcDocument([...htmlElement.childNodes])
+  enrichedDocument.value = await enrichRfcDocument([...htmlElement.childNodes])
   console.timeEnd('enriching')
 })
 
-const enrichRfcDocument = (nodes: Node[]): VNode => {
-  const enrichNode = (node: Node): VNode => {
+const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
+  const enrichNode = async (node: Node): Promise<VNode> => {
     if (isHtmlElement(node)) {
       const attributes = elementAttributesToObject(node.attributes)
-      console.log(attributes)
-      if (isAnchorElement(node)) {
-        return h(
-          AMaybeRFCLink,
-          attributes,
-          Array.from(node.childNodes).map(enrichNode)
-        )
-      }
-      return h(
-        node.nodeName,
-        attributes,
+      const children = await Promise.all(
         Array.from(node.childNodes).map(enrichNode)
       )
+
+      if (isAnchorElement(node)) {
+        return h(AMaybeRFCLink, attributes, children)
+      }
+      return h(node.nodeName, attributes, children)
     } else if (isTextNode(node)) {
       return createTextVNode(node.nodeValue ?? '')
     }
     throw Error(`Unhandled node type ${node.nodeType} ${node}`)
   }
 
-  return h('div', nodes.map(enrichNode))
+  return h('div', await Promise.all(nodes.map(enrichNode)))
 }
 </script>
