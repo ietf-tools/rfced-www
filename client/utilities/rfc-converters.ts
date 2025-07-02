@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import { createTextVNode } from 'vue'
 import { blankRfcCommon, parseRFCId } from './rfc'
 import type { RfcCommon, RfcBucketHtmlDocument, RFCJSON } from './rfc'
 import {
@@ -15,14 +14,7 @@ import {
 import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
 import type { RfcEditorToc } from './tableOfContents'
-import {
-  elementAttributesToObject,
-  getDOMParser,
-  isAnchorElement,
-  isHtmlElement,
-  isTextNode
-} from './dom'
-import AMaybeRFCLink from '~/components/AMaybeRFCLink.vue'
+import { getDOMParser, isHtmlElement, isTextNode } from './dom'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
 /**
@@ -456,29 +448,4 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
     title: 'Table of Contents',
     sections
   }
-}
-export const enrichRfcDocument = (nodes: Node[]): VNode => {
-  const enrichNode = (node: Node): VNode => {
-    if (isHtmlElement(node)) {
-      const attributes = elementAttributesToObject(node.attributes)
-      console.log(attributes)
-      if (isAnchorElement(node)) {
-        return h(
-          AMaybeRFCLink,
-          attributes,
-          Array.from(node.childNodes).map(enrichNode)
-        )
-      }
-      return h(
-        node.nodeName,
-        attributes,
-        Array.from(node.childNodes).map(enrichNode)
-      )
-    } else if (isTextNode(node)) {
-      return createTextVNode(node.nodeValue ?? '')
-    }
-    throw Error(`Unhandled node type ${node.nodeType} ${node}`)
-  }
-
-  return h('div', nodes.map(enrichNode))
 }

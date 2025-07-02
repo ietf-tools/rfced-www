@@ -129,7 +129,14 @@ import {
 } from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
-import { enrichRfcDocument } from '~/utilities/rfc-converters'
+import {
+  elementAttributesToObject,
+  isAnchorElement,
+  isHtmlElement,
+  isTextNode
+} from '~/utilities/dom'
+import { createTextVNode } from 'vue'
+import AMaybeRFCLink from './AMaybeRFCLink.vue'
 
 type Props = {
   rfc: RfcCommon
@@ -152,9 +159,36 @@ onMounted(() => {
   if (enrichedDocument.value || !rfcHtmlContainer.value) {
     return
   }
-
+  console.time('enriching')
   enrichedDocument.value = enrichRfcDocument([
     ...rfcHtmlContainer.value.childNodes
   ])
+  console.timeEnd('enriching')
 })
+
+const enrichRfcDocument = (nodes: Node[]): VNode => {
+  const enrichNode = (node: Node): VNode => {
+    if (isHtmlElement(node)) {
+      const attributes = elementAttributesToObject(node.attributes)
+      console.log(attributes)
+      if (isAnchorElement(node)) {
+        return h(
+          AMaybeRFCLink,
+          attributes,
+          Array.from(node.childNodes).map(enrichNode)
+        )
+      }
+      return h(
+        node.nodeName,
+        attributes,
+        Array.from(node.childNodes).map(enrichNode)
+      )
+    } else if (isTextNode(node)) {
+      return createTextVNode(node.nodeValue ?? '')
+    }
+    throw Error(`Unhandled node type ${node.nodeType} ${node}`)
+  }
+
+  return h('div', nodes.map(enrichNode))
+}
 </script>
