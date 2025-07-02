@@ -1,5 +1,3 @@
-import type { HTMLAttributes } from 'vue'
-
 /**
  * W3C DOMParser factory that works on server and browser
  */

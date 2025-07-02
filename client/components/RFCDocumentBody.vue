@@ -111,6 +111,7 @@
 </template>
 
 <script setup lang="ts">
+import { createTextVNode } from 'vue'
 import {
   PopoverAnchor,
   PopoverArrow,
@@ -120,6 +121,7 @@ import {
   PopoverRoot,
   PopoverTrigger
 } from 'reka-ui'
+import AMaybeRFCLink from './AMaybeRFCLink.vue'
 import {
   formatTitleAsVNode,
   parseRFCId,
@@ -135,8 +137,6 @@ import {
   isHtmlElement,
   isTextNode
 } from '~/utilities/dom'
-import { createTextVNode } from 'vue'
-import AMaybeRFCLink from './AMaybeRFCLink.vue'
 
 type Props = {
   rfc: RfcCommon
@@ -156,13 +156,26 @@ const rfcHtmlContainer = useTemplateRef('rfc-html-container')
 const enrichedDocument = ref<VNode>()
 
 onMounted(() => {
-  if (enrichedDocument.value || !rfcHtmlContainer.value) {
+  if (
+    // if we've already computed it,
+    // TODO: check whhether enrichedDocument would reset when navigating to another info RFC page via SPA nav
+    enrichedDocument.value
+  ) {
     return
   }
+
+  const { value: htmlElement } = rfcHtmlContainer
+  if (
+    // if the container isn't mounted (this shouldn't happen)
+    !htmlElement ||
+    !isHtmlElement(htmlElement)
+  ) {
+    console.error("Unable to enrich RFC document as container hasn't mounted")
+    return
+  }
+
   console.time('enriching')
-  enrichedDocument.value = enrichRfcDocument([
-    ...rfcHtmlContainer.value.childNodes
-  ])
+  enrichedDocument.value = enrichRfcDocument([...htmlElement.childNodes])
   console.timeEnd('enriching')
 })
 
