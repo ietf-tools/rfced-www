@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { createTextVNode } from 'vue'
 import { blankRfcCommon, parseRFCId } from './rfc'
 import type { RfcCommon, RfcBucketHtmlDocument, RFCJSON } from './rfc'
 import {
@@ -14,7 +15,14 @@ import {
 import { TypeSenseSearchItemSchema } from './typesense'
 import type { TypeSenseSearchItem } from './typesense'
 import type { RfcEditorToc } from './tableOfContents'
-import { getDOMParser } from './dom'
+import {
+  elementAttributesToObject,
+  getDOMParser,
+  isAnchorElement,
+  isHtmlElement,
+  isTextNode
+} from './dom'
+import AMaybeRFCLink from '~/components/AMaybeRFCLink.vue'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
 /**
@@ -267,7 +275,7 @@ export const rfcBucketHtmlToRfcDocument = async (
   // Parse useful stuff from <head>
   const headNodes = Array.from(dom.head.childNodes)
   headNodes.forEach((node) => {
-    if (node instanceof HTMLElement) {
+    if (isHtmlElement(node)) {
       let name: string | null,
         content: string | null,
         rel: string | null,
@@ -334,46 +342,45 @@ export const rfcBucketHtmlToRfcDocument = async (
 
   // Parse useful stuff from <body>
   const bodyNodes = Array.from(dom.body.childNodes)
-  const documentHtml = bodyNodes
-    .filter((node) => {
-      if (node instanceof HTMLElement) {
-        switch (node.nodeName.toLowerCase()) {
-          case 'script':
-            return false
-          case 'table':
-            if (node.classList.contains('ears')) {
-              return false
-            }
-            break
-        }
-
-        if (node.id === 'rfcnum' && rfc.number === blankRfcCommon.number) {
-          rfc.number = parseInt(node.innerText.replace(/[^0-9]/gi, ''), 10)
-        } else if (node.id === 'title') {
-          rfc.title = node.innerText
-        } else if (node.id === 'toc') {
-          tableOfContents = parseRfcBucketHtmlToc(node)
-        }
-
-        const idsToRemove = ['toc', 'external-metadata', 'internal-metadata']
-        if (idsToRemove.includes(node.id)) {
+  const rfcDocument = bodyNodes.filter((node) => {
+    if (isHtmlElement(node)) {
+      switch (node.nodeName.toLowerCase()) {
+        case 'script':
           return false
-        }
+        case 'table':
+          if (node.classList.contains('ears')) {
+            return false
+          }
+          break
       }
-      return true
-    })
+
+      if (node.id === 'rfcnum' && rfc.number === blankRfcCommon.number) {
+        rfc.number = parseInt(node.innerText.replace(/[^0-9]/gi, ''), 10)
+      } else if (node.id === 'title') {
+        rfc.title = node.innerText
+      } else if (node.id === 'toc') {
+        tableOfContents = parseRfcBucketHtmlToc(node)
+      }
+
+      const idsToRemove = ['toc', 'external-metadata', 'internal-metadata']
+      if (idsToRemove.includes(node.id)) {
+        return false
+      }
+    }
+    return true
+  })
+
+  const documentHtml = rfcDocument
     .map((node): string => {
-      if (node instanceof HTMLElement) {
+      if (isHtmlElement(node)) {
         return node.outerHTML
-      } else if (node instanceof Text) {
+      } else if (isTextNode(node)) {
         return node.textContent ?? ''
       }
       return ''
     })
     .join('')
     .trim()
-
-  console.log(documentHtml)
 
   return {
     rfc,
@@ -387,14 +394,14 @@ type TocSection = TocSections[number]
 
 const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
   const walk = (node: Node): TocSection | undefined => {
-    if (node instanceof HTMLElement) {
+    if (isHtmlElement(node)) {
       if (node.nodeName.toLowerCase() === 'li') {
         const newSection: TocSection = {
           links: []
         }
         Array.from(node.childNodes)
           .filter((childNode) => {
-            if (childNode instanceof HTMLElement) {
+            if (isHtmlElement(childNode)) {
               if (childNode.nodeName.toLowerCase() === 'ul') {
                 newSection.sections = Array.from(childNode.childNodes)
                   .map(walk)
@@ -406,11 +413,11 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
             return false
           })
           .forEach((childNode) => {
-            if (childNode instanceof HTMLElement) {
+            if (isHtmlElement(childNode)) {
               childNode.querySelectorAll('a.internal').forEach((anchor) => {
-                if (anchor instanceof HTMLAnchorElement) {
+                if (isHtmlElement(anchor)) {
                   const href = anchor.getAttribute('href')
-                  const title = anchor.innerText
+                  const title = anchor.innerHTML
                   if (typeof href === 'string' && typeof title === 'string') {
                     newSection.links.push({
                       id: href,
@@ -449,4 +456,29 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
     title: 'Table of Contents',
     sections
   }
+}
+export const enrichRfcDocument = (nodes: Node[]): VNode => {
+  const enrichNode = (node: Node): VNode => {
+    if (isHtmlElement(node)) {
+      const attributes = elementAttributesToObject(node.attributes)
+      console.log(attributes)
+      if (isAnchorElement(node)) {
+        return h(
+          AMaybeRFCLink,
+          attributes,
+          Array.from(node.childNodes).map(enrichNode)
+        )
+      }
+      return h(
+        node.nodeName,
+        attributes,
+        Array.from(node.childNodes).map(enrichNode)
+      )
+    } else if (isTextNode(node)) {
+      return createTextVNode(node.nodeValue ?? '')
+    }
+    throw Error(`Unhandled node type ${node.nodeType} ${node}`)
+  }
+
+  return h('div', nodes.map(enrichNode))
 }

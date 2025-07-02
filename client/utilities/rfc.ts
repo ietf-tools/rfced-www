@@ -176,7 +176,7 @@ export const parseRFCId = (title: string): RFCId => {
  * Formats a string of 'RFCnumber' with non-bold/bold text with an NBSP between
  * Returns h() Component for rendering
  */
-export const formatTitleAsVNode = (rfcId: string) => {
+export const formatTitleAsVNode = (rfcId: string): VNode => {
   const parts = parseRFCId(rfcId)
 
   return h('span', [

@@ -2,9 +2,11 @@
   <div class="min-h-[100vh]">
     <NuxtLayout name="white">
       <template v-if="rfcDocRetrieveError || rfcHtmlError">
-        <Alert level="1" variant="warning" heading="Error">
-          {{ rfcDocRetrieveError }} {{ rfcHtmlError }}
-        </Alert>
+        <div class="container mx-auto">
+          <Alert level="1" variant="warning" heading="Error">
+            {{ rfcDocRetrieveError }} {{ rfcHtmlError }}
+          </Alert>
+        </div>
       </template>
       <template
         v-else-if="

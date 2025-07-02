@@ -53,5 +53,5 @@
 
 <script setup lang="ts">
 import { AisSortBy } from 'vue-instantsearch/vue3/es'
-import { isSelectElement } from '~/utilities/html'
+import { isSelectElement } from '~/utilities/dom'
 </script>

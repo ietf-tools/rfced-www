@@ -30,9 +30,3 @@ export const parseHeadingLevel = (headingLevel: string): HeadingLevel => {
   }
   throw Error(`Unable to parse heading level "${headingLevel}"`)
 }
-
-export const isSelectElement = (
-  element: unknown
-): element is HTMLSelectElement => {
-  return element instanceof Element && element.tagName === 'SELECT'
-}

@@ -102,9 +102,11 @@
 
   <div class="mt-10 text-[9px] sm:text-base lg:text-base">
     <div
-      class="px-3 xs:px-0"
+      v-if="!enrichedDocument"
+      ref="rfc-html-container"
       v-html="props.rfcBucketHtmlDoc.documentHtml"
-    ></div>
+    />
+    <Renderable v-else :val="enrichedDocument" />
   </div>
 </template>
 
@@ -127,6 +129,7 @@ import {
 } from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
+import { enrichRfcDocument } from '~/utilities/rfc-converters'
 
 type Props = {
   rfc: RfcCommon
@@ -140,4 +143,18 @@ const props = defineProps<Props>()
 const isModalOpen = defineModel<boolean>('isModalOpen')
 
 const rfcId = computed(() => parseRFCId(`rfc${props.rfc.number}`))
+
+const rfcHtmlContainer = useTemplateRef('rfc-html-container')
+
+const enrichedDocument = ref<VNode>()
+
+onMounted(() => {
+  if (enrichedDocument.value || !rfcHtmlContainer.value) {
+    return
+  }
+
+  enrichedDocument.value = enrichRfcDocument([
+    ...rfcHtmlContainer.value.childNodes
+  ])
+})
 </script>
