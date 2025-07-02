@@ -6,25 +6,28 @@
       props.depth >= 1 && props.nestedListClass
     ]"
   >
-    <li v-for="section in props.sections" :key="section.id">
+    <li v-for="(section, index) in props.sections" :key="index">
       <NuxtLink
-        :id="makeTocId(section.id)"
-        :to="`#${section.id}`"
-        :aria-current="section.id === props.activeId"
+        v-for="(link, linkIndex) in section.links"
+        :id="makeTocId(link.id)"
+        :key="linkIndex"
+        :to="`#${link.id}`"
+        :aria-current="link.id === props.activeId"
         :class="[
           props.listItemClass,
-          activeId === section.id && props.listItemActiveClass,
+          activeId === link.id && props.listItemActiveClass,
           'flex flex-row justify-between'
         ]"
-        @click="handleClick(section.id)"
+        @click="handleClick(link.id)"
       >
         <span>
-          {{ section.title }}
+          {{ link.title }}
         </span>
-         <GraphicsChevron
-            class="shrink-0 grow-0 basis-5 w-1.5 h-1.5 text-blue-100 group-hover:text-white ml-1 translate-y-1.5 -rotate-90"
-          />
       </NuxtLink>
+
+      <GraphicsChevron
+        class="shrink-0 grow-0 basis-5 w-1.5 h-1.5 text-blue-100 group-hover:text-white ml-1 translate-y-1.5 -rotate-90"
+      />
 
       <TableOfContentsHighlightSection
         v-if="section.sections"

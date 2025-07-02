@@ -149,7 +149,8 @@ const { data: rfcs, error } = await useAsyncData(
       rfcNumberLimit: props.rfcNumberLimit,
       delayBetweenRequestsMs: 0
     })
-})
+  }
+)
 const rfcRows = computed(() => {
   if (!rfcs.value) return []
   return rfcs.value.map(rfcToRfcIndexRow)

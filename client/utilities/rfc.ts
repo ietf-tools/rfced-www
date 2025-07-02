@@ -1,4 +1,5 @@
 import { NONBREAKING_SPACE } from './strings'
+import type { RfcEditorToc } from './tableOfContents'
 
 export const subseriesCommonType: Record<
   RfcCommonSubseriesType,
@@ -49,7 +50,7 @@ export type RfcCommon = {
   }
   pages?: number | null
   authors: {
-    person: number
+    person?: number // generally should be present except when parsed from HTML
     name: string
     email?: string
     affiliation?: string
@@ -175,7 +176,7 @@ export const parseRFCId = (title: string): RFCId => {
  * Formats a string of 'RFCnumber' with non-bold/bold text with an NBSP between
  * Returns h() Component for rendering
  */
-export const formatTitleAsVNode = (rfcId: string) => {
+export const formatTitleAsVNode = (rfcId: string): VNode => {
   const parts = parseRFCId(rfcId)
 
   return h('span', [
@@ -205,4 +206,10 @@ export type RFCJSON = {
   see_also: string[]
   doi: string | null
   errata_url: string | null
+}
+
+export type RfcBucketHtmlDocument = {
+  rfc: RfcCommon
+  tableOfContents?: RfcEditorToc
+  documentHtml: string
 }

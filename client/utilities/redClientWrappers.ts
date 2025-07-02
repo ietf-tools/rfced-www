@@ -185,7 +185,7 @@ export const docRetrieve = async (redApi: ApiClient, rfcNumber: number) => {
   try {
     return await redApi.red.docRetrieve(rfcNumber)
   } catch (e: unknown) {
-    // The API can throw to express 404s
+    // The API client can throw to express 404s... if so, return null
     if (
       e &&
       typeof e === 'object' &&
@@ -201,7 +201,8 @@ export const docRetrieve = async (redApi: ApiClient, rfcNumber: number) => {
       }
     }
 
-    console.error(e)
-    throw Error('Unhandled Red API response')
+    const errorMessage = 'Unhandled Red API response'
+    console.error(errorMessage, e)
+    throw Error(`${errorMessage}. See console`)
   }
 }

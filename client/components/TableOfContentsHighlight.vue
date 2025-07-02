@@ -50,7 +50,7 @@ const listTypeElement = computed(() =>
 const wrapperRef = ref<HTMLElement>()
 
 const flattenSections = (section: Section): string[] =>
-  [section.id].concat(
+  [...section.links.map((link) => link.id)].concat(
     section.sections ? section.sections.flatMap(flattenSections) : []
   )
 

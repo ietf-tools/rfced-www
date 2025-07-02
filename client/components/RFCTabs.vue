@@ -58,11 +58,15 @@
               class="inline"
             >
               <A
-                :href="authorMailtoBuilder(author)"
+                v-if="author.email"
+                :href="mailToBuilder(author.email)"
                 class="whitespace-nowrap underline inline-block py-0.5 pr-1 mb-0.5"
               >
                 {{ author.name }}
               </A>
+              <span v-else>
+                {{ author.name }}
+              </span>
               <template v-if="authorIndex < props.rfc.authors.length - 1">
                 {{ COMMA }}
                 {{ SPACE }}
@@ -156,17 +160,18 @@ import {
   TabsTrigger
 } from 'reka-ui'
 import { DateTime } from 'luxon'
-import type { Rfc } from '~/generated/red-client'
 import { COMMA, SPACE } from '~/utilities/strings'
 import {
-  authorMailtoBuilder,
+  mailToBuilder,
   rfcCitePathBuilder,
   rfcFormatPathBuilder
 } from '~/utilities/url'
 import { formatDatePublished } from '~/utilities/rfc-converters-utils'
+import type { RfcBucketHtmlDocument, RfcCommon } from '~/utilities/rfc'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
+  rfcBucketHtmlDoc: RfcBucketHtmlDocument
 }
 
 const props = defineProps<Props>()
@@ -184,8 +189,14 @@ const formattedPublished = computed(() => {
 
 const citations = computed(() => {
   return [
-    { url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'txt'), title: 'TXT' },
-    { url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'xml'), title: 'XML' },
+    {
+      url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'txt'),
+      title: 'TXT'
+    },
+    {
+      url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'xml'),
+      title: 'XML'
+    },
     {
       url: rfcCitePathBuilder(`RFC${props.rfc.number}`, 'bibTeX'),
       title: 'BibTeX'

@@ -1,9 +1,9 @@
 <template>
-  <template v-if="isVNode(val)">
-    <component :is="val" />
+  <template v-if="isVNode(props.val)">
+    <component :is="props.val" />
   </template>
   <template v-else>
-    {{ val }}
+    {{ props.val }}
   </template>
 </template>
 
@@ -15,5 +15,5 @@ type Props = {
   val: string | VNode
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 </script>

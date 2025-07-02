@@ -101,13 +101,17 @@
   </Alert>
 
   <div class="mt-10 text-[9px] sm:text-base lg:text-base">
-    <div class="font-mono whitespace-pre-wrap px-3 xs:px-0">
-      {{ props.rfc.text }}
-    </div>
+    <div
+      v-if="!enrichedDocument"
+      ref="rfc-html-container"
+      v-html="props.rfcBucketHtmlDoc.documentHtml"
+    />
+    <Renderable v-else :val="enrichedDocument" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { createTextVNode } from 'vue'
 import {
   PopoverAnchor,
   PopoverArrow,
@@ -117,15 +121,29 @@ import {
   PopoverRoot,
   PopoverTrigger
 } from 'reka-ui'
-import type { Rfc } from '../generated/red-client'
-import { formatTitleAsVNode, parseRFCId, RFC_TYPE_RFC } from '~/utilities/rfc'
+import AMaybeRFCLink from './AMaybeRFCLink.vue'
+import {
+  formatTitleAsVNode,
+  parseRFCId,
+  RFC_TYPE_RFC,
+  type RfcBucketHtmlDocument,
+  type RfcCommon
+} from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
+import {
+  elementAttributesToObject,
+  isAnchorElement,
+  isHtmlElement,
+  isTextNode
+} from '~/utilities/dom'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
+  rfcBucketHtmlDoc: RfcBucketHtmlDocument
   gotoErrata: () => void
   breadcrumbItems: BreadcrumbItem[]
+  changeTab: (index: number) => void
 }
 
 const props = defineProps<Props>()
@@ -133,4 +151,65 @@ const props = defineProps<Props>()
 const isModalOpen = defineModel<boolean>('isModalOpen')
 
 const rfcId = computed(() => parseRFCId(`rfc${props.rfc.number}`))
+
+const rfcHtmlContainer = useTemplateRef('rfc-html-container')
+
+const enrichedDocument = ref<VNode>()
+
+onMounted(async () => {
+  if (
+    // if we've already computed it,
+    // TODO: check whhether enrichedDocument would reset when navigating to another info RFC page via SPA nav
+    enrichedDocument.value
+  ) {
+    return
+  }
+
+  const { value: htmlElement } = rfcHtmlContainer
+  if (
+    // if the container isn't mounted (this shouldn't happen)
+    !htmlElement ||
+    !isHtmlElement(htmlElement)
+  ) {
+    console.error("Unable to enrich RFC document as container hasn't mounted")
+    return
+  }
+
+  enrichedDocument.value = await enrichRfcDocument([...htmlElement.childNodes])
+})
+
+const enrichRfcDocument = async (nodes: Node[]): Promise<VNode> => {
+  const unwrapChildrenForVue = (vnodes: VNode[]) => {
+    switch (vnodes.length) {
+      case 0:
+        return undefined
+      case 1:
+        return vnodes[0]
+      default:
+        return vnodes
+    }
+  }
+
+  const enrichNode = async (node: Node): Promise<VNode> => {
+    if (isHtmlElement(node)) {
+      const attributes = elementAttributesToObject(node.attributes)
+      const children = await Promise.all(
+        Array.from(node.childNodes).map(enrichNode)
+      )
+      const childrenForVue = unwrapChildrenForVue(children)
+      if (isAnchorElement(node)) {
+        // fix Vue "Non-function value encountered for default slot." performance warning
+        // by wrapping children in a function so the Vue can defer rendering
+        return h(AMaybeRFCLink, attributes, () => childrenForVue)
+      }
+      return h(node.nodeName, attributes, childrenForVue)
+    } else if (isTextNode(node)) {
+      return createTextVNode(node.nodeValue ?? '')
+    }
+    throw Error(`Unhandled node type ${node.nodeType} ${node}`)
+  }
+
+  const children = await Promise.all(nodes.map(enrichNode))
+  return h('div', {}, children)
+}
 </script>

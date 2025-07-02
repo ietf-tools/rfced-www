@@ -5,6 +5,7 @@
         v-model:selected-tab="selectedTab"
         v-model:is-modal-open="isModalOpen"
         :rfc="props.rfc"
+        :rfc-bucket-html-doc="props.rfcBucketHtmlDoc"
         :goto-errata="gotoErrata"
         :change-tab="changeTab"
       />
@@ -12,6 +13,7 @@
     <RFCDocumentBody
       v-model:is-modal-open="isModalOpen"
       :rfc="props.rfc"
+      :rfc-bucket-html-doc="props.rfcBucketHtmlDoc"
       :breadcrumb-items="breadcrumbItems"
       :goto-errata="gotoErrata"
       :change-tab="changeTab"
@@ -20,11 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Rfc } from '../generated/red-client'
+import type { RfcBucketHtmlDocument, RfcCommon } from '~/utilities/rfc'
 import type { BreadcrumbItem } from '~/components/BreadcrumbsTypes'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
+  rfcBucketHtmlDoc: RfcBucketHtmlDocument
 }
 
 const props = defineProps<Props>()

@@ -7,6 +7,7 @@ import { NONBREAKING_SPACE } from './strings'
 import { assertIsString, assertNever } from './typescript'
 import type { HintedString } from './typescript'
 import type { TypeSenseSearchItemSchema } from './typesense'
+import type { RfcEditorToc } from './tableOfContents'
 import type { Rfc, RfcMetadata } from '~/generated/red-client'
 
 type RfcMetadataAuthor = RfcMetadata['authors'][number]
@@ -272,4 +273,15 @@ export const parseTypeSenseSubseries = (
       break
   }
   return undefined
+}
+
+type TocSection = RfcEditorToc['sections'][number]
+export const isTocSection = (
+  maybeTocSection?: TocSection
+): maybeTocSection is TocSection => {
+  return Boolean(
+    maybeTocSection &&
+      typeof maybeTocSection === 'object' &&
+      'links' in maybeTocSection
+  )
 }

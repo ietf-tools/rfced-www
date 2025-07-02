@@ -35,12 +35,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Rfc } from '~/generated/red-client'
-import { formatTitleAsVNode, RFC_TYPE_RFC, parseRFCId } from '~/utilities/rfc'
+import {
+  formatTitleAsVNode,
+  RFC_TYPE_RFC,
+  parseRFCId,
+  type RfcCommon
+} from '~/utilities/rfc'
 import { infoRfcPathBuilder } from '~/utilities/url'
 
 type Props = {
-  rfc: Rfc
+  rfc: RfcCommon
   isFixed: boolean
 }
 

@@ -1,5 +1,4 @@
 import { kebabCase } from 'lodash-es'
-import type { Rfc } from '../generated/red-client'
 import { parseRFCId } from '../utilities/rfc'
 import type { imagePreviewDimensions } from './head'
 
@@ -30,7 +29,7 @@ export type ValidHrefs =
   | (typeof _FIXME_URLS)[number]
   | ReturnType<typeof markdownPathBuilder>
   | ReturnType<typeof searchPathBuilder>
-  | ReturnType<typeof authorMailtoBuilder>
+  | ReturnType<typeof mailToBuilder>
   | ReturnType<typeof refsRefTxtPathBuilder>
   | ReturnType<typeof infoRfcPathBuilder>
   | ReturnType<typeof rfcJSONPathBuilder>
@@ -41,6 +40,8 @@ export type ValidHrefs =
   | ReturnType<typeof wikiDokuPathBuilder>
   | ReturnType<typeof materialsPathBuilder>
   | ReturnType<typeof dashboardPathBuilder>
+  | ReturnType<typeof apiRfcBucketHtmlURLBuilder>
+  | ReturnType<typeof apiRfcDocRetrievePathBuilder>
 
 export const HOME_PATH = '/'
 
@@ -169,27 +170,18 @@ export const searchPathBuilder = (
   }`
 }
 
-export const refsRefTxtPathBuilder = (
-  rfcId: string
-): `/refs/ref${string}.txt` => {
+export const refsRefTxtPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/refs/ref${rfcParts.number}.txt` as const
 }
 
-export const infoRfcPathBuilder = (
-  rfcId: string
-): `/info/${string}${string}/` => {
+export const infoRfcPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/info/${rfcParts.type.toLowerCase()}${rfcParts.number}/` as const
 }
 
-export const rfcJSONPathBuilder = (
-  rfcId: string
-): `/api/v1/rfc/rfc${string}.json` => {
+export const rfcJSONPathBuilder = (rfcId: string) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/api/v1/rfc/rfc${rfcParts.number}.json` as const
 }
 
@@ -205,7 +197,6 @@ export const rfcPathBuilder = (
   sectionHash?: `section-${string}`
 ) => {
   const rfcParts = parseRFCId(rfcId)
-
   return `/rfc/${rfcParts.type.toLowerCase()}${rfcParts.number}/${sectionHash ? (`#${sectionHash}` as const) : ''}` as const
 }
 
@@ -254,8 +245,20 @@ export const dashboardPathBuilder = (dashboardPath: string) => {
   return `${DASHBOARD_URL}${dashboardPath}` as const
 }
 
-export const authorMailtoBuilder = (author: Rfc['authors'][number]) => {
-  return `mailto:${author.email}` as const
+export const mailToBuilder = (email: string) => {
+  return `mailto:${email}` as const
+}
+
+export const apiRfcBucketHtmlURLBuilder = (rfcNumber: number) => {
+  // Intentionally not a relative url, the PUBLIC_SITE prefix is because this URL is served
+  // from a bucket on prod; it's not something that a localhost Nuxt can serve.
+  // The CORS headers of the prod URL should allow access from localhost:3000 as well as staging,
+  // etc. sites.
+  return `${PUBLIC_SITE}/rfc-neue/rfc${rfcNumber}.html` as const
+}
+
+export const apiRfcDocRetrievePathBuilder = (rfcNumber: number) => {
+  return `/api/v1/docretrieve/rfc${rfcNumber}.json` as const
 }
 
 const mailtoRegex = /^mailto:/
