@@ -40,16 +40,29 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   }
 
   const updateElements = () => {
-    elements = Array.from(
-      document.querySelectorAll(ids.value.map((id) => `#${id}`).join(','))
-    )
-    if (elements.length !== ids.value.length) {
+    // Note that ids might not be unique (ie, multiple TOC links to the same thing)
+    // so we have to uniquely select elements and map them back onto the elements.
+    const uniqueIds = Array.from(new Set([...ids.value]))
+    const selector = uniqueIds.map((id) => `#${CSS.escape(id)}`).join(',')
+    elements = Array.from(document.querySelectorAll(selector))
+
+    if (elements.length !== uniqueIds.length) {
       throw Error(
-        `Some ids weren't found: ${JSON.stringify(ids.value.filter((id) => elements.some((element) => element.id === id)))}`
+        `Some ids weren't found (${elements.length} !== ${uniqueIds.length}) by selector ${selector}: ${JSON.stringify(uniqueIds.filter((id) => elements.some((element) => element.id === id)))}`
       )
     }
-    elementTops = elements.map(
-      (element) => element.getBoundingClientRect().top + window.scrollY
+
+    const elementsById = elements.reduce(
+      (acc, element, index) => {
+        const id = uniqueIds[index]
+        acc[id] = element
+        return acc
+      },
+      {} as Record<string, HTMLElement>
+    )
+
+    elementTops = ids.value.map(
+      (id) => elementsById[id].getBoundingClientRect().top + window.scrollY
     )
   }
 
