@@ -388,46 +388,70 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
   const walk = (node: Node): TocSection | undefined => {
     if (isHtmlElement(node)) {
       if (node.nodeName.toLowerCase() === 'li') {
-        const newSection: TocSection = {
-          links: []
-        }
-        Array.from(node.childNodes)
-          .filter((childNode) => {
-            if (isHtmlElement(childNode)) {
-              if (childNode.nodeName.toLowerCase() === 'ul') {
-                newSection.sections = Array.from(childNode.childNodes)
-                  .map(walk)
-                  .filter(isTocSection)
-                return false
-              }
-              return true
-            }
-            return false
-          })
-          .forEach((childNode) => {
-            if (isHtmlElement(childNode)) {
-              childNode.querySelectorAll('a.internal').forEach((anchor) => {
-                if (isHtmlElement(anchor)) {
-                  const href = anchor.getAttribute('href')
-                  const title = anchor.innerHTML
-                  if (typeof href === 'string' && typeof title === 'string') {
-                    newSection.links.push({
-                      id: href,
-                      title
-                    })
+        const links = Array.from(node.childNodes)
+          .flatMap((childNode) => {
+            if (
+              isHtmlElement(childNode) &&
+              childNode.nodeName.toLowerCase() !== 'ul'
+            ) {
+              const internalLinks = childNode.querySelectorAll('a')
+              return Array.from(internalLinks).map((internalLink) => {
+                if (isHtmlElement(internalLink)) {
+                  const href = internalLink.getAttribute('href')
+                  if (
+                    href?.startsWith('#')
+                    // it's an internal link, assume a TOC link
+                  ) {
+                    const title = getInnerText(internalLink)
+                    if (title.length > 0) {
+                      return {
+                        id: href.substring(1),
+                        title
+                      }
+                    }
                   } else {
-                    throw Error(
-                      `Expected to find href and innerText of TOC anchor but was id="${href}" (typeof ${typeof href}), title="${title}" (typeof ${typeof title}) `
+                    console.warn(
+                      `Found non TOC link`,
+                      href,
+                      internalLink.outerHTML
                     )
                   }
                 } else {
-                  throw Error(
-                    `Unexpected querySelectorAll result of ${anchor} ${anchor.nodeType} ${anchor.nodeValue}`
-                  )
+                  throw Error(`Didn't expect non-element. Was ${internalLink}`)
                 }
               })
             }
           })
+          .filter((link): link is TocSection['links'][number] => {
+            return !!link
+          })
+
+        const subsections = Array.from(node.childNodes)
+          .map((childNode) => {
+            if (
+              isHtmlElement(childNode) &&
+              childNode.nodeName.toLowerCase() === 'ul'
+            ) {
+              return Array.from(childNode.childNodes)
+                .map(walk)
+                .filter(isTocSection)
+            }
+          })
+          .filter(
+            (
+              subsections
+            ): subsections is NonNullable<TocSection['sections']> => {
+              return !!subsections
+            }
+          )
+
+        const newSection: TocSection = {
+          links
+        }
+
+        if (subsections.length > 0 && subsections[0].length > 0) {
+          newSection.sections = subsections[0]
+        }
 
         return newSection
       }
@@ -448,4 +472,20 @@ const parseRfcBucketHtmlToc = (toc: HTMLElement): RfcEditorToc => {
     title: 'Table of Contents',
     sections
   }
+}
+
+export const rfcBucketHtmlFilenameBuilder = (rfcNumber: number) =>
+  `rfc${rfcNumber}-html.json`
+
+export const getInnerText = (element: HTMLElement): string => {
+  return Array.from(element.childNodes)
+    .map((node) => {
+      if (isHtmlElement(node)) {
+        return getInnerText(node)
+      } else if (isTextNode(node)) {
+        return node.textContent
+      }
+      return ''
+    })
+    .join('')
 }

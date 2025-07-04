@@ -40,12 +40,13 @@ export const useTocActiveId = (ids: Ref<string[]>) => {
   }
 
   const updateElements = () => {
-    elements = Array.from(
-      document.querySelectorAll(ids.value.map((id) => `#${id}`).join(','))
-    )
-    if (elements.length !== ids.value.length) {
+    const uniqueIds = Array.from(new Set([...ids.value]))
+    const selector = uniqueIds.map((id) => `#${CSS.escape(id)}`).join(',')
+    elements = Array.from(document.querySelectorAll(selector))
+
+    if (elements.length !== uniqueIds.length) {
       throw Error(
-        `Some ids weren't found: ${JSON.stringify(ids.value.filter((id) => elements.some((element) => element.id === id)))}`
+        `Some ids weren't found (${elements.length} !== ${uniqueIds.length}) by selector ${selector}: ${JSON.stringify(uniqueIds.filter((id) => elements.some((element) => element.id === id)))}`
       )
     }
     elementTops = elements.map(
