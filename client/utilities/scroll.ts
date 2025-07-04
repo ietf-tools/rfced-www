@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { throttle, clamp, zip } from 'lodash-es'
+import { throttle, clamp } from 'lodash-es'
 import { watchDebounced } from '@vueuse/core'
 import { prefersReducedMotion } from './accessibility'
 
