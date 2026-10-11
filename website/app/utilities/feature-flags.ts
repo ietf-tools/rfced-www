@@ -10,8 +10,7 @@ export const FeatureFlagsSchema = z.object({
   formatsAlsoViewAs: z.boolean().optional(),
   searchObsoletedDefaults: z.boolean().optional(),
   hasTextScale: z.boolean().optional(),
-  hasWordBreakMode: z.boolean().optional(),
-  redSurveys: z.boolean().optional()
+  hasWordBreakMode: z.boolean().optional()
 })
 
 // this is commented out until next time we need a string union value in feature flags.
@@ -32,11 +31,6 @@ export type FeatureFlagUIRow = {
 }
 
 const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
-  redSurveys: {
-    title: 'RFC-Editor.org hosted surveys',
-    description: 'Host surveys on rfc-editor not Reef.',
-    storageType: 'boolean'
-  },
   hasTextScale: {
     title: 'Text scaling option',
     description: 'Text scaling affects line spacing, letter spacing, word spacing, and spacing after paragraphs.',
@@ -76,8 +70,7 @@ export const DEFAULT_FEATURE_FLAGS: Required<FeatureFlags> = {
   isDidYouMeanActive: false,
   isAbnfDiagramsActive: false,
   formatsAlsoViewAs: false,
-  searchObsoletedDefaults: false,
-  redSurveys: false
+  searchObsoletedDefaults: false
 }
 
 export const featureFlagsUIRows = Object.entries(featureFlagsUI)

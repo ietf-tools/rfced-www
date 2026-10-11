@@ -3,13 +3,11 @@
 // only where the delay and the fetch live.
 
 import { until } from '@vueuse/core'
-import type { Ref } from 'vue'
 import type { OpenSurvey } from '~/utilities/reef-precomputed'
 import { useNotificationsStore, type Notification } from '~/stores/notifications'
 import { useReefSurveysStore } from '~/stores/reef-surveys'
 import { reefDocumentKey } from '~/utilities/reef-documents'
 import { parseSeriesId, type SeriesId } from './rfc'
-import type { FeatureFlags } from './feature-flags'
 import { SURVEY_PATH } from './url-constants'
 
 const LOAD_SURVEYS_AFTER_MS = 5_000
@@ -64,7 +62,7 @@ export const chooseSurvey = (openSurveys: OpenSurvey[], narrowing: Narrowing): O
   return narrowedSurveys[Math.floor(Math.random() * narrowedSurveys.length)] ?? null
 }
 
-const loadOpenSurveys = async (featureFlags: Ref<FeatureFlags>): Promise<void> => {
+const loadOpenSurveys = async (): Promise<void> => {
   const authStore = useAuthStore()
   const notificationsStore = useNotificationsStore()
   const notificationsStoreRefs = storeToRefs(notificationsStore)
@@ -85,7 +83,7 @@ const loadOpenSurveys = async (featureFlags: Ref<FeatureFlags>): Promise<void> =
       seriesId
     }
     const survey = chooseSurvey(surveys, narrowing)
-    if (survey?.url && featureFlags.value.redSurveys) {
+    if (survey?.url) {
       const surveyUrl = new URL(survey.url)
       surveyUrl.host = location.host
       surveyUrl.pathname = SURVEY_PATH
@@ -102,6 +100,6 @@ const loadOpenSurveys = async (featureFlags: Ref<FeatureFlags>): Promise<void> =
   }
 }
 
-export const initReefSurveys = (featureFlags: Ref<FeatureFlags>): void => {
-  setTimeout(() => loadOpenSurveys(featureFlags), LOAD_SURVEYS_AFTER_MS)
+export const initReefSurveys = (): void => {
+  setTimeout(() => loadOpenSurveys(), LOAD_SURVEYS_AFTER_MS)
 }

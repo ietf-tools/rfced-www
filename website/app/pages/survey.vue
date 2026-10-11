@@ -2,7 +2,6 @@
   <div class="min-h-[100vh]">
     <NuxtLayout name="default" has-sub-header>
       <div
-        v-if="featureFlags.redSurveys"
         :class="[
           'mx-auto pb-10',
           {
@@ -47,7 +46,6 @@
 
 <script setup lang="ts">
 import { until } from '@vueuse/core'
-import { useFeatureFlags } from '~/utilities/feature-flags'
 import { useRfcEditorHead } from '~/utilities/head'
 import { createSurveyResponse, getSurveyDefinition, ReefError, type SurveyDefinition } from '~/utilities/reef'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
@@ -61,8 +59,6 @@ definePageMeta({
 // intentionally, because surveys shouldn't be indexed and
 // they can be deleted so canonical has no use for us
 const canonicalPath = SURVEY_PATH
-
-const featureFlags = useFeatureFlags()
 
 const route = useRoute()
 

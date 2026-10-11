@@ -35,12 +35,10 @@
 import { useReefSurveysStore } from '~/stores/reef-surveys'
 import { useNotificationsStore } from '~/stores/notifications'
 import { withReturnTo } from '~/utilities/reef-surveys'
-import { useFeatureFlags } from '~/utilities/feature-flags'
 import { SURVEY_PATH } from '~/utilities/url-constants'
 
 const surveysStore = useReefSurveysStore()
 const notificationsStore = useNotificationsStore()
-const featureFlags = useFeatureFlags()
 
 const isDismissed = (slug: string): boolean => notificationsStore.dismissedIds.includes(slug)
 
@@ -48,19 +46,13 @@ const route = useRoute()
 
 const surveys = computed(() =>
   surveysStore.surveys.map((survey) => {
-    let { url } = survey
-    url = withReturnTo(url, route.fullPath)
-
-    if (featureFlags.value.redSurveys) {
-      const redSurveyUrl = new URL(url)
-      redSurveyUrl.host = location.host
-      redSurveyUrl.pathname = SURVEY_PATH
-      url = `${redSurveyUrl.pathname}${redSurveyUrl.search}`
-    }
+    const redSurveyUrl = new URL(withReturnTo(survey.url, route.fullPath))
+    redSurveyUrl.host = location.host
+    redSurveyUrl.pathname = SURVEY_PATH
 
     return {
       ...survey,
-      url
+      url: `${redSurveyUrl.pathname}${redSurveyUrl.search}`
     }
   })
 )
