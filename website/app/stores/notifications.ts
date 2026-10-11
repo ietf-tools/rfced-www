@@ -27,6 +27,12 @@ export type Notification = {
   title: string
   description?: string
   url?: string
+  /**
+   * Adds a `returnTo` query param to `url` holding the page the user is on when the toast is
+   * rendered, so the link sends them back to where they are now rather than where they were
+   * when the notification was created.
+   */
+  appendReturnTo?: boolean
   delayMs: number
   /**
    * How long in milliseconds the toast stays on screen once displayed, defaulting to

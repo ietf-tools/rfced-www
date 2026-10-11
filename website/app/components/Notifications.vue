@@ -50,6 +50,7 @@
 <script setup lang="ts">
 import { ToastAction, ToastClose, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'reka-ui'
 import { useNotificationsStore, type NotificationPosition } from '~/stores/notifications'
+import { withReturnTo } from '~/utilities/reef-surveys'
 
 const DEFAULT_TOAST_DURATION_MS = 10_000
 const DEFAULT_TOAST_POSITION: NotificationPosition = 'top'
@@ -64,6 +65,7 @@ const VIEWPORT_LABELS: Record<NotificationPosition, string> = {
 }
 
 const notificationsStore = useNotificationsStore()
+const route = useRoute()
 
 const { visibleNotifications } = storeToRefs(notificationsStore)
 const { hide, dismiss } = notificationsStore
@@ -94,6 +96,11 @@ const normaliseUrl = (url: string) => {
 }
 
 const normalisedUrls = computed(
-  () => new Map(visibleNotifications.value.flatMap(({ id, url }) => (url ? [[id, normaliseUrl(url)] as const] : [])))
+  () =>
+    new Map(
+      visibleNotifications.value.flatMap(({ id, url, appendReturnTo }) =>
+        url ? [[id, normaliseUrl(appendReturnTo ? withReturnTo(url, route.fullPath) : url)] as const] : []
+      )
+    )
 )
 </script>

@@ -26,12 +26,13 @@ const AUTH_CHECK_TIMEOUT_MS = 5_000
 
 // slug is what a dismissal is keyed on (see OpenSurvey), so it's the notification's id too —
 // not a derived string of our own that could drift from what the reader already dismissed.
-export const openSurveyNotification = (survey: OpenSurvey, returnToPath: string): Notification => ({
+export const openSurveyNotification = (survey: OpenSurvey): Notification => ({
   id: survey.slug,
   title: `Survey: ${survey.title}`,
   readMoreText: 'Take Survey',
   description: survey.description,
-  url: withReturnTo(survey.url, returnToPath),
+  url: survey.url,
+  appendReturnTo: true,
   delayMs: 0,
   durationMs: 60_000,
   allowDismiss: true,
@@ -68,7 +69,6 @@ const loadOpenSurveys = async (): Promise<void> => {
   const notificationsStoreRefs = storeToRefs(notificationsStore)
   const reefSurveysStore = useReefSurveysStore()
   const router = useRouter()
-  const route = useRoute()
   // Read from the route rather than parseSeriesId-ing the path
   // itself: a full path like /info/rfc9000/ splits into more than the two parts it expects and
   // never parses.
@@ -91,7 +91,7 @@ const loadOpenSurveys = async (): Promise<void> => {
     }
     if (survey) {
       console.info('[survey]', `valid survey found`, { survey, surveys, narrowing })
-      notificationsStore.add(openSurveyNotification(survey, route.fullPath))
+      notificationsStore.add(openSurveyNotification(survey))
     } else {
       console.info('[survey]', `no valid surveys found`, surveys, narrowing)
     }
