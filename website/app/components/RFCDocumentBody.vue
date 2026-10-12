@@ -320,9 +320,15 @@ const formatsPojo = computed((): DocumentPojo => {
   --layout-bleed-left: 0px;
   --layout-bleed-right: 0px;
 
-  ol,
+  ol {
+    /** don't use all:revert on ordered list 'ol' because Firefox will reset CSS counter-reset, discarding usage of start=offset attribute, causing bugs in lists like https://github.com/ietf-tools/red/issues/554 */
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
   ul {
-    /* revert some tailwind reset styles because the imported CSS expect different defaults */
+    /*
+     revert some tailwind reset styles because the imported CSS expect different defaults */
     all: revert;
   }
 
