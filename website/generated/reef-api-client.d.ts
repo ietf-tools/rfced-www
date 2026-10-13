@@ -61,6 +61,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/reef/me/ratings/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List your own ratings
+     * @description Return every document the authenticated caller has rated, with their 1-5 `value` and when it was last set, most recently changed first. Requires a credential. Unpaginated. A caller who has rated nothing gets an empty list.
+     */
+    get: operations['me_ratings_list']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/reef/notifications/': {
     parameters: {
       query?: never
@@ -745,6 +765,12 @@ export interface components {
       sets: components['schemas']['MyDocumentSet'][]
       documents: components['schemas']['MyDocument'][]
     }
+    MyRating: {
+      doc: string
+      value: number
+      /** Format: date-time */
+      updated_at: string
+    }
     /**
      * @description One survey as Red offers it, which is as a toast.
      *
@@ -1098,7 +1124,7 @@ export interface components {
       /** Format: date-time */
       readonly updated_at: string
     }
-    /** @description Definition and theme served to the Nuxt runner. */
+    /** @description Definition and theme served to the survey runner. */
     SurveyDefinition: {
       slug: string
       title: string
@@ -1122,7 +1148,17 @@ export interface components {
     WebNotification: {
       readonly id: number
       readonly kind: string
-      readonly event: unknown
+      /** @description The event as stored. Every key but rfc is untyped here. rfc is on an RFC change alone, and only when Red had an entry for the document at the time. */
+      readonly event: {
+        /** @description Red's own entry for the document from rfc-index.json, an RfcCommon, passed on as Red published it. Only number is relied on; every other field is Red's to define. */
+        rfc?: {
+          number: number
+        } & {
+          [key: string]: unknown
+        }
+      } & {
+        [key: string]: unknown
+      }
       readonly read: boolean
       /** Format: date-time */
       readonly created_at: string
@@ -1223,6 +1259,25 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['MyDocuments']
+        }
+      }
+    }
+  }
+  me_ratings_list: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['MyRating'][]
         }
       }
     }

@@ -131,6 +131,7 @@ export namespace Schemas {
    * The whole response: the caller's sets, and a row per requested document.
    */
   export type MyDocuments = { sets: Array<MyDocumentSet>; documents: Array<MyDocument> } & Record<string, unknown>
+  export type MyRating = { doc: string; value: number; updated_at: string } & Record<string, unknown>
   /**
    * * `open` - Open (anonymous)
    * * `authenticated` - Authenticated only
@@ -176,7 +177,15 @@ export namespace Schemas {
   export type WebNotification = {
     id: number
     kind: string
-    event: unknown
+    /**
+     * The event as stored. Every key but rfc is untyped here. rfc is on an RFC change alone, and only when Red had an entry for the document at the time.
+     */
+    event: Partial<{
+      /**
+       * Red's own entry for the document from rfc-index.json, an RfcCommon, passed on as Red published it. Only number is relied on; every other field is Red's to define.
+       */
+      rfc: { number: number } & Record<string, unknown>
+    }>
     read: boolean
     created_at: string
   } & Record<string, unknown>
@@ -503,7 +512,7 @@ export namespace Schemas {
     updated_at: string
   } & Record<string, unknown>
   /**
-   * Definition and theme served to the Nuxt runner.
+   * Definition and theme served to the survey runner.
    */
   export type SurveyDefinition = {
     slug: string
@@ -581,6 +590,17 @@ export namespace Endpoints {
       query?: Partial<{ doc: Array<string> }>
     }
     responses: { 200: Schemas.MyDocuments }
+  }
+  /**
+   * Return every document the authenticated caller has rated, with their 1-5 `value` and when it was last set, most recently changed first. Requires a credential. Unpaginated. A caller who has rated nothing gets an empty list.
+   */
+  export type get_Me_ratings_list = {
+    method: 'GET'
+    path: '/api/reef/me/ratings/'
+    requestFormat: 'json'
+    responseFormat: 'json'
+    parameters: never
+    responses: { 200: Array<Schemas.MyRating> }
   }
   /**
    * The caller's own notification feed, newest first.
@@ -1234,6 +1254,7 @@ export type EndpointByMethod = {
   get: {
     '/api/reef/digest-preference/': Endpoints.get_Digest_preference_retrieve
     '/api/reef/me/documents/': Endpoints.get_Me_documents_retrieve
+    '/api/reef/me/ratings/': Endpoints.get_Me_ratings_list
     '/api/reef/notifications/': Endpoints.get_Notifications_list
     '/api/reef/popularity/': Endpoints.get_Popularity_list
     '/api/reef/precomputed/subjects/': Endpoints.get_Precomputed_subject_index_retrieve

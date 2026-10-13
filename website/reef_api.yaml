@@ -114,6 +114,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/MyDocuments'
           description: ''
+  /api/reef/me/ratings/:
+    get:
+      operationId: me_ratings_list
+      description: Return every document the authenticated caller has rated, with
+        their 1-5 `value` and when it was last set, most recently changed first. Requires
+        a credential. Unpaginated. A caller who has rated nothing gets an empty list.
+      summary: List your own ratings
+      tags:
+        - me
+      security:
+        - BearerAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MyRating'
+          description: ''
   /api/reef/notifications/:
     get:
       operationId: notifications_list
@@ -1580,6 +1601,20 @@ components:
       required:
         - documents
         - sets
+    MyRating:
+      type: object
+      properties:
+        doc:
+          type: string
+        value:
+          type: integer
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - doc
+        - updated_at
+        - value
     OpenSurvey:
       type: object
       description: |-
@@ -2307,7 +2342,7 @@ components:
         - updated_at
     SurveyDefinition:
       type: object
-      description: Definition and theme served to the Nuxt runner.
+      description: Definition and theme served to the survey runner.
       properties:
         slug:
           type: string
@@ -2349,6 +2384,23 @@ components:
           type: string
           readOnly: true
         event:
+          type: object
+          description: The event as stored. Every key but rfc is untyped here. rfc
+            is on an RFC change alone, and only when Red had an entry for the document
+            at the time.
+          properties:
+            rfc:
+              type: object
+              description: Red's own entry for the document from rfc-index.json, an
+                RfcCommon, passed on as Red published it. Only number is relied on;
+                every other field is Red's to define.
+              properties:
+                number:
+                  type: integer
+              required:
+                - number
+              additionalProperties: true
+          additionalProperties: true
           readOnly: true
         read:
           type: boolean

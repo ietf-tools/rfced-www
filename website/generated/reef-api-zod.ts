@@ -107,6 +107,11 @@ export const MyDocuments = z
   .object({ sets: z.array(MyDocumentSet), documents: z.array(MyDocument) })
   .catchall(z.unknown())
 
+export type MyRating = __TypedOpenapi.Schemas.MyRating
+export const MyRating = z
+  .object({ doc: z.string(), value: z.number().int(), updated_at: z.iso.datetime() })
+  .catchall(z.unknown())
+
 export type VisibilityEnum = __TypedOpenapi.Schemas.VisibilityEnum
 export const VisibilityEnum = z.enum(['open', 'authenticated'])
 
@@ -129,7 +134,10 @@ export const WebNotification = z
   .object({
     id: z.number().int(),
     kind: z.string(),
-    event: z.unknown(),
+    event: z
+      .object({ rfc: z.object({ number: z.number().int() }).catchall(z.unknown()) })
+      .partial()
+      .catchall(z.unknown()),
     read: z.boolean(),
     created_at: z.iso.datetime()
   })
