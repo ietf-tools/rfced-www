@@ -1,18 +1,14 @@
 // How Red names a document to Reef, and how a component asks what Reef knows about one.
 //
-// Two things live here, and they're the whole of what a component needs:
+//   reefDocumentKey — the one canonical identifier, shared by the rating, subscription, set and
+//                     stats features.
+//   useReefDocument — what one document is to this reader. Reads only; fires no request.
 //
-//   reefDocumentKey  — the one canonical identifier, shared by the rating, subscription, set and
-//                      stats features.
-//   useReefDocument  — what one document is to this reader. Reads only; fires no request.
-//   useReefDocuments — declares which documents are on screen, so they're loaded in one call.
-//
-// The split between the two composables is the point: the page declares what it shows once and
-// every card reads the answer out of ~/stores/reef, so fifty cards cost one request per page
-// rather than fifty per feature.
+// There is nothing to declare: the reader's whole state is loaded when they sign in, so a card
+// reads its answer out of ~/stores/reef whether it is one of fifty on a page or the only one.
 
-import { computed, toValue, watch, type ComputedRef, type MaybeRefOrGetter } from 'vue'
-import { useReefStore, type ReefDocumentStatus, type ReefUserDocument } from '~/stores/reef'
+import { computed, toValue, type ComputedRef, type MaybeRefOrGetter } from 'vue'
+import { subscriptionKey, useReefStore } from '~/stores/reef'
 import type { SeriesId } from '~/utilities/rfc'
 
 /**
@@ -37,68 +33,25 @@ export type ReefDocument = {
   yourRating: ComputedRef<number | undefined>
   /** Whether this reader subscribes to this document directly. */
   isSubscribed: ComputedRef<boolean>
-  /** The id of that subscription, which is the only handle unsubscribing has. */
-  yourSubscriptionId: ComputedRef<number | undefined>
   /** Which of this reader's sets hold it, as the checkbox group's value. */
   yourSetIds: ComputedRef<string[]>
-  /** Whether the per-reader half has been loaded. `unknown` until something asks for it. */
-  status: ComputedRef<ReefDocumentStatus>
 }
 
 /**
  * What Reef knows about one document, as reactive reads.
  *
- * Deliberately loads nothing. A card rendering this is one of many on a page, and the page is
- * what declares the batch — see useReefDocuments. A component that is genuinely alone with its
- * document calls both.
- *
- * Everything is undefined or empty until then, which is also what a signed-out reader sees, so
- * nothing rendering this needs a branch for whether anyone is signed in.
+ * Everything is undefined or empty until the reader's state has loaded, which is also what a
+ * signed-out reader sees, so nothing rendering this needs a branch for whether anyone is signed in.
+ * Whether it has loaded is ReefStore.status, which the controls that hide behind a loading message
+ * read for themselves.
  */
 export const useReefDocument = (document: MaybeRefOrGetter<SeriesId | number>): ReefDocument => {
   const reefStore = useReefStore()
   const key = computed(() => reefDocumentKey(toValue(document)))
-  const userDocument = computed<ReefUserDocument | undefined>(() => reefStore.userDocuments[key.value])
 
   return {
-    yourRating: computed(() => userDocument.value?.yourRating),
-    isSubscribed: computed(() => userDocument.value?.yourSubscriptionId !== undefined),
-    yourSubscriptionId: computed(() => userDocument.value?.yourSubscriptionId),
-    yourSetIds: computed(() => userDocument.value?.yourSetIds ?? []),
-    status: computed(() => userDocument.value?.status ?? 'unknown')
+    yourRating: computed(() => reefStore.ratings[key.value]),
+    isSubscribed: computed(() => reefStore.isSubscribedTo(subscriptionKey({ kind: 'rfc', doc: key.value }))),
+    yourSetIds: computed(() => reefStore.setIdsByDoc[key.value] ?? [])
   }
-}
-
-/**
- * Declare which documents are on screen, so this reader's state for all of them is loaded in one
- * call — and so a document already loaded isn't asked for again.
- *
- * Called once per list, by whatever owns the list: a page of search results, the homepage's
- * latest, the RFC page with its single document. Whether anyone is signed in isn't a parameter
- * because the store decides that, and it re-runs by itself when the answer changes.
- */
-export const useReefDocuments = (documents: MaybeRefOrGetter<(SeriesId | number)[]>): void => {
-  const reefStore = useReefStore()
-
-  watch(
-    // The keys rather than the documents, so a list that rerenders with equal-but-new objects —
-    // which a search result list does on every keystroke — doesn't reload what it already has.
-    () => toValue(documents).map(reefDocumentKey),
-    (keys) => {
-      void reefStore.ensureDocuments(keys)
-    },
-    // Immediate because both gates in front of this are async and client-side: a restored session
-    // often lands before setup runs, leaving no transition to observe.
-    { immediate: true, deep: true }
-  )
-
-  // A reader signing in mid-page has to load what's already on screen, and one signing out has
-  // nothing to load but must not keep the previous reader's answers on the page — the store's
-  // reset handles the second, and this handles the first.
-  watch(
-    () => reefStore.isReadable,
-    () => {
-      void reefStore.ensureDocuments(toValue(documents).map(reefDocumentKey))
-    }
-  )
 }

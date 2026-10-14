@@ -48,6 +48,13 @@
                   Loading...
                 </p>
 
+                <AlertBox v-else-if="status.type === 'error'" variant="warning" role="alert">
+                  <p>
+                    {{ status.message }}
+                    <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
+                  </p>
+                </AlertBox>
+
                 <div v-else>
                   <p class="mb-5">Check to subscribe. Uncheck to unsubscribe.</p>
                   <CheckboxRoot v-model="isSubscribed" class="flex items-start gap-2 cursor-pointer w-full text-left">
@@ -105,9 +112,11 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
-import { useUserNewRfcSubscription } from '~/utilities/reef-subscriptions'
+import { useReefStore } from '~/stores/reef'
+import { useUserSubscription } from '~/utilities/reef-subscriptions'
 
-const { isSubscribed, status } = useUserNewRfcSubscription()
+const reefStore = useReefStore()
+const { isSubscribed, status } = useUserSubscription({ kind: 'new_rfc' }, 'new RFCs')
 
 const isLoading = computed(() => status.value.type === 'loading')
 

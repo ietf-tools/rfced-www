@@ -14,7 +14,7 @@
     <AlertBox v-else-if="subscriptionsLoadingStatus.type === 'error'" variant="warning" role="alert">
       <p>
         {{ subscriptionsLoadingStatus.message }}
-        <button type="button" class="underline cursor-pointer" @click="loadSubscriptions">Try again</button>
+        <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
       </p>
     </AlertBox>
 
@@ -124,7 +124,7 @@
  * The account page's list of notification subscriptions.
  *
  * Only rendered for a signed-in user — the caller is responsible for that check — and the
- * Reef API client is browser-only, so the load happens on mount rather than during SSR.
+ * Reef API client is browser-only, so the refresh happens on mount rather than during SSR.
  */
 import {
   DialogClose,
@@ -137,14 +137,8 @@ import {
   DialogTrigger
 } from 'reka-ui'
 import { z } from 'zod'
-import type { LoadingStatus } from '~/utilities/loading-status'
-import {
-  deleteSubscription,
-  getSubscriptions,
-  ReefError,
-  type Subscription,
-  type SubscriptionKind
-} from '~/utilities/reef'
+import { useReefStore } from '~/stores/reef'
+import { deleteSubscription, type Subscription, type SubscriptionKind } from '~/utilities/reef'
 import { parseSeriesId } from '~/utilities/rfc'
 import { infoSeriesPathBuilder, setPathBuilder, subjectsPathBuilder } from '~/utilities/url'
 
@@ -251,8 +245,15 @@ const subscriptionBrowsePath = (subscription: Subscription): string | undefined 
   return undefined
 }
 
-const subscriptionsLoadingStatus = ref<LoadingStatus>({ type: 'idle' })
-const subscriptions = ref<Subscription[]>([])
+// The list is the store's, which loaded it when the reader signed in, so it's on screen at once and
+// shared with every subscribe button. A reader who deletes a row here sees those buttons change too.
+const reefStore = useReefStore()
+const subscriptionsLoadingStatus = computed(() => reefStore.status.subscriptions)
+
+// Newest first, so a subscription the user just created appears at the top of the list.
+const subscriptions = computed(() =>
+  reefStore.subscriptions.toSorted((a, b) => b.created_at.localeCompare(a.created_at))
+)
 
 // Each row's browse-to link, computed once here rather than in the template: AMaybeRFCLink needs
 // a definite string, and vue-tsc can't narrow that from a v-if guard and a binding that each call
@@ -260,38 +261,6 @@ const subscriptions = ref<Subscription[]>([])
 const subscriptionRows = computed(() =>
   subscriptions.value.map((subscription) => ({ subscription, browsePath: subscriptionBrowsePath(subscription) }))
 )
-
-// One controller per attempt so that unmounting, or a retry click landing while the previous
-// request is still open, abandons the older request instead of letting it set state later.
-let subscriptionsController: AbortController | undefined
-
-const loadSubscriptions = async () => {
-  subscriptionsController?.abort()
-  subscriptionsController = new AbortController()
-  const { signal } = subscriptionsController
-
-  subscriptionsLoadingStatus.value = { type: 'loading' }
-
-  try {
-    const loaded = await getSubscriptions(signal)
-    // Newest first, so a subscription the user just created appears at the top of the list.
-    subscriptions.value = loaded.toSorted((a, b) => b.created_at.localeCompare(a.created_at))
-    subscriptionsLoadingStatus.value = { type: 'success' }
-  } catch (error) {
-    if (signal.aborted) {
-      // superseded by a newer attempt, or the component has gone away
-      return
-    }
-    console.error('Unable to load notification subscriptions.', error)
-    subscriptionsLoadingStatus.value = {
-      type: 'error',
-      message:
-        error instanceof ReefError && error.status === 403
-          ? "You don't have permission to view these notifications."
-          : 'Unable to load your notifications. See the web console for details.'
-    }
-  }
-}
 
 // Which row's delete confirmation dialog is open, if any. Only one can be open at a time — the
 // dialog is modal — so a single id is enough to control every row's DialogRoot.
@@ -307,7 +276,7 @@ const deleteSubscriptionRow = async (subscription: Subscription) => {
 
   try {
     await deleteSubscription(subscription.id)
-    subscriptions.value = subscriptions.value.filter(({ id }) => id !== subscription.id)
+    reefStore.removeSubscription(subscription.id)
   } catch (error) {
     console.error('Unable to delete this subscription.', error)
     subscriptionDeleteErrors[subscription.id] = 'Unable to delete this Subscription. Please try again.'
@@ -316,11 +285,9 @@ const deleteSubscriptionRow = async (subscription: Subscription) => {
   }
 }
 
+// What's held was true when it loaded, and this is the page where a reader checks it against what
+// they remember — an email link, or another tab, may have changed it since. Shown as it is meanwhile.
 onMounted(() => {
-  void loadSubscriptions()
-})
-
-onBeforeUnmount(() => {
-  subscriptionsController?.abort()
+  void reefStore.load()
 })
 </script>

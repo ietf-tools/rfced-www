@@ -6,16 +6,17 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-import type { MyDocuments } from './reef'
 import { writeUserRFCRating } from './reef-ratings'
 import { createUserSet, writeUserSetMembership } from './reef-sets'
-import { writeUserRFCSubscription } from './reef-subscriptions'
+import { writeUserSubscription } from './reef-subscriptions'
 import { useAuthStore } from '~/stores/auth'
 import { useNotificationsStore } from '~/stores/notifications'
 import { useReefStore } from '~/stores/reef'
 
 const reef = vi.hoisted(() => ({
-  getMyDocuments: vi.fn(),
+  getMyRatings: vi.fn(),
+  getSubscriptions: vi.fn(),
+  getSets: vi.fn(),
   putRating: vi.fn(),
   deleteRating: vi.fn(),
   createSubscription: vi.fn(),
@@ -38,21 +39,44 @@ const set = (id: string, title: string) => ({
   updated_at: '2026-08-18T00:00:00Z'
 })
 
-// Sign in and load rfc9110 into the store, so a write has a known starting point.
-const readerHolding = async (documents: MyDocuments['documents'], sets: MyDocuments['sets'] = []) => {
+type Held = {
+  rating?: number
+  subscriptionId?: number
+  setIds?: string[]
+}
+
+// Sign in and load what this reader holds of rfc9110 into the store, so a write has a known
+// starting point.
+const readerHolding = async (
+  { rating, subscriptionId, setIds = [] }: Held = {},
+  sets = [] as ReturnType<typeof set>[]
+) => {
   useAuthStore().setUser({ sub: 'reader-1' })
-  reef.getMyDocuments.mockResolvedValue({ sets, documents })
+  reef.getMyRatings.mockResolvedValue(rating === undefined ? [] : [{ doc: 'rfc9110', value: rating, updated_at: '' }])
+  reef.getSubscriptions.mockResolvedValue(
+    subscriptionId === undefined
+      ? []
+      : [{ id: subscriptionId, kind: 'rfc', params: { rfc: 'rfc9110' }, created_at: '2026-08-18T00:00:00Z' }]
+  )
+  reef.getSets.mockResolvedValue(
+    sets.map((loaded) => ({
+      ...loaded,
+      documents: setIds.includes(loaded.id) ? [{ doc: 'rfc9110', rank: 0, added_at: '' }] : []
+    }))
+  )
   const reefStore = useReefStore()
-  await reefStore.ensureDocuments(['rfc9110'])
+  await vi.waitFor(() => {
+    expect(Object.values(reefStore.status).map(({ type }) => type)).toEqual(['success', 'success', 'success'])
+  })
   return reefStore
 }
 
-const doc = (overrides = {}) => ({
-  doc: 'rfc9110',
-  your_rating: null,
-  your_subscription_id: null,
-  your_set_ids: [],
-  ...overrides
+const rfc9110 = { kind: 'rfc', doc: 'rfc9110' } as const
+const rfc9110Subscription = (id: number) => ({
+  id,
+  kind: 'rfc',
+  params: { rfc: 'rfc9110' },
+  created_at: '2026-08-18T00:00:00Z'
 })
 
 const notificationTitles = (): string[] => useNotificationsStore().queue.map(({ title }) => title)
@@ -65,55 +89,55 @@ describe('writeUserRFCRating', () => {
   })
 
   test('shows the rating before Reef has confirmed it', async () => {
-    const reefStore = await readerHolding([doc()])
+    const reefStore = await readerHolding()
     let confirm: (value: unknown) => void = () => {}
     reef.putRating.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
 
     const writing = writeUserRFCRating(9110, 4)
-    expect(reefStore.userDocuments.rfc9110?.yourRating).toBe(4)
+    expect(reefStore.ratings.rfc9110).toBe(4)
 
     confirm({ rfc: 'rfc9110', average: 4, count: 1, your_rating: 4 })
     await writing
   })
 
   test('puts the rating back when Reef refuses it', async () => {
-    const reefStore = await readerHolding([doc({ your_rating: 2 })])
+    const reefStore = await readerHolding({ rating: 2 })
     reef.putRating.mockRejectedValue(new Error('nope'))
 
     await writeUserRFCRating(9110, 5)
 
-    expect(reefStore.userDocuments.rfc9110?.yourRating).toBe(2)
+    expect(reefStore.ratings.rfc9110).toBe(2)
   })
 
   test('withdrawing a rating deletes it, and says so', async () => {
-    const reefStore = await readerHolding([doc({ your_rating: 2 })])
+    const reefStore = await readerHolding({ rating: 2 })
     reef.deleteRating.mockResolvedValue({ rfc: 'rfc9110', average: null, count: 0, your_rating: null })
 
     await writeUserRFCRating(9110, undefined)
 
     expect(reef.deleteRating).toHaveBeenCalledWith('rfc9110')
-    expect(reefStore.userDocuments.rfc9110?.yourRating).toBeUndefined()
+    expect(reefStore.ratings.rfc9110).toBeUndefined()
     expect(notificationTitles()).toContain('Rating removed')
   })
 
   test('says so when a withdrawal fails, because the stars come back on their own', async () => {
-    const reefStore = await readerHolding([doc({ your_rating: 2 })])
+    const reefStore = await readerHolding({ rating: 2 })
     reef.deleteRating.mockRejectedValue(new Error('nope'))
 
     await writeUserRFCRating(9110, undefined)
 
-    expect(reefStore.userDocuments.rfc9110?.yourRating).toBe(2)
+    expect(reefStore.ratings.rfc9110).toBe(2)
     expect(notificationTitles()).toContain('Unable to remove your rating')
   })
 
   test('writes nothing when the rating has not changed', async () => {
-    await readerHolding([doc({ your_rating: 4 })])
+    await readerHolding({ rating: 4 })
     await writeUserRFCRating(9110, 4)
     expect(reef.putRating).not.toHaveBeenCalled()
   })
 })
 
-describe('writeUserRFCSubscription', () => {
+describe('writeUserSubscription', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     Object.values(reef).forEach((fn) => fn.mockReset())
@@ -121,61 +145,62 @@ describe('writeUserRFCSubscription', () => {
   })
 
   test('ticks before Reef has assigned an id, and keeps the id it assigns', async () => {
-    const reefStore = await readerHolding([doc()])
+    const reefStore = await readerHolding()
     let confirm: (value: unknown) => void = () => {}
     reef.createSubscription.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
 
-    const writing = writeUserRFCSubscription(9110, true)
+    const writing = writeUserSubscription(rfc9110, 'RFC 9110', true)
     // Subscribed as far as the page is concerned, with no id to show for it yet.
-    expect(reefStore.userDocuments.rfc9110?.isSubscribed).toBe(true)
-    expect(reefStore.userDocuments.rfc9110?.yourSubscriptionId).toBeUndefined()
+    expect(reefStore.isSubscribedTo('rfc:rfc9110')).toBe(true)
+    expect(reefStore.subscriptionByKey.get('rfc:rfc9110')).toBeUndefined()
 
-    confirm({ id: 812, kind: 'rfc', params: { rfc: 'rfc9110' }, created_at: '' })
+    confirm(rfc9110Subscription(812))
     await writing
 
-    expect(reefStore.userDocuments.rfc9110?.yourSubscriptionId).toBe(812)
+    expect(reefStore.subscriptionByKey.get('rfc:rfc9110')?.id).toBe(812)
+    expect(reefStore.isSubscribedTo('rfc:rfc9110')).toBe(true)
   })
 
   test('unsubscribes by the id it was given', async () => {
-    const reefStore = await readerHolding([doc({ your_subscription_id: 812 })])
+    const reefStore = await readerHolding({ subscriptionId: 812 })
     reef.deleteSubscription.mockResolvedValue(undefined)
 
-    await writeUserRFCSubscription(9110, false)
+    await writeUserSubscription(rfc9110, 'RFC 9110', false)
 
     expect(reef.deleteSubscription).toHaveBeenCalledWith(812)
-    expect(reefStore.userDocuments.rfc9110?.isSubscribed).toBe(false)
+    expect(reefStore.isSubscribedTo('rfc:rfc9110')).toBe(false)
   })
 
   test('unticks and says so when Reef refuses', async () => {
-    const reefStore = await readerHolding([doc()])
+    const reefStore = await readerHolding()
     reef.createSubscription.mockRejectedValue(new Error('nope'))
 
-    await writeUserRFCSubscription(9110, true)
+    await writeUserSubscription(rfc9110, 'RFC 9110', true)
 
-    expect(reefStore.userDocuments.rfc9110?.isSubscribed).toBe(false)
+    expect(reefStore.isSubscribedTo('rfc:rfc9110')).toBe(false)
     expect(notificationTitles()).toContain('Unable to subscribe')
   })
 
   test('a subscribe and an immediate unsubscribe both run, in that order', async () => {
     // The point of queueing rather than cancelling: an unsubscribe that superseded the subscribe
     // would leave Reef holding a subscription nothing afterwards has the id to remove.
-    const reefStore = await readerHolding([doc()])
+    const reefStore = await readerHolding()
     const order: string[] = []
     reef.createSubscription.mockImplementation(async () => {
       order.push('create')
-      return { id: 812 }
+      return rfc9110Subscription(812)
     })
     reef.deleteSubscription.mockImplementation(async () => {
       order.push('delete')
     })
 
-    const subscribing = writeUserRFCSubscription(9110, true)
+    const subscribing = writeUserSubscription(rfc9110, 'RFC 9110', true)
     await subscribing
-    await writeUserRFCSubscription(9110, false)
+    await writeUserSubscription(rfc9110, 'RFC 9110', false)
 
     expect(order).toEqual(['create', 'delete'])
     expect(reef.deleteSubscription).toHaveBeenCalledWith(812)
-    expect(reefStore.userDocuments.rfc9110?.isSubscribed).toBe(false)
+    expect(reefStore.isSubscribedTo('rfc:rfc9110')).toBe(false)
   })
 })
 
@@ -187,27 +212,27 @@ describe('writeUserSetMembership', () => {
   })
 
   test('adds this document to a set', async () => {
-    const reefStore = await readerHolding([doc()], [set('set-a', 'Reading list')])
+    const reefStore = await readerHolding({}, [set('set-a', 'Reading list')])
     reef.putSetDocument.mockResolvedValue({})
 
     writeUserSetMembership(9110, ['set-a'])
-    expect(reefStore.userDocuments.rfc9110?.yourSetIds).toEqual(['set-a'])
+    expect(reefStore.setIdsByDoc.rfc9110).toEqual(['set-a'])
 
     await vi.waitFor(() => expect(reef.putSetDocument).toHaveBeenCalledWith('set-a', 'rfc9110'))
   })
 
   test('removes it from a set it was in', async () => {
-    const reefStore = await readerHolding([doc({ your_set_ids: ['set-a'] })], [set('set-a', 'Reading list')])
+    const reefStore = await readerHolding({ setIds: ['set-a'] }, [set('set-a', 'Reading list')])
     reef.deleteSetDocument.mockResolvedValue(undefined)
 
     writeUserSetMembership(9110, [])
     await vi.waitFor(() => expect(reef.deleteSetDocument).toHaveBeenCalledWith('set-a', 'rfc9110'))
 
-    expect(reefStore.userDocuments.rfc9110?.yourSetIds).toEqual([])
+    expect(reefStore.setIdsByDoc.rfc9110).toEqual([])
   })
 
   test('unticks only the set that failed, leaving the one that worked', async () => {
-    const reefStore = await readerHolding([doc()], [set('set-a', 'Works'), set('set-b', 'Fails')])
+    const reefStore = await readerHolding({}, [set('set-a', 'Works'), set('set-b', 'Fails')])
     reef.putSetDocument.mockImplementation(async (setId: string) => {
       if (setId === 'set-b') {
         throw new Error('nope')
@@ -216,13 +241,13 @@ describe('writeUserSetMembership', () => {
     })
 
     writeUserSetMembership(9110, ['set-a', 'set-b'])
-    await vi.waitFor(() => expect(reefStore.userDocuments.rfc9110?.yourSetIds).toEqual(['set-a']))
+    await vi.waitFor(() => expect(reefStore.setIdsByDoc.rfc9110).toEqual(['set-a']))
 
     expect(notificationTitles()).toContain('Unable to add to Set')
   })
 
   test('writes nothing when the ticks have not changed', async () => {
-    await readerHolding([doc({ your_set_ids: ['set-a'] })], [set('set-a', 'Reading list')])
+    await readerHolding({ setIds: ['set-a'] }, [set('set-a', 'Reading list')])
     writeUserSetMembership(9110, ['set-a'])
     expect(reef.putSetDocument).not.toHaveBeenCalled()
     expect(reef.deleteSetDocument).not.toHaveBeenCalled()
@@ -237,7 +262,7 @@ describe('createUserSet', () => {
   })
 
   test('offers the new set and puts this document in it', async () => {
-    const reefStore = await readerHolding([doc()])
+    const reefStore = await readerHolding()
     reef.createSet.mockResolvedValue(set('set-new', 'Reading list'))
     reef.putSetDocument.mockResolvedValue({})
 
@@ -247,13 +272,13 @@ describe('createUserSet', () => {
     // Trimmed, and with no description rather than an empty one.
     expect(reef.createSet).toHaveBeenCalledWith({ title: 'Reading list' })
     expect(reefStore.sets).toEqual([set('set-new', 'Reading list')])
-    expect(reefStore.userDocuments.rfc9110?.yourSetIds).toEqual(['set-new'])
+    expect(reefStore.setIdsByDoc.rfc9110).toEqual(['set-new'])
   })
 
   test('fills in a description Reef left out of the create response', async () => {
     // The create response omits the field when it holds nothing, but every read of a set has one,
     // so the store's copy is the read shape.
-    const reefStore = await readerHolding([doc()])
+    const reefStore = await readerHolding()
     const { description, ...withoutDescription } = set('set-new', 'Reading list')
     expect(description).toBe('')
     reef.createSet.mockResolvedValue(withoutDescription)
@@ -265,7 +290,7 @@ describe('createUserSet', () => {
   })
 
   test('hands back wording for the form when Reef refuses the title', async () => {
-    await readerHolding([doc()])
+    await readerHolding()
     const { ReefError } = await import('./reef')
     reef.createSet.mockRejectedValue(
       new ReefError({

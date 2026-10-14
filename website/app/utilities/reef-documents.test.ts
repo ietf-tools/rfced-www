@@ -1,29 +1,22 @@
 // @vitest-environment nuxt
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 
-import { reefDocumentKey, useReefDocument, useReefDocuments } from './reef-documents'
-import type { MyDocument, MyDocuments } from './reef'
+import { reefDocumentKey, useReefDocument } from './reef-documents'
 import { useAuthStore } from '~/stores/auth'
 import { useReefStore } from '~/stores/reef'
 
-const { getMyDocuments } = vi.hoisted(() => ({ getMyDocuments: vi.fn() }))
+const reef = vi.hoisted(() => ({
+  getMyRatings: vi.fn(),
+  getSubscriptions: vi.fn(),
+  getSets: vi.fn()
+}))
 
 vi.mock('~/utilities/reef', async (importOriginal) => ({
   ...(await importOriginal<typeof import('~/utilities/reef')>()),
-  getMyDocuments
+  ...reef
 }))
-
-const row = (doc: string, overrides: Partial<MyDocument> = {}): MyDocument => ({
-  doc,
-  your_rating: null,
-  your_subscription_id: null,
-  your_set_ids: [],
-  ...overrides
-})
-
-const requestedDocs = (): string[] => getMyDocuments.mock.calls.flatMap(([docs]) => docs as string[])
 
 describe('reefDocumentKey', () => {
   test('is the compact identifier Reef canonicalizes to', () => {
@@ -48,52 +41,69 @@ describe('reefDocumentKey', () => {
 describe('useReefDocument', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
-    getMyDocuments.mockReset()
-    getMyDocuments.mockImplementation(
-      (docs: string[]): Promise<MyDocuments> => Promise.resolve({ sets: [], documents: docs.map((doc) => row(doc)) })
-    )
+    Object.values(reef).forEach((fn) => fn.mockReset())
+    reef.getMyRatings.mockResolvedValue([])
+    reef.getSubscriptions.mockResolvedValue([])
+    reef.getSets.mockResolvedValue([])
   })
 
-  test('asks Reef for nothing of its own', async () => {
+  const loadedStore = async () => {
+    useAuthStore().setUser({ sub: 'reader-1' })
+    const reefStore = useReefStore()
+    await vi.waitFor(() => expect(reefStore.status.sets.type).toBe('success'))
+    return reefStore
+  }
+
+  test('asks Reef for nothing of its own', () => {
     useReefDocument(9110)
-    await nextTick()
-    expect(getMyDocuments).not.toHaveBeenCalled()
+    expect(reef.getMyRatings).not.toHaveBeenCalled()
+    expect(reef.getSubscriptions).not.toHaveBeenCalled()
+    expect(reef.getSets).not.toHaveBeenCalled()
   })
 
   test('reads what the store holds for this document', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    getMyDocuments.mockResolvedValue({
-      sets: [],
-      documents: [row('rfc9110', { your_rating: 4, your_subscription_id: 7, your_set_ids: ['set-a'] })]
-    })
-    const reefStore = useReefStore()
-
+    reef.getMyRatings.mockResolvedValue([{ doc: 'rfc9110', value: 4, updated_at: '' }])
+    reef.getSubscriptions.mockResolvedValue([
+      { id: 7, kind: 'rfc', params: { rfc: 'rfc9110' }, created_at: '2026-08-18T00:00:00Z' }
+    ])
+    reef.getSets.mockResolvedValue([
+      { id: 'set-a', title: 'A', description: '', documents: [{ doc: 'rfc9110', rank: 0, added_at: '' }] }
+    ])
     const document = useReefDocument(9110)
-    await reefStore.ensureDocuments(['rfc9110'])
+    await loadedStore()
 
     expect(document.yourRating.value).toBe(4)
     expect(document.isSubscribed.value).toBe(true)
-    expect(document.yourSubscriptionId.value).toBe(7)
     expect(document.yourSetIds.value).toEqual(['set-a'])
-    expect(document.status.value).toBe('ready')
   })
 
-  test('is empty rather than absent for a document nobody has asked about', () => {
+  test('is empty rather than absent for a document the reader has done nothing with', async () => {
     const document = useReefDocument(9110)
-    expect(document.status.value).toBe('unknown')
+    await loadedStore()
+
     expect(document.yourRating.value).toBeUndefined()
     expect(document.isSubscribed.value).toBe(false)
     expect(document.yourSetIds.value).toEqual([])
   })
 
+  test('is subscribed to the document itself, not to the RFC sharing its number', async () => {
+    reef.getSubscriptions.mockResolvedValue([
+      { id: 7, kind: 'rfc', params: { rfc: 'bcp14' }, created_at: '2026-08-18T00:00:00Z' }
+    ])
+    const subseries = useReefDocument({ type: 'bcp', number: 14 })
+    const rfc = useReefDocument(14)
+    await loadedStore()
+
+    expect(subseries.isSubscribed.value).toBe(true)
+    expect(rfc.isSubscribed.value).toBe(false)
+  })
+
   test('follows the document it is given when the page navigates', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    const reefStore = useReefStore()
-    getMyDocuments.mockResolvedValue({
-      sets: [],
-      documents: [row('rfc9110', { your_rating: 4 }), row('rfc2119', { your_rating: 1 })]
-    })
-    await reefStore.ensureDocuments(['rfc9110', 'rfc2119'])
+    reef.getMyRatings.mockResolvedValue([
+      { doc: 'rfc9110', value: 4, updated_at: '' },
+      { doc: 'rfc2119', value: 1, updated_at: '' }
+    ])
+    await loadedStore()
 
     const rfcNumber = ref(9110)
     const document = useReefDocument(rfcNumber)
@@ -101,72 +111,5 @@ describe('useReefDocument', () => {
 
     rfcNumber.value = 2119
     expect(document.yourRating.value).toBe(1)
-  })
-})
-
-describe('useReefDocuments', () => {
-  beforeEach(() => {
-    setActivePinia(createPinia())
-    getMyDocuments.mockReset()
-    getMyDocuments.mockImplementation(
-      (docs: string[]): Promise<MyDocuments> => Promise.resolve({ sets: [], documents: docs.map((doc) => row(doc)) })
-    )
-  })
-
-  test('loads a whole list in one request', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-
-    useReefDocuments([9110, 2119, { type: 'bcp', number: 14 }])
-    await nextTick()
-
-    expect(getMyDocuments).toHaveBeenCalledTimes(1)
-    expect(requestedDocs()).toEqual(['rfc9110', 'rfc2119', 'bcp14'])
-  })
-
-  test('asks for nothing while nobody is signed in', async () => {
-    useReefDocuments([9110])
-    await nextTick()
-    expect(getMyDocuments).not.toHaveBeenCalled()
-  })
-
-  test('loads what is already on screen when a reader signs in', async () => {
-    useReefDocuments([9110])
-    await nextTick()
-    expect(getMyDocuments).not.toHaveBeenCalled()
-
-    useAuthStore().setUser({ sub: 'reader-1' })
-    await nextTick()
-    await nextTick()
-
-    expect(requestedDocs()).toEqual(['rfc9110'])
-  })
-
-  test('asks only for the documents a next page adds', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    const documents = ref<number[]>([1, 2, 3])
-    useReefDocuments(documents)
-    await nextTick()
-    getMyDocuments.mockClear()
-
-    documents.value = [2, 3, 4, 5]
-    await nextTick()
-    await nextTick()
-
-    expect(requestedDocs()).toEqual(['rfc4', 'rfc5'])
-  })
-
-  test('does not reload a list that rerendered without changing', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    const documents = ref([{ type: 'bcp' as const, number: 14 }])
-    useReefDocuments(documents)
-    await nextTick()
-    getMyDocuments.mockClear()
-
-    // A search result list rebuilds equal-but-new objects on every keystroke.
-    documents.value = [{ type: 'bcp' as const, number: 14 }]
-    await nextTick()
-    await nextTick()
-
-    expect(getMyDocuments).not.toHaveBeenCalled()
   })
 })

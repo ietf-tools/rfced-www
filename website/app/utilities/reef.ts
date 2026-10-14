@@ -27,9 +27,7 @@ export type PatchedDigestPreference = components['schemas']['PatchedDigestPrefer
 export type DocumentSet = components['schemas']['DocumentSet']
 export type PatchedDocumentSet = components['schemas']['PatchedDocumentSet']
 export type DocumentSetEntry = components['schemas']['DocumentSetEntry']
-export type MyDocuments = components['schemas']['MyDocuments']
-export type MyDocument = components['schemas']['MyDocument']
-export type MyDocumentSet = components['schemas']['MyDocumentSet']
+export type MyRating = components['schemas']['MyRating']
 export type WebNotification = components['schemas']['WebNotification']
 export type PaginatedWebNotificationList = components['schemas']['PaginatedWebNotificationList']
 export type Popularity = components['schemas']['Popularity']
@@ -264,30 +262,12 @@ export const isRetiredSubject = (subject: SubjectDetailOrRedirect): subject is R
 
 export const isSubjectAlias = (subject: SubjectDetailOrRedirect): subject is SubjectAlias => 'alias_of' in subject
 
-// --- This reader's own state, a page at a time ---------------------------------------------
+// --- This reader's own state, all of it --------------------------------------------------
 
-// What the signed-in caller's rating, subscription and set membership are for each of the named
-// documents, plus the caller's own sets. One request for a whole page of documents: the pages that
-// show these controls show them beside ten to fifty documents at once.
-//
-// Carries nothing public. The averages and totals beside these controls are the same for every
-// visitor, so they come from the data the route already loaded rather than from here — which is
-// what keeps an anonymous visitor from reaching Reef at all.
-//
-// `docs` names the documents wanted, one `doc` parameter each, in the canonical form
-// ~/utilities/reef-documents builds. Reef caps a request at MY_DOCUMENTS_BATCH_LIMIT and answers a
-// longer one with a 400, so callers chunk. An empty array is not an error: it asks only for the
-// sets, which is how the set list is loaded on its own.
-export const MY_DOCUMENTS_BATCH_LIMIT = 100
-
-export const getMyDocuments = (docs: string[], signal?: AbortSignal): Promise<MyDocuments> => {
-  const query = docs.map((doc) => `doc=${encodeURIComponent(doc)}`).join('&')
-  const path = '/api/reef/me/documents/'
-  return reefFetch(query === '' ? path : `${path}?${query}`, {
-    auth: 'required',
-    signal
-  })
-}
+// Every rating the signed-in caller has given, most recently changed first. Unpaginated, so one
+// request is the whole of it, and an empty list is a caller who has rated nothing.
+export const getMyRatings = (signal?: AbortSignal): Promise<MyRating[]> =>
+  reefFetch('/api/reef/me/ratings/', { auth: 'required', signal })
 
 // Aggregate rating for one RFC. The operation also lists `{}` in its security, so anonymous is
 // fine and the token is sent only to identify the caller — which is what lets a signed-in

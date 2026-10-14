@@ -2,7 +2,7 @@
 // document back to Reef, and the model an RFC page binds its rating dialog to.
 //
 // Reading a rating happens in ~/stores/reef, along with every other per-reader answer, because
-// they all arrive in one response. What's left here is what's particular to a rating: what a
+// they're all loaded together when the reader signs in. What's left here is what's particular to a rating: what a
 // rating is, how it's worded, what happens when Reef refuses one, and how the public average
 // moves when this reader changes theirs.
 
@@ -73,7 +73,7 @@ export const writeUserRFCRating = async (rfcNumber: number, rating: UserRFCRatin
   const notificationsStore = useNotificationsStore()
   const doc = reefDocumentKey(rfcNumber)
 
-  const previous = reefStore.userDocuments[doc]?.yourRating
+  const previous = reefStore.ratings[doc]
   if (rating === previous) {
     return
   }
@@ -82,7 +82,7 @@ export const writeUserRFCRating = async (rfcNumber: number, rating: UserRFCRatin
   // one case that deletes instead of putting.
   const isRemoval = rating === undefined
 
-  reefStore.patchUserDocument(doc, { yourRating: rating })
+  reefStore.setRating(doc, rating)
 
   const outcome = await reefStore.runWrite(`${doc}:rating`, () =>
     isRemoval ? deleteRating(doc) : putRating(doc, { value: rating })
@@ -92,7 +92,7 @@ export const writeUserRFCRating = async (rfcNumber: number, rating: UserRFCRatin
     // Put the rating back to what Reef is holding. For a removal the dialog has already closed and
     // the stars have emptied, so without the toast the only visible result would be them silently
     // reappearing.
-    reefStore.patchUserDocument(doc, { yourRating: previous })
+    reefStore.setRating(doc, previous)
     if (isRemoval) {
       notificationsStore.add(ratingRemovalFailedNotification(rfcNumber))
       console.error('Unable to remove your rating for this RFC.', outcome.error)

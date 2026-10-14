@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRfcEditorHead } from '~/utilities/head'
-import { useReefDocuments } from '~/utilities/reef-documents'
 import { setDocuments, useSet } from '~/utilities/reef-sets'
 import { parseSeriesId, RFC_TYPE_RFC, type RfcCommon } from '~/utilities/rfc'
 import { formatTitleAsVNode } from '~/utilities/rfc-title'
@@ -154,11 +153,6 @@ watch(
   },
   { immediate: true }
 )
-
-// This reader's own answers for every member in one call, which is what the subscribe and set
-// buttons on each card read. Declared here rather than in the cards for the same reason as the
-// rfc-common loads above: a card that asked for its own would make a request per member.
-useReefDocuments(() => documents.value.flatMap(({ doc }) => rfcNumber(doc) ?? []))
 
 // One row per member document, in the set's own order: its card once there is one, and the
 // identifier and /info/ path the list shows until then.

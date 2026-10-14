@@ -1,54 +1,81 @@
-// What Reef knows about the documents on screen, for as long as this tab is open.
+// What Reef knows about this reader: their ratings, their subscriptions and their sets.
 //
-// One store rather than a cache per feature. The rating, the subscription and the set membership
-// of one document arrive together in one response and are read together by one card, so keeping
-// them apart only ever meant three requests and three copies of the same bookkeeping.
+// All of it, loaded once when they sign in, rather than a document at a time as the page asks. The
+// three endpoints are unpaginated and a reader's own data is small, so every control on every page
+// reads the same answer, and none of them has to ask — or to wait on a request of its own.
 //
 // Only this reader's own state. The public numbers beside these controls — the rating average, the
 // subscriber and set totals — are not here and never fetched: they arrive with whatever data the
 // route already loaded and are passed down as props, so an anonymous visitor never reaches Reef.
 //
 // Nothing here is persisted. Client-side navigation keeps this store, so moving between pages
-// re-asks for nothing; only a full page load starts empty. If that proves slow enough to be worth
-// it, a single serialised snapshot keyed by `subject` is the shape to add — not a cache per
-// feature.
+// re-asks for nothing; only a full page load starts empty. It is brought up to date again when the
+// tab regains focus, never on a timer, so a page left open makes no requests.
 
+import { useEventListener } from '@vueuse/core'
+import { omit } from 'es-toolkit'
 import { computed, ref, watch } from 'vue'
 import { useAuthStore } from '~/stores/auth'
-import { getMyDocuments, MY_DOCUMENTS_BATCH_LIMIT, type MyDocument, type MyDocumentSet } from '~/utilities/reef'
+import type { LoadingStatus } from '~/utilities/loading-status'
+import {
+  getMyRatings,
+  getSets,
+  getSubscriptions,
+  type DocumentSet,
+  type MyRating,
+  type Subscription
+} from '~/utilities/reef'
 
-// How many documents Red names in one request. Under Reef's own limit rather than at it, so a
-// page that grows by a few documents doesn't start failing at the boundary.
-const BATCH_SIZE = 50
+// How soon after one load another may be started by the tab regaining focus. Switching between
+// windows fires focus events in bursts, and nothing a reader changes elsewhere is worth a request
+// every time they glance back.
+const REFRESH_MIN_INTERVAL_MS = 30_000
+
+/** One of this reader's sets, without its membership — that is held per document, below. */
+export type ReefSet = Omit<DocumentSet, 'documents' | 'description'> & { description: string }
+
+/** The three things loaded for a reader, each of which succeeds or fails on its own. */
+export type ReefSlice = 'ratings' | 'subscriptions' | 'sets'
 
 /**
- * Whether this reader's half of a document has been loaded.
- *
- * `unknown` is the one that earns its place: it's what tells a document nobody has asked about
- * from one that came back with nothing to say, which is the whole basis of loading only what's
- * missing. `failed` is retried the next time the document is asked for, so navigating back to a
- * page is the retry.
+ * What a subscription is to, in the terms Red subscribes by. Reef has more kinds than this
+ * (`by_status`, `obsoleted`, `set`), but nothing in Red creates or shows a control for them, so
+ * they're held in the list for the account page and left out of the index.
  */
-export type ReefDocumentStatus = 'unknown' | 'loading' | 'ready' | 'failed'
+export type SubscriptionTarget =
+  | { kind: 'new_rfc' }
+  | { kind: 'rfc'; doc: string }
+  | { kind: 'subject'; subject: number }
 
-/** One document as it stands with this reader. */
-export type ReefUserDocument = {
-  status: Exclude<ReefDocumentStatus, 'unknown'>
-  yourRating: number | undefined
-  /**
-   * Whether this reader subscribes to this document.
-   *
-   * Held apart from the id rather than derived from it, because a subscription the reader has just
-   * ticked is real to them before Reef has assigned it one: the checkbox has to move under their
-   * finger, and the id only exists once the POST comes back.
-   */
-  isSubscribed: boolean
-  /** The id of that subscription, which is the only handle unsubscribing has. */
-  yourSubscriptionId: number | undefined
-  yourSetIds: string[]
+/** One string per target, which is what a control looks its subscription up by. */
+export const subscriptionKey = (target: SubscriptionTarget): string => {
+  switch (target.kind) {
+    case 'new_rfc':
+      return 'new_rfc'
+    case 'rfc':
+      return `rfc:${target.doc}`
+    case 'subject':
+      return `subject:${target.subject}`
+  }
 }
 
-export type ReefSet = MyDocumentSet
+/**
+ * The target an existing subscription is to, or undefined for a kind Red has no control for, or
+ * for one whose params aren't in the shape this build expects — `params` is free-form in the spec,
+ * so it's checked rather than trusted.
+ */
+export const subscriptionTargetOf = ({ kind, params, subject }: Subscription): SubscriptionTarget | undefined => {
+  if (kind === 'new_rfc') {
+    return { kind }
+  }
+  if (kind === 'rfc' && typeof params === 'object' && params !== null && 'rfc' in params) {
+    return typeof params.rfc === 'string' ? { kind, doc: params.rfc } : undefined
+  }
+  if (kind === 'subject' && typeof subject === 'number') {
+    return { kind, subject }
+  }
+  return undefined
+}
 
 /**
  * What became of one write.
@@ -59,55 +86,52 @@ export type ReefSet = MyDocumentSet
  */
 export type ReefWriteOutcome<T> = { status: 'done'; value: T } | { status: 'failed'; error: unknown }
 
-/** A document nobody has told us anything about yet, in whichever state it is in. */
-const blankUserDocument = (status: Exclude<ReefDocumentStatus, 'unknown'>): ReefUserDocument => ({
-  status,
-  yourRating: undefined,
-  isSubscribed: false,
-  yourSubscriptionId: undefined,
-  yourSetIds: []
-})
+/**
+ * A subscription change the reader has made that Reef hasn't answered yet: the state they asked
+ * for, and how many writes are still out. Subscribing has no id until the POST comes back, so the
+ * list can't hold it yet, but the checkbox has to move under their finger.
+ */
+export type PendingSubscription = { desired: boolean; inFlight: number }
 
-// Reef sends null for "no rating" and "not subscribed"; undefined is the one absent value the rest
-// of Red deals in, and it's what a `v-model` on a star rating already means.
-const toUserDocument = ({ your_rating, your_subscription_id, your_set_ids }: MyDocument): ReefUserDocument => ({
-  status: 'ready',
-  yourRating: your_rating ?? undefined,
-  isSubscribed: your_subscription_id !== null,
-  yourSubscriptionId: your_subscription_id ?? undefined,
-  yourSetIds: your_set_ids
+const idleStatuses = (): Record<ReefSlice, LoadingStatus> => ({
+  ratings: { type: 'idle' },
+  subscriptions: { type: 'idle' },
+  sets: { type: 'idle' }
 })
-
-const chunk = <T>(items: T[], size: number): T[][] =>
-  Array.from({ length: Math.ceil(items.length / size) }, (_, index) => items.slice(index * size, (index + 1) * size))
 
 export const useReefStore = defineStore('reef', () => {
   const authStore = useAuthStore()
 
-  const userDocuments = ref<Record<string, ReefUserDocument>>({})
+  // Keyed by canonical document id (`rfc9110`), the same key ~/utilities/reef-documents builds.
+  const ratings = ref<Record<string, number>>({})
+  const subscriptions = ref<Subscription[]>([])
+  const pendingSubscriptions = ref<Record<string, PendingSubscription>>({})
   const sets = ref<ReefSet[]>([])
+  // Which of the reader's sets hold each document, inverted from what Reef sends per set so that
+  // a card asking about one document doesn't search every set for it.
+  const setIdsByDoc = ref<Record<string, string[]>>({})
+
+  const status = ref<Record<ReefSlice, LoadingStatus>>(idleStatuses())
 
   // Whose the per-reader half is. Held rather than read from the auth store at the point of use,
   // because a response that lands after a sign-out has to be recognisable as the previous
   // reader's and dropped — by then the auth store no longer remembers who that was.
   const subject = ref<string>()
 
-  // In-flight loads, abandoned when the reader changes. Reads only: a write the reader has just
-  // made should reach Reef even if they navigate away, and unlike a read it leaves no state
-  // behind for a late response to corrupt.
+  // The in-flight load, abandoned when the reader changes or a newer load starts. Reads only: a
+  // write the reader has just made should reach Reef even if they navigate away, and unlike a read
+  // it leaves no state behind for a late response to corrupt.
   let loadController: AbortController | undefined
-
-  // Documents asked for but not yet sent, and the microtask that will send them. Everything asked
-  // for in one tick goes out as one request, whether that was one list declaring fifty documents
-  // or several parts of a page declaring their own — so the guarantee holds however the page is
-  // put together, rather than only when a single caller happens to own the whole list.
-  let pendingDocs = new Set<string>()
-  let pendingLoad: Promise<void> | undefined
+  let lastLoadedAt = 0
 
   // The last write queued per key — one document and one concern, so a rating and a subscription
   // for the same document don't wait on each other. Deliberately not reactive: nothing renders
   // from it, and a write in flight is not a state the page shows.
   const writeQueues = new Map<string, Promise<unknown>>()
+
+  // Bumped whenever a write starts, so a refresh can tell that the answer it is holding was read
+  // before a change the reader has since made, and must not undo it.
+  let writeEpoch = 0
 
   /**
    * Whether there's anything to ask Reef for. Browser-only, because the access token lives in the
@@ -115,14 +139,59 @@ export const useReefStore = defineStore('reef', () => {
    */
   const isReadable = computed(() => import.meta.client && authStore.isAuthenticated)
 
-  /**
-   * Change one document's per-reader state.
-   *
-   * The document need not have been loaded: a reader can act on a control before its state has
-   * arrived, and a change they made is a better answer than the nothing that was there.
-   */
-  const patchUserDocument = (doc: string, patch: Partial<ReefUserDocument>): void => {
-    userDocuments.value[doc] = { ...(userDocuments.value[doc] ?? blankUserDocument('ready')), ...patch }
+  const subscriptionByKey = computed(() => {
+    const byKey = new Map<string, Subscription>()
+    subscriptions.value.forEach((subscription) => {
+      const target = subscriptionTargetOf(subscription)
+      if (target !== undefined) {
+        byKey.set(subscriptionKey(target), subscription)
+      }
+    })
+    return byKey
+  })
+
+  /** Whether this reader subscribes to the target with this key, counting a change not yet confirmed. */
+  const isSubscribedTo = (key: string): boolean =>
+    pendingSubscriptions.value[key]?.desired ?? subscriptionByKey.value.has(key)
+
+  /** Record or withdraw this reader's rating of one document. */
+  const setRating = (doc: string, rating: number | undefined): void => {
+    if (rating === undefined) {
+      ratings.value = omit(ratings.value, [doc])
+      return
+    }
+    ratings.value = { ...ratings.value, [doc]: rating }
+  }
+
+  /** Note a subscription change that has been started and not yet answered. */
+  const beginSubscriptionChange = (key: string, desired: boolean): void => {
+    pendingSubscriptions.value[key] = { desired, inFlight: (pendingSubscriptions.value[key]?.inFlight ?? 0) + 1 }
+  }
+
+  /** Note that one such change has been answered, one way or the other. The list is what shows once none is left. */
+  const endSubscriptionChange = (key: string): void => {
+    const pending = pendingSubscriptions.value[key]
+    if (pending === undefined) {
+      return
+    }
+    if (pending.inFlight <= 1) {
+      delete pendingSubscriptions.value[key]
+      return
+    }
+    pending.inFlight -= 1
+  }
+
+  const addSubscription = (subscription: Subscription): void => {
+    subscriptions.value = [...subscriptions.value, subscription]
+  }
+
+  const removeSubscription = (id: number): void => {
+    subscriptions.value = subscriptions.value.filter((subscription) => subscription.id !== id)
+  }
+
+  /** Change which of the reader's sets hold one document. */
+  const setSetIds = (doc: string, setIds: string[]): void => {
+    setIdsByDoc.value = { ...setIdsByDoc.value, [doc]: setIds }
   }
 
   /** Add a set the reader has just made, so the dialog can offer it immediately. */
@@ -141,6 +210,7 @@ export const useReefStore = defineStore('reef', () => {
    * screen rather than an exception to catch.
    */
   const runWrite = <T>(key: string, run: () => Promise<T>): Promise<ReefWriteOutcome<T>> => {
+    writeEpoch += 1
     const queued: Promise<ReefWriteOutcome<T>> = (writeQueues.get(key) ?? Promise.resolve()).then(run).then(
       (value) => ({ status: 'done', value }),
       (error) => ({ status: 'failed', error })
@@ -156,120 +226,138 @@ export const useReefStore = defineStore('reef', () => {
     return queued
   }
 
-  /** Forget the per-reader half. The public numbers stay: they were never this reader's. */
+  /** Forget everything of the reader's. The public numbers stay: they were never this reader's. */
   const reset = (): void => {
     loadController?.abort()
     loadController = undefined
-    // Dropped rather than left to go out under the new reader: what's on screen is re-declared by
-    // the pages showing it as soon as there's a reader to declare it for.
-    pendingDocs = new Set()
-    pendingLoad = undefined
-    userDocuments.value = {}
+    lastLoadedAt = 0
+    ratings.value = {}
+    subscriptions.value = []
+    pendingSubscriptions.value = {}
     sets.value = []
+    setIdsByDoc.value = {}
+    status.value = idleStatuses()
   }
 
-  const loadBatch = async (docs: string[], signal: AbortSignal, loadingFor: string | undefined): Promise<void> => {
-    try {
-      const { sets: loadedSets, documents } = await getMyDocuments(docs, signal)
+  const applyRatings = (loaded: MyRating[]): void => {
+    ratings.value = Object.fromEntries(loaded.map(({ doc, value }) => [doc, value]))
+  }
 
-      // A response belonging to a reader who has since signed out, or to the previous one of two
-      // readers using this tab in turn, must not land. Checked on the way out as well as in the
-      // catch, because an aborted request can still resolve.
-      if (signal.aborted || subject.value !== loadingFor) {
-        return
-      }
+  const applySets = (loaded: DocumentSet[]): void => {
+    sets.value = loaded.map((set) => ({ ...omit(set, ['documents']), description: set.description ?? '' }))
 
-      sets.value = loadedSets
-      documents.forEach((document) => {
-        // Only into a document still waiting on this load. A reader can act on a control before
-        // its state has arrived — the row renders straight away — and the answer to a question
-        // asked before their change must not undo it.
-        if (userDocuments.value[document.doc]?.status === 'loading') {
-          userDocuments.value[document.doc] = toUserDocument(document)
-        }
+    const byDoc: Record<string, string[]> = {}
+    loaded.forEach(({ id, documents }) => {
+      documents.forEach(({ doc }) => {
+        byDoc[doc] = [...(byDoc[doc] ?? []), id]
       })
-      // Reef promises a row for every document named, so this only covers a Reef that didn't.
-      // Marked ready-with-nothing rather than left loading, which would never be asked for again.
-      docs.forEach((doc) => {
-        if (userDocuments.value[doc]?.status === 'loading') {
-          userDocuments.value[doc] = blankUserDocument('ready')
-        }
-      })
-    } catch (error) {
-      if (signal.aborted || subject.value !== loadingFor) {
-        return
-      }
-      // Not worth interrupting the page over: the controls still render, showing nothing rather
-      // than claiming a state we couldn't confirm. `failed` is retried when the document is next
-      // asked for. A document the reader has changed in the meantime keeps their change: the load
-      // failed, so it has nothing better to offer than what they just did.
-      docs.forEach((doc) => {
-        if (userDocuments.value[doc]?.status === 'loading') {
-          userDocuments.value[doc] = blankUserDocument('failed')
-        }
-      })
-      console.error('[reef] unable to load your ratings, subscriptions and sets for these documents.', error)
-    }
+    })
+    setIdsByDoc.value = byDoc
   }
 
   /**
-   * Load this reader's state for these documents, skipping the ones already held or already in
-   * flight.
+   * Load everything this reader has, all three requests at once.
    *
-   * Marking `loading` before awaiting is what makes that true: without it every card on a page
-   * would find the store empty in the same tick and start a request of its own, which is exactly
-   * the pile-up this store exists to end.
+   * Also how a failed load is retried. A load that finds a slice already loaded is a refresh: the
+   * data stays on screen and no loading state is shown, a failure leaves what was there, and an
+   * answer that was read before a change the reader has since made is dropped rather than undoing
+   * it.
    */
-  const ensureDocuments = async (docs: string[]): Promise<void> => {
+  const load = async (): Promise<void> => {
     if (!isReadable.value) {
       return
     }
 
-    const missing = [...new Set(docs)].filter((doc) => {
-      const status = userDocuments.value[doc]?.status
-      return status === undefined || status === 'failed'
-    })
+    loadController?.abort()
+    const controller = new AbortController()
+    loadController = controller
+    const { signal } = controller
+    const loadingFor = subject.value
+    const epoch = writeEpoch
+    lastLoadedAt = Date.now()
 
-    if (missing.length === 0) {
-      return
+    const loadSlice = async <T>(
+      slice: ReefSlice,
+      fetchSlice: (signal: AbortSignal) => Promise<T>,
+      apply: (loaded: T) => void,
+      failureMessage: string
+    ): Promise<void> => {
+      const isRefresh = status.value[slice].type === 'success'
+      if (!isRefresh) {
+        status.value[slice] = { type: 'loading' }
+      }
+
+      try {
+        const loaded = await fetchSlice(signal)
+
+        // A response belonging to a reader who has since signed out, or to the previous one of two
+        // readers using this tab in turn, must not land. Checked on the way out as well as in the
+        // catch, because an aborted request can still resolve.
+        if (signal.aborted || subject.value !== loadingFor) {
+          return
+        }
+        if (isRefresh && (writeEpoch !== epoch || writeQueues.size > 0)) {
+          return
+        }
+        apply(loaded)
+        status.value[slice] = { type: 'success' }
+      } catch (error) {
+        if (signal.aborted || subject.value !== loadingFor) {
+          return
+        }
+        console.error(`[reef] unable to load your ${slice}.`, error)
+        // The controls still render, showing nothing rather than claiming a state we couldn't
+        // confirm. A refresh that fails has nothing to say: what's on screen was true a moment ago.
+        if (!isRefresh) {
+          status.value[slice] = { type: 'error', message: failureMessage }
+        }
+      }
     }
 
-    missing.forEach((doc) => {
-      userDocuments.value[doc] = blankUserDocument('loading')
-      pendingDocs.add(doc)
-    })
-
-    pendingLoad ??= Promise.resolve().then(sendPendingDocs)
-    await pendingLoad
+    await Promise.all([
+      loadSlice('ratings', getMyRatings, applyRatings, 'Unable to load your ratings.'),
+      loadSlice(
+        'subscriptions',
+        getSubscriptions,
+        (loaded) => {
+          subscriptions.value = loaded
+        },
+        'Unable to load your Subscriptions.'
+      ),
+      loadSlice('sets', getSets, applySets, 'Unable to load your Sets.')
+    ])
   }
 
-  // Everything asked for since the last send, as one request per batch. The pending set is taken
-  // and cleared before the first await, so a document asked for while this is in flight starts a
-  // send of its own rather than joining one that has already gone out.
-  const sendPendingDocs = async (): Promise<void> => {
-    const docs = [...pendingDocs]
-    pendingDocs = new Set()
-    pendingLoad = undefined
-
-    if (docs.length === 0) {
-      return
+  /** Load again, unless that was done a moment ago. For things a reader does that say nothing about whether Reef changed. */
+  const refreshIfStale = (): void => {
+    if (Date.now() - lastLoadedAt >= REFRESH_MIN_INTERVAL_MS) {
+      void load()
     }
+  }
 
-    loadController ??= new AbortController()
-    const { signal } = loadController
-    const loadingFor = subject.value
-
-    await Promise.all(chunk(docs, BATCH_SIZE).map((batch) => loadBatch(batch, signal, loadingFor)))
+  // A tab left in the background is the one most likely to be out of date — another tab changed a
+  // subscription, an email link removed one — and coming back to it is the moment that matters. No
+  // timer: a page nobody is looking at asks for nothing.
+  if (import.meta.client) {
+    useEventListener(document, 'visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        refreshIfStale()
+      }
+    })
+    useEventListener(window, 'focus', refreshIfStale)
   }
 
   // Whose data this is, and the only thing that empties the per-reader half. Watching the subject
   // rather than isAuthenticated covers both the sign-out and the case two readers use one tab in
-  // turn, where the second sign-in would otherwise inherit the first reader's answers.
+  // turn, where the second sign-in would otherwise inherit the first reader's answers. It is also
+  // what starts the load, so it begins the moment the session restores rather than when a control
+  // first renders.
   watch(
     () => authStore.user?.sub,
     (sub) => {
       subject.value = sub
       reset()
+      void load()
     },
     // Synchronous, not because anything renders sooner for it, but because the gap a queued
     // watcher leaves is one in which this store still holds the previous reader's answers while
@@ -279,16 +367,26 @@ export const useReefStore = defineStore('reef', () => {
   )
 
   return {
-    userDocuments,
+    ratings,
+    subscriptions,
+    pendingSubscriptions,
     sets,
+    setIdsByDoc,
+    status,
     subject,
     isReadable,
-    patchUserDocument,
+    subscriptionByKey,
+    isSubscribedTo,
+    setRating,
+    beginSubscriptionChange,
+    endSubscriptionChange,
+    addSubscription,
+    removeSubscription,
+    setSetIds,
     addSet,
     runWrite,
-    ensureDocuments,
-    reset,
-    BATCH_SIZE,
-    MY_DOCUMENTS_BATCH_LIMIT
+    load,
+    refreshIfStale,
+    reset
   }
 })

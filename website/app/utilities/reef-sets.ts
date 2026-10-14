@@ -2,15 +2,25 @@
 // by the /set page.
 //
 // Which of this reader's sets hold a document, and what their sets are, are read from
-// ~/stores/reef along with every other per-reader answer: membership arrives per document, and
+// ~/stores/reef along with every other per-reader answer: membership is held per document, and
 // the sets carry only what labels a row. What's left here is what's particular to Sets: creating
 // one, changing what it holds, and the /set page's read of a single set by id.
 
-import { computed, ref, toValue, watch, type MaybeRefOrGetter, type Ref, type WritableComputedRef } from 'vue'
+import {
+  computed,
+  ref,
+  toValue,
+  watch,
+  type ComputedRef,
+  type MaybeRefOrGetter,
+  type Ref,
+  type WritableComputedRef
+} from 'vue'
 import { z } from 'zod'
 import { useNotificationsStore, type Notification } from '~/stores/notifications'
 import { useReefStore, type ReefSet } from '~/stores/reef'
 import { DjangoFieldErrorsSchema } from '~/utilities/django-schema'
+import type { LoadingStatus } from '~/utilities/loading-status'
 import { createSet, deleteSetDocument, getSet, putSetDocument, ReefError, type DocumentSet } from '~/utilities/reef'
 import { reefDocumentKey, useReefDocument } from '~/utilities/reef-documents'
 import { infoSeriesPathBuilder } from '~/utilities/url'
@@ -102,10 +112,8 @@ const writeSetMembership = async (set: ReefSet, rfcNumber: number, isAdding: boo
   if (outcome.status === 'failed') {
     // Untick or re-tick just this row and name the set in the toast, since the reader may have
     // several and nothing else on screen would tell them which one failed.
-    const current = reefStore.userDocuments[doc]?.yourSetIds ?? []
-    reefStore.patchUserDocument(doc, {
-      yourSetIds: isAdding ? current.filter((id) => id !== setId) : [...current, setId]
-    })
+    const current = reefStore.setIdsByDoc[doc] ?? []
+    reefStore.setSetIds(doc, isAdding ? current.filter((id) => id !== setId) : [...current, setId])
     notificationsStore.add(setMembershipFailedNotification(set, rfcNumber, isAdding))
     console.error('Unable to change which of your sets hold this RFC.', outcome.error)
   }
@@ -122,7 +130,7 @@ export const writeUserSetMembership = (rfcNumber: number, setIds: string[]): voi
   const reefStore = useReefStore()
   const doc = reefDocumentKey(rfcNumber)
 
-  const held = reefStore.userDocuments[doc]?.yourSetIds ?? []
+  const held = reefStore.setIdsByDoc[doc] ?? []
   const added = setIds.filter((id) => !held.includes(id))
   const removed = held.filter((id) => !setIds.includes(id))
 
@@ -130,7 +138,7 @@ export const writeUserSetMembership = (rfcNumber: number, setIds: string[]): voi
     return
   }
 
-  reefStore.patchUserDocument(doc, { yourSetIds: setIds })
+  reefStore.setSetIds(doc, setIds)
 
   const setById = new Map(reefStore.sets.map((set) => [set.id, set]))
   added.forEach((id) => {
@@ -182,7 +190,7 @@ export const createUserSet = async (rfcNumber: number, { title, description }: N
     const createdSet: ReefSet = { ...created, description: created.description ?? '' }
 
     reefStore.addSet(createdSet)
-    writeUserSetMembership(rfcNumber, [...(reefStore.userDocuments[doc]?.yourSetIds ?? []), createdSet.id])
+    writeUserSetMembership(rfcNumber, [...(reefStore.setIdsByDoc[doc] ?? []), createdSet.id])
 
     return { ok: true, set: createdSet }
   } catch (error) {
@@ -198,6 +206,9 @@ export type UserSets = {
   setIdsWithThisRFC: WritableComputedRef<string[]>
   // Create a set and put this document in it.
   createSet: (newSet: NewSet) => Promise<CreateSetOutcome>
+  // Whether the sets have loaded, so the dialog can hold off saying "you have no Sets" until it
+  // knows.
+  status: ComputedRef<LoadingStatus>
 }
 
 // This reader's sets and which of them hold one document, as models for the "Add to Set" dialog.
@@ -214,7 +225,8 @@ export const useUserSets = (rfcNumber: MaybeRefOrGetter<number>): UserSets => {
         writeUserSetMembership(toValue(rfcNumber), setIds)
       }
     }),
-    createSet: (newSet) => createUserSet(toValue(rfcNumber), newSet)
+    createSet: (newSet) => createUserSet(toValue(rfcNumber), newSet),
+    status: computed(() => reefStore.status.sets)
   }
 }
 

@@ -12,9 +12,19 @@
             'font-bold',
             COVER_LINK_STYLE_CLASS
           ]">
-          <GraphicsAddCircle
+          <GraphicsCheckmark
+            v-if="isInASet"
             :class="['text-blue-900 dark:text-blue-100 w-[24px] h-[24px] sm:mr-1', COVER_LINK_INNER_STYLE_CLASS]" />
-          <span :class="[COVER_LINK_INNER_STYLE_CLASS, { 'sr-only': props.iconOnly }]"> Add to Set </span>
+          <GraphicsAddCircle
+            v-else
+            :class="['text-blue-900 dark:text-blue-100 w-[24px] h-[24px] sm:mr-1', COVER_LINK_INNER_STYLE_CLASS]" />
+          <span :class="[COVER_LINK_INNER_STYLE_CLASS, { 'sr-only': props.iconOnly }]">
+            {{
+              isInASet
+                ? `In ${setIdsWithThisRFC.length} ${setIdsWithThisRFC.length === 1 ? 'Set' : 'Sets'}`
+                : 'Add to Set'
+            }}
+          </span>
         </DialogTrigger>
         <DialogPortal>
           <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-110" />
@@ -32,7 +42,19 @@
 
             <DialogDescription class="text-sm">
               <template v-if="isAuthenticated">
-                <div>
+                <p v-if="isLoading" class="flex items-center gap-2 py-3">
+                  <GraphicsLoading class="inline-block w-5 h-5" />
+                  Loading...
+                </p>
+
+                <AlertBox v-else-if="status.type === 'error'" variant="warning" role="alert">
+                  <p>
+                    {{ status.message }}
+                    <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
+                  </p>
+                </AlertBox>
+
+                <div v-else>
                   <!-- One checkbox per set, ticked when the set already holds this RFC. Checkboxes
                    rather than an add-only list because the dialog has to show what's already true
                    as well as offer the change, and aria-checked carries both without a live
@@ -140,7 +162,8 @@ import {
 import type { OidcUser } from '~/utilities/oidc'
 import { COVER_LINK_INNER_STYLE_CLASS, COVER_LINK_STYLE_CLASS } from '~/utilities/reef-cover-link'
 import type { CreateSetOutcome, NewSet } from '~/utilities/reef-sets'
-import type { ReefSet } from '~/stores/reef'
+import { useReefStore, type ReefSet } from '~/stores/reef'
+import type { LoadingStatus } from '~/utilities/loading-status'
 import type { ReefRFCStats } from '~/utilities/rfc-validators.js'
 import { setPathBuilder } from '~/utilities/url'
 import { formatTitleAsVNode } from '~/utilities/rfc-title'
@@ -159,10 +182,15 @@ type Props = {
   // creates a set. It comes from the parent's useUserSets, where the rest of the Reef work for
   // sets lives.
   createSet: (newSet: NewSet) => Promise<CreateSetOutcome>
+  // Whether this reader's sets have arrived yet, so the dialog doesn't say they have none before it
+  // knows.
+  status: LoadingStatus
   iconOnly?: boolean
 }
 
 const props = defineProps<Props>()
+
+const reefStore = useReefStore()
 
 // The ids of the sets holding this RFC — Reef's uuid strings, which is what a checkbox group's
 // value is. Built by the parent from Reef's own answer.
@@ -182,4 +210,13 @@ const formattedTitle = computed(() => formatTitleAsVNode(`rfc${props.rfcNumber}`
 // fail with a 401. Ask for a sign-in instead of letting the checkboxes look interactive and then
 // silently lose the change.
 const isAuthenticated = computed(() => props.user !== undefined)
+
+const isLoading = computed(() => props.status.type === 'loading')
+
+// Whether any of the reader's sets already holds this RFC, which is what the trigger shows instead
+// of the offer to add it. Held back for a signed-out reader and until the sets have loaded, so it
+// never claims a membership it hasn't confirmed.
+const isInASet = computed(
+  () => isAuthenticated.value && props.status.type === 'success' && setIdsWithThisRFC.value.length > 0
+)
 </script>

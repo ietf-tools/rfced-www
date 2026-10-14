@@ -13,9 +13,15 @@
             'hover:bg-sky-100 focus:bg-sky-100',
             COVER_LINK_STYLE_CLASS
           ]">
-          <GraphicsAlert
+          <GraphicsCheckmark
+            v-if="isSubscribedToThisRFC"
             :class="['text-blue-900 dark:text-blue-100 w-[24px] h-[24px] sm:mr-1', COVER_LINK_INNER_STYLE_CLASS]" />
-          <span :class="[COVER_LINK_INNER_STYLE_CLASS, { 'sr-only': props.iconOnly }]"> Subscribe </span></DialogTrigger
+          <GraphicsAlert
+            v-else
+            :class="['text-blue-900 dark:text-blue-100 w-[24px] h-[24px] sm:mr-1', COVER_LINK_INNER_STYLE_CLASS]" />
+          <span :class="[COVER_LINK_INNER_STYLE_CLASS, { 'sr-only': props.iconOnly }]">
+            {{ isSubscribedToThisRFC ? 'Subscribed' : 'Subscribe' }}
+          </span></DialogTrigger
         >
         <DialogPortal>
           <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-110" />
@@ -47,6 +53,13 @@
                   <GraphicsLoading class="inline-block w-5 h-5" />
                   Loading...
                 </p>
+
+                <AlertBox v-else-if="status.type === 'error'" variant="warning" role="alert">
+                  <p>
+                    {{ status.message }}
+                    <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
+                  </p>
+                </AlertBox>
 
                 <template v-else>
                   <!-- A checkbox rather than a Subscribe/Unsubscribe button, so the current state is
@@ -124,7 +137,8 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
-import type { ReefDocumentStatus } from '~/stores/reef'
+import { useReefStore } from '~/stores/reef'
+import type { LoadingStatus } from '~/utilities/loading-status'
 import type { OidcUser } from '~/utilities/oidc'
 import { COVER_LINK_INNER_STYLE_CLASS, COVER_LINK_STYLE_CLASS } from '~/utilities/reef-cover-link'
 import type { ReefRFCStats } from '~/utilities/rfc-validators.js'
@@ -138,15 +152,17 @@ type Props = {
   user: OidcUser | undefined
   // Whether this reader's own half has arrived yet, so the checkbox stays hidden behind a loading
   // message rather than showing unticked before there's a true state to show.
-  status: ReefDocumentStatus
+  status: LoadingStatus
   iconOnly?: boolean
 }
 
 const props = defineProps<Props>()
 
+const reefStore = useReefStore()
+
 const isSubscribed = defineModel<boolean>({ default: false })
 
-const isLoading = computed(() => props.status === 'unknown' || props.status === 'loading')
+const isLoading = computed(() => props.status.type === 'loading')
 
 // Whether a load has been seen in flight, so `loadAnnouncement` only speaks up once loading
 // actually happened. Without it, a dialog opened after the load already settled — the common case,
@@ -182,4 +198,8 @@ const formatNumber = (val: number, decimalPlaces: number) => {
 // fail with a 401. Ask for a sign-in instead of letting the checkbox look interactive and then
 // silently lose it.
 const isAuthenticated = computed(() => props.user !== undefined)
+
+// Only true once signed in and the checkbox model reflects a loaded subscription, so the trigger
+// doesn't flash the subscribed state for a signed-out reader or before the real status has arrived.
+const isSubscribedToThisRFC = computed(() => isAuthenticated.value && !isLoading.value && isSubscribed.value)
 </script>
