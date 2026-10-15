@@ -93,7 +93,7 @@ router
   .get('/errata.json', redirectTo('/api/v1/errata.json', 302))
   .get('/errata.php', redirectTo(`https://errata${env.ENV_DOMAIN}.rfc-editor.org`, 302))
   .get('/errata-definitions', redirectTo('/series/rfc-errata/'))
-  .get('/faq/', redirectTo('/series/rfc-faq/', 302))
+  .get('/faq/', redirectTo('/series/rfc-faq/', 301))
   .get('/history/', redirectTo('https://history.rfc-editor.org', 302))
   .get('/how-to-report/', redirectTo('/series/rfc-errata/', 302))
   .get('/how-to-verify', redirectTo('/series/errata/how-to-verify/', 302))
@@ -126,10 +126,10 @@ router
   .get('/standards/', redirectTo('/search/?status=Internet+Standard', 302))
   .get('/status_changes.php', redirectTo('/status-changes/', 302))
   .get('/styleguide.html', redirectTo('/authors/rfc-style-guide/', 302))
-  .get('/styleguide/', redirectTo('/authors/rfc-style-guide/', 302))
+  .get('/styleguide/', redirectTo('/authors/rfc-style-guide/', 301))
   .get('/styleguide/headers-and-boilerplate/', redirectTo('/authors/rfc-style-guide/#rfc-headers-and-boilerplate', 302))
-  .get('/styleguide/part2/', redirectTo('/authors/rfc-style-guide/', 302))
-  .get('/styleguide/tips/', redirectTo('/authors/rfc-style-guide/', 302))
+  .get('/styleguide/part2/', redirectTo('/authors/rfc-style-guide/', 301))
+  .get('/styleguide/tips/', redirectTo('/authors/rfc-style-guide/', 301))
   .get(
     '/rfc-style-guide/part2.html', // https://www.rfc-editor.org/info/rfc7322/#section-6.1
     redirectTo('/authors/rfc-style-guide/', 302)
