@@ -1,217 +1,315 @@
 // @vitest-environment nuxt
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
-import type { MyDocument, MyDocuments } from '~/utilities/reef'
+import type { DocumentSet, MyRating, Subscription } from '~/utilities/reef'
 import { useAuthStore } from '~/stores/auth'
-import { useReefStore } from '~/stores/reef'
+import { subscriptionKey, subscriptionTargetOf, useReefStore } from '~/stores/reef'
 
-const { getMyDocuments } = vi.hoisted(() => ({ getMyDocuments: vi.fn() }))
+const reef = vi.hoisted(() => ({
+  getMyRatings: vi.fn(),
+  getSubscriptions: vi.fn(),
+  getSets: vi.fn()
+}))
 
 vi.mock('~/utilities/reef', async (importOriginal) => ({
   ...(await importOriginal<typeof import('~/utilities/reef')>()),
-  getMyDocuments
+  ...reef
 }))
 
-const row = (doc: string, overrides: Partial<MyDocument> = {}): MyDocument => ({
-  doc,
-  your_rating: null,
-  your_subscription_id: null,
-  your_set_ids: [],
-  ...overrides
+const subscription = (overrides: Partial<Subscription> = {}): Subscription =>
+  ({ id: 1, kind: 'new_rfc', params: {}, created_at: '2026-08-18T00:00:00Z', ...overrides }) as Subscription
+
+const set = (id: string, docs: string[] = []): DocumentSet => ({
+  id,
+  title: id,
+  description: '',
+  documents: docs.map((doc, rank) => ({ doc, rank, added_at: '2026-08-18T00:00:00Z' })),
+  created_at: '2026-08-18T00:00:00Z',
+  updated_at: '2026-08-18T00:00:00Z'
 })
 
-// What Reef answers with, from the documents it was asked for.
-const answering = (build: (docs: string[]) => MyDocument[] = (docs) => docs.map((doc) => row(doc))) => {
-  getMyDocuments.mockImplementation(
-    (docs: string[]): Promise<MyDocuments> => Promise.resolve({ sets: [], documents: build(docs) })
-  )
+const answering = ({
+  ratings = [],
+  subscriptions = [],
+  sets = []
+}: {
+  ratings?: MyRating[]
+  subscriptions?: Subscription[]
+  sets?: DocumentSet[]
+} = {}) => {
+  reef.getMyRatings.mockResolvedValue(ratings)
+  reef.getSubscriptions.mockResolvedValue(subscriptions)
+  reef.getSets.mockResolvedValue(sets)
 }
 
-// The documents named across every call made so far, so a test can assert what was *not* asked for.
-const requestedDocs = (): string[] => getMyDocuments.mock.calls.flatMap(([docs]) => docs as string[])
+// Every store made is disposed afterwards, so a window listener from one test can't answer in the next.
+const stores: ReturnType<typeof useReefStore>[] = []
+const useTrackedReefStore = () => {
+  const reefStore = useReefStore()
+  stores.push(reefStore)
+  return reefStore
+}
 
 const signIn = (sub = 'reader-1') => {
   useAuthStore().setUser({ sub })
 }
 
+const loaded = (reefStore: ReturnType<typeof useReefStore>) =>
+  vi.waitFor(() => {
+    expect(Object.values(reefStore.status).map(({ type }) => type)).toEqual(['success', 'success', 'success'])
+  })
+
+describe('subscriptionKey and subscriptionTargetOf', () => {
+  test('give one key per thing subscribed to', () => {
+    expect(subscriptionKey({ kind: 'new_rfc' })).toBe('new_rfc')
+    expect(subscriptionKey({ kind: 'rfc', doc: 'rfc9110' })).toBe('rfc:rfc9110')
+    expect(subscriptionKey({ kind: 'subject', subject: 9 })).toBe('subject:9')
+  })
+
+  test('find the target of a subscription Reef holds', () => {
+    expect(subscriptionTargetOf(subscription({ kind: 'new_rfc' }))).toEqual({ kind: 'new_rfc' })
+    expect(subscriptionTargetOf(subscription({ kind: 'rfc', params: { rfc: 'rfc9110' } }))).toEqual({
+      kind: 'rfc',
+      doc: 'rfc9110'
+    })
+    expect(subscriptionTargetOf(subscription({ kind: 'subject', subject: 9 }))).toEqual({ kind: 'subject', subject: 9 })
+  })
+
+  test('leave out kinds Red has no control for, and params it cannot read', () => {
+    expect(subscriptionTargetOf(subscription({ kind: 'by_status' }))).toBeUndefined()
+    expect(subscriptionTargetOf(subscription({ kind: 'rfc', params: {} }))).toBeUndefined()
+    expect(subscriptionTargetOf(subscription({ kind: 'rfc', params: { rfc: 9110 } }))).toBeUndefined()
+    expect(subscriptionTargetOf(subscription({ kind: 'subject', subject: null }))).toBeUndefined()
+  })
+})
+
 describe('useReefStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
-    getMyDocuments.mockReset()
+    Object.values(reef).forEach((fn) => fn.mockReset())
+    vi.spyOn(console, 'error').mockImplementation(() => {})
     answering()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    stores.splice(0).forEach((reefStore) => reefStore.$dispose())
   })
 
   // --- The gate -------------------------------------------------------------
 
   test('asks Reef for nothing while nobody is signed in', async () => {
-    await useReefStore().ensureDocuments(['rfc9110'])
-    expect(getMyDocuments).not.toHaveBeenCalled()
+    const reefStore = useTrackedReefStore()
+    await reefStore.load()
+
+    expect(reef.getMyRatings).not.toHaveBeenCalled()
+    expect(reef.getSubscriptions).not.toHaveBeenCalled()
+    expect(reef.getSets).not.toHaveBeenCalled()
+    expect(reefStore.status.subscriptions).toEqual({ type: 'idle' })
   })
 
-  test('loads this reader’s own state once they are signed in', async () => {
-    signIn()
-    const reefStore = useReefStore()
-    answering((docs) => docs.map((doc) => row(doc, { your_rating: 4, your_set_ids: ['set-a'] })))
-
-    await reefStore.ensureDocuments(['rfc9110'])
-
-    expect(reefStore.userDocuments.rfc9110).toEqual({
-      status: 'ready',
-      yourRating: 4,
-      isSubscribed: false,
-      yourSubscriptionId: undefined,
-      yourSetIds: ['set-a']
+  test('loads everything the moment they sign in', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({
+      ratings: [{ doc: 'rfc9110', value: 4, updated_at: '' }],
+      subscriptions: [subscription({ id: 7, kind: 'rfc', params: { rfc: 'rfc9110' } })],
+      sets: [set('set-a', ['rfc9110', 'rfc2119']), set('set-b', ['rfc9110'])]
     })
-  })
 
-  test('reports a document nobody has asked about as unknown rather than absent', () => {
-    expect(useReefStore().userDocuments.rfc9110).toBeUndefined()
-  })
-
-  // --- Loading only what is missing -----------------------------------------
-
-  test('asks only for the documents it does not already hold', async () => {
     signIn()
-    const reefStore = useReefStore()
+    expect(reefStore.status.subscriptions).toEqual({ type: 'loading' })
+    await loaded(reefStore)
 
-    await reefStore.ensureDocuments(['rfc1', 'rfc2', 'rfc3'])
-    getMyDocuments.mockClear()
-    await reefStore.ensureDocuments(['rfc1', 'rfc2', 'rfc3', 'rfc4', 'rfc5'])
-
-    expect(requestedDocs()).toEqual(['rfc4', 'rfc5'])
+    expect(reefStore.ratings).toEqual({ rfc9110: 4 })
+    expect(reefStore.isSubscribedTo('rfc:rfc9110')).toBe(true)
+    expect(reefStore.subscriptionByKey.get('rfc:rfc9110')?.id).toBe(7)
+    expect(reefStore.setIdsByDoc).toEqual({ rfc9110: ['set-a', 'set-b'], rfc2119: ['set-a'] })
+    // Labels only: what a set holds is held per document.
+    expect(reefStore.sets.map(({ id }) => id)).toEqual(['set-a', 'set-b'])
+    expect(reefStore.sets[0]).not.toHaveProperty('documents')
   })
 
-  test('makes one request when a whole page asks at once', async () => {
+  test('is not subscribed to something it holds no subscription for', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({ subscriptions: [subscription({ id: 1, kind: 'subject', subject: 5 })] })
     signIn()
-    const reefStore = useReefStore()
+    await loaded(reefStore)
 
-    // Separate callers in the same tick.
-    await Promise.all(['rfc1', 'rfc2', 'rfc3'].map((doc) => reefStore.ensureDocuments([doc])))
-
-    expect(getMyDocuments).toHaveBeenCalledTimes(1)
-    expect(requestedDocs()).toEqual(['rfc1', 'rfc2', 'rfc3'])
+    expect(reefStore.isSubscribedTo('subject:9')).toBe(false)
+    expect(reefStore.isSubscribedTo('new_rfc')).toBe(false)
   })
 
-  test('starts a new request for a document asked for while one is in flight', async () => {
+  test('shows a change that has not been answered yet, over what the list says', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({ subscriptions: [subscription({ id: 1 })] })
     signIn()
-    const reefStore = useReefStore()
+    await loaded(reefStore)
 
-    const first = reefStore.ensureDocuments(['rfc1'])
-    await first
-    await reefStore.ensureDocuments(['rfc2'])
+    reefStore.beginSubscriptionChange('new_rfc', false)
+    expect(reefStore.isSubscribedTo('new_rfc')).toBe(false)
 
-    expect(getMyDocuments).toHaveBeenCalledTimes(2)
-    expect(requestedDocs()).toEqual(['rfc1', 'rfc2'])
+    reefStore.endSubscriptionChange('new_rfc')
+    expect(reefStore.isSubscribedTo('new_rfc')).toBe(true)
   })
 
-  test('asks once for a document named twice in one call', async () => {
+  test('keeps showing a change until the last of several has been answered', async () => {
+    const reefStore = useTrackedReefStore()
     signIn()
-    await useReefStore().ensureDocuments(['rfc9110', 'rfc9110'])
-    expect(requestedDocs()).toEqual(['rfc9110'])
+    await loaded(reefStore)
+
+    reefStore.beginSubscriptionChange('new_rfc', true)
+    reefStore.beginSubscriptionChange('new_rfc', false)
+    reefStore.endSubscriptionChange('new_rfc')
+    expect(reefStore.pendingSubscriptions.new_rfc).toEqual({ desired: false, inFlight: 1 })
+
+    reefStore.endSubscriptionChange('new_rfc')
+    expect(reefStore.pendingSubscriptions.new_rfc).toBeUndefined()
   })
 
-  test('does nothing at all when everything asked for is already held', async () => {
+  // --- Failure --------------------------------------------------------------
+
+  test('reports one slice failing without taking the others with it', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({ ratings: [{ doc: 'rfc9110', value: 3, updated_at: '' }] })
+    reef.getSets.mockRejectedValue(new Error('reef is down'))
     signIn()
-    const reefStore = useReefStore()
-    await reefStore.ensureDocuments(['rfc9110'])
-    getMyDocuments.mockClear()
 
-    await reefStore.ensureDocuments(['rfc9110'])
-
-    expect(getMyDocuments).not.toHaveBeenCalled()
+    await vi.waitFor(() => expect(reefStore.status.sets.type).toBe('error'))
+    await vi.waitFor(() => expect(reefStore.status.ratings.type).toBe('success'))
+    expect(reefStore.status.subscriptions.type).toBe('success')
+    expect(reefStore.ratings).toEqual({ rfc9110: 3 })
   })
 
-  test('splits a page larger than the batch size across requests', async () => {
+  test('loads again when asked, which is how a failure is retried', async () => {
+    const reefStore = useTrackedReefStore()
+    reef.getSets.mockRejectedValueOnce(new Error('reef is down'))
     signIn()
-    const reefStore = useReefStore()
-    const docs = Array.from({ length: reefStore.BATCH_SIZE + 10 }, (_, index) => `rfc${index + 1}`)
+    await vi.waitFor(() => expect(reefStore.status.sets.type).toBe('error'))
 
-    await reefStore.ensureDocuments(docs)
+    await reefStore.load()
 
-    expect(getMyDocuments).toHaveBeenCalledTimes(2)
-    expect(getMyDocuments.mock.calls[0]?.[0]).toHaveLength(reefStore.BATCH_SIZE)
-    expect(getMyDocuments.mock.calls[1]?.[0]).toHaveLength(10)
-    expect(requestedDocs()).toEqual(docs)
+    expect(reefStore.status.sets).toEqual({ type: 'success' })
   })
 
-  test('keeps every batch within Reef’s own limit', () => {
-    const reefStore = useReefStore()
-    expect(reefStore.BATCH_SIZE).toBeLessThanOrEqual(reefStore.MY_DOCUMENTS_BATCH_LIMIT)
-  })
+  // --- Refreshing -----------------------------------------------------------
 
-  // --- When Reef will not answer --------------------------------------------
-
-  test('marks a document failed rather than leaving it loading forever', async () => {
+  test('brings what it holds up to date without showing a loading state', async () => {
+    const reefStore = useTrackedReefStore()
     signIn()
-    const reefStore = useReefStore()
-    getMyDocuments.mockRejectedValue(new Error('reef is down'))
-    vi.spyOn(console, 'error').mockImplementation(() => {})
+    await loaded(reefStore)
+    answering({ subscriptions: [subscription({ id: 3 })] })
 
-    await reefStore.ensureDocuments(['rfc9110'])
+    const refreshing = reefStore.load()
+    expect(reefStore.status.subscriptions).toEqual({ type: 'success' })
+    await refreshing
 
-    expect(reefStore.userDocuments.rfc9110?.status).toBe('failed')
+    expect(reefStore.isSubscribedTo('new_rfc')).toBe(true)
   })
 
-  test('retries a failed document the next time it is asked for', async () => {
+  test('keeps what it holds when a refresh fails', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({ subscriptions: [subscription({ id: 3 })] })
     signIn()
-    const reefStore = useReefStore()
-    getMyDocuments.mockRejectedValue(new Error('reef is down'))
-    vi.spyOn(console, 'error').mockImplementation(() => {})
-    await reefStore.ensureDocuments(['rfc9110'])
+    await loaded(reefStore)
+    reef.getSubscriptions.mockRejectedValue(new Error('reef is down'))
 
-    answering()
-    await reefStore.ensureDocuments(['rfc9110'])
+    await reefStore.load()
 
-    expect(reefStore.userDocuments.rfc9110?.status).toBe('ready')
+    expect(reefStore.status.subscriptions).toEqual({ type: 'success' })
+    expect(reefStore.isSubscribedTo('new_rfc')).toBe(true)
   })
 
-  test('settles a document Reef left out of its answer', async () => {
+  test('does not let a refresh undo a change made while it was in flight', async () => {
+    const reefStore = useTrackedReefStore()
     signIn()
-    const reefStore = useReefStore()
-    answering(() => [])
+    await loaded(reefStore)
 
-    await reefStore.ensureDocuments(['rfc9110'])
+    let answer: (value: MyRating[]) => void = () => {}
+    reef.getMyRatings.mockReturnValue(new Promise<MyRating[]>((resolve) => (answer = resolve)))
+    const refreshing = reefStore.load()
 
-    expect(reefStore.userDocuments.rfc9110?.status).toBe('ready')
+    reefStore.setRating('rfc9110', 5)
+    await reefStore.runWrite('rfc9110:rating', () => Promise.resolve())
+    answer([])
+    await refreshing
+
+    expect(reefStore.ratings).toEqual({ rfc9110: 5 })
+  })
+
+  test('refreshes when asked to, unless it loaded only a moment ago', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    const reefStore = useTrackedReefStore()
+    signIn()
+    await loaded(reefStore)
+    reef.getSubscriptions.mockClear()
+
+    reefStore.refreshIfStale()
+    expect(reef.getSubscriptions).not.toHaveBeenCalled()
+
+    vi.advanceTimersByTime(60_000)
+    reefStore.refreshIfStale()
+    expect(reef.getSubscriptions).toHaveBeenCalledTimes(1)
+  })
+
+  test('refreshes when the tab regains focus', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    const reefStore = useTrackedReefStore()
+    signIn()
+    await loaded(reefStore)
+    reef.getSubscriptions.mockClear()
+
+    vi.advanceTimersByTime(60_000)
+    window.dispatchEvent(new Event('focus'))
+
+    expect(reef.getSubscriptions).toHaveBeenCalledTimes(1)
   })
 
   // --- Whose data it is ------------------------------------------------------
 
   test('forgets this reader’s own state when they sign out', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({
+      ratings: [{ doc: 'rfc9110', value: 4, updated_at: '' }],
+      subscriptions: [subscription()],
+      sets: [set('set-a', ['rfc9110'])]
+    })
     signIn()
-    const reefStore = useReefStore()
-    await reefStore.ensureDocuments(['rfc9110'])
+    await loaded(reefStore)
 
     useAuthStore().clearUser()
 
-    expect(reefStore.userDocuments.rfc9110).toBeUndefined()
+    expect(reefStore.ratings).toEqual({})
+    expect(reefStore.subscriptions).toEqual([])
     expect(reefStore.sets).toEqual([])
+    expect(reefStore.setIdsByDoc).toEqual({})
+    expect(reefStore.status.subscriptions).toEqual({ type: 'idle' })
   })
 
   test('does not show one reader what the previous one loaded', async () => {
+    const reefStore = useTrackedReefStore()
+    answering({ ratings: [{ doc: 'rfc9110', value: 4, updated_at: '' }] })
     signIn('reader-1')
-    const reefStore = useReefStore()
-    await reefStore.ensureDocuments(['rfc9110'])
+    await loaded(reefStore)
 
+    answering()
     signIn('reader-2')
+    await loaded(reefStore)
 
-    expect(reefStore.userDocuments.rfc9110).toBeUndefined()
+    expect(reefStore.ratings).toEqual({})
   })
 
   test('drops an answer that arrives after the reader has changed', async () => {
+    const reefStore = useTrackedReefStore()
+    let answer: (value: MyRating[]) => void = () => {}
+    reef.getMyRatings.mockReturnValue(new Promise<MyRating[]>((resolve) => (answer = resolve)))
     signIn('reader-1')
-    const reefStore = useReefStore()
 
-    let answer: (value: MyDocuments) => void = () => {}
-    getMyDocuments.mockReturnValue(new Promise<MyDocuments>((resolve) => (answer = resolve)))
-    const loading = reefStore.ensureDocuments(['rfc9110'])
-
+    answering()
     signIn('reader-2')
-    answer({ sets: [{ id: 'set-a' } as never], documents: [row('rfc9110', { your_rating: 5 })] })
-    await loading
+    answer([{ doc: 'rfc9110', value: 5, updated_at: '' }])
+    await loaded(reefStore)
 
-    expect(reefStore.userDocuments.rfc9110).toBeUndefined()
-    expect(reefStore.sets).toEqual([])
+    expect(reefStore.ratings).toEqual({})
   })
 })

@@ -139,7 +139,6 @@
 
 <script setup lang="ts">
 import { useRfcEditorHead } from '~/utilities/head'
-import { useReefDocuments } from '~/utilities/reef-documents'
 import { HomepageLatestSchema } from '~/utilities/rfc-validators'
 import {
   IAB_URL_ORIGIN,
@@ -200,12 +199,6 @@ const homepageLatest = computed(() => {
   }
   return data
 })
-
-// This reader's own ratings, subscriptions and sets for the latest RFCs, in one call rather than
-// one per card. Only that: the public numbers ride along on each RFC as reefStats and are handed
-// to the card as a prop. Declared after homepageLatest rather than before it, because the getter
-// is read immediately and would otherwise reach the computed before it exists.
-useReefDocuments(() => homepageLatest.value?.homepageLatest.map((rfc) => rfc.number) ?? [])
 
 useRfcEditorHead({
   title: '',

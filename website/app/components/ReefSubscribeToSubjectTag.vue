@@ -48,6 +48,13 @@
                   Loading...
                 </p>
 
+                <AlertBox v-else-if="status.type === 'error'" variant="warning" role="alert">
+                  <p>
+                    {{ status.message }}
+                    <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
+                  </p>
+                </AlertBox>
+
                 <template v-else>
                   <SubscriptionCheckboxHelpText />
                   <CheckboxRoot v-model="isSubscribed" class="flex items-start gap-2 cursor-pointer w-full text-left">
@@ -105,7 +112,8 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
-import { useUserSubjectSubscription } from '~/utilities/reef-subscriptions'
+import { useReefStore } from '~/stores/reef'
+import { useUserSubscription } from '~/utilities/reef-subscriptions'
 import type { PrecomputedSubjectDetail } from '~~/generated/reef-api-zod'
 
 type Props = {
@@ -114,8 +122,9 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const { isSubscribed, status } = useUserSubjectSubscription(
-  () => props.subject.id,
+const reefStore = useReefStore()
+const { isSubscribed, status } = useUserSubscription(
+  () => ({ kind: 'subject', subject: props.subject.id }),
   () => props.subject.name
 )
 

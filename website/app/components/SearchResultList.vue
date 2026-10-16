@@ -11,7 +11,6 @@ import { watchDebounced } from '@vueuse/core'
 import { calculateMaxHeadingCharWidth } from '~/utilities/rfc-title'
 import type { TypeSenseSearchItem } from '../utilities/typesense'
 import { typeSenseSearchItemToRFCCommon } from '~/utilities/rfc-converters'
-import { useReefDocuments } from '~/utilities/reef-documents'
 
 type Props = {
   items: TypeSenseSearchItem[]
@@ -22,13 +21,6 @@ const props = defineProps<Props>()
 const list = computed(() =>
   props.items.map((typesenseSearchItem) => typeSenseSearchItemToRFCCommon(typesenseSearchItem))
 )
-
-// The whole page of results in one call, and only for the results this reader's answers aren't
-// already held for — moving to page 2, or refining a query that keeps some of the same RFCs, asks
-// only about what's new. Declared here rather than in the cards because a card that loaded its own
-// would make one request per result. This reader's own state only: the public numbers beside it
-// come from the search index, carried on each RFC as reefStats.
-useReefDocuments(() => list.value.map((rfc) => rfc.number))
 
 const maxHeadingWidth = ref(calculateMaxHeadingCharWidth(list.value))
 

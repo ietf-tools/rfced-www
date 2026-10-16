@@ -26,6 +26,7 @@
           :user="user"
           :sets="userSets"
           :create-set="createSet"
+          :status="setsStatus"
           v-model="setIdsWithThisRFC" />
       </li>
     </ul>
@@ -54,15 +55,13 @@
  * refuses — is in the feature's own module, so this component is left doing what a component
  * should: deciding what appears in the row, and handing each dialog the model it binds.
  *
- * Loading is not one of those calls. useReefDocuments declares the one document this row is about,
- * and every model below then reads what came back — the same one call a page of fifty search
- * results makes for all fifty.
+ * Loading is not one of those calls. The reader's whole state is loaded when they sign in, so every
+ * model below only reads it — the same way a page of fifty search results does.
  *
  * The public numbers beside them are not fetched at all. They arrive as `props.reefStats`, taken
  * from the bucket JSON by RFCDocumentBody, so a visitor's browser is handed them with the page
  * instead of asking Reef for them.
  */
-import { useReefDocuments } from '~/utilities/reef-documents'
 import { useUserRFCRating } from '~/utilities/reef-ratings'
 import type { ReefRFCStats } from '~/utilities/rfc-validators'
 import { useUserSets } from '~/utilities/reef-sets'
@@ -84,9 +83,7 @@ const { user } = storeToRefs(useAuthStore())
 // navigates to another RFC reuses this component, and every model has to follow it to the new one.
 const rfcNumber = () => props.rfcNumber
 
-useReefDocuments(() => [props.rfcNumber])
-
 const userRFCRating = useUserRFCRating(rfcNumber)
 const { isSubscribed: isSubscribedToThisRFC, status: subscriptionStatus } = useUserRFCSubscription(rfcNumber)
-const { sets: userSets, setIdsWithThisRFC, createSet } = useUserSets(rfcNumber)
+const { sets: userSets, setIdsWithThisRFC, createSet, status: setsStatus } = useUserSets(rfcNumber)
 </script>

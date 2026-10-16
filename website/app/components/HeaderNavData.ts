@@ -250,7 +250,7 @@ export const useMenuData = (mode: Mode) => {
         hideLabelDesktop: true,
         icon: sanitisedPicture
           ? () =>
-              h(UserImageNotificationsWrapper, [
+              h(UserImageNotificationsWrapper, () => [
                 h('img', {
                   src: sanitisedPicture,
                   /***
@@ -262,7 +262,7 @@ export const useMenuData = (mode: Mode) => {
                 })
               ])
           : () =>
-              h(UserImageNotificationsWrapper, [
+              h(UserImageNotificationsWrapper, () => [
                 h(GraphicsBustInSilhouette, { 'aria-label': `${displayName}`, class: `${imageSize} rounded-full` })
               ]),
         children: [

@@ -50,6 +50,13 @@
                   Loading...
                 </p>
 
+                <AlertBox v-else-if="status.type === 'error'" variant="warning" role="alert">
+                  <p>
+                    {{ status.message }}
+                    <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
+                  </p>
+                </AlertBox>
+
                 <template v-else>
                   <SubscriptionCheckboxHelpText />
                   <CheckboxRoot v-model="isSubscribed" class="flex items-start gap-2 cursor-pointer w-full text-left">
@@ -107,6 +114,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
+import { useReefStore } from '~/stores/reef'
 import { useUserRFCSubscription } from '~/utilities/reef-subscriptions'
 import type { SeriesId } from '~/utilities/rfc'
 
@@ -118,10 +126,10 @@ const props = defineProps<Props>()
 
 const subseriesLabel = computed(() => `${props.subseriesId.type.toUpperCase()} ${props.subseriesId.number}`)
 
+const reefStore = useReefStore()
 const { isSubscribed, status } = useUserRFCSubscription(() => props.subseriesId)
 
-// `unknown` is a signed-in reader whose answer hasn't arrived yet, which reads the same as loading.
-const isLoading = computed(() => status.value === 'unknown' || status.value === 'loading')
+const isLoading = computed(() => status.value.type === 'loading')
 
 // Whether a load has been seen in flight, so `loadAnnouncement` only speaks up once loading
 // actually happened. Without it, a dialog opened after the load already settled — the common case,

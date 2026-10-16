@@ -4,12 +4,15 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { enableAutoUnmount } from '@vue/test-utils'
 
-import { useUserNewRfcSubscription, useUserSubjectSubscription } from './reef-subscriptions'
+import { useUserRFCSubscription, useUserSubscription } from './reef-subscriptions'
 import { useAuthStore } from '~/stores/auth'
 import { useNotificationsStore } from '~/stores/notifications'
+import { useReefStore } from '~/stores/reef'
 
 const reef = vi.hoisted(() => ({
+  getMyRatings: vi.fn(),
   getSubscriptions: vi.fn(),
+  getSets: vi.fn(),
   createSubscription: vi.fn(),
   deleteSubscription: vi.fn()
 }))
@@ -19,152 +22,201 @@ vi.mock('~/utilities/reef', async (importOriginal) => ({
   ...reef
 }))
 
-// A harness rather than mounting ReefSubscribeToAllRFCs itself: what's under test is the model —
-// loaded on mount, written back on change — not the dialog chrome around it.
-const Harness = defineComponent({
-  setup: () => useUserNewRfcSubscription()
+// A harness rather than mounting a dialog itself: what's under test is the model — read from the
+// store, written back on change — not the dialog chrome around it.
+const NewRfcHarness = defineComponent({
+  setup: () => useUserSubscription({ kind: 'new_rfc' }, 'new RFCs')
 })
 
-describe('useUserNewRfcSubscription', () => {
+const SubjectHarness = defineComponent({
+  setup: () => useUserSubscription({ kind: 'subject', subject: 9 }, 'Applications')
+})
+
+const DocumentHarness = defineComponent({
+  setup: () => useUserRFCSubscription(9110)
+})
+
+const existing = (overrides = {}) => ({
+  id: 42,
+  kind: 'new_rfc',
+  params: {},
+  created_at: '2026-08-18T00:00:00Z',
+  ...overrides
+})
+
+const signedInWith = async (subscriptions: unknown[]) => {
+  reef.getSubscriptions.mockResolvedValue(subscriptions)
+  useAuthStore().setUser({ sub: 'reader-1' })
+  const reefStore = useReefStore()
+  await vi.waitFor(() => expect(reefStore.status.subscriptions.type).toBe('success'))
+}
+
+describe('useUserSubscription', () => {
   enableAutoUnmount(afterEach)
 
   beforeEach(() => {
     Object.values(reef).forEach((fn) => fn.mockReset())
+    reef.getMyRatings.mockResolvedValue([])
+    reef.getSets.mockResolvedValue([])
     vi.spyOn(console, 'error').mockImplementation(() => {})
     useAuthStore().clearUser()
     useNotificationsStore().queue = []
   })
 
   test('stays unticked, and asks Reef nothing, while signed out', async () => {
-    const harness = await mountSuspended(Harness)
+    const harness = await mountSuspended(NewRfcHarness)
 
     expect(harness.vm.isSubscribed).toBe(false)
+    expect(reef.getSubscriptions).not.toHaveBeenCalled()
+  })
+
+  test('fetches nothing of its own once signed in: the store has it', async () => {
+    await signedInWith([existing()])
+    reef.getSubscriptions.mockClear()
+
+    const harness = await mountSuspended(NewRfcHarness)
+
+    expect(harness.vm.isSubscribed).toBe(true)
     expect(reef.getSubscriptions).not.toHaveBeenCalled()
   })
 
   test('reflects an existing new_rfc subscription once signed in', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([
-      { id: 42, kind: 'new_rfc', params: {}, created_at: '2026-08-18T00:00:00Z' }
-    ])
-
-    const harness = await mountSuspended(Harness)
-    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(true))
+    await signedInWith([existing()])
+    const harness = await mountSuspended(NewRfcHarness)
+    expect(harness.vm.isSubscribed).toBe(true)
   })
 
   test('defaults to unticked when signed in with no new_rfc subscription', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([
-      { id: 1, kind: 'rfc', params: { rfc: 'rfc9110' }, created_at: '2026-08-18T00:00:00Z' }
-    ])
-
-    const harness = await mountSuspended(Harness)
-    await vi.waitFor(() => expect(reef.getSubscriptions).toHaveBeenCalled())
+    await signedInWith([existing({ id: 1, kind: 'rfc', params: { rfc: 'rfc9110' } })])
+    const harness = await mountSuspended(NewRfcHarness)
     expect(harness.vm.isSubscribed).toBe(false)
   })
 
-  test('ticks before Reef has assigned an id, and keeps the id it assigns', async () => {
+  test('says it is loading until the subscriptions have arrived', async () => {
+    let answer: (value: unknown[]) => void = () => {}
+    reef.getSubscriptions.mockReturnValue(new Promise((resolve) => (answer = resolve)))
     useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([])
-    let confirm: (value: { id: number }) => void = () => {}
-    reef.createSubscription.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
 
-    const harness = await mountSuspended(Harness)
-    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
+    const harness = await mountSuspended(NewRfcHarness)
+    expect(harness.vm.status).toEqual({ type: 'loading' })
+
+    answer([])
+    await vi.waitFor(() => expect(harness.vm.status).toEqual({ type: 'success' }))
+  })
+
+  test('ticks before Reef has assigned an id, and keeps the id it assigns', async () => {
+    await signedInWith([])
+    let confirm: (value: unknown) => void = () => {}
+    reef.createSubscription.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
+    reef.deleteSubscription.mockResolvedValue(undefined)
+    const harness = await mountSuspended(NewRfcHarness)
 
     harness.vm.isSubscribed = true
     expect(harness.vm.isSubscribed).toBe(true)
-    confirm({ id: 812 })
+    confirm(existing({ id: 812 }))
     await vi.waitFor(() => expect(reef.createSubscription).toHaveBeenCalledWith({ kind: 'new_rfc' }))
+    await vi.waitFor(() => expect(useReefStore().subscriptionByKey.get('new_rfc')?.id).toBe(812))
+    expect(harness.vm.isSubscribed).toBe(true)
 
     harness.vm.isSubscribed = false
     await vi.waitFor(() => expect(reef.deleteSubscription).toHaveBeenCalledWith(812))
+    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
+  })
+
+  test('removes the subscription a tick made when it is unticked straight away', async () => {
+    // Queued rather than cancelled, and decided when each write runs: the unsubscribe has no id when
+    // it is asked for, because the subscribe it follows hasn't been answered.
+    await signedInWith([])
+    reef.createSubscription.mockResolvedValue(existing({ id: 812 }))
+    reef.deleteSubscription.mockResolvedValue(undefined)
+    const harness = await mountSuspended(NewRfcHarness)
+
+    harness.vm.isSubscribed = true
+    harness.vm.isSubscribed = false
+
+    await vi.waitFor(() => expect(reef.deleteSubscription).toHaveBeenCalledWith(812))
+    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
+    expect(useReefStore().subscriptions).toEqual([])
   })
 
   test('unticks and says so when Reef refuses', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([])
+    await signedInWith([])
     reef.createSubscription.mockRejectedValue(new Error('nope'))
-
-    const harness = await mountSuspended(Harness)
-    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
+    const harness = await mountSuspended(NewRfcHarness)
 
     harness.vm.isSubscribed = true
     await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
     expect(useNotificationsStore().queue.map(({ title }) => title)).toContain('Unable to subscribe')
   })
-})
 
-// A harness rather than mounting ReefSubscribeToSubjectTag itself, for the same reason as above:
-// what's under test is the model, not the dialog chrome around it.
-const SubjectHarness = defineComponent({
-  setup: () => useUserSubjectSubscription(9, 'Applications')
-})
+  test('stays ticked and says so when Reef refuses an unsubscribe', async () => {
+    await signedInWith([existing()])
+    reef.deleteSubscription.mockRejectedValue(new Error('nope'))
+    const harness = await mountSuspended(NewRfcHarness)
 
-describe('useUserSubjectSubscription', () => {
-  beforeEach(() => {
-    Object.values(reef).forEach((fn) => fn.mockReset())
-    vi.spyOn(console, 'error').mockImplementation(() => {})
+    harness.vm.isSubscribed = false
+    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(true))
+    expect(useNotificationsStore().queue.map(({ title }) => title)).toContain('Unable to unsubscribe')
+  })
+
+  test('does not add a subscription to the list of a reader who has since signed out', async () => {
+    await signedInWith([])
+    let confirm: (value: unknown) => void = () => {}
+    reef.createSubscription.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
+    const harness = await mountSuspended(NewRfcHarness)
+
+    harness.vm.isSubscribed = true
+    await vi.waitFor(() => expect(reef.createSubscription).toHaveBeenCalled())
     useAuthStore().clearUser()
-    useNotificationsStore().queue = []
+    confirm(existing({ id: 812 }))
+    await vi.waitFor(() => expect(useReefStore().pendingSubscriptions).toEqual({}))
+
+    expect(useReefStore().subscriptions).toEqual([])
   })
 
-  test('stays unticked, and asks Reef nothing, while signed out', async () => {
-    const harness = await mountSuspended(SubjectHarness)
+  test('reflects an existing subject subscription, and ignores one for a different subject', async () => {
+    await signedInWith([existing({ id: 42, kind: 'subject', subject: 9 })])
+    expect((await mountSuspended(SubjectHarness)).vm.isSubscribed).toBe(true)
 
-    expect(harness.vm.isSubscribed).toBe(false)
-    expect(reef.getSubscriptions).not.toHaveBeenCalled()
+    useAuthStore().clearUser()
+    await signedInWith([existing({ id: 42, kind: 'subject', subject: 5 })])
+    expect((await mountSuspended(SubjectHarness)).vm.isSubscribed).toBe(false)
   })
 
-  test('reflects an existing subject subscription once signed in', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([
-      { id: 42, kind: 'subject', subject: 9, params: {}, created_at: '2026-08-18T00:00:00Z' }
-    ])
-
+  test('subscribes to a subject by its id', async () => {
+    await signedInWith([])
+    reef.createSubscription.mockResolvedValue(existing({ id: 812, kind: 'subject', subject: 9 }))
     const harness = await mountSuspended(SubjectHarness)
+
+    harness.vm.isSubscribed = true
+
+    await vi.waitFor(() => expect(reef.createSubscription).toHaveBeenCalledWith({ kind: 'subject', subject: 9 }))
+  })
+
+  test('subscribes to a document under the rfc kind, named by its canonical id', async () => {
+    await signedInWith([])
+    reef.createSubscription.mockResolvedValue(existing({ id: 812, kind: 'rfc', params: { rfc: 'rfc9110' } }))
+    const harness = await mountSuspended(DocumentHarness)
+
+    harness.vm.isSubscribed = true
+
+    await vi.waitFor(() =>
+      expect(reef.createSubscription).toHaveBeenCalledWith({ kind: 'rfc', params: { rfc: 'rfc9110' } })
+    )
     await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(true))
   })
 
-  test('ignores a subject subscription for a different subject', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([
-      { id: 42, kind: 'subject', subject: 5, params: {}, created_at: '2026-08-18T00:00:00Z' }
-    ])
-
-    const harness = await mountSuspended(SubjectHarness)
-    await vi.waitFor(() => expect(reef.getSubscriptions).toHaveBeenCalled())
-    expect(harness.vm.isSubscribed).toBe(false)
-  })
-
-  test('ticks before Reef has assigned an id, and keeps the id it assigns', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([])
-    let confirm: (value: { id: number }) => void = () => {}
-    reef.createSubscription.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
-
-    const harness = await mountSuspended(SubjectHarness)
-    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
-
-    harness.vm.isSubscribed = true
-    expect(harness.vm.isSubscribed).toBe(true)
-    confirm({ id: 812 })
-    await vi.waitFor(() => expect(reef.createSubscription).toHaveBeenCalledWith({ kind: 'subject', subject: 9 }))
-
-    harness.vm.isSubscribed = false
-    await vi.waitFor(() => expect(reef.deleteSubscription).toHaveBeenCalledWith(812))
-  })
-
-  test('unticks and says so when Reef refuses', async () => {
-    useAuthStore().setUser({ sub: 'reader-1' })
-    reef.getSubscriptions.mockResolvedValue([])
+  test('names the target in the toast when Reef refuses', async () => {
+    await signedInWith([])
     reef.createSubscription.mockRejectedValue(new Error('nope'))
-
-    const harness = await mountSuspended(SubjectHarness)
-    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
+    const harness = await mountSuspended(DocumentHarness)
 
     harness.vm.isSubscribed = true
-    await vi.waitFor(() => expect(harness.vm.isSubscribed).toBe(false))
-    expect(useNotificationsStore().queue.map(({ title }) => title)).toContain('Unable to subscribe')
+
+    await vi.waitFor(() =>
+      expect(useNotificationsStore().queue.map(({ description }) => description)).toContain(
+        'You have not been subscribed to RFC 9110. Please try again.'
+      )
+    )
   })
 })
