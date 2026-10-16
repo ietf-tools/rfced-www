@@ -105,7 +105,8 @@ import { DateTime } from 'luxon'
 import { z } from 'zod'
 import { RFCTitle } from '#components'
 import { filterNotificationsByUnread, useReefNotificationsStore } from '~/stores/reef-notifications'
-import { parseSeriesId } from '~/utilities/rfc'
+import { parseSeriesId, type RfcCommon } from '~/utilities/rfc'
+import { RfcCommonSchema } from '~/utilities/rfc-validators'
 import type { SubscriptionKind, WebNotification } from '~/utilities/reef'
 import { infoSeriesPathBuilder, usePublicSiteUrlOrigin } from '~/utilities/url'
 
@@ -149,15 +150,32 @@ const notificationChange = (notification: WebNotification): string | undefined =
   return isKnownKind(kind) ? KIND_CHANGE[kind] : undefined
 }
 
+// `event.rfc` is Red's own RfcCommon for the document, present on an RFC change only and passed
+// on as Red published it, so it's validated rather than trusted.
+const notificationRfcCommon = (notification: WebNotification): RfcCommon | undefined => {
+  const { data } = NotificationEventSchema.safeParse(notification.event)
+  return RfcCommonSchema.safeParse(data?.rfc).data
+}
+
 // The notification's title: the change (if any) followed by the RFC it's about, rendered with
-// RFCTitle so it matches every other RFC reference on the site — title text is hidden since the
-// event carries nothing to fill it with, so only the "RFC 1234" chip shows. Falls back to plain
-// text — the change alone, or failing that the raw kind — for a notification this build can't
-// parse an RFC out of, so it still shows something rather than an empty row.
+// RFCTitle so it matches every other RFC reference on the site. When the event carries the RFC's
+// metadata its title is shown too; otherwise only the "RFC 1234" chip, parsed from `doc`. Falls
+// back to plain text — the change alone, or failing that the raw kind — for a notification this
+// build can't parse an RFC out of, so it still shows something rather than an empty row.
 const notificationContent = (notification: WebNotification): VNode => {
+  const change = notificationChange(notification)
+  const rfcCommon = notificationRfcCommon(notification)
+
+  if (rfcCommon !== undefined) {
+    const { number, title } = rfcCommon
+    return h('span', [
+      change ? `${change} ` : undefined,
+      h(RFCTitle, { rfc: { number, title }, hasTrailingColon: true })
+    ])
+  }
+
   const doc = notificationEventString(notification, 'doc')
   const rfc = doc !== undefined ? parseSeriesId(doc) : undefined
-  const change = notificationChange(notification)
 
   if (rfc === undefined) {
     return h('span', change ?? notification.kind)
