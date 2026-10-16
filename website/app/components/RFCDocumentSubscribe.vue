@@ -5,13 +5,17 @@
         <DialogTrigger
           type="button"
           :class="[
-            'flex flex-col sm:flex-row gap-1 items-center',
+            'flex flex-col sm:flex-row items-center',
             'cursor-pointer',
             'rounded',
             'text-sm text-center md:text-left',
             'font-bold',
             'hover:bg-sky-100 focus:bg-sky-100',
-            COVER_LINK_STYLE_CLASS
+            COVER_LINK_STYLE_CLASS,
+            {
+              'gap-0': isSubscribedToThisRFC,
+              'gap-1': !isSubscribedToThisRFC
+            }
           ]">
           <GraphicsCheckmark
             v-if="isSubscribedToThisRFC"
@@ -21,8 +25,8 @@
             :class="['text-blue-900 dark:text-blue-100 w-[24px] h-[24px] sm:mr-1', COVER_LINK_INNER_STYLE_CLASS]" />
           <span :class="[COVER_LINK_INNER_STYLE_CLASS, { 'sr-only': props.iconOnly }]">
             {{ isSubscribedToThisRFC ? 'Subscribed' : 'Subscribe' }}
-          </span></DialogTrigger
-        >
+          </span>
+        </DialogTrigger>
         <DialogPortal>
           <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-110" />
           <DialogContent
@@ -109,7 +113,7 @@
       <p
         v-if="props.reefStats?.subscriberCount"
         data-reef-stat
-        :class="['hidden md:block sm:pl-8 text-xs', COVER_LINK_INNER_STYLE_CLASS]">
+        :class="['hidden md:block sm:pl-7 text-xs', COVER_LINK_INNER_STYLE_CLASS]">
         {{ formatNumber(props.reefStats.subscriberCount, 0) }}
         subscribed
       </p>

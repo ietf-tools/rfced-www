@@ -1,5 +1,5 @@
 <template>
-  <component :is="resolveGraphicsIcon(props.icon)" v-if="props.icon && typeof props.icon === 'string'" />
+  <component v-if="props.icon && typeof props.icon === 'string'" :is="resolveGraphicsIcon(props.icon)" />
   <component v-else-if="props.icon && typeof props.icon === 'function'" :is="props.icon" />
 </template>
 
