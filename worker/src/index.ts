@@ -38,6 +38,16 @@ const excludeAuthorRedirects = [
 const subseriesRedirect = (req: IRequest) => {
   const url = new URL(req.normalizedPath, req.url)
   // handle paths like
+  //  * `/rfc/bcp/bcp47.txt`
+  // by redirecting to /info/bcp47/ etc
+  const bcpTxtMatch = url.pathname.match(/^\/rfc\/bcp\/bcp([0-9]+)\.txt$/)
+  if (bcpTxtMatch) {
+    const [, bcpNumber] = bcpTxtMatch
+    url.pathname = `/info/bcp${bcpNumber}/` // the new site expects a trailing slash
+    return redirectTo(url.toString(), 302)(req)
+  }
+
+  // handle paths like
   //  * `/bcp/bcp78`
   //  * `/fyi/fyi3`
   //  * `/std/std3`
@@ -213,6 +223,7 @@ router
   .get('/rfc/std-ref.txt', redirectTo('/std/std-index.txt', 302))
   // note that /rfc/fyi-ref.txt doesn't exist, and /rfc/rfc-ref.txt is not a redirect and is a blob still served
 
+  .get('/rfc/bcp/bcp*', subseriesRedirect)
   .get('/bcp/*', subseriesRedirect)
   .get('/fyi/*', subseriesRedirect)
   .get('/std/*', subseriesRedirect)
