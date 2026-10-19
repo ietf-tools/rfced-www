@@ -180,9 +180,14 @@ if (
   // only compare route.path not route.fullPath as that will clobber ?search#id params
   route.path !== canonicalPath
 ) {
-  await navigateTo({
-    path: canonicalPath
-  })
+  await navigateTo(
+    {
+      path: canonicalPath
+    },
+    {
+      redirectCode: 301
+    }
+  )
 }
 
 // Title format is "RFC <number>: <title>" (https://github.com/ietf-tools/red/issues/196)

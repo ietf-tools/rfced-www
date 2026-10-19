@@ -118,9 +118,14 @@ if (
   // only compare route.path not route.fullPath as that will clobber ?search#id params
   route.path !== canonicalPath
 ) {
-  await navigateTo({
-    path: canonicalPath
-  })
+  await navigateTo(
+    {
+      path: canonicalPath
+    },
+    {
+      redirectCode: 301
+    }
+  )
 }
 
 const formattedTitle = computed(() => formatTitleAsVNode(`${props.subseriesId.type}${props.subseriesId.number}`))
