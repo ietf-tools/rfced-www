@@ -84,7 +84,7 @@ export async function blobsRfc(req: IRequest, env: Env): Promise<Response | unde
   // Links to `/rfc/rfc1234` without a file extension should redirect to the `/info/rfc1234/` page
   const extensionlessMatch = objectPath.match(/^(rfc(\d+)\/?)$/i)
   if (extensionlessMatch && canonicalUrl) {
-    return Response.redirect(canonicalUrl, 302)
+    return Response.redirect(canonicalUrl, 301)
   }
 
   return notFoundResponse()

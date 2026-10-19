@@ -44,7 +44,7 @@ const subseriesRedirect = (req: IRequest) => {
   if (bcpTxtMatch) {
     const [, bcpNumber] = bcpTxtMatch
     url.pathname = `/info/bcp${bcpNumber}/` // the new site expects a trailing slash
-    return redirectTo(url.toString(), 302)(req)
+    return redirectTo(url.toString(), 301)(req)
   }
 
   // handle paths like
@@ -135,9 +135,9 @@ router
   .get('/staff/track_by_editor.php', redirectTo(`https://purple${env.ENV_DOMAIN}.rfc-editor.org/team`, 302))
   .get('/standards/', redirectTo('/search/?status=Internet+Standard', 302))
   .get('/status_changes.php', redirectTo('/status-changes/', 302))
-  .get('/styleguide.html', redirectTo('/authors/rfc-style-guide/', 302))
+  .get('/styleguide.html', redirectTo('/authors/rfc-style-guide/', 301))
   .get('/styleguide/', redirectTo('/authors/rfc-style-guide/', 301))
-  .get('/styleguide/headers-and-boilerplate/', redirectTo('/authors/rfc-style-guide/#rfc-headers-and-boilerplate', 302))
+  .get('/styleguide/headers-and-boilerplate/', redirectTo('/authors/rfc-style-guide/#rfc-headers-and-boilerplate', 301))
   .get('/styleguide/part2/', redirectTo('/authors/rfc-style-guide/', 301))
   .get('/styleguide/tips/', redirectTo('/authors/rfc-style-guide/', 301))
   .get(
