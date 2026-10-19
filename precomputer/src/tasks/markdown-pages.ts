@@ -22,6 +22,9 @@ const CONTENT_METADATA_PATH = path.resolve(import.meta.dirname, '../../../websit
 
 type ContentMetadata = Record<string, { mtime: string } | undefined>
 
+// A nested index.md is served at its directory's URL, so `series/errata/index.md` has the slug `series/errata`.
+const markdownPathToSlug = (relativePath: string): string => relativePath.replace(/\.md$/, '').replace(/\/index$/, '')
+
 export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
   const mdPattern = '**/*.md'
   const markdownGlob = fsPromises.glob(mdPattern, { cwd: CONTENT_DIR })
@@ -41,7 +44,7 @@ export const uploadAllMarkdownPages = async (): AsyncTaskItem => {
   const results = await Promise.all(
     relativePaths.map(async (relativePath): Promise<string | false> => {
       const filePath = path.join(CONTENT_DIR, relativePath)
-      const slug = relativePath.replace(/\.md$/, '')
+      const slug = markdownPathToSlug(relativePath)
       const s3Key = markdownPagePathBuilder(slug)
       try {
         const page = await renderMarkdownPage(filePath, contentMetadata)
@@ -155,7 +158,7 @@ export const markdownToHtml = (markdown: string): string =>
   })
 
 export const renderMarkdownPage = async (filePath: string, contentMetadata: ContentMetadata): Promise<MarkdownPage> => {
-  const slug = path.relative(CONTENT_DIR, filePath).replace(/\.md$/, '')
+  const slug = markdownPathToSlug(path.relative(CONTENT_DIR, filePath))
   const fileContent = await fsPromises.readFile(filePath, 'utf-8')
   return renderMarkdownPageData({
     fileContent,
