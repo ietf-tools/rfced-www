@@ -1,16 +1,5 @@
 <template>
-  <div
-    v-if="featureFlags.accountTabs === false"
-    class="container mx-auto px-4 pt-5 grid grid-cols-1 md:grid-cols-2 gap-8">
-    <AccountWebNotifications />
-
-    <section>
-      <AccountToggleEmail />
-      <AccountSubscriptions />
-      <AccountSets />
-    </section>
-  </div>
-  <div v-else>
+  <div>
     <TabsRoot v-model="selectedTab" class="min-h-0 flex flex-col">
       <div class="bg-blue-900 dark:bg-blue-950">
         <TabsList class="container mx-auto mt-4 px-4 flex flex-col sm:flex-row gap-1">
@@ -81,10 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import { useFeatureFlags } from '~/utilities/feature-flags'
-
-const featureFlags = useFeatureFlags()
-
 const PageTypes = ['notifications', 'subscriptions', 'sets', 'email'] as const
 type PageType = (typeof PageTypes)[number]
 
