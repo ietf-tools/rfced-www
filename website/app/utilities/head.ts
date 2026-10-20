@@ -363,6 +363,11 @@ const buildGoogleScholarMetaTags = (props: UseRfcEditorProps): MetaTag[] => {
   })
 
   metaTags.push({
+    name: 'citation_technical_report_institution',
+    content: googleScholarMetadata.citation_technical_report_institution
+  })
+
+  metaTags.push({
     name: 'citation_title',
     content: googleScholarMetadata.citation_title
   })
@@ -449,7 +454,7 @@ const buildFeedAutodiscovery = (publicSiteOrigin: string): LinkTag[] => {
  * that, which we need for repeated names such as citation_author.
  *
  * The opt-out does not apply to `viewport`, `description`, `keywords` or `robots`,
- * which are collapsed to one tag regardless of `key`. That is why 'keywords'
+ * which are collapsed to one tag regardless of `key`. That is why `keywords`
  * are emitted as a single comma-separated tag.
  *
  * See https://unhead.unjs.io/docs/head/guides/core-concepts/handling-duplicates
