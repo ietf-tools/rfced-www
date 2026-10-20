@@ -90,7 +90,7 @@ type PageType = (typeof PageTypes)[number]
 
 const selectedTab = ref<PageType>('notifications')
 
-const TAB_CLASS = 'px-3 py-2 font-medium cursor-pointer border-1 border-b-0'
+const TAB_CLASS = 'px-3 pt-3 pb-2 font-medium cursor-pointer border-1 border-b-0'
 const SELECTED_CLASS =
   'text-bold-without-layout-shift bg-gray-100 dark:bg-blue-25 text-gray-900 dark:text-gray-900 border-b-blue-900 dark:border-b-white'
 const UNSELECTED_CLASS = 'border-b-transparent bg-blue-900 text-gray-100 dark:text-gray-300'
