@@ -34,7 +34,7 @@
         @click="webNotifications.markAllRead">
         Mark all as read
       </button>
-      <ul v-if="notificationRows.length > 0" class="flex flex-col py-3 rounded-xl border-gray-200">
+      <ul v-if="notificationRows.length > 0" class="flex flex-col max-w-220 py-3 rounded-xl border-gray-200">
         <li
           v-for="{ notification, href, content } in notificationRows"
           :key="notification.id"

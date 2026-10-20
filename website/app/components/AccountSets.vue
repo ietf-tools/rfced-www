@@ -19,7 +19,7 @@
     </AlertBox>
 
     <template v-else-if="setsLoadingStatus.type === 'success'">
-      <ul v-if="sets.length > 0" class="flex flex-col gap-2 py-3">
+      <ul v-if="sets.length > 0" class="flex flex-col max-w-120 gap-2 py-3">
         <li
           v-for="set in sets"
           :key="set.id"

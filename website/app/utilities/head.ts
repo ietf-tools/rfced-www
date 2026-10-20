@@ -41,6 +41,7 @@ type UseRfcEditorProps = {
   resourceTimestamps?: ResourceTimestamp[]
   googleScholarMetadata?: GoogleScholarMetadata
   noIndex?: boolean
+  bodyAttrsClass?: string // wrapping useHead
 }
 
 export const useRfcEditorHead = (props: UseRfcEditorProps) => {
@@ -74,7 +75,8 @@ export const useRfcEditorHead = (props: UseRfcEditorProps) => {
         tagPosition: 'bodyOpen',
         innerHTML: `<div style="background-color: #ffc9c9; color: #9f0712; padding: 7px; text-align:center; text-size: .9rem;"><span style="font-weight: 600;">Your browser has JavaScript disabled. Most of this site works without JS, but some features require it. If something seems broken please try enabling JavaScript and reloading the page.</span><br><span style="font-size: .8rem;">The JavaScript used by this site is served directly from IETF infrastructure and does not include any code that links to a third party service.</span></div>`
       }
-    ]
+    ],
+    bodyAttrs: props.bodyAttrsClass ? { class: props.bodyAttrsClass } : undefined
   })
 }
 

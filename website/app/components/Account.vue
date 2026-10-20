@@ -85,7 +85,7 @@ import { useFeatureFlags } from '~/utilities/feature-flags'
 
 const featureFlags = useFeatureFlags()
 
-const PageTypes = ['notifications', 'subscriptions', 'email', 'sets'] as const
+const PageTypes = ['notifications', 'subscriptions', 'sets', 'email'] as const
 type PageType = (typeof PageTypes)[number]
 
 const selectedTab = ref<PageType>('notifications')
