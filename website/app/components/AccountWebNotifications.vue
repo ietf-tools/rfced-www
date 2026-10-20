@@ -1,8 +1,23 @@
 <template>
   <section aria-labelledby="account-web-notifications-heading">
-    <Heading id="account-web-notifications-heading" level="2">
-      Your Subscription notifications ({{ unreadCount }} unread)
-    </Heading>
+    <div class="max-w-220 flex flex-row justify-between items-center">
+      <Heading id="account-web-notifications-heading" level="2">
+        Your Subscription notifications ({{ unreadCount }} unread)
+      </Heading>
+      <button
+        v-if="unreadCount > 0"
+        type="button"
+        :class="[
+          'ml-4 cursor-pointer',
+          'py-1 px-3',
+          'font-bold rounded text-xs tracking-wider text-blue-500 dark:text-blue-100',
+          'border-2 border-blue-500 dark:border-blue-200',
+          'bg-white hover:bg-blue-400 focus:bg-blue-400 focus:text-white hover:text-white dark:bg-blue-950'
+        ]"
+        @click="webNotifications.markAllRead">
+        Mark all as read
+      </button>
+    </div>
 
     <p
       v-if="webNotifications.status === 'pending' && webNotifications.notifications.length === 0"
@@ -21,28 +36,34 @@
     </AlertBox>
 
     <template v-else>
-      <button
-        v-if="unreadCount > 0"
-        type="button"
-        :class="[
-          'mt-4 ml-4 cursor-pointer',
-          'py-1 px-3',
-          'font-bold rounded text-xs tracking-wider text-blue-500 dark:text-blue-100',
-          'border-2 border-blue-500 dark:border-blue-200',
-          ' bg-white hover:bg-blue-400 focus:bg-blue-400 focus:text-white hover:text-white dark:bg-blue-950'
-        ]"
-        @click="webNotifications.markAllRead">
-        Mark all as read
-      </button>
       <ul v-if="notificationRows.length > 0" class="flex flex-col max-w-220 py-3 rounded-xl border-gray-200">
         <li
           v-for="{ notification, href, content } in notificationRows"
           :key="notification.id"
           :class="[
-            'py-4 px-4 flex flex-row justify-between border border-b-1 border-gray-200 dark:border-gray-600',
+            'py-4 px-4 flex flex-row border border-b-1 border-gray-200 dark:border-gray-600',
             notification.read ? 'bg-transparent' : 'bg-white dark:bg-gray-800'
           ]">
-          <div class="flex flex-row">
+          <div class="w-full flex flex-row">
+            <div class="pt-1 pr-1 min-w-[8em]">
+              <time
+                :datetime="notification.created_at"
+                class="inline-block text-center font-bold tracking-wider bg-gray-300 dark:bg-gray-600 rounded-xl px-3 py-1 text-xs whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                {{ formatNotificationDate(notification.created_at) }}
+              </time>
+            </div>
+            <Anchor
+              v-if="href"
+              :href="href"
+              class="flex-1 no-underline inline-block px-3"
+              @click="webNotifications.markRead(notification.id)">
+              <span class="underline">
+                <Renderable :val="content" />
+              </span>
+            </Anchor>
+            <div v-else class="flex-1 px-3">
+              <Renderable :val="content" />
+            </div>
             <div>
               <span
                 :class="[
@@ -57,25 +78,6 @@
                 >{{ notification.read ? 'read' : 'unread' }}</span
               >
             </div>
-            <Anchor
-              v-if="href"
-              :href="href"
-              class="no-underline inline-block px-3"
-              @click="webNotifications.markRead(notification.id)">
-              <span class="underline">
-                <Renderable :val="content" />
-              </span>
-            </Anchor>
-            <div v-else class="px-3">
-              <Renderable :val="content" />
-            </div>
-          </div>
-          <div class="pt-1 pr-1">
-            <time
-              :datetime="notification.created_at"
-              class="block font-bold tracking-wider bg-gray-300 dark:bg-gray-600 rounded-xl px-3 py-1 text-xs whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-              {{ formatNotificationDate(notification.created_at) }}
-            </time>
           </div>
         </li>
       </ul>
