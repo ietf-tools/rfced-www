@@ -24,7 +24,7 @@
               }
             ]"
             :value="PageTypes[0]">
-            <UserImageNotificationsWrapper> Notifications </UserImageNotificationsWrapper>
+            <UserImageNotificationsWrapper class="pr-3"> Notifications </UserImageNotificationsWrapper>
           </TabsTrigger>
           <TabsTrigger
             :class="[
