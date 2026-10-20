@@ -24,8 +24,7 @@
               }
             ]"
             :value="PageTypes[0]">
-            Notifications
-            <DiamondText v-if="unreadCount" :text="unreadCount.toString()" />
+            <UserImageNotificationsWrapper> Notifications </UserImageNotificationsWrapper>
           </TabsTrigger>
           <TabsTrigger
             :class="[
@@ -90,9 +89,6 @@ const PageTypes = ['notifications', 'subscriptions', 'email', 'sets'] as const
 type PageType = (typeof PageTypes)[number]
 
 const selectedTab = ref<PageType>('notifications')
-
-const webNotifications = useReefNotificationsStore()
-const unreadCount = computed(() => filterNotificationsByUnread(webNotifications.notifications).length)
 
 const TAB_CLASS = 'px-3 py-2 font-medium cursor-pointer border-1 border-b-0'
 const SELECTED_CLASS =
