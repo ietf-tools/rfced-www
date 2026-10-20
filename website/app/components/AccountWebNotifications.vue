@@ -41,10 +41,10 @@
           v-for="{ notification, href, content } in notificationRows"
           :key="notification.id"
           :class="[
-            'py-4 px-4 flex flex-row border border-b-1 border-gray-200 dark:border-gray-600',
+            'py-4 px-4 border border-b-1 border-gray-200 dark:border-gray-600',
             notification.read ? 'bg-transparent' : 'bg-white dark:bg-gray-800'
           ]">
-          <div class="w-full flex flex-row">
+          <div class="w-full flex flex-col sm:flex-row">
             <div class="pt-1 pr-1 min-w-[8em]">
               <time
                 :datetime="notification.created_at"
@@ -55,7 +55,7 @@
             <Anchor
               v-if="href"
               :href="href"
-              class="flex-1 no-underline inline-block px-3"
+              class="flex-1 no-underline inline-block px-1 sm:px-3 py-1 sm:py-0"
               @click="webNotifications.markRead(notification.id)">
               <span class="underline">
                 <Renderable :val="content" />
