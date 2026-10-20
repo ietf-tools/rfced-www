@@ -5,7 +5,7 @@
     </HeaderWrapper>
     <Main :class="props.mainClass">
       <AuthWall>
-        <HeaderWrapper :class="props.hasSubHeader ? 'border-b border-b-white dark:border-b-blue-900' : undefined">
+        <HeaderWrapper>
           <slot name="subheader" />
         </HeaderWrapper>
         <slot />

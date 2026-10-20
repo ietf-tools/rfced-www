@@ -10,7 +10,8 @@ export const FeatureFlagsSchema = z.object({
   formatsAlsoViewAs: z.boolean().optional(),
   searchObsoletedDefaults: z.boolean().optional(),
   hasTextScale: z.boolean().optional(),
-  hasWordBreakMode: z.boolean().optional()
+  hasWordBreakMode: z.boolean().optional(),
+  accountTabs: z.boolean().optional()
 })
 
 // this is commented out until next time we need a string union value in feature flags.
@@ -31,6 +32,11 @@ export type FeatureFlagUIRow = {
 }
 
 const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
+  accountTabs: {
+    title: 'Account tabs',
+    description: 'Whether the user /my/ route should render in tabs',
+    storageType: 'boolean'
+  },
   hasTextScale: {
     title: 'Text scaling option',
     description: 'Text scaling affects line spacing, letter spacing, word spacing, and spacing after paragraphs.',
@@ -65,6 +71,7 @@ const featureFlagsUI: Record<keyof FeatureFlags, FeatureFlagUIRow> = {
 }
 
 export const DEFAULT_FEATURE_FLAGS: Required<FeatureFlags> = {
+  accountTabs: false,
   hasTextScale: false,
   hasWordBreakMode: false,
   isDidYouMeanActive: false,
