@@ -858,18 +858,18 @@ const noScriptHtml = computed(() => {
       ${rfc.obsoleted_by?.length ? `<dt class="font-bold mt-2">Obsoleted by (${rfc.obsoleted_by.length})</dt><dd>${renderRfcList(rfc.obsoleted_by)}</dd>` : ''}
       ${rfc.published ? `<dt class="font-bold mt-2">Date published</dt><dd>${formattedPublished.value}</dd>` : ''}
       ${
-          rfc.authors.length > 0
-            ? `<dt class="font-bold mt-2">Authors</dt><dd>${rfc.authors
-                .map((author, index, arr) => {
-                  const punctuation = index < arr.length - 1 ? ', ' : '.'
-                  if (author.datatracker_person_path) {
-                    return `<a href="${htmlEscapeToText(datatrackerAuthorUrlBuilder(author.datatracker_person_path))}" class="${LINK_CLASS}">${htmlEscapeToText(author.titlepage_name ?? '(no name)')}</a>${punctuation}`
-                  }
-                  return `${htmlEscapeToText(author.titlepage_name ?? '(no name)')}${punctuation}`
-                })
-                .join('')}</dd>`
-            : ''
-        }
+        rfc.authors.length > 0
+          ? `<dt class="font-bold mt-2">Authors</dt><dd>${rfc.authors
+              .map((author, index, arr) => {
+                const punctuation = index < arr.length - 1 ? ', ' : '.'
+                if (author.datatracker_person_path) {
+                  return `<a href="${htmlEscapeToText(datatrackerAuthorUrlBuilder(author.datatracker_person_path))}" class="${LINK_CLASS}">${htmlEscapeToText(author.titlepage_name ?? '(no name)')}</a>${punctuation}`
+                }
+                return `${htmlEscapeToText(author.titlepage_name ?? '(no name)')}${punctuation}`
+              })
+              .join('')}</dd>`
+          : ''
+      }
       ${shouldShowGroup(rfc) ? `<dt class="font-bold mt-2">${htmlEscapeToText(groupName(rfc))}</dt><dd>${renderDocumentPojoToHtmlString(groupValuePojo(rfc))}</dd>` : ''}
       ${shouldShowArea(rfc) ? `<dt class="font-bold mt-2">Area</dt><dd>${renderDocumentPojoToHtmlString(areaValuePojo(rfc))}</dd>` : ''}
       ${shouldShowStreamValue(rfc) ? `<dt class="font-bold mt-2">${htmlEscapeToText(streamName.value)}</dt><dd>${renderDocumentPojoToHtmlString(streamValuePojo(rfc))}</dd>` : ''}

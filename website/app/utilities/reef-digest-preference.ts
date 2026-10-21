@@ -84,9 +84,8 @@ export const useDigestEmailPreference = (): {
     pendingWrites += 1
     saveStatus.value = { type: 'loading' }
 
-    const outcome = await reefStore.runWrite(
-      'digest-preference',
-      (): Promise<void> => patchDigestPreference({ receive_digest_email: receive }).then(() => undefined)
+    const outcome = await reefStore.runWrite('digest-preference', (): Promise<void> =>
+      patchDigestPreference({ receive_digest_email: receive }).then(() => undefined)
     )
 
     pendingWrites -= 1

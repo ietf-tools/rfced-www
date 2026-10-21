@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { useHead } from 'nuxt/app'
+import type { Link, Meta } from '@unhead/vue/types'
 import {
   linkPreviewImageUrlBuilder,
   faviconPathBuilder,
@@ -116,12 +117,7 @@ const getMime = (url: string) => {
   throw Error(`Unsupported image format from ${url}`)
 }
 
-type MetaTag = {
-  name?: string
-  property?: string
-  content: string
-  key?: string
-}
+type MetaTag = Meta
 
 const buildOpenGraphMetaTags = (props: UseRfcEditorProps, publicSiteOrigin: string): MetaTag[] => {
   const {
@@ -285,30 +281,15 @@ const FAVICON_DIMENSIONS: [number, number][] = [
   [512, 512]
 ]
 
-type LinkTag = {
-  // extracting types from unhead is hard so we'll just make some similar types here
-  // this typing isn't exhaustive -- change it as needed
-  rel: 'canonical' | 'icon' | 'alternate'
-  type?:
-    | 'image/png'
-    | 'text/xml'
-    | 'application/xml'
-    | 'application/rss+xml' // not IANA registered but W3C recommended https://validator.w3.org/feed/docs/warning/UnexpectedContentType.html
-    | 'application/atom+xml' // IANA registered
-  sizes?: `${number}x${number}`
-  title?: string
-  href: string
-}
+type LinkTag = Link
 
 const buildFaviconLinks = (): LinkTag[] => {
-  return FAVICON_DIMENSIONS.map(
-    ([widthPx, heightPx]): LinkTag => ({
-      rel: 'icon',
-      type: 'image/png',
-      sizes: `${widthPx}x${heightPx}`,
-      href: faviconPathBuilder(widthPx, heightPx)
-    })
-  )
+  return FAVICON_DIMENSIONS.map(([widthPx, heightPx]): LinkTag => ({
+    rel: 'icon',
+    type: 'image/png',
+    sizes: `${widthPx}x${heightPx}`,
+    href: faviconPathBuilder(widthPx, heightPx)
+  }))
 }
 
 const buildNoIndex = ({ noIndex }: UseRfcEditorProps): MetaTag[] => {

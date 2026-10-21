@@ -202,17 +202,15 @@ export const useMenuData = (mode: Mode) => {
         label: 'Theme',
         role: 'radiogroup',
         radioGroupRef: themeRef,
-        children: colorPreferences.map(
-          (colorPreference): MenuItem => ({
-            label: colorPreference.label,
-            activeLabelFn: () =>
-              colorMode.preference === colorPreference.value
-                ? `Selected ${colorPreference.label}`
-                : `Not selected ${colorPreference.label}`,
-            role: 'radio',
-            fieldValue: colorPreference.value
-          })
-        )
+        children: colorPreferences.map((colorPreference): MenuItem => ({
+          label: colorPreference.label,
+          activeLabelFn: () =>
+            colorMode.preference === colorPreference.value
+              ? `Selected ${colorPreference.label}`
+              : `Not selected ${colorPreference.label}`,
+          role: 'radio',
+          fieldValue: colorPreference.value
+        }))
       },
       {
         label: 'Surveys',
