@@ -6,8 +6,10 @@
          the action; DialogTrigger already announces the dialog itself via aria-haspopup. -->
       <DialogTrigger
         :class="[
+          'inline-block',
+          'min-w-[8em]', // set a minimum width so that changing rating doesn't cause reflow
           'cursor-pointer',
-          'px-2 pt-1.25 pb-1 rounded',
+          'px-0 pt-1.25 pb-1 rounded',
           'text-blue-900 dark:text-blue-100 font-bold',
           'hover:text-blue-400 dark:hover:text-blue-25 focus:text-blue-400 hover:bg-sky-100 dark:hover:bg-sky-950 focus:bg-sky-100',
           'border-1 border-white dark:border-black focus:border-blue-600 hover:border-blue-600 dark:hover:border-blue-25'
@@ -18,6 +20,7 @@
       <DialogPortal>
         <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-110" />
         <DialogContent
+          v-bind="dialogDescriptionAttrs(isAuthenticated)"
           :class="[
             'fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] translate-x-[-50%] translate-y-[-50%] z-115',
             'focus:outline-none rounded-md shadow-3xl',
@@ -37,9 +40,9 @@
             <template v-else>Rate RFC {{ props.rfcNumber }}</template>
           </DialogTitle>
 
-          <DialogDescription class="text-sm">
-            <template v-if="isAuthenticated">
-              <p class="text-center">Select a rating between 1 and 5</p>
+          <template v-if="isAuthenticated">
+            <div class="text-sm">
+              <DialogDescription class="text-center">Select a rating between 1 and 5</DialogDescription>
               <div class="flex flex-col items-center justify-center gap-1 py-3">
                 <div class="px-4 py-2">
                   <StarRating
@@ -52,7 +55,7 @@
                   </p>
                 </div>
               </div>
-              <div class="flex justify-between pb-2">
+              <div class="flex justify-between items-center pb-2">
                 <span>
                   <!-- Removing is a change to the rating like picking a star is, so it goes out the
                      same way — through the model, leaving the parent to persist it and to announce
@@ -68,22 +71,26 @@
                     </button>
                   </DialogClose>
                 </span>
-                <DialogClose
-                  :class="[
-                    'px-3 py-1 rounded-md',
-                    'text-white bg-blue-600 dark:bg-blue-900 font-bold',
-                    'border border-gray-400',
-                    'cursor-pointer'
-                  ]">
-                  Done
-                </DialogClose>
-              </div>
-            </template>
+                <div class="flex items-center gap-1">
+                  <AsyncStatusIcon :status="syncStatus" label="your rating" @retry="emit('retry')" />
 
-            <template v-else>
-              <LoginModalFeatureWall />
-            </template>
-          </DialogDescription>
+                  <DialogClose
+                    :class="[
+                      'px-3 py-1 rounded-md',
+                      'text-white bg-blue-600 dark:bg-blue-900 font-bold',
+                      'border border-gray-400',
+                      'cursor-pointer'
+                    ]">
+                    Done
+                  </DialogClose>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <div v-else class="text-sm">
+            <LoginModalFeatureWall />
+          </div>
 
           <DialogClose class="absolute top-2 right-2 px-2 py-2 cursor-pointer" aria-label="Close">
             <GraphicsClose />
@@ -113,13 +120,18 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
+import { dialogDescriptionAttrs } from '~/utilities/accessibility'
+import type { LoadingStatus } from '~/utilities/loading-status'
 import { STAR_SCORE_LENGTH, userRFCRatingLabel } from '~/utilities/reef-ratings'
 
 type Props = {
   rfcNumber: number
+  // The reader's rating as it is saved, for the icon beside the Done button.
+  syncStatus: LoadingStatus
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{ retry: [] }>()
 
 const userRFCRating = defineModel<number | undefined>()
 

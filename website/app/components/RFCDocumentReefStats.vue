@@ -9,7 +9,11 @@
             props.reefStats.ratingAggregate.average > 0 // an average of 0 means there are no ratings (users can only rate 1-5)
           "
           :reef-stats="props.reefStats" />
-        <RFCDocumentRateThisRFC :rfc-number="props.rfcNumber" v-model="userRFCRating" />
+        <RFCDocumentRateThisRFC
+          :rfc-number="props.rfcNumber"
+          :sync-status="ratingSyncStatus"
+          @retry="retryRating"
+          v-model="userRFCRating" />
       </li>
       <li class="sm:pl-2 sm:pr-2 sm:border-l-1 sm:border-r-1 border-gray-300 dark:border-gray-700">
         <RFCDocumentSubscribe
@@ -17,6 +21,8 @@
           :reef-stats="props.reefStats"
           :user="user"
           :status="subscriptionStatus"
+          :sync-status="subscriptionSyncStatus"
+          @retry="retrySubscription"
           v-model="isSubscribedToThisRFC" />
       </li>
       <li class="pl-1 sm:pl-2">
@@ -27,6 +33,8 @@
           :sets="userSets"
           :create-set="createSet"
           :status="setsStatus"
+          :sync-status="setsSyncStatus"
+          @retry="retrySets"
           v-model="setIdsWithThisRFC" />
       </li>
     </ul>
@@ -83,7 +91,19 @@ const { user } = storeToRefs(useAuthStore())
 // navigates to another RFC reuses this component, and every model has to follow it to the new one.
 const rfcNumber = () => props.rfcNumber
 
-const userRFCRating = useUserRFCRating(rfcNumber)
-const { isSubscribed: isSubscribedToThisRFC, status: subscriptionStatus } = useUserRFCSubscription(rfcNumber)
-const { sets: userSets, setIdsWithThisRFC, createSet, status: setsStatus } = useUserSets(rfcNumber)
+const { rating: userRFCRating, syncStatus: ratingSyncStatus, retry: retryRating } = useUserRFCRating(rfcNumber)
+const {
+  isSubscribed: isSubscribedToThisRFC,
+  status: subscriptionStatus,
+  syncStatus: subscriptionSyncStatus,
+  retry: retrySubscription
+} = useUserRFCSubscription(rfcNumber)
+const {
+  sets: userSets,
+  setIdsWithThisRFC,
+  createSet,
+  status: setsStatus,
+  syncStatus: setsSyncStatus,
+  retry: retrySets
+} = useUserSets(rfcNumber)
 </script>

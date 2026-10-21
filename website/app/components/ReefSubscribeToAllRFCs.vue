@@ -20,6 +20,7 @@
         <DialogPortal>
           <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-110" />
           <DialogContent
+            v-bind="dialogDescriptionAttrs(isAuthenticated)"
             :class="[
               'fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] translate-x-[-50%] translate-y-[-50%] z-115',
               'focus:outline-none rounded-md shadow-3xl',
@@ -35,40 +36,29 @@
               <template v-else>New RFCs Subscription</template>
             </DialogTitle>
 
-            <DialogDescription class="text-sm pt-3">
-              <template v-if="isAuthenticated">
-                <!-- A separate hidden region rather than aria-live on the paragraph itself, so the
-                   announcement doesn't sit inside the same element the checkbox later renders into —
-                   nesting a live region around an interactive control it would otherwise re-announce
-                   on every tick, which this avoids by only ever holding this one status string. -->
-                <span class="sr-only" aria-live="polite" aria-atomic="true">{{ loadAnnouncement }}</span>
+            <template v-if="isAuthenticated">
+              <div class="text-sm pt-3">
+                <DialogDescription class="mb-5">Check to subscribe. Uncheck to unsubscribe.</DialogDescription>
+                <CheckboxRoot
+                  v-model="isSubscribed"
+                  :disabled="!isSubscriptionLoaded"
+                  class="flex items-start gap-2 w-full text-left cursor-pointer data-[disabled]:cursor-not-allowed data-[disabled]:opacity-60">
+                  <span
+                    class="inline-flex shrink-0 items-center justify-center w-[20px] h-[20px] mt-0.5 border-1 rounded border-current/60">
+                    <CheckboxIndicator>
+                      <GraphicsCheckmark class="block w-[14px] h-[14px]" />
+                    </CheckboxIndicator>
+                  </span>
+                  <span>Subscribe to new RFCs</span>
+                </CheckboxRoot>
 
-                <p v-if="status.type === 'loading'" class="flex items-center gap-2 py-3">
-                  <GraphicsLoading class="inline-block w-5 h-5" />
-                  Loading...
-                </p>
+                <div class="flex justify-end items-center gap-1 pb-2 pt-4">
+                  <AsyncStatusIcon
+                    v-if="isAuthenticated"
+                    :status="syncStatus"
+                    label="your subscription"
+                    @retry="retry" />
 
-                <AlertBox v-else-if="status.type === 'error'" variant="warning" role="alert">
-                  <p>
-                    {{ status.message }}
-                    <button type="button" class="underline cursor-pointer" @click="reefStore.load()">Try again</button>
-                  </p>
-                </AlertBox>
-
-                <div v-else>
-                  <p class="mb-5">Check to subscribe. Uncheck to unsubscribe.</p>
-                  <CheckboxRoot v-model="isSubscribed" class="flex items-start gap-2 cursor-pointer w-full text-left">
-                    <span
-                      class="inline-flex shrink-0 items-center justify-center w-[20px] h-[20px] mt-0.5 border-1 rounded border-current/60">
-                      <CheckboxIndicator>
-                        <GraphicsCheckmark class="block w-[14px] h-[14px]" />
-                      </CheckboxIndicator>
-                    </span>
-                    <span>Subscribe to new RFCs</span>
-                  </CheckboxRoot>
-                </div>
-
-                <div class="flex justify-end pb-2 pt-4">
                   <DialogClose
                     :class="[
                       'px-3 py-1 rounded-md',
@@ -79,12 +69,12 @@
                     Done
                   </DialogClose>
                 </div>
-              </template>
+              </div>
+            </template>
 
-              <template v-else>
-                <LoginModalFeatureWall />
-              </template>
-            </DialogDescription>
+            <div v-else class="text-sm pt-3">
+              <LoginModalFeatureWall />
+            </div>
 
             <DialogClose class="absolute top-2 right-2 px-2 py-2 cursor-pointer" aria-label="Close">
               <GraphicsClose />
@@ -112,35 +102,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
-import { useReefStore } from '~/stores/reef'
+import { dialogDescriptionAttrs } from '~/utilities/accessibility'
 import { useUserSubscription } from '~/utilities/reef-subscriptions'
 
-const reefStore = useReefStore()
-const { isSubscribed, status } = useUserSubscription({ kind: 'new_rfc' }, 'new RFCs')
+const { isSubscribed, status, syncStatus, retry } = useUserSubscription({ kind: 'new_rfc' }, 'new RFCs')
 
-const isLoading = computed(() => status.value.type === 'loading')
-
-// Whether a load has been seen in flight, so `loadAnnouncement` only speaks up once loading
-// actually happened. Without it, a dialog opened after the load already settled — the common case,
-// since it starts as soon as the page does — would announce "loaded" for something the reader
-// never saw as pending.
-const hasLoaded = ref(false)
-watch(
-  isLoading,
-  (loading) => {
-    if (loading) {
-      hasLoaded.value = true
-    }
-  },
-  { immediate: true }
-)
-
-const loadAnnouncement = computed(() => {
-  if (isLoading.value) {
-    return 'Loading your Subscription status.'
-  }
-  return hasLoaded.value ? 'Subscription status loaded.' : ''
-})
+// A checkbox that ticked before the subscriptions arrived would read as "not subscribed" rather
+// than "not known yet", so it stays disabled until they have.
+const isSubscriptionLoaded = computed(() => status.value.type === 'success')
 
 // `user` is passed down to the subscribe and sets dialogs rather than left for them to read from
 // the store themselves, so they render from what they're given and this component stays the one
@@ -154,5 +123,5 @@ const isAuthenticated = computed(() => user.value !== undefined)
 
 // Only true once signed in and the checkbox model reflects a loaded subscription, so the trigger
 // doesn't flash the subscribed style for a signed-out reader or before the real status has arrived.
-const isSubscribedToAll = computed(() => isAuthenticated.value && !isLoading.value && isSubscribed.value)
+const isSubscribedToAll = computed(() => isAuthenticated.value && isSubscriptionLoaded.value && isSubscribed.value)
 </script>

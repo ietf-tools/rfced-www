@@ -93,6 +93,17 @@ export type ReefWriteOutcome<T> = { status: 'done'; value: T } | { status: 'fail
  */
 export type PendingSubscription = { desired: boolean; inFlight: number }
 
+/**
+ * How the changes to which sets hold one document are going, per set. Each set is its own write, so
+ * what a dialog can say about them as a whole is whether any is still out, which were refused (and
+ * which way they were going, to say what the reader is left with), and whether any has been kept.
+ */
+export type SetMembershipSync = {
+  inFlight: Record<string, number>
+  failed: Record<string, { adding: boolean }>
+  hasSaved: boolean
+}
+
 const idleStatuses = (): Record<ReefSlice, LoadingStatus> => ({
   ratings: { type: 'idle' },
   subscriptions: { type: 'idle' },
@@ -106,6 +117,7 @@ export const useReefStore = defineStore('reef', () => {
   const ratings = ref<Record<string, number>>({})
   const subscriptions = ref<Subscription[]>([])
   const pendingSubscriptions = ref<Record<string, PendingSubscription>>({})
+  const setMembershipSync = ref<Record<string, SetMembershipSync>>({})
   const sets = ref<ReefSet[]>([])
   // Which of the reader's sets hold each document, inverted from what Reef sends per set so that
   // a card asking about one document doesn't search every set for it.
@@ -181,6 +193,36 @@ export const useReefStore = defineStore('reef', () => {
     pending.inFlight -= 1
   }
 
+  /** Note a change to whether one set holds one document that has been started and not yet answered. */
+  const beginSetMembershipChange = (doc: string, setId: string): void => {
+    const sync = (setMembershipSync.value[doc] ??= { inFlight: {}, failed: {}, hasSaved: false })
+    sync.inFlight[setId] = (sync.inFlight[setId] ?? 0) + 1
+    delete sync.failed[setId]
+  }
+
+  /**
+   * Note that one such change has been answered. A refusal is only recorded once no later change to
+   * the same set is still out, because that later one decides where the set ends up.
+   */
+  const endSetMembershipChange = (doc: string, setId: string, failure?: { adding: boolean }): void => {
+    const sync = setMembershipSync.value[doc]
+    if (sync === undefined) {
+      return
+    }
+    const remaining = (sync.inFlight[setId] ?? 1) - 1
+    if (remaining > 0) {
+      sync.inFlight[setId] = remaining
+    } else {
+      delete sync.inFlight[setId]
+      if (failure !== undefined) {
+        sync.failed[setId] = failure
+      }
+    }
+    if (failure === undefined) {
+      sync.hasSaved = true
+    }
+  }
+
   const addSubscription = (subscription: Subscription): void => {
     subscriptions.value = [...subscriptions.value, subscription]
   }
@@ -234,6 +276,7 @@ export const useReefStore = defineStore('reef', () => {
     ratings.value = {}
     subscriptions.value = []
     pendingSubscriptions.value = {}
+    setMembershipSync.value = {}
     sets.value = []
     setIdsByDoc.value = {}
     status.value = idleStatuses()
@@ -370,6 +413,7 @@ export const useReefStore = defineStore('reef', () => {
     ratings,
     subscriptions,
     pendingSubscriptions,
+    setMembershipSync,
     sets,
     setIdsByDoc,
     status,
@@ -380,6 +424,8 @@ export const useReefStore = defineStore('reef', () => {
     setRating,
     beginSubscriptionChange,
     endSubscriptionChange,
+    beginSetMembershipChange,
+    endSetMembershipChange,
     addSubscription,
     removeSubscription,
     setSetIds,

@@ -136,7 +136,7 @@
                     ]">
                     <DialogTitle class="text-lg font-semibold text-center pb-3">Delete this Set?</DialogTitle>
 
-                    <DialogDescription class="text-sm">
+                    <div class="text-sm">
                       <p>{{ set.title || 'Untitled Set' }}</p>
                       <p class="pt-2">This can't be undone, and anyone else with the link will lose it too.</p>
 
@@ -163,7 +163,7 @@
                           {{ setsDeleting[set.id] ? 'Deleting…' : 'Delete' }}
                         </button>
                       </div>
-                    </DialogDescription>
+                    </div>
 
                     <DialogClose class="absolute top-2 right-2 px-2 py-2 cursor-pointer" aria-label="Close">
                       <GraphicsClose />

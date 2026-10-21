@@ -67,14 +67,16 @@
                     ]">
                     <DialogTitle class="text-lg font-semibold text-center pb-3">Delete this Subscription?</DialogTitle>
 
-                    <DialogDescription class="text-sm">
-                      <p>
-                        {{ subscriptionLabel(subscription) }}
-                        <template v-if="subscriptionParamsSummary(subscription)">
-                          — {{ subscriptionParamsSummary(subscription) }}
-                        </template>
-                      </p>
-                      <p class="pt-2">You'll stop receiving these notifications. This can't be undone.</p>
+                    <div class="text-sm">
+                      <DialogDescription as="div">
+                        <p>
+                          {{ subscriptionLabel(subscription) }}
+                          <template v-if="subscriptionParamsSummary(subscription)">
+                            — {{ subscriptionParamsSummary(subscription) }}
+                          </template>
+                        </p>
+                        <p class="pt-2">You'll stop receiving these notifications. This can't be undone.</p>
+                      </DialogDescription>
 
                       <!-- role="alert" so a failed delete is announced: the dialog stays put and the only
                            thing that changed is this line appearing. -->
@@ -102,7 +104,7 @@
                           {{ subscriptionsDeleting[subscription.id] ? 'Deleting…' : 'Delete' }}
                         </button>
                       </div>
-                    </DialogDescription>
+                    </div>
 
                     <DialogClose class="absolute top-2 right-2 px-2 py-2 cursor-pointer" aria-label="Close">
                       <GraphicsClose />

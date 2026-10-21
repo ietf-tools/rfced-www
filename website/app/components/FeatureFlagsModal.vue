@@ -7,15 +7,13 @@
           <DialogTitle as="h1" class="text-xl font-bold py-2 pr-16">
             RFC-Editor.org Feature Flag Experiments
           </DialogTitle>
-          <DialogDescription
-            as="div"
-            class="w-full leading-6 pb-3 flex flex-row border-b-1 border-b-gray-300 dark:border-b-gray-600">
-            <p class="flex-2 text-balance">
+          <div class="w-full leading-6 pb-3 flex flex-row border-b-1 border-b-gray-300 dark:border-b-gray-600">
+            <DialogDescription class="flex-2 text-balance">
               <b class="text-red-800 dark:text-red-400">Warning: </b> This config panel is intended for a specific
               audience. It is for those interested in using experimental features of the website and giving technical
               feedback. These experimental features may be buggy. You should not enable these experimental features
               unless you know what you're doing.
-            </p>
+            </DialogDescription>
             <div
               class="flex-1 text-sm bg-yellow-50 dark:bg-yellow-900 text-yellow-950 dark:text-yellow-100 ml-6 w-50 py-2 px-3">
               <Heading level="2" style-level="5">What are "feature flags"?</Heading>
@@ -24,7 +22,7 @@
                 <b>or may not</b> become default in the future.
               </p>
             </div>
-          </DialogDescription>
+          </div>
           <Heading level="2" style-level="4" class="mt-4 mb-0 pb-0">Website feature flags:</Heading>
           <div class="py-3 flex flex-col gap-5 border-b-1 border-b-gray-300 dark:border-b-gray-600">
             <FeatureFlagItem

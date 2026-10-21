@@ -22,7 +22,7 @@ export const withReturnTo = (surveyUrl: string, returnToPath: string): string =>
 // How long to wait for ~/utilities/oidc's session restore to settle before giving up and treating
 // the reader as signed out. Covers both outcomes it can still be waiting on this far in — an
 // Authentik round trip, or finding no session cookie at all — with room to spare.
-const AUTH_CHECK_TIMEOUT_MS = 5_000
+const AUTH_CHECK_TIMEOUT_MS = 60_000
 
 // slug is what a dismissal is keyed on (see OpenSurvey), so it's the notification's id too —
 // not a derived string of our own that could drift from what the reader already dismissed.

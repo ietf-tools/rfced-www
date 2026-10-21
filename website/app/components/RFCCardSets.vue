@@ -7,6 +7,8 @@
     :icon-only="props.iconOnly"
     :create-set="createSet"
     :status="status"
+    :sync-status="syncStatus"
+    @retry="retry"
     v-model="setIdsWithThisRFC" />
 </template>
 
@@ -24,5 +26,5 @@ const props = defineProps<Props>()
 
 const authStore = useAuthStore()
 
-const { sets: userSets, setIdsWithThisRFC, createSet, status } = useUserSets(() => props.rfcNumber)
+const { sets: userSets, setIdsWithThisRFC, createSet, status, syncStatus, retry } = useUserSets(() => props.rfcNumber)
 </script>

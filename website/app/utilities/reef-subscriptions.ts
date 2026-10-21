@@ -6,7 +6,7 @@
 // subscription they have when they sign in. One composable serves every kind Red has a control for:
 // a document (the `rfc` kind), all new RFCs (`new_rfc`) and a subject (`subject`).
 
-import { computed, toValue, type ComputedRef, type MaybeRefOrGetter, type WritableComputedRef } from 'vue'
+import { computed, ref, toValue, watch, type ComputedRef, type MaybeRefOrGetter, type WritableComputedRef } from 'vue'
 import { subscriptionKey, useReefStore, type SubscriptionTarget } from '~/stores/reef'
 import { useNotificationsStore, type Notification } from '~/stores/notifications'
 import type { LoadingStatus } from '~/utilities/loading-status'
@@ -40,6 +40,11 @@ const subscriptionBody = (target: SubscriptionTarget): Pick<Subscription, 'kind'
 export const documentLabel = (document: SeriesId | number): string =>
   typeof document === 'number' ? `RFC ${document}` : `${document.type.toUpperCase()} ${document.number}`
 
+const subscriptionFailedDescription = (label: string, wasSubscribing: boolean): string =>
+  wasSubscribing
+    ? `You have not been subscribed to ${label}. Please try again.`
+    : `You are still subscribed to ${label}. Please try again.`
+
 export const subscriptionFailedNotification = (
   target: SubscriptionTarget,
   label: string,
@@ -49,9 +54,7 @@ export const subscriptionFailedNotification = (
   // message rather than stacking a second toast on top of it.
   id: `subscription.${subscriptionKey(target)}`,
   title: wasSubscribing ? 'Unable to subscribe' : 'Unable to unsubscribe',
-  description: wasSubscribing
-    ? `You have not been subscribed to ${label}. Please try again.`
-    : `You are still subscribed to ${label}. Please try again.`,
+  description: subscriptionFailedDescription(label, wasSubscribing),
   delayMs: 0,
   position: 'top',
   // A direct result of the reader pressing the checkbox, so it's announced rather than left to be
@@ -71,18 +74,20 @@ export const subscriptionFailedNotification = (
  * subscribe followed at once by an unsubscribe removes the subscription the first one made, and one
  * that failed leaves nothing for the second to remove. If Reef refuses, the pending change simply
  * ends and the list — which was never touched — is what shows again.
+ *
+ * Resolves to `unchanged` when there was nothing to ask Reef for.
  */
 export const writeUserSubscription = async (
   target: SubscriptionTarget,
   label: string,
   isSubscribed: boolean
-): Promise<void> => {
+): Promise<'saved' | 'failed' | 'unchanged'> => {
   const reefStore = useReefStore()
   const notificationsStore = useNotificationsStore()
   const key = subscriptionKey(target)
 
   if (isSubscribed === reefStore.isSubscribedTo(key)) {
-    return
+    return 'unchanged'
   }
 
   // Whose subscription this is, so an answer that arrives after they have signed out isn't added
@@ -120,7 +125,9 @@ export const writeUserSubscription = async (
   if (outcome.status === 'failed') {
     notificationsStore.add(subscriptionFailedNotification(target, label, isSubscribed))
     console.error('Unable to change your subscription.', outcome.error)
+    return 'failed'
   }
+  return 'saved'
 }
 
 /**
@@ -132,21 +139,81 @@ export const writeUserSubscription = async (
  * `status` is exposed alongside so the dialog can hold off showing the checkbox until the
  * subscriptions have arrived — an unticked box while they're still loading would read as "not
  * subscribed" rather than "not known yet".
+ *
+ * `syncStatus` is the whole round trip for an async status icon: the load while that is pending or
+ * has failed, and after it the reader's own changes — loading while one is being saved, an error
+ * if the latest was refused, success once it is kept. `retry` repeats whichever of the two failed.
  */
 export const useUserSubscription = (
   target: MaybeRefOrGetter<SubscriptionTarget>,
   label: MaybeRefOrGetter<string>
-): { isSubscribed: WritableComputedRef<boolean>; status: ComputedRef<LoadingStatus> } => {
+): {
+  isSubscribed: WritableComputedRef<boolean>
+  status: ComputedRef<LoadingStatus>
+  syncStatus: ComputedRef<LoadingStatus>
+  retry: () => void
+} => {
   const reefStore = useReefStore()
+  const key = computed(() => subscriptionKey(toValue(target)))
+
+  const failedSave = ref<{ subscribed: boolean }>()
+  const hasSaved = ref(false)
+  // Only the latest change decides the outcome: an earlier one that fails after a later one was
+  // started describes a state the reader has already moved on from.
+  let latestSave = 0
+
+  watch(key, () => {
+    failedSave.value = undefined
+    hasSaved.value = false
+  })
+
+  const save = async (subscribed: boolean): Promise<void> => {
+    latestSave += 1
+    const thisSave = latestSave
+    failedSave.value = undefined
+    const outcome = await writeUserSubscription(toValue(target), toValue(label), subscribed)
+    if (thisSave !== latestSave) {
+      return
+    }
+    if (outcome === 'failed') {
+      failedSave.value = { subscribed }
+    } else if (outcome === 'saved') {
+      hasSaved.value = true
+    }
+  }
+
+  const saveStatus = computed<LoadingStatus>(() => {
+    if (reefStore.pendingSubscriptions[key.value] !== undefined) {
+      return { type: 'loading' }
+    }
+    const failed = failedSave.value
+    if (failed !== undefined) {
+      return { type: 'error', message: subscriptionFailedDescription(toValue(label), failed.subscribed) }
+    }
+    return hasSaved.value ? { type: 'success' } : { type: 'idle' }
+  })
+
+  const status = computed(() => reefStore.status.subscriptions)
 
   return {
     isSubscribed: computed({
-      get: () => reefStore.isSubscribedTo(subscriptionKey(toValue(target))),
+      get: () => reefStore.isSubscribedTo(key.value),
       set: (subscribed) => {
-        void writeUserSubscription(toValue(target), toValue(label), subscribed)
+        void save(subscribed)
       }
     }),
-    status: computed(() => reefStore.status.subscriptions)
+    status,
+    syncStatus: computed(() => (status.value.type === 'success' ? saveStatus.value : status.value)),
+    retry: () => {
+      if (status.value.type !== 'success') {
+        void reefStore.load()
+        return
+      }
+      const failed = failedSave.value
+      if (failed !== undefined) {
+        void save(failed.subscribed)
+      }
+    }
   }
 }
 

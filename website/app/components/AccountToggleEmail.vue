@@ -14,18 +14,23 @@
       </p>
     </AlertBox>
 
-    <CheckboxRoot
-      v-else-if="status.type === 'success'"
-      v-model="receivesDigestEmail"
-      class="flex items-start gap-2 cursor-pointer text-left py-3">
-      <span
-        class="inline-flex shrink-0 items-center justify-center w-[20px] h-[20px] mt-0.5 border-1 rounded border-current/60">
-        <CheckboxIndicator>
-          <GraphicsCheckmark class="block w-[14px] h-[14px]" />
-        </CheckboxIndicator>
-      </span>
-      <span>Send me a daily digest of my Subscriptions by email</span>
-    </CheckboxRoot>
+    <template v-else-if="status.type === 'success'">
+      <CheckboxRoot v-model="receivesDigestEmail" class="flex items-start gap-2 cursor-pointer text-left py-3">
+        <span
+          class="inline-flex shrink-0 items-center justify-center w-[20px] h-[20px] mt-0.5 border-1 rounded border-current/60">
+          <CheckboxIndicator>
+            <GraphicsCheckmark class="block w-[14px] h-[14px]" />
+          </CheckboxIndicator>
+        </span>
+        <span>Send me a daily digest of my Subscriptions by email</span>
+      </CheckboxRoot>
+      <AsyncStatusMessage
+        :status="saveStatus"
+        :messages="{
+          loading: 'Saving...',
+          success: receivesDigestEmail ? 'Digest email will be sent' : 'Digest email will not be sent'
+        }" />
+    </template>
   </section>
 </template>
 
@@ -42,5 +47,5 @@
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
 import { useDigestEmailPreference } from '~/utilities/reef-digest-preference'
 
-const { receivesDigestEmail, status, load } = useDigestEmailPreference()
+const { receivesDigestEmail, status, saveStatus, load } = useDigestEmailPreference()
 </script>

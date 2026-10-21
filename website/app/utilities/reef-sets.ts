@@ -70,20 +70,25 @@ export const setCreationErrorMessage = (error: unknown): string => {
 // aria-checked. A failure is different — the checkbox is put back the way it was, so without this
 // the only visible result of pressing it would be nothing happening.
 
-export const setMembershipFailedNotification = (
-  { id, title }: ReefSet,
-  rfcNumber: number,
-  wasAdding: boolean
-): Notification => ({
+// What the reader is left with, said of however many sets were refused: the ones the document was
+// not added to, and the ones it is still in. Names them, because the reader may have several and
+// the message appears away from the rows that failed.
+export const setMembershipFailedMessage = (rfcNumber: number, notAddedTo: ReefSet[], stillIn: ReefSet[]): string => {
+  const names = (sets: ReefSet[]): string =>
+    new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(sets.map(({ title }) => `“${title}”`))
+  const parts = [
+    ...(notAddedTo.length > 0 ? [`has not been added to ${names(notAddedTo)}`] : []),
+    ...(stillIn.length > 0 ? [`is still in ${names(stillIn)}`] : [])
+  ]
+  return `RFC ${rfcNumber} ${parts.join(', and ')}. Please try again.`
+}
+
+export const setMembershipFailedNotification = (set: ReefSet, rfcNumber: number, wasAdding: boolean): Notification => ({
   // Keyed by set as well as document, because unlike the subscribe checkbox this dialog has a row
   // per set and two of them can fail independently.
-  id: `rfc-set-membership.${id}.${reefDocumentKey(rfcNumber)}`,
+  id: `rfc-set-membership.${set.id}.${reefDocumentKey(rfcNumber)}`,
   title: wasAdding ? 'Unable to add to Set' : 'Unable to remove from Set',
-  // Names the set, because the reader may have several and the toast appears away from the row
-  // that failed.
-  description: wasAdding
-    ? `RFC ${rfcNumber} has not been added to “${title}”. Please try again.`
-    : `RFC ${rfcNumber} is still in “${title}”. Please try again.`,
+  description: setMembershipFailedMessage(rfcNumber, wasAdding ? [set] : [], wasAdding ? [] : [set]),
   delayMs: 0,
   position: 'top',
   // A direct result of the reader pressing the checkbox, so it's announced rather than left to be
@@ -99,6 +104,8 @@ const writeSetMembership = async (set: ReefSet, rfcNumber: number, isAdding: boo
   const doc = reefDocumentKey(rfcNumber)
   const { id: setId } = set
 
+  reefStore.beginSetMembershipChange(doc, setId)
+
   const outcome = await reefStore.runWrite(`${doc}:set:${setId}`, async (): Promise<void> => {
     if (isAdding) {
       // The updated set the add answers with is dropped: the dialog's rows are labelled from
@@ -108,6 +115,8 @@ const writeSetMembership = async (set: ReefSet, rfcNumber: number, isAdding: boo
     }
     await deleteSetDocument(setId, doc)
   })
+
+  reefStore.endSetMembershipChange(doc, setId, outcome.status === 'failed' ? { adding: isAdding } : undefined)
 
   if (outcome.status === 'failed') {
     // Untick or re-tick just this row and name the set in the toast, since the reader may have
@@ -209,6 +218,11 @@ export type UserSets = {
   // Whether the sets have loaded, so the dialog can hold off saying "you have no Sets" until it
   // knows.
   status: ComputedRef<LoadingStatus>
+  // Whether the changes the reader has made to which sets hold this document are saved: loading
+  // while any is out, an error naming the sets if any was refused, success once they are kept.
+  syncStatus: ComputedRef<LoadingStatus>
+  // Repeat the changes that were refused.
+  retry: () => void
 }
 
 // This reader's sets and which of them hold one document, as models for the "Add to Set" dialog.
@@ -216,6 +230,38 @@ export type UserSets = {
 export const useUserSets = (rfcNumber: MaybeRefOrGetter<number>): UserSets => {
   const reefStore = useReefStore()
   const { yourSetIds } = useReefDocument(rfcNumber)
+
+  const failedSets = computed(() => {
+    const failed = reefStore.setMembershipSync[reefDocumentKey(toValue(rfcNumber))]?.failed ?? {}
+    return Object.entries(failed).flatMap(([setId, { adding }]) => {
+      const set = reefStore.sets.find(({ id }) => id === setId)
+      return set === undefined ? [] : [{ set, adding }]
+    })
+  })
+
+  const syncStatus = computed<LoadingStatus>(() => {
+    const sync = reefStore.setMembershipSync[reefDocumentKey(toValue(rfcNumber))]
+    if (sync === undefined) {
+      return { type: 'idle' }
+    }
+    if (Object.keys(sync.inFlight).length > 0) {
+      return { type: 'loading' }
+    }
+    if (failedSets.value.length > 0) {
+      const notAddedTo = failedSets.value.filter(({ adding }) => adding).map(({ set }) => set)
+      const stillIn = failedSets.value.filter(({ adding }) => !adding).map(({ set }) => set)
+      return { type: 'error', message: setMembershipFailedMessage(toValue(rfcNumber), notAddedTo, stillIn) }
+    }
+    return sync.hasSaved ? { type: 'success' } : { type: 'idle' }
+  })
+
+  const retry = (): void => {
+    const retried = failedSets.value.reduce(
+      (setIds, { set: { id: setId }, adding }) => (adding ? [...setIds, setId] : setIds.filter((id) => id !== setId)),
+      yourSetIds.value
+    )
+    writeUserSetMembership(toValue(rfcNumber), retried)
+  }
 
   return {
     sets: computed(() => sortSets(reefStore.sets)),
@@ -226,7 +272,9 @@ export const useUserSets = (rfcNumber: MaybeRefOrGetter<number>): UserSets => {
       }
     }),
     createSet: (newSet) => createUserSet(toValue(rfcNumber), newSet),
-    status: computed(() => reefStore.status.sets)
+    status: computed(() => reefStore.status.sets),
+    syncStatus,
+    retry
   }
 }
 

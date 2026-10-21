@@ -28,11 +28,14 @@ export const digestPreferenceFailedNotification = (wasEnabling: boolean): Notifi
  *
  * `status` is exposed alongside the checkbox model so a caller can hold off showing it until the
  * load settles — while it's in flight there's no true state to show yet, and an unticked box
- * would read as "off" rather than "not known yet".
+ * would read as "off" rather than "not known yet". `saveStatus` is the separate state of writing a
+ * change back: loading while any write is in flight, success once the last one lands, and idle if
+ * a write failed (the failure notification speaks for it).
  */
 export const useDigestEmailPreference = (): {
   receivesDigestEmail: WritableComputedRef<boolean>
   status: Ref<LoadingStatus>
+  saveStatus: Ref<LoadingStatus>
   load: () => Promise<void>
 } => {
   const authStore = useAuthStore()
@@ -41,6 +44,7 @@ export const useDigestEmailPreference = (): {
 
   const receivesDigest = ref(false)
   const status = ref<LoadingStatus>({ type: 'idle' })
+  const saveStatus = ref<LoadingStatus>({ type: 'idle' })
 
   const load = async () => {
     if (!authStore.isAuthenticated) {
@@ -68,6 +72,8 @@ export const useDigestEmailPreference = (): {
   onMounted(load)
   watch(() => authStore.isAuthenticated, load)
 
+  let pendingWrites = 0
+
   const write = async (receive: boolean) => {
     if (receive === receivesDigest.value) {
       return
@@ -75,15 +81,24 @@ export const useDigestEmailPreference = (): {
     const previous = receivesDigest.value
     receivesDigest.value = receive
 
+    pendingWrites += 1
+    saveStatus.value = { type: 'loading' }
+
     const outcome = await reefStore.runWrite(
       'digest-preference',
       (): Promise<void> => patchDigestPreference({ receive_digest_email: receive }).then(() => undefined)
     )
 
+    pendingWrites -= 1
+
     if (outcome.status === 'failed') {
       receivesDigest.value = previous
       notificationsStore.add(digestPreferenceFailedNotification(receive))
       console.error('Unable to change your email digest preference.', outcome.error)
+      // The notification already says what went wrong, so the inline message just stands down.
+      saveStatus.value = { type: 'idle' }
+    } else if (pendingWrites === 0) {
+      saveStatus.value = { type: 'success' }
     }
   }
 
@@ -94,5 +109,5 @@ export const useDigestEmailPreference = (): {
     }
   })
 
-  return { receivesDigestEmail, status, load }
+  return { receivesDigestEmail, status, saveStatus, load }
 }

@@ -33,6 +33,7 @@
         <DialogPortal>
           <DialogOverlay class="bg-black/10 backdrop-blur-xs fixed inset-0 z-110" />
           <DialogContent
+            v-bind="dialogDescriptionAttrs(isDescribed)"
             :class="[
               'fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[550px] translate-x-[-50%] translate-y-[-50%] z-115',
               'focus:outline-none rounded-md shadow-3xl',
@@ -44,8 +45,8 @@
               <template v-else>Your Sets</template>
             </DialogTitle>
 
-            <DialogDescription class="text-sm">
-              <template v-if="isAuthenticated">
+            <template v-if="isAuthenticated">
+              <div class="text-sm">
                 <p v-if="isLoading" class="flex items-center gap-2 py-3">
                   <GraphicsLoading class="inline-block w-5 h-5" />
                   Loading...
@@ -70,10 +71,10 @@
                     role="group"
                     :aria-label="`Sets holding RFC ${props.rfcNumber}`"
                     class="mx-auto max-w-[300px] flex flex-col gap-1 pb-2">
-                    <p class="text-sm italic">
+                    <DialogDescription class="text-sm italic">
                       Check a Set to add <Component :is="formattedTitle" /> to it.<br />
                       Uncheck to remove it.
-                    </p>
+                    </DialogDescription>
                     <template v-for="set in props.sets" :key="set.id">
                       <CheckboxRoot
                         :value="set.id"
@@ -106,22 +107,26 @@
                     :rfc-number="props.rfcNumber"
                     :create-set="props.createSet"
                     :has-solid-button="props.sets.length === 0" />
-                  <div class="flex justify-end pb-2">
+                  <div class="flex justify-end items-center gap-1 pb-2">
+                    <AsyncStatusIcon :status="syncStatus" label="your Sets" @retry="emit('retry')" />
+
                     <DialogClose
                       :class="[
                         'px-3 py-1 rounded-md',
-                        'text-blue-800 dark:text-white light:bg-blue-950 font-bold border-1 border-blue-600 dark:border-blue-200',
+                        'text-white bg-blue-600 dark:bg-blue-900',
+                        'font-bold border-1',
                         'cursor-pointer'
                       ]">
                       Done
                     </DialogClose>
                   </div>
                 </div>
-              </template>
-              <template v-else>
-                <LoginModalFeatureWall />
-              </template>
-            </DialogDescription>
+              </div>
+            </template>
+
+            <div v-else class="text-sm">
+              <LoginModalFeatureWall />
+            </div>
 
             <DialogClose class="absolute top-2 right-2 px-2 py-2 cursor-pointer" aria-label="Close">
               <GraphicsClose />
@@ -163,6 +168,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from 'reka-ui'
+import { dialogDescriptionAttrs } from '~/utilities/accessibility'
 import type { OidcUser } from '~/utilities/oidc'
 import { COVER_LINK_INNER_STYLE_CLASS, COVER_LINK_STYLE_CLASS } from '~/utilities/reef-cover-link'
 import type { CreateSetOutcome, NewSet } from '~/utilities/reef-sets'
@@ -189,10 +195,13 @@ type Props = {
   // Whether this reader's sets have arrived yet, so the dialog doesn't say they have none before it
   // knows.
   status: LoadingStatus
+  // The reader's changes to which Sets hold this RFC as they are saved, for the icon beside Done.
+  syncStatus: LoadingStatus
   iconOnly?: boolean
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{ retry: [] }>()
 
 const reefStore = useReefStore()
 
@@ -222,5 +231,10 @@ const isLoading = computed(() => props.status.type === 'loading')
 // never claims a membership it hasn't confirmed.
 const isInASet = computed(
   () => isAuthenticated.value && props.status.type === 'success' && setIdsWithThisRFC.value.length > 0
+)
+
+// Whether the instruction above the Sets, which is what the dialog describes itself with, is on screen.
+const isDescribed = computed(
+  () => isAuthenticated.value && !isLoading.value && props.status.type !== 'error' && props.sets.length > 0
 )
 </script>

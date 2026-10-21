@@ -159,6 +159,63 @@ describe('useUserSubscription', () => {
     expect(useNotificationsStore().queue.map(({ title }) => title)).toContain('Unable to unsubscribe')
   })
 
+  test('syncStatus follows a save: loading while it is in flight, then success', async () => {
+    await signedInWith([])
+    let confirm: (value: unknown) => void = () => {}
+    reef.createSubscription.mockReturnValue(new Promise((resolve) => (confirm = resolve)))
+    const harness = await mountSuspended(NewRfcHarness)
+    expect(harness.vm.syncStatus).toEqual({ type: 'idle' })
+
+    harness.vm.isSubscribed = true
+    expect(harness.vm.syncStatus).toEqual({ type: 'loading' })
+
+    confirm(existing({ id: 812 }))
+    await vi.waitFor(() => expect(harness.vm.syncStatus).toEqual({ type: 'success' }))
+  })
+
+  test('syncStatus reports a refused save with a message, and retry repeats it', async () => {
+    await signedInWith([])
+    reef.createSubscription.mockRejectedValueOnce(new Error('nope'))
+    const harness = await mountSuspended(NewRfcHarness)
+
+    harness.vm.isSubscribed = true
+    await vi.waitFor(() => expect(harness.vm.syncStatus.type).toBe('error'))
+    expect(harness.vm.syncStatus).toEqual({
+      type: 'error',
+      message: 'You have not been subscribed to new RFCs. Please try again.'
+    })
+
+    reef.createSubscription.mockResolvedValue(existing({ id: 812 }))
+    harness.vm.retry()
+    await vi.waitFor(() => expect(harness.vm.syncStatus).toEqual({ type: 'success' }))
+    expect(harness.vm.isSubscribed).toBe(true)
+  })
+
+  test('syncStatus is not left in error by a refusal the reader has already moved on from', async () => {
+    await signedInWith([])
+    let refuse: (error: Error) => void = () => {}
+    reef.createSubscription.mockReturnValue(new Promise((_, reject) => (refuse = reject)))
+    const harness = await mountSuspended(NewRfcHarness)
+
+    harness.vm.isSubscribed = true
+    harness.vm.isSubscribed = false
+    refuse(new Error('nope'))
+
+    await vi.waitFor(() => expect(harness.vm.syncStatus).toEqual({ type: 'success' }))
+  })
+
+  test('syncStatus is the load while that has failed, and retry reloads', async () => {
+    reef.getSubscriptions.mockRejectedValueOnce(new Error('down'))
+    useAuthStore().setUser({ sub: 'reader-1' })
+    const harness = await mountSuspended(NewRfcHarness)
+    await vi.waitFor(() => expect(harness.vm.syncStatus.type).toBe('error'))
+
+    reef.getSubscriptions.mockResolvedValue([])
+    harness.vm.retry()
+    await vi.waitFor(() => expect(harness.vm.status).toEqual({ type: 'success' }))
+    expect(reef.getSubscriptions).toHaveBeenCalledTimes(2)
+  })
+
   test('does not add a subscription to the list of a reader who has since signed out', async () => {
     await signedInWith([])
     let confirm: (value: unknown) => void = () => {}
