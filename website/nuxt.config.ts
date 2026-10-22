@@ -35,6 +35,11 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    css: {
+      lightningcss: {
+        errorRecovery: true
+      }
+    },
     build: {
       cssCodeSplit: false,
       rollupOptions: {
