@@ -1914,8 +1914,28 @@ components:
         - value
     ResponseCreate:
       type: object
+      description: |-
+        A submission: the answers, plus optional anti-spam measures.
+
+        duration_seconds and pages_viewed are reported by the caller, so a determined
+        spammer can forge them; they are for staff to review, not a gate. Both are
+        write-only so the 201 body never sends a null for one the caller left out.
       properties:
         data: {}
+        duration_seconds:
+          type: integer
+          maximum: 2592000
+          minimum: 0
+          writeOnly: true
+          description: Seconds the submitter took on the survey, as reported by the
+            submitting client. An anti-spam measure.
+        pages_viewed:
+          type: integer
+          maximum: 10000
+          minimum: 0
+          writeOnly: true
+          description: Pages viewed before submitting, as counted by the submitting
+            client. An anti-spam measure.
     RetiredSubject:
       type: object
       description: |-

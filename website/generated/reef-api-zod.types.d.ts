@@ -4,15 +4,15 @@ export namespace Schemas {
   /**
    * The area or group a document belongs to, narrowed to what a page names.
    */
-  export type DocumentAreaOrGroup = { acronym: string; name: string } & Record<string, unknown>
+  export type DocumentAreaOrGroup = { acronym: string; name: string }
   /**
    * One persistent identifier -- a DOI or an ISSN -- Red records for a document.
    */
-  export type DocumentIdentifier = { type: string; value: string } & Record<string, unknown>
+  export type DocumentIdentifier = { type: string; value: string }
   /**
    * A document as the index file names it: just enough to render a row.
    */
-  export type DocumentMetadata = { title: string | null; subseries: Array<string> } & Record<string, unknown>
+  export type DocumentMetadata = { title: string | null; subseries: Array<string> }
   export type DocumentSetEntry = {
     doc: string
     /**
@@ -20,7 +20,7 @@ export namespace Schemas {
      */
     rank: number
     added_at: string
-  } & Record<string, unknown>
+  }
   export type DocumentSet = {
     id: string
     title: string
@@ -28,11 +28,11 @@ export namespace Schemas {
     documents: Array<DocumentSetEntry>
     created_at: string
     updated_at: string
-  } & Record<string, unknown>
+  }
   /**
    * The set's documents, in the order they should be shown.
    */
-  export type DocumentSetOrder = { documents: Array<string> } & Record<string, unknown>
+  export type DocumentSetOrder = { documents: Array<string> }
   /**
    * Public engagement numbers for one document.
    */
@@ -42,7 +42,7 @@ export namespace Schemas {
     rating_count: number
     subscriber_count: number
     set_count: number
-  } & Record<string, unknown>
+  }
   /**
    * A document as its own subject's file names it: everything Red's index says.
    */
@@ -65,7 +65,7 @@ export namespace Schemas {
     keywords: Array<string>
     pages: number | null
     abstract: string | null
-  } & Record<string, unknown>
+  }
   /**
    * * `new_rfc` - Any new RFC
    * * `by_status` - New RFC by status
@@ -94,7 +94,7 @@ export namespace Schemas {
      * Slugs from the top down, separated by a slash. Derived; edit the slug or the parent instead.
      */
     path: string
-  } & Record<string, unknown>
+  }
   /**
    * What one document is to the caller: their rating, their subscription,
    * their sets.
@@ -108,7 +108,7 @@ export namespace Schemas {
     your_rating: number | null
     your_subscription_id: number | null
     your_set_ids: Array<string>
-  } & Record<string, unknown>
+  }
   /**
    * One of the caller's sets, without its membership.
    *
@@ -120,18 +120,12 @@ export namespace Schemas {
    * `your_set_ids`. Sending both would make the payload grow with the caller's
    * library rather than with the page.
    */
-  export type MyDocumentSet = {
-    id: string
-    title: string
-    description: string
-    created_at: string
-    updated_at: string
-  } & Record<string, unknown>
+  export type MyDocumentSet = { id: string; title: string; description: string; created_at: string; updated_at: string }
   /**
    * The whole response: the caller's sets, and a row per requested document.
    */
-  export type MyDocuments = { sets: Array<MyDocumentSet>; documents: Array<MyDocument> } & Record<string, unknown>
-  export type MyRating = { doc: string; value: number; updated_at: string } & Record<string, unknown>
+  export type MyDocuments = { sets: Array<MyDocumentSet>; documents: Array<MyDocument> }
+  export type MyRating = { doc: string; value: number; updated_at: string }
   /**
    * * `open` - Open (anonymous)
    * * `authenticated` - Authenticated only
@@ -167,7 +161,7 @@ export namespace Schemas {
     documents: Array<string> | null
     visibility?: VisibilityEnum
     answered: boolean
-  } & Record<string, unknown>
+  }
   /**
    * One row of the caller's own notification feed.
    *
@@ -185,15 +179,16 @@ export namespace Schemas {
        * Red's own entry for the document from rfc-index.json, an RfcCommon, passed on as Red published it. Only number is relied on; every other field is Red's to define.
        */
       rfc: { number: number } & Record<string, unknown>
-    }>
+    }> &
+      Record<string, unknown>
     read: boolean
     created_at: string
-  } & Record<string, unknown>
+  }
   export type PaginatedWebNotificationList = {
     next?: string | null
     previous?: string | null
     results: Array<WebNotification>
-  } & Record<string, unknown>
+  }
   export type PatchedDigestPreference = Partial<{ receive_digest_email: boolean }>
   export type PatchedDocumentSet = Partial<{
     id: string
@@ -231,7 +226,7 @@ export namespace Schemas {
      * 0 is the least popular ranked document, 1 the most.
      */
     popularity: number
-  } & Record<string, unknown>
+  }
   /**
    * The whole ranking, most popular first, with when it was last computed.
    */
@@ -241,7 +236,7 @@ export namespace Schemas {
      */
     computed_at: string | null
     entries: Array<PopularityEntry>
-  } & Record<string, unknown>
+  }
   /**
    * One ancestor on the way up to the root, root first.
    *
@@ -256,7 +251,7 @@ export namespace Schemas {
     description: string
     document_count: number
     document_count_deep: number
-  } & Record<string, unknown>
+  }
   /**
    * One subject in a descendant branch, with its own children nested beneath it.
    *
@@ -264,15 +259,14 @@ export namespace Schemas {
    * needs to know which subject is whose child, and a flat map throws that
    * relationship away.
    */
-  export type SubjectBranchNode = {
+  export interface SubjectBranchNode {
     slug: string
     name: string
     description: string
     document_count: number
     document_count_deep: number
-    children: SubjectBranchNodeArray
-  } & Record<string, unknown>
-  export interface SubjectBranchNodeArray extends Array<SubjectBranchNode> {}
+    children: Array<SubjectBranchNode>
+  }
   /**
    * A subject's branch of the vocabulary: its ancestors and its whole
    * descendant subtree, so that a page renders both without a second fetch.
@@ -280,10 +274,7 @@ export namespace Schemas {
    * Not siblings, and not the subject itself, which carries its own name and
    * description at the top level of this same file already.
    */
-  export type SubjectMeta = { ancestors: Array<SubjectAncestor>; descendants: Array<SubjectBranchNode> } & Record<
-    string,
-    unknown
-  >
+  export type SubjectMeta = { ancestors: Array<SubjectAncestor>; descendants: Array<SubjectBranchNode> }
   /**
    * A subject's own file: the served shape plus what a page cannot look up.
    *
@@ -326,7 +317,7 @@ export namespace Schemas {
     documents: Array<string>
     document_meta: Record<string, FullDocumentMetadata>
     subject_meta: SubjectMeta
-  } & Record<string, unknown>
+  }
   /**
    * A retired subject, as the only thing a retired subject is still for.
    *
@@ -345,7 +336,7 @@ export namespace Schemas {
      * Stable identifier used in URLs and by Red. Changing it leaves the old one behind as an alias, so links naming it still resolve; the name is still the field to edit when only the wording changed.
      */
     merged_into: string
-  } & Record<string, unknown>
+  }
   /**
    * An alias, as the only thing an alias is for: the name it resolves to.
    *
@@ -364,16 +355,28 @@ export namespace Schemas {
      * Stable identifier used in URLs and by Red. Changing it leaves the old one behind as an alias, so links naming it still resolve; the name is still the field to edit when only the wording changed.
      */
     alias_of: string
-  } & Record<string, unknown>
+  }
   export type PrecomputedSubjectDetailOrRedirect = PrecomputedSubjectDetail | RetiredSubject | SubjectAlias
-  export type RatingAggregate = {
-    rfc: string
-    average: number | null
-    count: number
-    your_rating: number | null
-  } & Record<string, unknown>
-  export type RatingWrite = { value: number } & Record<string, unknown>
-  export type ResponseCreate = Partial<{ data: unknown }>
+  export type RatingAggregate = { rfc: string; average: number | null; count: number; your_rating: number | null }
+  export type RatingWrite = { value: number }
+  /**
+   * A submission: the answers, plus optional anti-spam measures.
+   *
+   * duration_seconds and pages_viewed are reported by the caller, so a determined
+   * spammer can forge them; they are for staff to review, not a gate. Both are
+   * write-only so the 201 body never sends a null for one the caller left out.
+   */
+  export type ResponseCreate = Partial<{
+    data: unknown
+    /**
+     * Seconds the submitter took on the survey, as reported by the submitting client. An anti-spam measure.
+     */
+    duration_seconds: number
+    /**
+     * Pages viewed before submitting, as counted by the submitting client. An anti-spam measure.
+     */
+    pages_viewed: number
+  }>
   /**
    * A subject as a caller sees it, without its membership.
    *
@@ -408,7 +411,7 @@ export namespace Schemas {
     path: string
     document_count: number
     document_count_deep: number
-  } & Record<string, unknown>
+  }
   /**
    * A subject and the documents carrying it.
    *
@@ -449,7 +452,7 @@ export namespace Schemas {
      * change. The subtree is the index file's business.
      */
     documents: Array<string>
-  } & Record<string, unknown>
+  }
   export type SubjectDetailOrRedirect = SubjectDetail | RetiredSubject | SubjectAlias
   /**
    * One subject in the index file.
@@ -468,7 +471,7 @@ export namespace Schemas {
     documents: Array<string>
     document_count: number
     document_count_deep: number
-  } & Record<string, unknown>
+  }
   /**
    * The whole vocabulary in one payload: the tree, the assignments, the titles.
    *
@@ -485,7 +488,7 @@ export namespace Schemas {
   export type SubjectIndex = {
     documents: Record<string, DocumentMetadata>
     subjects: Record<string, SubjectIndexEntry>
-  } & Record<string, unknown>
+  }
   export type Subscription = {
     id: number
     kind: KindEnum
@@ -494,7 +497,7 @@ export namespace Schemas {
     subject?: number | null
     subject_details: MinimalSubject
     created_at: string
-  } & Record<string, unknown>
+  }
   /**
    * Full survey representation used by the management API and the builder.
    */
@@ -510,7 +513,7 @@ export namespace Schemas {
     audience?: null
     created_at: string
     updated_at: string
-  } & Record<string, unknown>
+  }
   /**
    * Definition and theme served to the survey runner.
    */
@@ -521,7 +524,7 @@ export namespace Schemas {
     definition?: unknown
     theme?: null
     visibility?: VisibilityEnum
-  } & Record<string, unknown>
+  }
 
   // </Schemas>
 }
@@ -860,7 +863,7 @@ export namespace Endpoints {
           | 'zh-hant'
       }>
     }
-    responses: { 200: Record<string, unknown> | Record<string, unknown> }
+    responses: { 200: Record<string, unknown> }
   }
   /**
    * List and create the caller's document sets.

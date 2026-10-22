@@ -913,8 +913,19 @@ export interface components {
     RatingWrite: {
       value: number
     }
+    /**
+     * @description A submission: the answers, plus optional anti-spam measures.
+     *
+     *     duration_seconds and pages_viewed are reported by the caller, so a determined
+     *     spammer can forge them; they are for staff to review, not a gate. Both are
+     *     write-only so the 201 body never sends a null for one the caller left out.
+     */
     ResponseCreate: {
       data?: unknown
+      /** @description Seconds the submitter took on the survey, as reported by the submitting client. An anti-spam measure. */
+      duration_seconds?: number
+      /** @description Pages viewed before submitting, as counted by the submitting client. An anti-spam measure. */
+      pages_viewed?: number
     }
     /**
      * @description A retired subject, as the only thing a retired subject is still for.
