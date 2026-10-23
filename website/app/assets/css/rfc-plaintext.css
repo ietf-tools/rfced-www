@@ -10,9 +10,20 @@ pre {
 
   /*
     Plaintext RFCs are fixed width, so each has an optimal font-size: the one at which its longest
-    line just fits the container. The container width is not linear in the viewport (a sidebar
-    appears at desktop widths, wide browsers hit a maximum container width, padding varies), so
-    `vw` units fit poorly and a table of breakpoints ties the font-size to the current design.
+    line just fits the container.
+    
+    The container width is not linearly related to the viewport because a sidebar appears at
+    desktop size, or browsers hit a max-width, or padding might vary responsively. We can't
+    size fixed-width text using `vw` units for this reason. We could have a range of breakpoints
+    and font-sizes but consider how many breakpoints would be needed to size text optimally for
+    every different mobile that might vary by px. Early prototypes tried this approach and there
+    were about 40 different breakpoints needed, so it becomes a maintenance burden. Any padding
+    tweak could result in 40 optimum font-size recalculations. We could programatically build that
+    CSS but the software complexity and layers of abstraction to optimise a font-size are getting
+    quite extreme.
+
+    Also plaintext RFCs vary in line length.
+
     Instead the precomputer stores each RFC's longest line as --preformatted-max-line-length and
     the font-size is --magic-scaling-number divided by it, in cqi, which scales smoothly with the
     container. The scaling number was tuned by eye, leaving a little space rather than pushing
@@ -20,13 +31,16 @@ pre {
     out at 14.7px and RFC 2119 (72 chars) at 27px in a 1178px container. The widest known line is
     137 chars; most RFCs are 72-73. On mobile the text is deliberately small: a 72-character line
     cannot be both unwrapped and readable there, wrapping would break ASCII art and tables, and a
-    larger font-size is no different from the pinch-zoom readers are expected to use. If lines
-    wrap in some font, lower --magic-scaling-number.
+    larger font-size is no different from the pinch-zoom readers are expected to use.
+    
+    If you're investigating a bug where lines wrap on some device, lower --magic-scaling-number,
+    and add a note here saying why.
+    - user reported wrapping in RFC 2606. Device unknown. Scaling down slightly.
     */
 
   /* Default font size for browsers that don't support cqi container units */
   font-size: 16px;
-  --magic-scaling-number: 160;
+  --magic-scaling-number: 159;
 
   /* the basic responsive font-size
     calc() supported in chrome 26/firefox 16, and CSS variables in chrome 49/firefox 31,

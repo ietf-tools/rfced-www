@@ -10,7 +10,7 @@ import { reefDocumentKey } from '~/utilities/reef-documents'
 import { parseSeriesId, type SeriesId } from './rfc'
 import { SURVEY_PATH } from './url-constants'
 
-const LOAD_SURVEYS_AFTER_MS = 5_000
+const LOAD_SURVEYS_AFTER_MS = 60_000
 
 // Reef reads `returnTo` off the survey link and sends the taker back there once they're done.
 export const withReturnTo = (surveyUrl: string, returnToPath: string): string => {
@@ -34,7 +34,7 @@ export const openSurveyNotification = (survey: OpenSurvey): Notification => ({
   url: survey.url,
   appendReturnTo: true,
   delayMs: 0,
-  durationMs: 60_000,
+  durationMs: 30_000,
   allowDismiss: true,
   position: 'bottom'
 })
