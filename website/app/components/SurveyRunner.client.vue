@@ -23,14 +23,17 @@ import { Model, type CompleteEvent } from 'survey-core'
 import { DefaultDark, DefaultLight } from 'survey-core/themes'
 import { SurveyComponent } from 'survey-vue3-ui'
 import { z } from 'zod'
+import { secondsSince } from '~/utilities/reef-survey-response'
 
 type SurveyData = Record<string, unknown>
 type SaveOptions = Pick<CompleteEvent, 'showSaveInProgress' | 'showSaveError' | 'showSaveSuccess'>
 
+type SaveMetrics = { durationSeconds: number }
+
 type Props = {
   definition: unknown
   theme?: unknown
-  save: (data: SurveyData) => Promise<void>
+  save: (data: SurveyData, metrics: SaveMetrics) => Promise<void>
 }
 
 const { definition, theme, save } = defineProps<Props>()
@@ -43,6 +46,10 @@ const colorMode = useColorMode()
 const model = new Model(definition)
 const saving = ref(false)
 const retryable = ref(false)
+
+// The runner is remounted per survey (see :key in the page), so mounting is when this survey's
+// clock starts. performance.now() rather than Date so a clock change can't skew it.
+const startedAt = performance.now()
 
 // A survey's own theme (from the SurveyJS Theme Editor) carries only the colours a designer picked,
 // so it's laid over a base that follows the site's colour mode.
@@ -110,19 +117,20 @@ const applyTheme = (model: Model, theme: unknown, mode: string) => {
 }
 
 // Held once the survey completes, because by then SurveyJS has left the last page and a retry has
-// nothing else to resubmit.
-let completed: { data: SurveyData; options: SaveOptions } | undefined
+// nothing else to resubmit. The duration is fixed here too, so a retry reports how long the survey
+// took rather than how long the reader then waited to retry.
+let completed: { data: SurveyData; options: SaveOptions; metrics: SaveMetrics } | undefined
 
 const attemptSave = async () => {
   if (!completed || saving.value) {
     return
   }
-  const { data, options } = completed
+  const { data, options, metrics } = completed
   saving.value = true
   retryable.value = false
   options.showSaveInProgress()
   try {
-    await save(data)
+    await save(data, metrics)
     options.showSaveSuccess()
     emit('saved')
   } catch (error) {
@@ -142,7 +150,11 @@ applyTheme(model, theme, colorMode.value)
 // answers to questions its conditions hid, which is the data a response stores. attemptSave()
 // reports saving before its first await, or SurveyJS would follow a navigateToUrl straight away.
 model.onComplete.add((sender, options) => {
-  completed = { data: sender.data, options }
+  completed = {
+    data: sender.data,
+    options,
+    metrics: { durationSeconds: secondsSince(startedAt, performance.now()) }
+  }
   void attemptSave()
 })
 watch(

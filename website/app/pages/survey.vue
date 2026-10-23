@@ -47,7 +47,8 @@
 <script setup lang="ts">
 import { until } from '@vueuse/core'
 import { useRfcEditorHead } from '~/utilities/head'
-import { createSurveyResponse, getSurveyDefinition, ReefError, type SurveyDefinition } from '~/utilities/reef'
+import { getSurveyDefinition, ReefError, type SurveyDefinition } from '~/utilities/reef'
+import { submitSurveyResponse } from '~/utilities/reef-survey-response'
 import { ANCHOR_COLOR_TAILWIND_STYLE } from '~/utilities/theme'
 import { SURVEY_PATH } from '~/utilities/url'
 
@@ -90,7 +91,7 @@ type Load =
       slug: string
       definition: SurveyDefinition['definition']
       theme: unknown
-      save: (data: Record<string, unknown>) => Promise<void>
+      save: (data: Record<string, unknown>, metrics: { durationSeconds: number }) => Promise<void>
     }
   | { status: 'authRequired' }
   | { status: 'notFound' }
@@ -133,9 +134,7 @@ const loadSurvey = async (slug: string) => {
       slug,
       definition,
       theme,
-      save: async (data) => {
-        await createSurveyResponse(slug, { data })
-      }
+      save: (data, metrics) => submitSurveyResponse(slug, data, metrics)
     }
   } catch (error) {
     if (token !== loadToken) {
